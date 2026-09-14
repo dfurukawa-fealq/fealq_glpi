@@ -1,0 +1,547 @@
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: brandkit\n"
+"Language: ca_ES\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "Dynamic cut for a bolder call-to-action."
+msgstr "Tall dinàmic per a una crida a l'acció més atrevida."
+
+msgid "Email"
+msgstr "Correu electrònic"
+
+msgid "Field background"
+msgstr "Fons de camp"
+
+msgid "Field border"
+msgstr "Frontera del camp"
+
+msgid "Field border width (px)"
+msgstr "Amplada de la vora del camp (px)"
+
+msgid "Field focus glow"
+msgstr "Lluentor del focus de camp"
+
+msgid "Field icons"
+msgstr "Icones de camp"
+
+msgid "Field radius (px)"
+msgstr "Radi del camp (px)"
+
+msgid "Fields"
+msgstr "Camps"
+
+msgid "Field spacing (px)"
+msgstr "Espaiat de camps (px)"
+
+msgid "Field style"
+msgstr "Estil de camp"
+
+msgid "Field text"
+msgstr "Text del camp"
+
+msgid "Field text size (px)"
+msgstr "Mida del text del camp (px)"
+
+msgid "Fill with color"
+msgstr "Ompliu de color"
+
+msgid "Fixed"
+msgstr "Arreglat"
+
+msgid "Friendly, fully rounded shape."
+msgstr "Forma amigable, totalment arrodonida."
+
+msgid "Glass blur"
+msgstr "Desenfocament de vidre"
+
+msgid "Hide login text"
+msgstr "Amaga el text d'inici de sessió"
+
+msgid "Hover effect"
+msgstr "Efecte Hover"
+
+msgid "Hover fill custom color"
+msgstr "Passeu el cursor per omplir el color personalitzat"
+
+msgid "Hover text color"
+msgstr "Passa el cursor del color del text"
+
+msgid "Icon color"
+msgstr "Color de la icona"
+
+msgid "Icon position"
+msgstr "Posició de la icona"
+
+msgid "ID card"
+msgstr "DNI"
+
+msgid "Info"
+msgstr "Informació"
+
+msgid "Inside panel"
+msgstr "Panell interior"
+
+msgid "Key"
+msgstr "clau"
+
+msgid "Layout"
+msgstr "Disseny"
+
+msgid "Layout & logo"
+msgstr "Disseny i logotip"
+
+msgid "Left"
+msgstr "Esquerra"
+
+msgid "Light"
+msgstr "Llum"
+
+msgid "Lock"
+msgstr "Bloqueig"
+
+msgid "Login icon"
+msgstr "Icona d'inici de sessió"
+
+msgid "Login logo size (px)"
+msgstr "Mida del logotip d'inici de sessió (px)"
+
+msgid "Login page configuration"
+msgstr "Configuració de la pàgina d'inici de sessió"
+
+msgid "Logo offset from top (px)"
+msgstr "Logotip desplaçat des de la part superior (px)"
+
+msgid "Logo position"
+msgstr "Posició del logotip"
+
+msgid "Neon glow"
+msgstr "resplendor de neó"
+
+msgid "No (disable)"
+msgstr "No (desactivar)"
+
+msgid "None"
+msgstr "Cap"
+
+msgid "No (show panel)"
+msgstr "No (mostra el tauler)"
+
+msgid "Original size"
+msgstr "Mida original"
+
+msgid "Outline"
+msgstr "Esquema"
+
+msgid "Outline danger"
+msgstr "Esquema el perill"
+
+msgid "Outline dark"
+msgstr "Contorn fosc"
+
+msgid "Outline info"
+msgstr "Informació d'esquema"
+
+msgid "Outline only"
+msgstr "Només esquema"
+
+msgid "Outline primary"
+msgstr "Esquema primària"
+
+msgid "Outline secondary"
+msgstr "Esquema secundari"
+
+msgid "Outline success"
+msgstr "Esquema d'èxit"
+
+msgid "Outline warning"
+msgstr "Advertència d'esquema"
+
+msgid "Overlay color"
+msgstr "Color de superposició"
+
+msgid "Overlay opacity (%)"
+msgstr "Opacitat de superposició (%)"
+
+msgid "Page text size (px)"
+msgstr "Mida del text de la pàgina (px)"
+
+msgid "Panel blur (px)"
+msgstr "Desenfocament del panell (px)"
+
+msgid "Panel color"
+msgstr "Color del panell"
+
+msgid "Panel height (px)"
+msgstr "Alçada del panell (px)"
+
+msgid "Panel hover effect"
+msgstr "Efecte de flotació del panell"
+
+msgid "Panel opacity (%)"
+msgstr "Opacitat del panell (%)"
+
+msgid "Panel & split styling"
+msgstr "Estil de panell i dividit"
+
+msgid "Panel width (px)"
+msgstr "Amplada del panell (px)"
+
+msgid "Password icon"
+msgstr "Icona de contrasenya"
+
+msgid "Pick a custom color"
+msgstr "Trieu un color personalitzat"
+
+msgid "Pick a layout and visual treatments for the GLPI login page."
+msgstr ""
+"Trieu un disseny i tractaments visuals per a la pàgina d'inici de sessió "
+"GLPI."
+
+msgid "Pill"
+msgstr "Píndola"
+
+msgid "Position"
+msgstr "Posició"
+
+msgid "Preset palette"
+msgstr "Paleta preestablerta"
+
+msgid "Press on hover"
+msgstr "Premeu al passar el cursor"
+
+msgid "Primary (default)"
+msgstr "Principal (per defecte)"
+
+msgid "Recommended: 1920x1080 or larger."
+msgstr "Recomanat: 1920x1080 o més."
+
+msgid "Right"
+msgstr "D'acord"
+
+msgid "Rounded"
+msgstr "Arrodonit"
+
+msgid "Save login page"
+msgstr "Desa la pàgina d'inici de sessió"
+
+msgid "Scroll"
+msgstr "Desplaçament"
+
+msgid "Secondary"
+msgstr "Secundària"
+
+msgid "Sharp edges with a confident shadow."
+msgstr "Vores afilades amb una ombra segura."
+
+msgid "Shield"
+msgstr "Escut"
+
+msgid "Size"
+msgstr "Mida"
+
+msgid "Soft depth"
+msgstr "Profunditat suau"
+
+msgid "Soft shadow"
+msgstr "Ombra suau"
+
+msgid "Solid"
+msgstr "Sòlid"
+
+msgid "Split blur (px)"
+msgstr "Desenfocament dividit (px)"
+
+msgid "Split color"
+msgstr "Color dividit"
+
+msgid "Split left"
+msgstr "Dividir a l'esquerra"
+
+msgid "Split opacity (%)"
+msgstr "Opacitat dividida (%)"
+
+msgid "Split right"
+msgstr "Dividir a la dreta"
+
+msgid "Split width (%)"
+msgstr "Amplada dividida (%)"
+
+msgid "Square"
+msgstr "Quadrat"
+
+msgid "Stretch"
+msgstr "Estirar"
+
+msgid "Success"
+msgstr "Èxit"
+
+msgid "Text color"
+msgstr "Color del text"
+
+msgid "Title text size (px)"
+msgstr "Mida del text del títol (px)"
+
+msgid "Top"
+msgstr "A dalt"
+
+msgid "Transparent panel"
+msgstr "Panell transparent"
+
+msgid "Underline"
+msgstr "Subratlla"
+
+msgid "Upload wallpaper"
+msgstr "Carregueu fons de pantalla"
+
+msgid "Use button color"
+msgstr "Utilitzeu el color del botó"
+
+msgid "User"
+msgstr "Usuari"
+
+msgid "Wallpaper"
+msgstr "Fons de pantalla"
+
+msgid "Warning"
+msgstr "Avís"
+
+msgid "Yes"
+msgstr "Sí"
+
+msgid "Yes (enable)"
+msgstr "Sí (activar)"
+
+msgid "Yes (hide panel)"
+msgstr "Sí (amaga el tauler)"
+
+msgid ""
+"Light mode logos: used when the system is in light mode, ensuring good "
+"visibility on white or light backgrounds."
+msgstr ""
+"Logotips en mode llum: s'utilitzen quan el sistema està en mode llum, "
+"assegurant una bona visibilitat sobre fons blancs o clars."
+
+msgid ""
+"Dark mode logos: used when the system is in dark mode, ensuring contrast and "
+"readability on black or dark backgrounds."
+msgstr ""
+"Logotips en mode fosc: s'utilitzen quan el sistema està en mode fosc, "
+"garantint el contrast i la llegibilitat en fons negres o foscos."
+
+msgid ""
+"The favicon is the small icon that appears in the browser tab (and also in "
+"bookmarks)."
+msgstr ""
+"El favicon és la petita icona que apareix a la pestanya del navegador (i "
+"també a les adreces d'interès)."
+
+msgid ""
+"Expanded menu logo: the logo displayed when the sidebar menu is open, with "
+"more space available."
+msgstr ""
+"Logotip del menú ampliat: el logotip que es mostra quan el menú de la barra "
+"lateral està obert, amb més espai disponible."
+
+msgid ""
+"Collapsed menu logo: the logo displayed when the sidebar menu is collapsed, "
+"so it needs to be a more compact version."
+msgstr ""
+"Logotip del menú replegat: el logotip que es mostra quan es replega el menú "
+"de la barra lateral, de manera que ha de ser una versió més compacta."
+
+msgid ""
+"Login page logo: the logo displayed on the login screen before the user "
+"enters the system."
+msgstr ""
+"Logotip de la pàgina d'inici de sessió: el logotip que es mostra a la "
+"pantalla d'inici de sessió abans que l'usuari entri al sistema."
+
+msgid "Logo size (%)"
+msgstr "Mida del logotip (%)"
+
+msgid "Favicon active"
+msgstr "Favicon actiu"
+
+msgid "Button"
+msgstr "Botó"
+
+msgid "Wallpaper source"
+msgstr "Font del fons de pantalla"
+
+msgid "Preset wallpaper"
+msgstr "Fons de pantalla predefinit"
+
+msgid "Attachment"
+msgstr "Adjunt"
+
+msgid "Button shape"
+msgstr "Forma de botó"
+
+msgid "Button fill style"
+msgstr "Estil de farciment de botons"
+
+msgid "Button text size (px)"
+msgstr "Mida del text del botó (px)"
+
+msgid "Color mode"
+msgstr "Mode de color"
+
+msgid "GLPI logo configuration"
+msgstr "Configuració del logotip GLPI"
+
+msgid ""
+"Upload logos that will replace the default GLPI assets using CSS variables."
+msgstr ""
+"Pengeu logotips que substituiran els actius GLPI predeterminats mitjançant "
+"variables CSS."
+
+msgid "Expanded menu logo size (%)"
+msgstr "Mida del logotip del menú ampliat (%)"
+
+msgid "Collapsed menu logo size (%)"
+msgstr "Mida del logotip del menú replegat (%)"
+
+msgid "Favicon (browser tab)"
+msgstr "Favicon (pestanya del navegador)"
+
+msgid "Field height (px)"
+msgstr "Alçada del camp (px)"
+
+msgid "Preset wallpapers"
+msgstr "Fons de pantalla preestablerts"
+
+msgid "Custom upload"
+msgstr "Càrrega personalitzada"
+
+msgid "Classic centered"
+msgstr "Clàssic centrat"
+
+msgid "Above panel"
+msgstr "A sobre del panell"
+
+msgid "No"
+msgstr "No"
+
+msgid "Default fill"
+msgstr "Ompliment per defecte"
+
+msgid "Custom color"
+msgstr "Color personalitzat"
+
+msgid "Accent color"
+msgstr "Color d'accent"
+
+msgid "Turn GLPI into a showcase for your brand in just a few clicks."
+msgstr ""
+"Converteix GLPI en un aparador per a la teva marca amb només uns quants "
+"clics."
+
+msgid "About"
+msgstr "Sobre"
+
+msgid "GLPI logos"
+msgstr "GLPI logotips"
+
+msgid "Login Page"
+msgstr "Pàgina d'inici de sessió"
+
+msgid "Premium"
+msgstr "Premium"
+
+msgid "Brandkit by Marcati"
+msgstr "Brandkit per Marcati"
+
+msgid "The visual evolution of your GLPI starts here."
+msgstr "L'evolució visual del vostre GLPI comença aquí."
+
+msgid ""
+"Brandkit delivers logos, login screens, and colors aligned with your "
+"identity. No CSS, no effort, just professional results."
+msgstr ""
+"Brandkit ofereix logotips, pantalles d'inici de sessió i colors alineats amb "
+"la vostra identitat. No CSS, sense esforç, només resultats professionals."
+
+msgid "Discover Marcati at"
+msgstr "Descobriu Marcati a"
+
+msgid "Meet Marcati"
+msgstr "Coneix Marcati"
+
+msgid "Consistent logos"
+msgstr "Logotips coherents"
+
+msgid "Ready uploads for header, favicon, and login."
+msgstr "Càrregues a punt per a la capçalera, la favicon i l'inici de sessió."
+
+msgid "Login with presence"
+msgstr "Inicieu sessió amb presència"
+
+msgid ""
+"Pick layouts, colors, and effects for an authentication screen that sells "
+"your brand."
+msgstr ""
+"Trieu dissenys, colors i efectes per a una pantalla d'autenticació que "
+"vengui la vostra marca."
+
+msgid "Fast delivery"
+msgstr "Lliurament ràpid"
+
+msgid "Settings saved directly in GLPI to activate branding without rework."
+msgstr ""
+"La configuració s'ha desat directament a GLPI per activar la marca sense "
+"tornar a treballar."
+
+msgid "Custom hex color"
+msgstr "Color hexagonal personalitzat"
+
+msgid "Save logo sizes"
+msgstr "Desa les mides del logotip"
+
+msgid "Restore defaults"
+msgstr "Restore defaults"
+
+msgid "Expanded menu logo"
+msgstr "Logotip del menú expandit"
+
+msgid "Collapsed menu logo"
+msgstr "Logotip del menú plegat"
+
+msgid "Login logo"
+msgstr "Logotip d'inici de sessió"
+
+msgid "No custom logo uploaded yet."
+msgstr "Encara no s'ha pujat cap logotip personalitzat."
+
+msgid "No favicon yet"
+msgstr "Encara no hi ha favicon"
+
+msgid "Field width (px)"
+msgstr "Amplada del camp (px)"
+
+msgid "Light mode logos"
+msgstr "Logotips del mode clar"
+
+msgid "Dark mode logos"
+msgstr "Logotips del mode fosc"
+
+msgid "Favicon"
+msgstr "Favicon"
+
+msgid "Upload logo"
+msgstr "Puja el logotip"
+
+msgid "Remove logo"
+msgstr "Elimina el logotip"
+
+msgid "No custom favicon uploaded yet."
+msgstr "Encara no s’ha pujat cap favicon personalitzat."
+
+msgid "Expanded menu logo (dark mode)"
+msgstr "Logotip del menú ampliat (mode fosc)"
+
+msgid "Collapsed menu logo (dark mode)"
+msgstr "Logotip del menú col·lapsat (mode fosc)"
+

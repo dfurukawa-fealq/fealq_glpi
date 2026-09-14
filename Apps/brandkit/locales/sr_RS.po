@@ -1,0 +1,543 @@
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: brandkit\n"
+"Language: sr_RS\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "Dynamic cut for a bolder call-to-action."
+msgstr "Динамичан крој за храбрији позив на акцију."
+
+msgid "Email"
+msgstr "Емаил"
+
+msgid "Field background"
+msgstr "Позадина поља"
+
+msgid "Field border"
+msgstr "Граница поља"
+
+msgid "Field border width (px)"
+msgstr "Ширина ивице поља (пк)"
+
+msgid "Field focus glow"
+msgstr "Сјај фокуса поља"
+
+msgid "Field icons"
+msgstr "Иконе поља"
+
+msgid "Field radius (px)"
+msgstr "Радијус поља (пк)"
+
+msgid "Fields"
+msgstr "Поља"
+
+msgid "Field spacing (px)"
+msgstr "Размак између поља (пк)"
+
+msgid "Field style"
+msgstr "Фиелд стиле"
+
+msgid "Field text"
+msgstr "Текст поља"
+
+msgid "Field text size (px)"
+msgstr "Величина текста поља (пк)"
+
+msgid "Fill with color"
+msgstr "Попуните бојом"
+
+msgid "Fixed"
+msgstr "Фиксно"
+
+msgid "Friendly, fully rounded shape."
+msgstr "Пријатељски, потпуно заобљен облик."
+
+msgid "Glass blur"
+msgstr "Замућење стакла"
+
+msgid "Hide login text"
+msgstr "Сакриј текст за пријаву"
+
+msgid "Hover effect"
+msgstr "Лебдећи ефекат"
+
+msgid "Hover fill custom color"
+msgstr "Прилагођена боја попуне показивача миша"
+
+msgid "Hover text color"
+msgstr "Боја текста преласка мишем"
+
+msgid "Icon color"
+msgstr "Боја иконе"
+
+msgid "Icon position"
+msgstr "Положај иконе"
+
+msgid "ID card"
+msgstr "личну карту"
+
+msgid "Info"
+msgstr "Инфо"
+
+msgid "Inside panel"
+msgstr "Унутрашња плоча"
+
+msgid "Key"
+msgstr "Кључ"
+
+msgid "Layout"
+msgstr "Лаиоут"
+
+msgid "Layout & logo"
+msgstr "Распоред и лого"
+
+msgid "Left"
+msgstr "Лево"
+
+msgid "Light"
+msgstr "Светлост"
+
+msgid "Lock"
+msgstr "Закључај"
+
+msgid "Login icon"
+msgstr "Икона за пријаву"
+
+msgid "Login logo size (px)"
+msgstr "Величина логотипа за пријаву (пк)"
+
+msgid "Login page configuration"
+msgstr "Конфигурација странице за пријаву"
+
+msgid "Logo offset from top (px)"
+msgstr "Лого помак од врха (пк)"
+
+msgid "Logo position"
+msgstr "Положај логотипа"
+
+msgid "Neon glow"
+msgstr "Неонски сјај"
+
+msgid "No (disable)"
+msgstr "Не (онемогући)"
+
+msgid "None"
+msgstr "Ниједан"
+
+msgid "No (show panel)"
+msgstr "Не (прикажи таблу)"
+
+msgid "Original size"
+msgstr "Оригинална величина"
+
+msgid "Outline"
+msgstr "Оутлине"
+
+msgid "Outline danger"
+msgstr "Означите опасност"
+
+msgid "Outline dark"
+msgstr "Контура тамна"
+
+msgid "Outline info"
+msgstr "Оутлине инфо"
+
+msgid "Outline only"
+msgstr "Само обрис"
+
+msgid "Outline primary"
+msgstr "Оутлине примарни"
+
+msgid "Outline secondary"
+msgstr "Оутлине секундарно"
+
+msgid "Outline success"
+msgstr "Нацрт успеха"
+
+msgid "Outline warning"
+msgstr "Оутлине варнинг"
+
+msgid "Overlay color"
+msgstr "Боја преклапања"
+
+msgid "Overlay opacity (%)"
+msgstr "Прозирност преклапања (%)"
+
+msgid "Page text size (px)"
+msgstr "Величина текста странице (пк)"
+
+msgid "Panel blur (px)"
+msgstr "Замућење панела (пк)"
+
+msgid "Panel color"
+msgstr "Боја панела"
+
+msgid "Panel height (px)"
+msgstr "Висина панела (пк)"
+
+msgid "Panel hover effect"
+msgstr "Ефекат лебдења на панелу"
+
+msgid "Panel opacity (%)"
+msgstr "Прозирност панела (%)"
+
+msgid "Panel & split styling"
+msgstr "Панел и подељени стил"
+
+msgid "Panel width (px)"
+msgstr "Ширина панела (пк)"
+
+msgid "Password icon"
+msgstr "Икона лозинке"
+
+msgid "Pick a custom color"
+msgstr "Изаберите прилагођену боју"
+
+msgid "Pick a layout and visual treatments for the GLPI login page."
+msgstr "Изаберите изглед и визуелне третмане за страницу за пријаву __КВ0__."
+
+msgid "Pill"
+msgstr "Пилула"
+
+msgid "Position"
+msgstr "Положај"
+
+msgid "Preset palette"
+msgstr "Пресет палета"
+
+msgid "Press on hover"
+msgstr "Притисните на лебдећи"
+
+msgid "Primary (default)"
+msgstr "Примарни (подразумевано)"
+
+msgid "Recommended: 1920x1080 or larger."
+msgstr "Препоручено: 1920к1080 или више."
+
+msgid "Right"
+msgstr "Тачно"
+
+msgid "Rounded"
+msgstr "Заобљен"
+
+msgid "Save login page"
+msgstr "Сачувај страницу за пријаву"
+
+msgid "Scroll"
+msgstr "Сцролл"
+
+msgid "Secondary"
+msgstr "Секундарни"
+
+msgid "Sharp edges with a confident shadow."
+msgstr "Оштре ивице са самоувереном сенком."
+
+msgid "Shield"
+msgstr "Штит"
+
+msgid "Size"
+msgstr "Величина"
+
+msgid "Soft depth"
+msgstr "Мека дубина"
+
+msgid "Soft shadow"
+msgstr "Мека сенка"
+
+msgid "Solid"
+msgstr "Чврсто"
+
+msgid "Split blur (px)"
+msgstr "Раздвојено замућење (пк)"
+
+msgid "Split color"
+msgstr "Сплит цолор"
+
+msgid "Split left"
+msgstr "Сплит лево"
+
+msgid "Split opacity (%)"
+msgstr "Подељена непрозирност (%)"
+
+msgid "Split right"
+msgstr "Подели десно"
+
+msgid "Split width (%)"
+msgstr "Ширина поделе (%)"
+
+msgid "Square"
+msgstr "Скуаре"
+
+msgid "Stretch"
+msgstr "Стретцх"
+
+msgid "Success"
+msgstr "Успех"
+
+msgid "Text color"
+msgstr "Боја текста"
+
+msgid "Title text size (px)"
+msgstr "Величина текста наслова (пк)"
+
+msgid "Top"
+msgstr "Врх"
+
+msgid "Transparent panel"
+msgstr "Транспарент панел"
+
+msgid "Underline"
+msgstr "Подвуци"
+
+msgid "Upload wallpaper"
+msgstr "Отпреми позадину"
+
+msgid "Use button color"
+msgstr "Користите боју дугмета"
+
+msgid "User"
+msgstr "Корисник"
+
+msgid "Wallpaper"
+msgstr "Валлпапер"
+
+msgid "Warning"
+msgstr "Упозорење"
+
+msgid "Yes"
+msgstr "Да"
+
+msgid "Yes (enable)"
+msgstr "Да (омогући)"
+
+msgid "Yes (hide panel)"
+msgstr "Да (сакриј панел)"
+
+msgid ""
+"Light mode logos: used when the system is in light mode, ensuring good "
+"visibility on white or light backgrounds."
+msgstr ""
+"Логотипи светлосног режима: користе се када је систем у светлом режиму, "
+"обезбеђујући добру видљивост на белој или светлој позадини."
+
+msgid ""
+"Dark mode logos: used when the system is in dark mode, ensuring contrast and "
+"readability on black or dark backgrounds."
+msgstr ""
+"Логотипи тамног режима: користе се када је систем у тамном режиму, "
+"обезбеђујући контраст и читљивост на црној или тамној позадини."
+
+msgid ""
+"The favicon is the small icon that appears in the browser tab (and also in "
+"bookmarks)."
+msgstr ""
+"Фавицон је мала икона која се појављује на картици претраживача (и такође у "
+"обележивачима)."
+
+msgid ""
+"Expanded menu logo: the logo displayed when the sidebar menu is open, with "
+"more space available."
+msgstr ""
+"Лого проширеног менија: логотип који се приказује када је мени бочне траке "
+"отворен, са више расположивог простора."
+
+msgid ""
+"Collapsed menu logo: the logo displayed when the sidebar menu is collapsed, "
+"so it needs to be a more compact version."
+msgstr ""
+"Скупљени лого менија: логотип који се приказује када је мени на бочној траци "
+"скупљен, тако да треба да буде компактнија верзија."
+
+msgid ""
+"Login page logo: the logo displayed on the login screen before the user "
+"enters the system."
+msgstr ""
+"Лого странице за пријаву: логотип који се приказује на екрану за пријаву пре "
+"него што корисник уђе у систем."
+
+msgid "Logo size (%)"
+msgstr "Величина логотипа (%)"
+
+msgid "Favicon active"
+msgstr "Фавицон активан"
+
+msgid "Button"
+msgstr "Дугме"
+
+msgid "Wallpaper source"
+msgstr "Извор позадине"
+
+msgid "Preset wallpaper"
+msgstr "Унапред подешена позадина"
+
+msgid "Attachment"
+msgstr "Прилог"
+
+msgid "Button shape"
+msgstr "Облик дугмета"
+
+msgid "Button fill style"
+msgstr "Стил пуњења дугмета"
+
+msgid "Button text size (px)"
+msgstr "Величина текста дугмета (пк)"
+
+msgid "Color mode"
+msgstr "Режим боје"
+
+msgid "GLPI logo configuration"
+msgstr "__КВ0__ конфигурација логотипа"
+
+msgid ""
+"Upload logos that will replace the default GLPI assets using CSS variables."
+msgstr ""
+"Отпремите логотипе који ће заменити подразумевана средства __КВ0__ помоћу "
+"променљивих __КВ3__."
+
+msgid "Expanded menu logo size (%)"
+msgstr "Величина логотипа проширеног менија (%)"
+
+msgid "Collapsed menu logo size (%)"
+msgstr "Величина скупљеног логотипа менија (%)"
+
+msgid "Favicon (browser tab)"
+msgstr "Фавицон (картица прегледача)"
+
+msgid "Field height (px)"
+msgstr "Висина поља (пк)"
+
+msgid "Preset wallpapers"
+msgstr "Унапред подешене позадине"
+
+msgid "Custom upload"
+msgstr "Прилагођено отпремање"
+
+msgid "Classic centered"
+msgstr "Класично центриран"
+
+msgid "Above panel"
+msgstr "Изнад панела"
+
+msgid "No"
+msgstr "бр"
+
+msgid "Default fill"
+msgstr "Подразумевано попуњавање"
+
+msgid "Custom color"
+msgstr "Прилагођена боја"
+
+msgid "Accent color"
+msgstr "Боја акцента"
+
+msgid "Turn GLPI into a showcase for your brand in just a few clicks."
+msgstr "Претворите __КВ0__ у излог свог бренда у само неколико кликова."
+
+msgid "About"
+msgstr "Абоут"
+
+msgid "GLPI logos"
+msgstr "__КВ0__ логотипи"
+
+msgid "Login Page"
+msgstr "Страница за пријаву"
+
+msgid "Premium"
+msgstr "Premium"
+
+msgid "Brandkit by Marcati"
+msgstr "__КВ1__ од __КВ2__"
+
+msgid "The visual evolution of your GLPI starts here."
+msgstr "Визуелна еволуција вашег __КВ0__ почиње овде."
+
+msgid ""
+"Brandkit delivers logos, login screens, and colors aligned with your "
+"identity. No CSS, no effort, just professional results."
+msgstr ""
+"__КВ1__ испоручује логотипе, екране за пријаву и боје усклађене са вашим "
+"идентитетом. Без __КВ3__, без труда, само професионални резултати."
+
+msgid "Discover Marcati at"
+msgstr "Откријте __КВ2__ на"
+
+msgid "Meet Marcati"
+msgstr "Упознај __КВ2__"
+
+msgid "Consistent logos"
+msgstr "Конзистентни логотипи"
+
+msgid "Ready uploads for header, favicon, and login."
+msgstr "Спремно отпремање за заглавље, фавицон и пријављивање."
+
+msgid "Login with presence"
+msgstr "Пријавите се са присуством"
+
+msgid ""
+"Pick layouts, colors, and effects for an authentication screen that sells "
+"your brand."
+msgstr ""
+"Изаберите распореде, боје и ефекте за екран за потврду идентитета који "
+"продаје ваш бренд."
+
+msgid "Fast delivery"
+msgstr "Брза испорука"
+
+msgid "Settings saved directly in GLPI to activate branding without rework."
+msgstr ""
+"Подешавања сачувана директно у __КВ0__ да бисте активирали брендирање без "
+"прераде."
+
+msgid "Custom hex color"
+msgstr "Прилагођена хексадецимална боја"
+
+msgid "Save logo sizes"
+msgstr "Сачувајте величине логотипа"
+
+msgid "Restore defaults"
+msgstr "Restore defaults"
+
+msgid "Expanded menu logo"
+msgstr "Логотип проширеног менија"
+
+msgid "Collapsed menu logo"
+msgstr "Логотип скупљеног менија"
+
+msgid "Login logo"
+msgstr "Логотип пријаве"
+
+msgid "No custom logo uploaded yet."
+msgstr "Још није отпремљен прилагођени логотип."
+
+msgid "No favicon yet"
+msgstr "Још нема фавикона"
+
+msgid "Field width (px)"
+msgstr "Ширина поља (пк)"
+
+msgid "Light mode logos"
+msgstr "Logotipi svetlog režima"
+
+msgid "Dark mode logos"
+msgstr "Logotipi tamnog režima"
+
+msgid "Favicon"
+msgstr "Favicon"
+
+msgid "Upload logo"
+msgstr "Otpremi logotip"
+
+msgid "Remove logo"
+msgstr "Ukloni logotip"
+
+msgid "No custom favicon uploaded yet."
+msgstr "Prilagođeni favicon još nije otpremljen."
+
+msgid "Expanded menu logo (dark mode)"
+msgstr "Logotip proširenog menija (tamni režim)"
+
+msgid "Collapsed menu logo (dark mode)"
+msgstr "Logotip skupljenog menija (tamni režim)"
+

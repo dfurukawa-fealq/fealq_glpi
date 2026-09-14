@@ -1,0 +1,544 @@
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: brandkit\n"
+"Language: vi_VN\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "Dynamic cut for a bolder call-to-action."
+msgstr "Kiểu cắt năng động để kêu gọi hành động táo bạo hơn."
+
+msgid "Email"
+msgstr "E-mail"
+
+msgid "Field background"
+msgstr "Nền trường"
+
+msgid "Field border"
+msgstr "Đường viền trường"
+
+msgid "Field border width (px)"
+msgstr "Chiều rộng đường viền trường (px)"
+
+msgid "Field focus glow"
+msgstr "Ánh sáng tiêu điểm trường"
+
+msgid "Field icons"
+msgstr "Biểu tượng trường"
+
+msgid "Field radius (px)"
+msgstr "Bán kính trường (px)"
+
+msgid "Fields"
+msgstr "Trường"
+
+msgid "Field spacing (px)"
+msgstr "Khoảng cách trường (px)"
+
+msgid "Field style"
+msgstr "Kiểu trường"
+
+msgid "Field text"
+msgstr "Văn bản trường"
+
+msgid "Field text size (px)"
+msgstr "Kích thước văn bản trường (px)"
+
+msgid "Fill with color"
+msgstr "Đổ đầy màu sắc"
+
+msgid "Fixed"
+msgstr "Đã sửa"
+
+msgid "Friendly, fully rounded shape."
+msgstr "Thân thiện, hình dáng tròn trịa."
+
+msgid "Glass blur"
+msgstr "Kính mờ"
+
+msgid "Hide login text"
+msgstr "Ẩn văn bản đăng nhập"
+
+msgid "Hover effect"
+msgstr "Hiệu ứng di chuột"
+
+msgid "Hover fill custom color"
+msgstr "Di chuột tô màu tùy chỉnh"
+
+msgid "Hover text color"
+msgstr "Màu văn bản di chuột"
+
+msgid "Icon color"
+msgstr "Màu biểu tượng"
+
+msgid "Icon position"
+msgstr "Vị trí biểu tượng"
+
+msgid "ID card"
+msgstr "CMND"
+
+msgid "Info"
+msgstr "Thông tin"
+
+msgid "Inside panel"
+msgstr "Bảng điều khiển bên trong"
+
+msgid "Key"
+msgstr "Chìa khóa"
+
+msgid "Layout"
+msgstr "Cách trình bày"
+
+msgid "Layout & logo"
+msgstr "Bố cục & logo"
+
+msgid "Left"
+msgstr "Bên trái"
+
+msgid "Light"
+msgstr "Ánh sáng"
+
+msgid "Lock"
+msgstr "Khóa"
+
+msgid "Login icon"
+msgstr "Biểu tượng đăng nhập"
+
+msgid "Login logo size (px)"
+msgstr "Kích thước logo đăng nhập (px)"
+
+msgid "Login page configuration"
+msgstr "Cấu hình trang đăng nhập"
+
+msgid "Logo offset from top (px)"
+msgstr "Logo lệch từ trên xuống (px)"
+
+msgid "Logo position"
+msgstr "Vị trí logo"
+
+msgid "Neon glow"
+msgstr "Ánh đèn neon"
+
+msgid "No (disable)"
+msgstr "Không (tắt)"
+
+msgid "None"
+msgstr "Không có"
+
+msgid "No (show panel)"
+msgstr "Không (hiển thị bảng điều khiển)"
+
+msgid "Original size"
+msgstr "Kích thước ban đầu"
+
+msgid "Outline"
+msgstr "phác thảo"
+
+msgid "Outline danger"
+msgstr "Phác thảo mối nguy hiểm"
+
+msgid "Outline dark"
+msgstr "Phác thảo tối"
+
+msgid "Outline info"
+msgstr "thông tin phác thảo"
+
+msgid "Outline only"
+msgstr "Chỉ phác thảo"
+
+msgid "Outline primary"
+msgstr "phác thảo chính"
+
+msgid "Outline secondary"
+msgstr "phác thảo thứ cấp"
+
+msgid "Outline success"
+msgstr "phác thảo thành công"
+
+msgid "Outline warning"
+msgstr "cảnh báo phác thảo"
+
+msgid "Overlay color"
+msgstr "Màu lớp phủ"
+
+msgid "Overlay opacity (%)"
+msgstr "Độ mờ của lớp phủ (%)"
+
+msgid "Page text size (px)"
+msgstr "Kích thước văn bản trang (px)"
+
+msgid "Panel blur (px)"
+msgstr "Độ mờ của bảng điều khiển (px)"
+
+msgid "Panel color"
+msgstr "Màu bảng điều khiển"
+
+msgid "Panel height (px)"
+msgstr "Chiều cao của bảng điều khiển (px)"
+
+msgid "Panel hover effect"
+msgstr "Hiệu ứng di chuột của bảng điều khiển"
+
+msgid "Panel opacity (%)"
+msgstr "Độ mờ của bảng điều khiển (%)"
+
+msgid "Panel & split styling"
+msgstr "Kiểu dáng bảng điều khiển & phân chia"
+
+msgid "Panel width (px)"
+msgstr "Chiều rộng bảng điều khiển (px)"
+
+msgid "Password icon"
+msgstr "Biểu tượng mật khẩu"
+
+msgid "Pick a custom color"
+msgstr "Chọn một màu tùy chỉnh"
+
+msgid "Pick a layout and visual treatments for the GLPI login page."
+msgstr "Chọn bố cục và cách xử lý hình ảnh cho trang đăng nhập GLPI."
+
+msgid "Pill"
+msgstr "Thuốc viên"
+
+msgid "Position"
+msgstr "Chức vụ"
+
+msgid "Preset palette"
+msgstr "Bảng màu cài sẵn"
+
+msgid "Press on hover"
+msgstr "Nhấn vào di chuột"
+
+msgid "Primary (default)"
+msgstr "Chính (mặc định)"
+
+msgid "Recommended: 1920x1080 or larger."
+msgstr "Khuyến nghị: 1920x1080 hoặc lớn hơn."
+
+msgid "Right"
+msgstr "Phải"
+
+msgid "Rounded"
+msgstr "làm tròn"
+
+msgid "Save login page"
+msgstr "Lưu trang đăng nhập"
+
+msgid "Scroll"
+msgstr "Cuộn"
+
+msgid "Secondary"
+msgstr "Sơ trung"
+
+msgid "Sharp edges with a confident shadow."
+msgstr "Các cạnh sắc nét với một cái bóng tự tin."
+
+msgid "Shield"
+msgstr "Khiên"
+
+msgid "Size"
+msgstr "Kích cỡ"
+
+msgid "Soft depth"
+msgstr "Độ sâu mềm"
+
+msgid "Soft shadow"
+msgstr "Bóng mềm"
+
+msgid "Solid"
+msgstr "Chất rắn"
+
+msgid "Split blur (px)"
+msgstr "Tách mờ (px)"
+
+msgid "Split color"
+msgstr "Tách màu"
+
+msgid "Split left"
+msgstr "Chia trái"
+
+msgid "Split opacity (%)"
+msgstr "Độ mờ phân chia (%)"
+
+msgid "Split right"
+msgstr "Chia phải"
+
+msgid "Split width (%)"
+msgstr "Chiều rộng phân chia (%)"
+
+msgid "Square"
+msgstr "Quảng trường"
+
+msgid "Stretch"
+msgstr "Kéo dài"
+
+msgid "Success"
+msgstr "Thành công"
+
+msgid "Text color"
+msgstr "Màu văn bản"
+
+msgid "Title text size (px)"
+msgstr "Kích thước văn bản tiêu đề (px)"
+
+msgid "Top"
+msgstr "Đứng đầu"
+
+msgid "Transparent panel"
+msgstr "Bảng trong suốt"
+
+msgid "Underline"
+msgstr "gạch chân"
+
+msgid "Upload wallpaper"
+msgstr "Tải hình nền lên"
+
+msgid "Use button color"
+msgstr "Sử dụng màu nút"
+
+msgid "User"
+msgstr "người dùng"
+
+msgid "Wallpaper"
+msgstr "Hình nền"
+
+msgid "Warning"
+msgstr "Cảnh báo"
+
+msgid "Yes"
+msgstr "Đúng"
+
+msgid "Yes (enable)"
+msgstr "Có (bật)"
+
+msgid "Yes (hide panel)"
+msgstr "Có (ẩn bảng điều khiển)"
+
+msgid ""
+"Light mode logos: used when the system is in light mode, ensuring good "
+"visibility on white or light backgrounds."
+msgstr ""
+"Logo chế độ sáng: sử dụng khi hệ thống ở chế độ sáng, đảm bảo hiển thị tốt "
+"trên nền trắng hoặc sáng."
+
+msgid ""
+"Dark mode logos: used when the system is in dark mode, ensuring contrast and "
+"readability on black or dark backgrounds."
+msgstr ""
+"Logo chế độ tối: được sử dụng khi hệ thống ở chế độ tối, đảm bảo độ tương "
+"phản và dễ đọc trên nền đen hoặc tối."
+
+msgid ""
+"The favicon is the small icon that appears in the browser tab (and also in "
+"bookmarks)."
+msgstr ""
+"Favicon là biểu tượng nhỏ xuất hiện trong tab trình duyệt (và cả trong dấu "
+"trang)."
+
+msgid ""
+"Expanded menu logo: the logo displayed when the sidebar menu is open, with "
+"more space available."
+msgstr ""
+"Logo menu mở rộng: logo hiển thị khi menu thanh bên được mở, có nhiều không "
+"gian hơn."
+
+msgid ""
+"Collapsed menu logo: the logo displayed when the sidebar menu is collapsed, "
+"so it needs to be a more compact version."
+msgstr ""
+"Logo menu thu gọn: logo hiển thị khi menu sidebar được thu gọn nên cần có "
+"phiên bản nhỏ gọn hơn."
+
+msgid ""
+"Login page logo: the logo displayed on the login screen before the user "
+"enters the system."
+msgstr ""
+"Logo trang đăng nhập: logo hiển thị trên màn hình đăng nhập trước khi người "
+"dùng vào hệ thống."
+
+msgid "Logo size (%)"
+msgstr "Kích thước biểu tượng (%)"
+
+msgid "Favicon active"
+msgstr "Biểu tượng yêu thích đang hoạt động"
+
+msgid "Button"
+msgstr "Cái nút"
+
+msgid "Wallpaper source"
+msgstr "Nguồn hình nền"
+
+msgid "Preset wallpaper"
+msgstr "Hình nền cài sẵn"
+
+msgid "Attachment"
+msgstr "Tệp đính kèm"
+
+msgid "Button shape"
+msgstr "Hình dạng nút"
+
+msgid "Button fill style"
+msgstr "Kiểu điền nút"
+
+msgid "Button text size (px)"
+msgstr "Kích thước văn bản nút (px)"
+
+msgid "Color mode"
+msgstr "Chế độ màu"
+
+msgid "GLPI logo configuration"
+msgstr "Cấu hình biểu tượng GLPI"
+
+msgid ""
+"Upload logos that will replace the default GLPI assets using CSS variables."
+msgstr ""
+"Tải lên các biểu trưng sẽ thay thế nội dung GLPI mặc định bằng cách sử dụng "
+"các biến CSS."
+
+msgid "Expanded menu logo size (%)"
+msgstr "Kích thước logo menu mở rộng (%)"
+
+msgid "Collapsed menu logo size (%)"
+msgstr "Kích thước logo menu được thu gọn (%)"
+
+msgid "Favicon (browser tab)"
+msgstr "Favicon (tab trình duyệt)"
+
+msgid "Field height (px)"
+msgstr "Chiều cao trường (px)"
+
+msgid "Preset wallpapers"
+msgstr "Hình nền cài sẵn"
+
+msgid "Custom upload"
+msgstr "Tải lên tùy chỉnh"
+
+msgid "Classic centered"
+msgstr "Cổ điển tập trung"
+
+msgid "Above panel"
+msgstr "Bảng trên"
+
+msgid "No"
+msgstr "KHÔNG"
+
+msgid "Default fill"
+msgstr "Điền mặc định"
+
+msgid "Custom color"
+msgstr "Màu tùy chỉnh"
+
+msgid "Accent color"
+msgstr "Màu nhấn"
+
+msgid "Turn GLPI into a showcase for your brand in just a few clicks."
+msgstr ""
+"Biến GLPI thành nơi trưng bày thương hiệu của bạn chỉ bằng vài cú nhấp chuột."
+
+msgid "About"
+msgstr "Về"
+
+msgid "GLPI logos"
+msgstr "GLPI biểu tượng"
+
+msgid "Login Page"
+msgstr "Trang đăng nhập"
+
+msgid "Premium"
+msgstr "Premium"
+
+msgid "Brandkit by Marcati"
+msgstr "Brandkit bởi Marcati"
+
+msgid "The visual evolution of your GLPI starts here."
+msgstr "Quá trình phát triển trực quan của GLPI của bạn bắt đầu từ đây."
+
+msgid ""
+"Brandkit delivers logos, login screens, and colors aligned with your "
+"identity. No CSS, no effort, just professional results."
+msgstr ""
+"Brandkit cung cấp logo, màn hình đăng nhập và màu sắc phù hợp với danh tính "
+"của bạn. Không CSS, không cần nỗ lực, chỉ cần kết quả chuyên nghiệp."
+
+msgid "Discover Marcati at"
+msgstr "Khám phá Marcati tại"
+
+msgid "Meet Marcati"
+msgstr "Gặp Marcati"
+
+msgid "Consistent logos"
+msgstr "Logo nhất quán"
+
+msgid "Ready uploads for header, favicon, and login."
+msgstr "Sẵn sàng tải lên tiêu đề, favicon và đăng nhập."
+
+msgid "Login with presence"
+msgstr "Đăng nhập với sự hiện diện"
+
+msgid ""
+"Pick layouts, colors, and effects for an authentication screen that sells "
+"your brand."
+msgstr ""
+"Chọn bố cục, màu sắc và hiệu ứng cho màn hình xác thực bán thương hiệu của "
+"bạn."
+
+msgid "Fast delivery"
+msgstr "Giao hàng nhanh"
+
+msgid "Settings saved directly in GLPI to activate branding without rework."
+msgstr ""
+"Cài đặt được lưu trực tiếp trong GLPI để kích hoạt nhãn hiệu mà không cần "
+"làm lại."
+
+msgid "Custom hex color"
+msgstr "Màu lục giác tùy chỉnh"
+
+msgid "Save logo sizes"
+msgstr "Lưu kích thước logo"
+
+msgid "Restore defaults"
+msgstr "Restore defaults"
+
+msgid "Expanded menu logo"
+msgstr "Logo menu mở rộng"
+
+msgid "Collapsed menu logo"
+msgstr "Logo menu thu gọn"
+
+msgid "Login logo"
+msgstr "Logo đăng nhập"
+
+msgid "No custom logo uploaded yet."
+msgstr "Chưa tải lên logo tùy chỉnh."
+
+msgid "No favicon yet"
+msgstr "Chưa có favicon"
+
+msgid "Field width (px)"
+msgstr "Chiều rộng trường (px)"
+
+msgid "Light mode logos"
+msgstr "Logo chế độ sáng"
+
+msgid "Dark mode logos"
+msgstr "Logo chế độ tối"
+
+msgid "Favicon"
+msgstr "Favicon"
+
+msgid "Upload logo"
+msgstr "Tải logo lên"
+
+msgid "Remove logo"
+msgstr "Xóa logo"
+
+msgid "No custom favicon uploaded yet."
+msgstr "Chưa có favicon tùy chỉnh nào được tải lên."
+
+msgid "Expanded menu logo (dark mode)"
+msgstr "Logo menu mở rộng (chế độ tối)"
+
+msgid "Collapsed menu logo (dark mode)"
+msgstr "Logo menu thu gọn (chế độ tối)"
+

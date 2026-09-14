@@ -1,0 +1,145 @@
+{
+  "name": "DashGLPI - SLA Triagem Omnicanal",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "dashglpi-sla-triagem",
+        "responseMode": "onReceived",
+        "options": {}
+      },
+      "id": "1f9b8f0a-0001-4a00-8000-000000000001",
+      "name": "Webhook (dashglpi)",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [240, 300],
+      "webhookId": "dashglpi-sla-triagem"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Lista de entities_id tratados como VIP (edite aqui — sem precisar reimportar o\n// workflow inteiro). Ver Apps/workflows/sla-triagem-omnicanal.md.\nconst VIP_ENTITIES = [];\n\nconst alert = $input.first().json.body ?? $input.first().json;\nconst entitiesId = Number(alert.entities_id) || 0;\nconst isVip = entitiesId > 0 && VIP_ENTITIES.includes(entitiesId);\n\nreturn [\n  {\n    json: {\n      ...alert,\n      is_vip: isVip,\n    },\n  },\n];\n"
+      },
+      "id": "1f9b8f0a-0002-4a00-8000-000000000002",
+      "name": "Resolve VIP",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [460, 300]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Monta o MessageCard do Teams no mesmo formato usado pelo canal direto do\n// dashglpi (Apps/dashglpi/inc/messaging/teams_channel.php) — mesmas cores/emoji\n// por nível, para o time ver um único estilo de card independente do caminho.\nconst a = $input.first().json;\n\nconst themeColor = a.level === 'warn' ? 'FFB020' : (a.level === 'info' ? '2A9D8F' : 'D2314B');\nconst emoji = a.level === 'warn' ? '\\u26A0\\uFE0F' : (a.level === 'info' ? '\\uD83D\\uDCCC' : '\\uD83D\\uDEA8');\nconst levelLabel = a.level === 'warn' ? 'Aten\\u00e7\\u00e3o de SLA' : (a.level === 'info' ? 'Novo Evento' : 'SLA estourado');\n\nconst facts = [\n  { name: 'Chamado', value: '#' + (a.ticket_id ?? '0') },\n  { name: 'Entidade', value: a.entity_name || '\\u2014' },\n  { name: 'Categoria', value: a.category || '\\u2014' },\n];\nif (a.created_at_formatted) {\n  facts.push({ name: a.event_at_label || 'Ocorrido em', value: a.created_at_formatted });\n}\nfacts.push({\n  name: (a.threshold > 0) ? 'Sem a\\u00e7\\u00e3o h\\u00e1' : 'Detectado h\\u00e1',\n  value: (a.minutes_overdue ?? 0) + ' min' + (a.threshold > 0 ? (' (limite: ' + a.threshold + ' min)') : ''),\n});\nif (a.note) {\n  facts.push({ name: 'Detalhe', value: a.note });\n}\n\nconst actions = [];\nif (a.url) {\n  actions.push({ '@type': 'OpenUri', name: 'Visualizar Chamado (GLPI)', targets: [{ os: 'default', uri: a.url }] });\n}\nif (a.dashboard_url) {\n  actions.push({ '@type': 'OpenUri', name: 'Abrir no DashGLPI', targets: [{ os: 'default', uri: a.dashboard_url }] });\n}\n\nconst card = {\n  '@type': 'MessageCard',\n  '@context': 'https://schema.org/extensions',\n  themeColor,\n  title: emoji + ' ' + levelLabel,\n  summary: levelLabel + ' - Chamado #' + (a.ticket_id ?? '0'),\n  sections: [\n    {\n      activityTitle: '**' + (a.title || ('Chamado #' + (a.ticket_id ?? '0'))) + '**',\n      activitySubtitle: 'Fealq \\u00b7 n8n (SLA Triagem Omnicanal)',\n      facts,\n      markdown: true,\n    },\n  ],\n};\nif (actions.length) {\n  card.potentialAction = actions;\n}\n\nreturn [{ json: { ...a, teams_card: card } }];\n"
+      },
+      "id": "1f9b8f0a-0003-4a00-8000-000000000003",
+      "name": "Build Teams Card",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [680, 300]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $env.TEAMS_WEBHOOK_URL }}",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify($json.teams_card) }}",
+        "options": {}
+      },
+      "id": "1f9b8f0a-0004-4a00-8000-000000000004",
+      "name": "Enviar Teams",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [900, 220],
+      "notes": "URL do Incoming Webhook do Teams lida de $env.TEAMS_WEBHOOK_URL (variável do container kawa_n8n, docker-compose.yml) — nunca literal aqui. Ver .md deste workflow."
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "1f9b8f0a-0005-4a00-8000-000000000005",
+              "leftValue": "={{ $json.is_vip }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "1f9b8f0a-0006-4a00-8000-000000000006",
+      "name": "E VIP?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [900, 400]
+    },
+    {
+      "parameters": {
+        "jsCode": "const a = $input.first().json;\nconst lines = [\n  '\\uD83D\\uDEA8 Chamado VIP: #' + (a.ticket_id ?? '0'),\n  a.title || '',\n  'Entidade: ' + (a.entity_name || '\\u2014'),\n  'Categoria: ' + (a.category || '\\u2014'),\n];\nif (a.created_at_formatted) {\n  lines.push((a.event_at_label || 'Ocorrido em') + ': ' + a.created_at_formatted);\n}\nlines.push('Sem a\\u00e7\\u00e3o h\\u00e1: ' + (a.minutes_overdue ?? 0) + ' min');\nif (a.url) {\n  lines.push('');\n  lines.push('GLPI: ' + a.url);\n}\n\nreturn [{ json: { ...a, whatsapp_text: lines.filter((l) => l !== undefined).join('\\n') } }];\n"
+      },
+      "id": "1f9b8f0a-0007-4a00-8000-000000000007",
+      "name": "Build WhatsApp Text",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1120, 400]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $env.EVOLUTION_API_URL }}/message/sendText/{{ $env.EVOLUTION_API_INSTANCE }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            { "name": "apikey", "value": "={{ $env.AUTHENTICATION_API_KEY }}" }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ number: $env.N8N_VIP_WHATSAPP_NUMBER, text: $json.whatsapp_text }) }}",
+        "options": {}
+      },
+      "id": "1f9b8f0a-0008-4a00-8000-000000000008",
+      "name": "Enviar WhatsApp VIP",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1340, 400],
+      "notes": "Evolution API (kawa_evolutionapi). URL/instância/API key/número VIP lidos de $env (variáveis do container kawa_n8n, docker-compose.yml) — nunca literais aqui. Ver .md deste workflow."
+    }
+  ],
+  "connections": {
+    "Webhook (dashglpi)": {
+      "main": [[{ "node": "Resolve VIP", "type": "main", "index": 0 }]]
+    },
+    "Resolve VIP": {
+      "main": [[
+        { "node": "Build Teams Card", "type": "main", "index": 0 },
+        { "node": "E VIP?", "type": "main", "index": 0 }
+      ]]
+    },
+    "Build Teams Card": {
+      "main": [[{ "node": "Enviar Teams", "type": "main", "index": 0 }]]
+    },
+    "E VIP?": {
+      "main": [
+        [{ "node": "Build WhatsApp Text", "type": "main", "index": 0 }],
+        []
+      ]
+    },
+    "Build WhatsApp Text": {
+      "main": [[{ "node": "Enviar WhatsApp VIP", "type": "main", "index": 0 }]]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "pinData": {}
+}

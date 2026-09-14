@@ -1,0 +1,529 @@
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: brandkit\n"
+"Language: zh_CN\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "Dynamic cut for a bolder call-to-action."
+msgstr "动态剪裁带来更大胆的号召性用语。"
+
+msgid "Email"
+msgstr "电子邮件"
+
+msgid "Field background"
+msgstr "领域背景"
+
+msgid "Field border"
+msgstr "田野边界"
+
+msgid "Field border width (px)"
+msgstr "字段边框宽度（像素）"
+
+msgid "Field focus glow"
+msgstr "场焦点发光"
+
+msgid "Field icons"
+msgstr "字段图标"
+
+msgid "Field radius (px)"
+msgstr "场半径（像素）"
+
+msgid "Fields"
+msgstr "领域"
+
+msgid "Field spacing (px)"
+msgstr "字段间距（像素）"
+
+msgid "Field style"
+msgstr "田野风格"
+
+msgid "Field text"
+msgstr "字段文本"
+
+msgid "Field text size (px)"
+msgstr "字段文本大小（像素）"
+
+msgid "Fill with color"
+msgstr "填充颜​​色"
+
+msgid "Fixed"
+msgstr "固定的"
+
+msgid "Friendly, fully rounded shape."
+msgstr "友好、完全圆形的形状。"
+
+msgid "Glass blur"
+msgstr "玻璃模糊"
+
+msgid "Hide login text"
+msgstr "隐藏登录文本"
+
+msgid "Hover effect"
+msgstr "悬停效果"
+
+msgid "Hover fill custom color"
+msgstr "悬停填充自定义颜色"
+
+msgid "Hover text color"
+msgstr "悬停文本颜色"
+
+msgid "Icon color"
+msgstr "图标颜色"
+
+msgid "Icon position"
+msgstr "图标位置"
+
+msgid "ID card"
+msgstr "身份证"
+
+msgid "Info"
+msgstr "信息"
+
+msgid "Inside panel"
+msgstr "内面板"
+
+msgid "Key"
+msgstr "钥匙"
+
+msgid "Layout"
+msgstr "布局"
+
+msgid "Layout & logo"
+msgstr "布局和标志"
+
+msgid "Left"
+msgstr "左边"
+
+msgid "Light"
+msgstr "光"
+
+msgid "Lock"
+msgstr "锁"
+
+msgid "Login icon"
+msgstr "登录图标"
+
+msgid "Login logo size (px)"
+msgstr "登录徽标大小（像素）"
+
+msgid "Login page configuration"
+msgstr "登录页面配置"
+
+msgid "Logo offset from top (px)"
+msgstr "徽标距顶部的偏移量 (px)"
+
+msgid "Logo position"
+msgstr "标志位置"
+
+msgid "Neon glow"
+msgstr "霓虹灯发光"
+
+msgid "No (disable)"
+msgstr "否（禁用）"
+
+msgid "None"
+msgstr "没有任何"
+
+msgid "No (show panel)"
+msgstr "否（显示面板）"
+
+msgid "Original size"
+msgstr "原始尺寸"
+
+msgid "Outline"
+msgstr "大纲"
+
+msgid "Outline danger"
+msgstr "概述危险"
+
+msgid "Outline dark"
+msgstr "轮廓暗"
+
+msgid "Outline info"
+msgstr "概要信息"
+
+msgid "Outline only"
+msgstr "仅大纲"
+
+msgid "Outline primary"
+msgstr "大纲初级"
+
+msgid "Outline secondary"
+msgstr "大纲中学"
+
+msgid "Outline success"
+msgstr "概述成功"
+
+msgid "Outline warning"
+msgstr "大纲警告"
+
+msgid "Overlay color"
+msgstr "叠加颜色"
+
+msgid "Overlay opacity (%)"
+msgstr "叠加不透明度 (%)"
+
+msgid "Page text size (px)"
+msgstr "页面文字大小（像素）"
+
+msgid "Panel blur (px)"
+msgstr "面板模糊（像素）"
+
+msgid "Panel color"
+msgstr "面板颜色"
+
+msgid "Panel height (px)"
+msgstr "面板高度（像素）"
+
+msgid "Panel hover effect"
+msgstr "面板悬停效果"
+
+msgid "Panel opacity (%)"
+msgstr "面板不透明度 (%)"
+
+msgid "Panel & split styling"
+msgstr "面板和分体样式"
+
+msgid "Panel width (px)"
+msgstr "面板宽度（像素）"
+
+msgid "Password icon"
+msgstr "密码图标"
+
+msgid "Pick a custom color"
+msgstr "选择自定义颜色"
+
+msgid "Pick a layout and visual treatments for the GLPI login page."
+msgstr "为 GLPI 登录页面选择布局和视觉处理。"
+
+msgid "Pill"
+msgstr "丸"
+
+msgid "Position"
+msgstr "位置"
+
+msgid "Preset palette"
+msgstr "预设调色板"
+
+msgid "Press on hover"
+msgstr "悬停时按下"
+
+msgid "Primary (default)"
+msgstr "主要（默认）"
+
+msgid "Recommended: 1920x1080 or larger."
+msgstr "建议：1920x1080 或更大。"
+
+msgid "Right"
+msgstr "正确的"
+
+msgid "Rounded"
+msgstr "圆形"
+
+msgid "Save login page"
+msgstr "保存登录页面"
+
+msgid "Scroll"
+msgstr "滚动"
+
+msgid "Secondary"
+msgstr "中学"
+
+msgid "Sharp edges with a confident shadow."
+msgstr "锐利的边缘和自信的阴影。"
+
+msgid "Shield"
+msgstr "盾"
+
+msgid "Size"
+msgstr "尺寸"
+
+msgid "Soft depth"
+msgstr "软深度"
+
+msgid "Soft shadow"
+msgstr "软阴影"
+
+msgid "Solid"
+msgstr "坚硬的"
+
+msgid "Split blur (px)"
+msgstr "分割模糊 (px)"
+
+msgid "Split color"
+msgstr "分色"
+
+msgid "Split left"
+msgstr "向左劈开"
+
+msgid "Split opacity (%)"
+msgstr "分割不透明度 (%)"
+
+msgid "Split right"
+msgstr "右分割"
+
+msgid "Split width (%)"
+msgstr "分割宽度 (%)"
+
+msgid "Square"
+msgstr "正方形"
+
+msgid "Stretch"
+msgstr "拉紧"
+
+msgid "Success"
+msgstr "成功"
+
+msgid "Text color"
+msgstr "文字颜色"
+
+msgid "Title text size (px)"
+msgstr "标题文字大小（像素）"
+
+msgid "Top"
+msgstr "顶部"
+
+msgid "Transparent panel"
+msgstr "透明面板"
+
+msgid "Underline"
+msgstr "强调"
+
+msgid "Upload wallpaper"
+msgstr "上传壁纸"
+
+msgid "Use button color"
+msgstr "使用按钮颜色"
+
+msgid "User"
+msgstr "用户"
+
+msgid "Wallpaper"
+msgstr "墙纸"
+
+msgid "Warning"
+msgstr "警告"
+
+msgid "Yes"
+msgstr "是的"
+
+msgid "Yes (enable)"
+msgstr "是（启用）"
+
+msgid "Yes (hide panel)"
+msgstr "是（隐藏面板）"
+
+msgid ""
+"Light mode logos: used when the system is in light mode, ensuring good "
+"visibility on white or light backgrounds."
+msgstr ""
+"浅色模式徽标：系统处于浅色模式时使用，确保在白色或浅色背景下具有良好的可视"
+"性。"
+
+msgid ""
+"Dark mode logos: used when the system is in dark mode, ensuring contrast and "
+"readability on black or dark backgrounds."
+msgstr ""
+"深色模式徽标：当系统处于深色模式时使用，确保黑色或深色背景上的对比度和可读"
+"性。"
+
+msgid ""
+"The favicon is the small icon that appears in the browser tab (and also in "
+"bookmarks)."
+msgstr "图标是出现在浏览器选项卡（以及书签中）中的小图标。"
+
+msgid ""
+"Expanded menu logo: the logo displayed when the sidebar menu is open, with "
+"more space available."
+msgstr "扩展菜单徽标：侧边栏菜单打开时显示的徽标，有更多可用空间。"
+
+msgid ""
+"Collapsed menu logo: the logo displayed when the sidebar menu is collapsed, "
+"so it needs to be a more compact version."
+msgstr "折叠菜单徽标：侧边栏菜单折叠时显示的徽标，因此需要是更紧凑的版本。"
+
+msgid ""
+"Login page logo: the logo displayed on the login screen before the user "
+"enters the system."
+msgstr "登录页面标识：用户进入系统前登录界面上显示的标识。"
+
+msgid "Logo size (%)"
+msgstr "标志尺寸（%）"
+
+msgid "Favicon active"
+msgstr "网站图标处于活动状态"
+
+msgid "Button"
+msgstr "按钮"
+
+msgid "Wallpaper source"
+msgstr "壁纸来源"
+
+msgid "Preset wallpaper"
+msgstr "预设壁纸"
+
+msgid "Attachment"
+msgstr "依恋"
+
+msgid "Button shape"
+msgstr "纽扣形状"
+
+msgid "Button fill style"
+msgstr "按钮填充样式"
+
+msgid "Button text size (px)"
+msgstr "按钮文字大小（像素）"
+
+msgid "Color mode"
+msgstr "色彩模式"
+
+msgid "GLPI logo configuration"
+msgstr "GLPI 标志配置"
+
+msgid ""
+"Upload logos that will replace the default GLPI assets using CSS variables."
+msgstr "上传将使用 CSS 变量替换默认 GLPI 资源的徽标。"
+
+msgid "Expanded menu logo size (%)"
+msgstr "扩展菜单徽标尺寸 (%)"
+
+msgid "Collapsed menu logo size (%)"
+msgstr "折叠菜单徽标尺寸 (%)"
+
+msgid "Favicon (browser tab)"
+msgstr "网站图标（浏览器选项卡）"
+
+msgid "Field height (px)"
+msgstr "字段高度（像素）"
+
+msgid "Preset wallpapers"
+msgstr "预设壁纸"
+
+msgid "Custom upload"
+msgstr "自定义上传"
+
+msgid "Classic centered"
+msgstr "以经典为中心"
+
+msgid "Above panel"
+msgstr "上方面板"
+
+msgid "No"
+msgstr "不"
+
+msgid "Default fill"
+msgstr "默认填充"
+
+msgid "Custom color"
+msgstr "定制颜色"
+
+msgid "Accent color"
+msgstr "强调色"
+
+msgid "Turn GLPI into a showcase for your brand in just a few clicks."
+msgstr "只需点击几下，即可将 GLPI 变成您品牌的展示柜。"
+
+msgid "About"
+msgstr "关于"
+
+msgid "GLPI logos"
+msgstr "GLPI 标志"
+
+msgid "Login Page"
+msgstr "登录页面"
+
+msgid "Premium"
+msgstr "Premium"
+
+msgid "Brandkit by Marcati"
+msgstr "Brandkit 由 Marcati 提供"
+
+msgid "The visual evolution of your GLPI starts here."
+msgstr "您的 GLPI 的视觉进化从这里开始。"
+
+msgid ""
+"Brandkit delivers logos, login screens, and colors aligned with your "
+"identity. No CSS, no effort, just professional results."
+msgstr ""
+"Brandkit 提供与您的身份相符的徽标、登录屏幕和颜色。没有CSS，没有努力，只有专"
+"业的结果。"
+
+msgid "Discover Marcati at"
+msgstr "发现 Marcati 在"
+
+msgid "Meet Marcati"
+msgstr "认识Marcati"
+
+msgid "Consistent logos"
+msgstr "一致的标志"
+
+msgid "Ready uploads for header, favicon, and login."
+msgstr "准备上传标题、图标和登录。"
+
+msgid "Login with presence"
+msgstr "登录并存在"
+
+msgid ""
+"Pick layouts, colors, and effects for an authentication screen that sells "
+"your brand."
+msgstr "为销售您的品牌的身份验证屏幕选择布局、颜色和效果。"
+
+msgid "Fast delivery"
+msgstr "交货快捷"
+
+msgid "Settings saved directly in GLPI to activate branding without rework."
+msgstr "设置直接保存在 GLPI 中，无需返工即可激活品牌。"
+
+msgid "Custom hex color"
+msgstr "自定义十六进制颜色"
+
+msgid "Save logo sizes"
+msgstr "保存徽标尺寸"
+
+msgid "Restore defaults"
+msgstr "Restore defaults"
+
+msgid "Expanded menu logo"
+msgstr "展开菜单徽标"
+
+msgid "Collapsed menu logo"
+msgstr "折叠菜单徽标"
+
+msgid "Login logo"
+msgstr "登录徽标"
+
+msgid "No custom logo uploaded yet."
+msgstr "尚未上传自定义徽标。"
+
+msgid "No favicon yet"
+msgstr "尚无网站图标"
+
+msgid "Field width (px)"
+msgstr "字段宽度 (px)"
+
+msgid "Light mode logos"
+msgstr "浅色模式徽标"
+
+msgid "Dark mode logos"
+msgstr "深色模式徽标"
+
+msgid "Favicon"
+msgstr "网站图标"
+
+msgid "Upload logo"
+msgstr "上传徽标"
+
+msgid "Remove logo"
+msgstr "移除徽标"
+
+msgid "No custom favicon uploaded yet."
+msgstr "尚未上传自定义网站图标。"
+
+msgid "Expanded menu logo (dark mode)"
+msgstr "展开菜单徽标（深色模式）"
+
+msgid "Collapsed menu logo (dark mode)"
+msgstr "收起菜单徽标（深色模式）"
+

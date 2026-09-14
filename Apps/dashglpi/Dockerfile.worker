@@ -1,0 +1,31 @@
+# Worker de SLA do DashGLPI (Step 5 do .Stack.md).
+#
+# Reaproveita o mesmo código PHP do dashboard (inc/*, worker/*), porém roda como
+# processo CLI de background — motor de agendamento próprio, desacoplado do cron
+# nativo do GLPI. O loop de execução fica no CMD; cada passada é idempotente.
+FROM composer:2 AS composer
+
+FROM php:8.3-cli
+
+COPY --from=composer /usr/bin/composer /usr/bin/composer
+
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends libgmp-dev libcurl4-openssl-dev libonig-dev unzip \
+    && docker-php-ext-install pdo pdo_mysql gmp mbstring curl >/dev/null \
+    && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /var/www/html
+
+COPY composer.json composer.lock /tmp/dashglpi-deps/
+RUN cd /tmp/dashglpi-deps \
+    && composer install --no-dev --prefer-dist --no-interaction --no-progress \
+    && mkdir -p /var/www/html/php-vendor \
+    && cp -a vendor/. /var/www/html/php-vendor/
+
+COPY . /var/www/html/
+
+# SLA_WORKER_INTERVAL: segundos entre passadas (default 60).
+ENV SLA_WORKER_INTERVAL=60
+
+# Loop resiliente: uma passada por ciclo (SLA + Task + Solution); falhas não derrubam o container.
+CMD ["sh", "-c", "echo \"[dashglpi-worker] iniciando (intervalo ${SLA_WORKER_INTERVAL}s)\"; while true; do php /var/www/html/worker/orchestrator.php || echo \"[dashglpi-worker] passada retornou erro\"; sleep \"${SLA_WORKER_INTERVAL}\"; done"]

@@ -1,0 +1,8 @@
+ARG GLPI_VERSION=11.0.8
+FROM glpi/glpi:${GLPI_VERSION}
+
+COPY --chown=www-data:www-data Apps/brandkit /var/www/glpi/plugins/brandkit
+COPY --chown=www-data:www-data Apps/addressing /var/www/glpi/plugins/addressing
+COPY --chown=www-data:www-data Apps/dashglpi /var/www/glpi/plugins/dashglpi
+COPY --chown=www-data:www-data Apps/addressing/public/addressing.css /var/www/glpi/plugins/addressing/addressing.css
+COPY config/apache-brandkit.conf /etc/apache2/conf-enabled/brandkit.conf

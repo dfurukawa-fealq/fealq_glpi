@@ -1,0 +1,601 @@
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: brandkit\n"
+"Language: es_ES\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "Save login page"
+msgstr "Guardar página de inicio de sesión"
+
+#: /var/www/glpi/plugins/brandkit/front/index.php:2471
+msgid "Premium features"
+msgstr "Funciones premium"
+
+#: /var/www/glpi/plugins/brandkit/front/index.php:2472
+msgid "Unlock advanced Brandkit upgrades."
+msgstr "Desbloquea mejoras avanzadas de Brandkit."
+
+#: /var/www/glpi/plugins/brandkit/front/index.php:2473
+msgid ""
+"This area is available in the paid version. Get more control and deeper "
+"customization for your GLPI experience."
+msgstr ""
+"Esta área está disponible en la versión de pago. Obtén más control y una "
+"personalización más profunda para tu experiencia en GLPI."
+
+#: /var/www/glpi/plugins/brandkit/front/index.php:2475
+msgid "Download and upload configuration presets."
+msgstr "Descarga y carga preajustes de configuración."
+
+#: /var/www/glpi/plugins/brandkit/front/index.php:2476
+msgid "Theme customization with one-click presets."
+msgstr "Personalización del tema con preajustes de un clic."
+
+#: /var/www/glpi/plugins/brandkit/front/index.php:2477
+msgid "Menu color variations and layout tuning for GLPI."
+msgstr "Variaciones de color del menú y ajustes de diseño para GLPI."
+
+#: /var/www/glpi/plugins/brandkit/front/index.php:2478
+msgid "Extra custom colors beyond the default GLPI palette."
+msgstr ""
+"Colores personalizados adicionales más allá de la paleta predeterminada de "
+"GLPI."
+
+#: /var/www/glpi/plugins/brandkit/front/index.php:2481
+msgid "See plans"
+msgstr "Ver planes"
+
+#: /var/www/glpi/plugins/brandkit/front/index.php:2487
+msgid "Premium access"
+msgstr "Acceso premium"
+
+#: /var/www/glpi/plugins/brandkit/front/index.php:2488
+msgid "Request access to unlock these features for your team."
+msgstr "Solicita acceso para desbloquear estas funciones para tu equipo."
+
+#: /var/www/glpi/plugins/brandkit/setup.php:149
+#, php-format
+msgid "Plugin Brandkit requires GLPI version %s to %s."
+msgstr "El plugin Brandkit requiere la versión de GLPI de %s a %s."
+
+#: /var/www/glpi/plugins/brandkit/setup.php:164
+#, php-format
+msgid "Plugin Brandkit requires PHP extension: %s"
+msgstr "El plugin Brandkit requiere la extensión PHP: %s"
+
+msgid "Field spacing (px)"
+msgstr "Espaciado del campo (px)"
+
+msgid "Fill with color"
+msgstr "Rellenar con color"
+
+msgid "Hover effect"
+msgstr "Efecto al pasar el mouse"
+
+msgid "Hover fill custom color"
+msgstr "Color personalizado de relleno en hover"
+
+msgid "Hover text color"
+msgstr "Color del texto en hover"
+
+msgid "Pick a custom color"
+msgstr "Elegir un color personalizado"
+
+msgid "Press on hover"
+msgstr "Presionar al pasar el mouse"
+
+msgid "Title text size (px)"
+msgstr "Tamaño del texto del título (px)"
+
+msgid "Use button color"
+msgstr "Usar color del botón"
+
+msgid ""
+"Light mode logos: used when the system is in light mode, ensuring good "
+"visibility on white or light backgrounds."
+msgstr ""
+"Logos del modo claro: se usan cuando el sistema está en modo claro, "
+"garantizando buena visibilidad sobre fondos blancos o claros."
+
+msgid ""
+"Dark mode logos: used when the system is in dark mode, ensuring contrast and "
+"readability on black or dark backgrounds."
+msgstr ""
+"Logos del modo oscuro: se usan cuando el sistema está en modo oscuro, "
+"garantizando contraste y legibilidad sobre fondos negros u oscuros."
+
+msgid ""
+"The favicon is the small icon that appears in the browser tab (and also in "
+"bookmarks)."
+msgstr ""
+"El favicon es el pequeño icono que aparece en la pestaña del navegador (y "
+"también en los marcadores)."
+
+msgid ""
+"Expanded menu logo: the logo displayed when the sidebar menu is open, with "
+"more space available."
+msgstr ""
+"Logo del menú expandido: el logo que se muestra cuando el menú lateral está "
+"abierto, con más espacio disponible."
+
+msgid ""
+"Collapsed menu logo: the logo displayed when the sidebar menu is collapsed, "
+"so it needs to be a more compact version."
+msgstr ""
+"Logo del menú contraído: el logo que se muestra cuando el menú lateral está "
+"plegado, por lo que necesita ser una versión más compacta."
+
+msgid ""
+"Login page logo: the logo displayed on the login screen before the user "
+"enters the system."
+msgstr ""
+"Logo de la página de inicio de sesión: el logo que se muestra en la pantalla "
+"de inicio de sesión antes de que el usuario entre al sistema."
+
+msgid "Dynamic cut for a bolder call-to-action."
+msgstr "Corte dinámico para una llamada a la acción más audaz."
+
+msgid "Email"
+msgstr "Correo electrónico"
+
+msgid "Field background"
+msgstr "Fondo del campo"
+
+msgid "Field border"
+msgstr "Borde del campo"
+
+msgid "Field border width (px)"
+msgstr "Ancho del borde del campo (px)"
+
+msgid "Field focus glow"
+msgstr "Brillo de enfoque del campo"
+
+msgid "Field icons"
+msgstr "Iconos de los campos"
+
+msgid "Field radius (px)"
+msgstr "Radio del campo (px)"
+
+msgid "Fields"
+msgstr "Campos"
+
+msgid "Field style"
+msgstr "Estilo del campo"
+
+msgid "Field text"
+msgstr "Texto del campo"
+
+msgid "Field text size (px)"
+msgstr "Tamaño del texto del campo (px)"
+
+msgid "Fixed"
+msgstr "Fijo"
+
+msgid "Friendly, fully rounded shape."
+msgstr "Forma amigable y totalmente redondeada."
+
+msgid "Glass blur"
+msgstr "Desenfoque de vidrio"
+
+msgid "Hide login text"
+msgstr "Ocultar texto de inicio de sesión"
+
+msgid "Icon color"
+msgstr "Color del icono"
+
+msgid "Icon position"
+msgstr "Posición del icono"
+
+msgid "ID card"
+msgstr "Tarjeta de identificación"
+
+msgid "Info"
+msgstr "Información"
+
+msgid "Inside panel"
+msgstr "Dentro del panel"
+
+msgid "Key"
+msgstr "Llave"
+
+msgid "Layout"
+msgstr "Diseño"
+
+msgid "Layout & logo"
+msgstr "Diseño y logo"
+
+msgid "Left"
+msgstr "Izquierda"
+
+msgid "Light"
+msgstr "Claro"
+
+msgid "Lock"
+msgstr "Candado"
+
+msgid "Login icon"
+msgstr "Icono de inicio de sesión"
+
+msgid "Login logo size (px)"
+msgstr "Tamaño del logo de inicio de sesión (px)"
+
+msgid "Login page configuration"
+msgstr "Configuración de la página de inicio de sesión"
+
+msgid "Logo offset from top (px)"
+msgstr "Desplazamiento del logo desde la parte superior (px)"
+
+msgid "Logo position"
+msgstr "Posición del logo"
+
+msgid "Neon glow"
+msgstr "Brillo neón"
+
+msgid "No (disable)"
+msgstr "No (desactivar)"
+
+msgid "None"
+msgstr "Ninguno"
+
+msgid "No (show panel)"
+msgstr "No (mostrar panel)"
+
+msgid "Original size"
+msgstr "Tamaño original"
+
+msgid "Outline"
+msgstr "Contorno"
+
+msgid "Outline danger"
+msgstr "Contorno de peligro"
+
+msgid "Outline dark"
+msgstr "Contorno oscuro"
+
+msgid "Outline info"
+msgstr "Contorno info"
+
+msgid "Outline only"
+msgstr "Solo contorno"
+
+msgid "Outline primary"
+msgstr "Contorno primario"
+
+msgid "Outline secondary"
+msgstr "Contorno secundario"
+
+msgid "Outline success"
+msgstr "Contorno de éxito"
+
+msgid "Outline warning"
+msgstr "Contorno de advertencia"
+
+msgid "Overlay color"
+msgstr "Color de superposición"
+
+msgid "Overlay opacity (%)"
+msgstr "Opacidad de superposición (%)"
+
+msgid "Page text size (px)"
+msgstr "Tamaño del texto de la página (px)"
+
+msgid "Panel blur (px)"
+msgstr "Desenfoque del panel (px)"
+
+msgid "Panel color"
+msgstr "Color del panel"
+
+msgid "Panel height (px)"
+msgstr "Altura del panel (px)"
+
+msgid "Panel hover effect"
+msgstr "Efecto al pasar el mouse en el panel"
+
+msgid "Panel opacity (%)"
+msgstr "Opacidad del panel (%)"
+
+msgid "Panel & split styling"
+msgstr "Estilo del panel y división"
+
+msgid "Panel width (px)"
+msgstr "Ancho del panel (px)"
+
+msgid "Password icon"
+msgstr "Icono de contraseña"
+
+msgid "Pick a layout and visual treatments for the GLPI login page."
+msgstr ""
+"Elige un diseño y tratamientos visuales para la página de inicio de sesión "
+"de GLPI."
+
+msgid "Pill"
+msgstr "Pastilla"
+
+msgid "Position"
+msgstr "Posición"
+
+msgid "Preset palette"
+msgstr "Paleta predefinida"
+
+msgid "Primary (default)"
+msgstr "Primario (predeterminado)"
+
+msgid "Recommended: 1920x1080 or larger."
+msgstr "Recomendado: 1920x1080 o mayor."
+
+msgid "Right"
+msgstr "Derecha"
+
+msgid "Rounded"
+msgstr "Redondeado"
+
+msgid "Scroll"
+msgstr "Desplazamiento"
+
+msgid "Secondary"
+msgstr "Secundario"
+
+msgid "Sharp edges with a confident shadow."
+msgstr "Bordes definidos con una sombra firme."
+
+msgid "Shield"
+msgstr "Escudo"
+
+msgid "Size"
+msgstr "Tamaño"
+
+msgid "Soft depth"
+msgstr "Profundidad suave"
+
+msgid "Soft shadow"
+msgstr "Sombra suave"
+
+msgid "Solid"
+msgstr "Sólido"
+
+msgid "Split blur (px)"
+msgstr "Desenfoque de la división (px)"
+
+msgid "Split color"
+msgstr "Color de la división"
+
+msgid "Split left"
+msgstr "Dividir a la izquierda"
+
+msgid "Split opacity (%)"
+msgstr "Opacidad de la división (%)"
+
+msgid "Split right"
+msgstr "Dividir a la derecha"
+
+msgid "Split width (%)"
+msgstr "Ancho de la división (%)"
+
+msgid "Square"
+msgstr "Cuadrado"
+
+msgid "Stretch"
+msgstr "Estirar"
+
+msgid "Success"
+msgstr "Éxito"
+
+msgid "Text color"
+msgstr "Color del texto"
+
+msgid "Top"
+msgstr "Arriba"
+
+msgid "Transparent panel"
+msgstr "Panel transparente"
+
+msgid "Underline"
+msgstr "Subrayado"
+
+msgid "Upload wallpaper"
+msgstr "Subir fondo de pantalla"
+
+msgid "User"
+msgstr "Usuario"
+
+msgid "Wallpaper"
+msgstr "Fondo de pantalla"
+
+msgid "Warning"
+msgstr "Advertencia"
+
+msgid "Yes"
+msgstr "Sí"
+
+msgid "Yes (enable)"
+msgstr "Sí (activar)"
+
+msgid "Yes (hide panel)"
+msgstr "Sí (ocultar panel)"
+
+msgid "Logo size (%)"
+msgstr "Tamaño del logo (%)"
+
+msgid "Favicon active"
+msgstr "Favicon activo"
+
+msgid "Button"
+msgstr "Botón"
+
+msgid "Wallpaper source"
+msgstr "Origen del fondo de pantalla"
+
+msgid "Preset wallpaper"
+msgstr "Fondo de pantalla predefinido"
+
+msgid "Attachment"
+msgstr "Fijación"
+
+msgid "Button shape"
+msgstr "Forma del botón"
+
+msgid "Button fill style"
+msgstr "Estilo de relleno del botón"
+
+msgid "Button text size (px)"
+msgstr "Tamaño del texto del botón (px)"
+
+msgid "Color mode"
+msgstr "Modo de color"
+
+msgid "GLPI logo configuration"
+msgstr "Configuración de logos de GLPI"
+
+msgid ""
+"Upload logos that will replace the default GLPI assets using CSS variables."
+msgstr ""
+"Sube logos que reemplazarán los recursos predeterminados de GLPI usando "
+"variables CSS."
+
+msgid "Expanded menu logo size (%)"
+msgstr "Tamaño del logo del menú expandido (%)"
+
+msgid "Collapsed menu logo size (%)"
+msgstr "Tamaño del logo del menú contraído (%)"
+
+msgid "Favicon (browser tab)"
+msgstr "Favicon (pestaña del navegador)"
+
+msgid "Field height (px)"
+msgstr "Altura del campo (px)"
+
+msgid "Preset wallpapers"
+msgstr "Fondos de pantalla predefinidos"
+
+msgid "Custom upload"
+msgstr "Carga personalizada"
+
+msgid "Classic centered"
+msgstr "Clásico centrado"
+
+msgid "Above panel"
+msgstr "Encima del panel"
+
+msgid "No"
+msgstr "No"
+
+msgid "Default fill"
+msgstr "Relleno predeterminado"
+
+msgid "Custom color"
+msgstr "Color personalizado"
+
+msgid "Accent color"
+msgstr "Color de acento"
+
+msgid "Turn GLPI into a showcase for your brand in just a few clicks."
+msgstr "Convierte GLPI en un escaparate de tu marca en solo unos clics."
+
+msgid "About"
+msgstr "Acerca de"
+
+msgid "GLPI logos"
+msgstr "Logos de GLPI"
+
+msgid "Login Page"
+msgstr "Página de inicio de sesión"
+
+msgid "Premium"
+msgstr "Premium"
+
+msgid "Brandkit by Marcati"
+msgstr "Brandkit de Marcati"
+
+msgid "The visual evolution of your GLPI starts here."
+msgstr "La evolución visual de tu GLPI comienza aquí."
+
+msgid ""
+"Brandkit delivers logos, login screens, and colors aligned with your "
+"identity. No CSS, no effort, just professional results."
+msgstr ""
+"Brandkit ofrece logos, pantallas de inicio de sesión y colores alineados con "
+"tu identidad. Sin CSS, sin esfuerzo, solo resultados profesionales."
+
+msgid "Discover Marcati at"
+msgstr "Descubre Marcati en"
+
+msgid "Meet Marcati"
+msgstr "Conoce Marcati"
+
+msgid "Consistent logos"
+msgstr "Logos consistentes"
+
+msgid "Ready uploads for header, favicon, and login."
+msgstr "Cargas listas para encabezado, favicon e inicio de sesión."
+
+msgid "Login with presence"
+msgstr "Inicio de sesión con presencia"
+
+msgid ""
+"Pick layouts, colors, and effects for an authentication screen that sells "
+"your brand."
+msgstr ""
+"Elige diseños, colores y efectos para una pantalla de autenticación que "
+"vende tu marca."
+
+msgid "Fast delivery"
+msgstr "Entrega rápida"
+
+msgid "Settings saved directly in GLPI to activate branding without rework."
+msgstr ""
+"Configuraciones guardadas directamente en GLPI para activar la marca sin "
+"retrabajo."
+
+msgid "Custom hex color"
+msgstr "Color hexadecimal personalizado"
+
+msgid "Save logo sizes"
+msgstr "Guardar tamaños de los logos"
+
+msgid "Restore defaults"
+msgstr "Restore defaults"
+
+msgid "Expanded menu logo"
+msgstr "Logo del menú expandido"
+
+msgid "Collapsed menu logo"
+msgstr "Logo del menú contraído"
+
+msgid "Login logo"
+msgstr "Logo de inicio de sesión"
+
+msgid "No custom logo uploaded yet."
+msgstr "Aún no se ha subido ningún logo personalizado."
+
+msgid "No favicon yet"
+msgstr "Aún no hay favicon"
+
+msgid "Field width (px)"
+msgstr "Ancho del campo (px)"
+
+msgid "Light mode logos"
+msgstr "Logotipos de modo claro"
+
+msgid "Dark mode logos"
+msgstr "Logotipos de modo oscuro"
+
+msgid "Favicon"
+msgstr "Favicon"
+
+msgid "Upload logo"
+msgstr "Subir logotipo"
+
+msgid "Remove logo"
+msgstr "Quitar logotipo"
+
+msgid "No custom favicon uploaded yet."
+msgstr "Aún no se ha subido ningún favicon personalizado."
+
+msgid "Expanded menu logo (dark mode)"
+msgstr "Logotipo del menú expandido (modo oscuro)"
+
+msgid "Collapsed menu logo (dark mode)"
+msgstr "Logotipo del menú contraído (modo oscuro)"
+

@@ -1,0 +1,544 @@
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: brandkit\n"
+"Language: hu_HU\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "Dynamic cut for a bolder call-to-action."
+msgstr "Dinamikus szabás a merészebb cselekvésre ösztönzésért."
+
+msgid "Email"
+msgstr "Email"
+
+msgid "Field background"
+msgstr "Mező háttér"
+
+msgid "Field border"
+msgstr "Mezőszegély"
+
+msgid "Field border width (px)"
+msgstr "Mezőszegély szélessége (px)"
+
+msgid "Field focus glow"
+msgstr "Mezőfókusz fénye"
+
+msgid "Field icons"
+msgstr "Mező ikonok"
+
+msgid "Field radius (px)"
+msgstr "Mező sugara (px)"
+
+msgid "Fields"
+msgstr "Mezők"
+
+msgid "Field spacing (px)"
+msgstr "Mezőtávolság (px)"
+
+msgid "Field style"
+msgstr "Mező stílus"
+
+msgid "Field text"
+msgstr "Mező szövege"
+
+msgid "Field text size (px)"
+msgstr "A mező szövegének mérete (px)"
+
+msgid "Fill with color"
+msgstr "Töltsük meg színnel"
+
+msgid "Fixed"
+msgstr "Rögzített"
+
+msgid "Friendly, fully rounded shape."
+msgstr "Barátságos, teljesen lekerekített forma."
+
+msgid "Glass blur"
+msgstr "Üveg elmosódás"
+
+msgid "Hide login text"
+msgstr "Bejelentkezési szöveg elrejtése"
+
+msgid "Hover effect"
+msgstr "Lebegő hatás"
+
+msgid "Hover fill custom color"
+msgstr "Vigye rá az egérmutatót a kitöltési egyedi színre"
+
+msgid "Hover text color"
+msgstr "Mutasson rá a szöveg színére"
+
+msgid "Icon color"
+msgstr "Ikon színe"
+
+msgid "Icon position"
+msgstr "Ikon pozíciója"
+
+msgid "ID card"
+msgstr "személyi igazolvány"
+
+msgid "Info"
+msgstr "Info"
+
+msgid "Inside panel"
+msgstr "Belső panel"
+
+msgid "Key"
+msgstr "Kulcsfontosságú"
+
+msgid "Layout"
+msgstr "Elrendezés"
+
+msgid "Layout & logo"
+msgstr "Elrendezés és logó"
+
+msgid "Left"
+msgstr "Balra"
+
+msgid "Light"
+msgstr "Fény"
+
+msgid "Lock"
+msgstr "Zár"
+
+msgid "Login icon"
+msgstr "Bejelentkezés ikonra"
+
+msgid "Login logo size (px)"
+msgstr "Bejelentkezési logó mérete (px)"
+
+msgid "Login page configuration"
+msgstr "Bejelentkezési oldal konfigurációja"
+
+msgid "Logo offset from top (px)"
+msgstr "Embléma felülről eltolva (px)"
+
+msgid "Logo position"
+msgstr "A logó pozíciója"
+
+msgid "Neon glow"
+msgstr "Neon fény"
+
+msgid "No (disable)"
+msgstr "Nem (letilt)"
+
+msgid "None"
+msgstr "Egyik sem"
+
+msgid "No (show panel)"
+msgstr "Nem (panel megjelenítése)"
+
+msgid "Original size"
+msgstr "Eredeti méret"
+
+msgid "Outline"
+msgstr "Vázlat"
+
+msgid "Outline danger"
+msgstr "Vázolja fel a veszélyt"
+
+msgid "Outline dark"
+msgstr "Sötét körvonal"
+
+msgid "Outline info"
+msgstr "Vázlati információk"
+
+msgid "Outline only"
+msgstr "Csak vázlat"
+
+msgid "Outline primary"
+msgstr "Vázlat elsődleges"
+
+msgid "Outline secondary"
+msgstr "Vázlat másodlagos"
+
+msgid "Outline success"
+msgstr "Vázolja fel a sikert"
+
+msgid "Outline warning"
+msgstr "Vázlatos figyelmeztetés"
+
+msgid "Overlay color"
+msgstr "Fedvény színe"
+
+msgid "Overlay opacity (%)"
+msgstr "Fedvény átlátszatlansága (%)"
+
+msgid "Page text size (px)"
+msgstr "Oldal szövegének mérete (px)"
+
+msgid "Panel blur (px)"
+msgstr "Panel elmosása (px)"
+
+msgid "Panel color"
+msgstr "Panel színe"
+
+msgid "Panel height (px)"
+msgstr "Panel magassága (px)"
+
+msgid "Panel hover effect"
+msgstr "Panel lebegő effektus"
+
+msgid "Panel opacity (%)"
+msgstr "Panel átlátszatlansága (%)"
+
+msgid "Panel & split styling"
+msgstr "Panel és osztott stílus"
+
+msgid "Panel width (px)"
+msgstr "Panel szélessége (px)"
+
+msgid "Password icon"
+msgstr "Jelszó ikonra"
+
+msgid "Pick a custom color"
+msgstr "Válasszon egyedi színt"
+
+msgid "Pick a layout and visual treatments for the GLPI login page."
+msgstr ""
+"Válasszon elrendezést és vizuális kezeléseket a GLPI bejelentkezési oldalhoz."
+
+msgid "Pill"
+msgstr "Tabletta"
+
+msgid "Position"
+msgstr "Pozíció"
+
+msgid "Preset palette"
+msgstr "Előre beállított paletta"
+
+msgid "Press on hover"
+msgstr "Nyomja meg az egérmutatót"
+
+msgid "Primary (default)"
+msgstr "Elsődleges (alapértelmezett)"
+
+msgid "Recommended: 1920x1080 or larger."
+msgstr "Javasolt: 1920x1080 vagy nagyobb."
+
+msgid "Right"
+msgstr "Jobbra"
+
+msgid "Rounded"
+msgstr "Lekerekített"
+
+msgid "Save login page"
+msgstr "Bejelentkezési oldal mentése"
+
+msgid "Scroll"
+msgstr "Görgetés"
+
+msgid "Secondary"
+msgstr "Másodlagos"
+
+msgid "Sharp edges with a confident shadow."
+msgstr "Éles élek magabiztos árnyékkal."
+
+msgid "Shield"
+msgstr "Pajzs"
+
+msgid "Size"
+msgstr "Méret"
+
+msgid "Soft depth"
+msgstr "Lágy mélység"
+
+msgid "Soft shadow"
+msgstr "Lágy árnyék"
+
+msgid "Solid"
+msgstr "Szilárd"
+
+msgid "Split blur (px)"
+msgstr "Osztott elmosódás (px)"
+
+msgid "Split color"
+msgstr "Osztott szín"
+
+msgid "Split left"
+msgstr "Balra osztva"
+
+msgid "Split opacity (%)"
+msgstr "Osztott átlátszatlanság (%)"
+
+msgid "Split right"
+msgstr "Jobbra osztva"
+
+msgid "Split width (%)"
+msgstr "Felosztási szélesség (%)"
+
+msgid "Square"
+msgstr "Négyzet"
+
+msgid "Stretch"
+msgstr "Nyújtsd"
+
+msgid "Success"
+msgstr "Siker"
+
+msgid "Text color"
+msgstr "Szöveg színe"
+
+msgid "Title text size (px)"
+msgstr "Cím szövegének mérete (px)"
+
+msgid "Top"
+msgstr "Top"
+
+msgid "Transparent panel"
+msgstr "Átlátszó panel"
+
+msgid "Underline"
+msgstr "Aláhúzás"
+
+msgid "Upload wallpaper"
+msgstr "Töltsön fel háttérképet"
+
+msgid "Use button color"
+msgstr "Használja a gomb színét"
+
+msgid "User"
+msgstr "Felhasználó"
+
+msgid "Wallpaper"
+msgstr "Tapéta"
+
+msgid "Warning"
+msgstr "Figyelmeztetés"
+
+msgid "Yes"
+msgstr "Igen"
+
+msgid "Yes (enable)"
+msgstr "Igen (engedélyezés)"
+
+msgid "Yes (hide panel)"
+msgstr "Igen (panel elrejtése)"
+
+msgid ""
+"Light mode logos: used when the system is in light mode, ensuring good "
+"visibility on white or light backgrounds."
+msgstr ""
+"Light mode logók: akkor használatos, ha a rendszer világos üzemmódban van, "
+"jó láthatóságot biztosítva fehér vagy világos háttéren."
+
+msgid ""
+"Dark mode logos: used when the system is in dark mode, ensuring contrast and "
+"readability on black or dark backgrounds."
+msgstr ""
+"Sötét mód logók: akkor használatos, ha a rendszer sötét módban van, "
+"kontrasztot és olvashatóságot biztosítva fekete vagy sötét háttéren."
+
+msgid ""
+"The favicon is the small icon that appears in the browser tab (and also in "
+"bookmarks)."
+msgstr ""
+"A favicon a böngésző lapján (és a könyvjelzőkben is) megjelenő kis ikon."
+
+msgid ""
+"Expanded menu logo: the logo displayed when the sidebar menu is open, with "
+"more space available."
+msgstr ""
+"Kiterjesztett menü logója: az oldalsáv menüjének megnyitásakor megjelenő "
+"logó, ahol több hely áll rendelkezésre."
+
+msgid ""
+"Collapsed menu logo: the logo displayed when the sidebar menu is collapsed, "
+"so it needs to be a more compact version."
+msgstr ""
+"Összecsukott menü logója: az oldalsáv menüjének összecsukásakor megjelenő "
+"logó, ezért kompaktabb verzióra van szükség."
+
+msgid ""
+"Login page logo: the logo displayed on the login screen before the user "
+"enters the system."
+msgstr ""
+"Bejelentkezési oldal logója: a bejelentkező képernyőn megjelenő logó, "
+"mielőtt a felhasználó belép a rendszerbe."
+
+msgid "Logo size (%)"
+msgstr "Embléma mérete (%)"
+
+msgid "Favicon active"
+msgstr "Favicon aktív"
+
+msgid "Button"
+msgstr "Gomb"
+
+msgid "Wallpaper source"
+msgstr "Háttérkép forrása"
+
+msgid "Preset wallpaper"
+msgstr "Előre beállított háttérkép"
+
+msgid "Attachment"
+msgstr "Melléklet"
+
+msgid "Button shape"
+msgstr "Gomb alakú"
+
+msgid "Button fill style"
+msgstr "Gomb kitöltési stílus"
+
+msgid "Button text size (px)"
+msgstr "A gomb szövegének mérete (px)"
+
+msgid "Color mode"
+msgstr "Színes mód"
+
+msgid "GLPI logo configuration"
+msgstr "GLPI logó konfiguráció"
+
+msgid ""
+"Upload logos that will replace the default GLPI assets using CSS variables."
+msgstr ""
+"Töltsön fel logókat, amelyek lecserélik az alapértelmezett GLPI elemeket CSS "
+"változók használatával."
+
+msgid "Expanded menu logo size (%)"
+msgstr "Kiterjesztett menü logó mérete (%)"
+
+msgid "Collapsed menu logo size (%)"
+msgstr "Összecsukott menü logó mérete (%)"
+
+msgid "Favicon (browser tab)"
+msgstr "Favicon (böngésző lap)"
+
+msgid "Field height (px)"
+msgstr "Mező magassága (px)"
+
+msgid "Preset wallpapers"
+msgstr "Előre beállított háttérképek"
+
+msgid "Custom upload"
+msgstr "Egyéni feltöltés"
+
+msgid "Classic centered"
+msgstr "Klasszikus központú"
+
+msgid "Above panel"
+msgstr "Panel felett"
+
+msgid "No"
+msgstr "Nem"
+
+msgid "Default fill"
+msgstr "Alapértelmezett kitöltés"
+
+msgid "Custom color"
+msgstr "Egyedi szín"
+
+msgid "Accent color"
+msgstr "Kiemelt szín"
+
+msgid "Turn GLPI into a showcase for your brand in just a few clicks."
+msgstr "Változtassa GLPI-t márkája kirakatává néhány kattintással."
+
+msgid "About"
+msgstr "Körülbelül"
+
+msgid "GLPI logos"
+msgstr "GLPI logók"
+
+msgid "Login Page"
+msgstr "Bejelentkezési oldal"
+
+msgid "Premium"
+msgstr "Premium"
+
+msgid "Brandkit by Marcati"
+msgstr "Brandkit, szerző: Marcati"
+
+msgid "The visual evolution of your GLPI starts here."
+msgstr "A GLPI vizuális fejlődése itt kezdődik."
+
+msgid ""
+"Brandkit delivers logos, login screens, and colors aligned with your "
+"identity. No CSS, no effort, just professional results."
+msgstr ""
+"A Brandkit az Ön személyazonosságához igazodó logókat, bejelentkezési "
+"képernyőket és színeket biztosít. Nincs CSS, nincs erőfeszítés, csak "
+"professzionális eredmények."
+
+msgid "Discover Marcati at"
+msgstr "Fedezze fel Marcati itt"
+
+msgid "Meet Marcati"
+msgstr "Ismerje meg Marcati"
+
+msgid "Consistent logos"
+msgstr "Egységes logók"
+
+msgid "Ready uploads for header, favicon, and login."
+msgstr "Kész feltöltések fejléchez, faviconhoz és bejelentkezéshez."
+
+msgid "Login with presence"
+msgstr "Bejelentkezés jelenléttel"
+
+msgid ""
+"Pick layouts, colors, and effects for an authentication screen that sells "
+"your brand."
+msgstr ""
+"Válasszon elrendezéseket, színeket és effektusokat a márkáját értékesítő "
+"hitelesítési képernyőhöz."
+
+msgid "Fast delivery"
+msgstr "Gyors szállítás"
+
+msgid "Settings saved directly in GLPI to activate branding without rework."
+msgstr ""
+"A beállítások közvetlenül a GLPI mappába mentve, hogy átalakítás nélkül "
+"aktiválják a márkaépítést."
+
+msgid "Custom hex color"
+msgstr "Egyedi hatszögletű szín"
+
+msgid "Save logo sizes"
+msgstr "Mentse el a logó méretét"
+
+msgid "Restore defaults"
+msgstr "Restore defaults"
+
+msgid "Expanded menu logo"
+msgstr "Kinyitott menü logója"
+
+msgid "Collapsed menu logo"
+msgstr "Összecsukott menü logója"
+
+msgid "Login logo"
+msgstr "Bejelentkezési logó"
+
+msgid "No custom logo uploaded yet."
+msgstr "Még nincs feltöltve egyéni logó."
+
+msgid "No favicon yet"
+msgstr "Még nincs favicon"
+
+msgid "Field width (px)"
+msgstr "Mező szélessége (px)"
+
+msgid "Light mode logos"
+msgstr "Világos mód logói"
+
+msgid "Dark mode logos"
+msgstr "Sötét mód logói"
+
+msgid "Favicon"
+msgstr "Favicon"
+
+msgid "Upload logo"
+msgstr "Logó feltöltése"
+
+msgid "Remove logo"
+msgstr "Logó eltávolítása"
+
+msgid "No custom favicon uploaded yet."
+msgstr "Még nem lett egyéni favicon feltöltve."
+
+msgid "Expanded menu logo (dark mode)"
+msgstr "Kibontott menü logója (sötét mód)"
+
+msgid "Collapsed menu logo (dark mode)"
+msgstr "Összecsukott menü logója (sötét mód)"
+

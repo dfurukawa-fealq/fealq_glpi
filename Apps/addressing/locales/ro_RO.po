@@ -1,0 +1,277 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR Addressing Development Team
+# This file is distributed under the same license as the GLPI - Addressing plugin package.
+# 
+# Translators:
+# Doru  DEACONU <dumitrudeaconu@yahoo.com>, 2012
+msgid ""
+msgstr ""
+"Project-Id-Version: GLPI Project - addressing plugin\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-09-15 13:40+0200\n"
+"PO-Revision-Date: 2012-09-07 11:14+0000\n"
+"Last-Translator: Doru  DEACONU <dumitrudeaconu@yahoo.com>, 2012\n"
+"Language-Team: Romanian (Romania) (http://www.transifex.com/infotelGLPI/GLPI_addressing/language/ro_RO/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: ro_RO\n"
+"Plural-Forms: nplurals=3; plural=(n==1?0:(((n%100>19)||((n%100==0)&&(n!=0)))?2:1));\n"
+
+#: hook.php:215 inc/ping_equipment.class.php:92 inc/pinginfo.class.php:190
+#: inc/report.class.php:141
+msgid "Ping result"
+msgstr ""
+
+#: hook.php:247
+msgid "Last ping OK"
+msgstr ""
+
+#: hook.php:249
+msgid "Last ping KO"
+msgstr ""
+
+#: hook.php:251 inc/pinginfo.class.php:174
+msgid "Ping informations not available"
+msgstr ""
+
+#: setup.php:81 inc/addressing.class.php:46 inc/ipcomment.class.php:44
+#: inc/pinginfo.class.php:42 inc/profile.class.php:108
+msgid "IP Adressing"
+msgid_plural "IP Adressing"
+msgstr[0] "Adresare IP"
+msgstr[1] "Adresare IP"
+msgstr[2] "Adresare IP"
+
+#: ajax/addressing.php:60 inc/ping_equipment.class.php:71
+#: inc/ping_equipment.class.php:87 inc/report.class.php:179
+#: inc/report.class.php:184 inc/report.class.php:448 inc/report.class.php:453
+#: inc/report.class.php:585 inc/report.class.php:590 inc/report.class.php:690
+#: inc/report.class.php:695
+msgid "IP ping"
+msgstr "Ping IP"
+
+#: ajax/addressing.php:69 inc/report.class.php:289 inc/report.class.php:346
+#: inc/report.class.php:480 inc/report.class.php:715
+#: inc/reserveip.class.php:42
+msgid "IP reservation"
+msgstr ""
+
+#: front/addressing.form.php:52 front/addressing.form.php:82
+msgid "Problem when adding, required fields are not here"
+msgstr "Probleme la adăugare, câmpurile cerute sunt lipsă"
+
+#: front/config.form.php:50 front/config.php:50
+msgid "Please activate the plugin"
+msgstr "Vă rog activaţi plugin-ul"
+
+#: front/reserveip.form.php:39
+msgid "The address has been reserved"
+msgstr ""
+
+#: inc/addressing.class.php:92 inc/addressing.class.php:401
+msgid "Ping free IP"
+msgstr ""
+
+#: inc/addressing.class.php:140 inc/addressing.class.php:251
+#: inc/filter.class.php:121 inc/filter.class.php:316
+msgid "First IP"
+msgstr "Primul IP"
+
+#: inc/addressing.class.php:149 inc/addressing.class.php:300
+#: inc/filter.class.php:161 inc/filter.class.php:317
+msgid "Last IP"
+msgstr "Ultimul IP"
+
+#: inc/addressing.class.php:183 inc/addressing.class.php:388
+#: inc/filter.class.php:219
+msgid "Report for the IP Range"
+msgstr "Raport pentru plaja de IP -uri"
+
+#: inc/addressing.class.php:222 inc/addressing.class.php:396
+#: inc/filter.class.php:87 inc/filter.class.php:225
+msgid "Invalid data !!"
+msgstr "Date introduse incorecte !"
+
+#: inc/addressing.class.php:236 inc/addressing.class.php:770
+#: inc/config.class.php:64
+msgid "Assigned IP"
+msgstr "IP -uri atribuite"
+
+#: inc/addressing.class.php:288 inc/addressing.class.php:751
+#: inc/addressing.class.php:782 inc/config.class.php:69
+msgid "Free IP"
+msgstr "IP -uri libere"
+
+#: inc/addressing.class.php:356 inc/addressing.class.php:733
+#: inc/addressing.class.php:774 inc/config.class.php:75
+msgid "Same IP"
+msgstr "Acelaşi IP"
+
+#: inc/addressing.class.php:376 inc/addressing.class.php:754
+#: inc/addressing.class.php:778 inc/config.class.php:80
+msgid "Reserved IP"
+msgstr "IP rezervat"
+
+#: inc/addressing.class.php:422 inc/addressing.class.php:812
+#: inc/filter.class.php:43
+msgid "Filter"
+msgid_plural "Filters"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+#: inc/addressing.class.php:431
+msgid "Use the networks as filter"
+msgstr ""
+
+#: inc/addressing.class.php:434
+msgid "The display of items depends on these criterias"
+msgstr ""
+
+#: inc/addressing.class.php:438
+msgid "Default fields for reservation"
+msgstr ""
+
+#: inc/addressing.class.php:711
+msgid "Number of free IP"
+msgstr ""
+
+#: inc/addressing.class.php:715
+msgid "Number of reserved IP"
+msgstr ""
+
+#: inc/addressing.class.php:719
+msgid "Number of assigned IP (no doubles)"
+msgstr ""
+
+#: inc/addressing.class.php:723
+msgid "Number of doubles IP"
+msgstr ""
+
+#: inc/addressing.class.php:741 inc/addressing.class.php:794
+#: inc/ping_equipment.class.php:280 inc/report.class.php:594
+#: inc/reserveip.class.php:198
+msgid "Ping: got a response - used IP"
+msgstr ""
+
+#: inc/addressing.class.php:747 inc/addressing.class.php:790
+#: inc/ping_equipment.class.php:277 inc/report.class.php:699
+#: inc/reserveip.class.php:195
+msgid "Ping: no response - free IP"
+msgstr ""
+
+#: inc/addressing.class.php:799 inc/addressing.class.php:801
+#: inc/pinginfo.class.php:200
+msgctxt "button"
+msgid "Manual launch of ping"
+msgstr ""
+
+#: inc/addressing.class.php:872
+msgid "Real free IP (Ping=KO)"
+msgstr ""
+
+#: inc/addressing.class.php:881
+msgid "Problem detected with the IP Range"
+msgstr "Probleme in alegerea plajei IP"
+
+#: inc/config.class.php:51
+msgid "System for ping"
+msgstr "Sistem pentru ping"
+
+#: inc/config.class.php:54
+msgid "Linux ping"
+msgstr "Linux ping"
+
+#: inc/config.class.php:55
+msgid "Windows"
+msgstr "Windows"
+
+#: inc/config.class.php:56
+msgid "Linux fping"
+msgstr "Linux fping"
+
+#: inc/config.class.php:57
+msgid "BSD ping"
+msgstr "BSD ping"
+
+#: inc/config.class.php:58
+msgid "MacOSX ping"
+msgstr "MacOSX ping"
+
+#: inc/config.class.php:62
+msgid "Display"
+msgstr "Afişează"
+
+#: inc/config.class.php:87
+msgid "Use Ping"
+msgstr "Utilizaţi ping - ul"
+
+#: inc/filter.class.php:279
+msgid "Add a filter"
+msgstr ""
+
+#: inc/ping_equipment.class.php:108
+msgid "No IP for this equipment"
+msgstr "Niciun IP pentru acest echipament"
+
+#: inc/pinginfo.class.php:53
+msgid "Launch ping for each ip report"
+msgstr ""
+
+#: inc/pinginfo.class.php:173 inc/report.class.php:272
+#: inc/report.class.php:604 inc/report.class.php:705
+msgid "Automatic action has not be launched"
+msgstr ""
+
+#: inc/pinginfo.class.php:177 inc/pinginfo.class.php:178
+#: inc/pinginfo.class.php:182 inc/pinginfo.class.php:183
+#: inc/report.class.php:302 inc/report.class.php:323 inc/report.class.php:606
+#: inc/report.class.php:707
+msgid "Last ping attempt"
+msgstr ""
+
+#: inc/profile.class.php:44 inc/profile.class.php:74
+msgid "Generate reports"
+msgstr "Generare rapoarte"
+
+#: inc/profile.class.php:47 inc/profile.class.php:86
+msgid "Use ping on equipment form"
+msgstr "Utilizaţi ping pe fişa de echipamente"
+
+#: inc/report.class.php:143
+msgid "Reservation"
+msgstr ""
+
+#: inc/report.class.php:284 inc/report.class.php:340 inc/report.class.php:476
+#: inc/report.class.php:711
+msgid "Reserve IP"
+msgstr ""
+
+#: inc/report.class.php:306 inc/report.class.php:328
+msgid "Reserved Address"
+msgstr "Adrese rezervate"
+
+#: inc/report.class.php:313 inc/report.class.php:611
+msgid "Success"
+msgstr ""
+
+#: inc/report.class.php:316 inc/report.class.php:354
+msgid "Reserved"
+msgstr ""
+
+#: inc/report.class.php:351
+msgid "Failed"
+msgstr ""
+
+#: inc/reserveip.class.php:142
+msgid "Object's name"
+msgstr ""
+
+#: inc/reserveip.class.php:262
+msgid "Name already in use"
+msgstr ""
+
+#: inc/reserveip.class.php:306
+msgid "Validate the reservation"
+msgstr ""

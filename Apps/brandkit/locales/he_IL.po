@@ -1,0 +1,532 @@
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: brandkit\n"
+"Language: he_IL\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "Dynamic cut for a bolder call-to-action."
+msgstr "חיתוך דינמי לקריאה נועזת יותר לפעולה."
+
+msgid "Email"
+msgstr "אֶלֶקטרוֹנִי"
+
+msgid "Field background"
+msgstr "רקע שדה"
+
+msgid "Field border"
+msgstr "גבול שדה"
+
+msgid "Field border width (px)"
+msgstr "רוחב גבול שדה (px)"
+
+msgid "Field focus glow"
+msgstr "זוהר מיקוד שדה"
+
+msgid "Field icons"
+msgstr "סמלי שדות"
+
+msgid "Field radius (px)"
+msgstr "רדיוס שדה (px)"
+
+msgid "Fields"
+msgstr "שדות"
+
+msgid "Field spacing (px)"
+msgstr "מרווח שדות (פיקסלים)"
+
+msgid "Field style"
+msgstr "סגנון שדה"
+
+msgid "Field text"
+msgstr "טקסט שדה"
+
+msgid "Field text size (px)"
+msgstr "גודל טקסט שדה (px)"
+
+msgid "Fill with color"
+msgstr "ממלאים בצבע"
+
+msgid "Fixed"
+msgstr "קָבוּעַ"
+
+msgid "Friendly, fully rounded shape."
+msgstr "צורה ידידותית, מעוגלת לחלוטין."
+
+msgid "Glass blur"
+msgstr "טשטוש זכוכית"
+
+msgid "Hide login text"
+msgstr "הסתר טקסט כניסה"
+
+msgid "Hover effect"
+msgstr "אפקט ריחוף"
+
+msgid "Hover fill custom color"
+msgstr "צבע מותאם אישית של מילוי בריחוף"
+
+msgid "Hover text color"
+msgstr "רחף צבע טקסט"
+
+msgid "Icon color"
+msgstr "צבע סמל"
+
+msgid "Icon position"
+msgstr "מיקום אייקון"
+
+msgid "ID card"
+msgstr "תְעוּדַת זֶהוּת"
+
+msgid "Info"
+msgstr "מידע"
+
+msgid "Inside panel"
+msgstr "פאנל פנימי"
+
+msgid "Key"
+msgstr "מַפְתֵחַ"
+
+msgid "Layout"
+msgstr "מַעֲרָך"
+
+msgid "Layout & logo"
+msgstr "פריסה ולוגו"
+
+msgid "Left"
+msgstr "שְׁמֹאל"
+
+msgid "Light"
+msgstr "אוֹר"
+
+msgid "Lock"
+msgstr "לִנְעוֹל"
+
+msgid "Login icon"
+msgstr "סמל התחברות"
+
+msgid "Login logo size (px)"
+msgstr "גודל לוגו כניסה (px)"
+
+msgid "Login page configuration"
+msgstr "תצורת עמוד הכניסה"
+
+msgid "Logo offset from top (px)"
+msgstr "היסט לוגו מלמעלה (px)"
+
+msgid "Logo position"
+msgstr "מיקום לוגו"
+
+msgid "Neon glow"
+msgstr "זוהר ניאון"
+
+msgid "No (disable)"
+msgstr "לא (השבת)"
+
+msgid "None"
+msgstr "אַף לֹא אֶחָד"
+
+msgid "No (show panel)"
+msgstr "לא (הצג פאנל)"
+
+msgid "Original size"
+msgstr "גודל מקורי"
+
+msgid "Outline"
+msgstr "מִתְאָר"
+
+msgid "Outline danger"
+msgstr "מתאר סכנה"
+
+msgid "Outline dark"
+msgstr "מתאר כהה"
+
+msgid "Outline info"
+msgstr "מידע מתאר"
+
+msgid "Outline only"
+msgstr "מתאר בלבד"
+
+msgid "Outline primary"
+msgstr "מתאר ראשוני"
+
+msgid "Outline secondary"
+msgstr "מתאר משני"
+
+msgid "Outline success"
+msgstr "מתאר הצלחה"
+
+msgid "Outline warning"
+msgstr "אזהרת מתאר"
+
+msgid "Overlay color"
+msgstr "צבע שכבת-על"
+
+msgid "Overlay opacity (%)"
+msgstr "אטימות שכבת-על (%)"
+
+msgid "Page text size (px)"
+msgstr "גודל טקסט עמוד (px)"
+
+msgid "Panel blur (px)"
+msgstr "טשטוש לוח (פיקסלים)"
+
+msgid "Panel color"
+msgstr "צבע פאנל"
+
+msgid "Panel height (px)"
+msgstr "גובה לוח (פיקסלים)"
+
+msgid "Panel hover effect"
+msgstr "אפקט ריחוף בלוח"
+
+msgid "Panel opacity (%)"
+msgstr "אטימות לוח (%)"
+
+msgid "Panel & split styling"
+msgstr "עיצוב פאנל ופיצול"
+
+msgid "Panel width (px)"
+msgstr "רוחב פאנל (פיקסלים)"
+
+msgid "Password icon"
+msgstr "סמל סיסמה"
+
+msgid "Pick a custom color"
+msgstr "בחר צבע מותאם אישית"
+
+msgid "Pick a layout and visual treatments for the GLPI login page."
+msgstr "בחר פריסה וטיפולים חזותיים עבור דף ההתחברות GLPI."
+
+msgid "Pill"
+msgstr "כַּדוּר"
+
+msgid "Position"
+msgstr "מַצָב"
+
+msgid "Preset palette"
+msgstr "פלטה מוגדרת מראש"
+
+msgid "Press on hover"
+msgstr "לחץ על ריחוף"
+
+msgid "Primary (default)"
+msgstr "ראשי (ברירת מחדל)"
+
+msgid "Recommended: 1920x1080 or larger."
+msgstr "מומלץ: 1920x1080 או יותר."
+
+msgid "Right"
+msgstr "יָמִינָה"
+
+msgid "Rounded"
+msgstr "מְעוּגָל"
+
+msgid "Save login page"
+msgstr "שמור את דף הכניסה"
+
+msgid "Scroll"
+msgstr "גְלִילָה"
+
+msgid "Secondary"
+msgstr "מִשׁנִי"
+
+msgid "Sharp edges with a confident shadow."
+msgstr "קצוות חדים עם צל בטוח."
+
+msgid "Shield"
+msgstr "מָגֵן"
+
+msgid "Size"
+msgstr "גוֹדֶל"
+
+msgid "Soft depth"
+msgstr "עומק רך"
+
+msgid "Soft shadow"
+msgstr "צל רך"
+
+msgid "Solid"
+msgstr "מוּצָק"
+
+msgid "Split blur (px)"
+msgstr "טשטוש מפוצל (פיקסלים)"
+
+msgid "Split color"
+msgstr "צבע מפוצל"
+
+msgid "Split left"
+msgstr "פיצול שמאלה"
+
+msgid "Split opacity (%)"
+msgstr "אטימות מפוצלת (%)"
+
+msgid "Split right"
+msgstr "פיצול ימינה"
+
+msgid "Split width (%)"
+msgstr "רוחב מפוצל (%)"
+
+msgid "Square"
+msgstr "מְרוּבָּע"
+
+msgid "Stretch"
+msgstr "לִמְתוֹחַ"
+
+msgid "Success"
+msgstr "הַצלָחָה"
+
+msgid "Text color"
+msgstr "צבע טקסט"
+
+msgid "Title text size (px)"
+msgstr "גודל טקסט כותרת (px)"
+
+msgid "Top"
+msgstr "רֹאשׁ"
+
+msgid "Transparent panel"
+msgstr "פאנל שקוף"
+
+msgid "Underline"
+msgstr "לָשִׂים דָגֵשׁ"
+
+msgid "Upload wallpaper"
+msgstr "העלה טפט"
+
+msgid "Use button color"
+msgstr "השתמש בצבע כפתור"
+
+msgid "User"
+msgstr "מִשׁתַמֵשׁ"
+
+msgid "Wallpaper"
+msgstr "טָפֵּט"
+
+msgid "Warning"
+msgstr "אַזהָרָה"
+
+msgid "Yes"
+msgstr "כֵּן"
+
+msgid "Yes (enable)"
+msgstr "כן (אפשר)"
+
+msgid "Yes (hide panel)"
+msgstr "כן (הסתר חלונית)"
+
+msgid ""
+"Light mode logos: used when the system is in light mode, ensuring good "
+"visibility on white or light backgrounds."
+msgstr ""
+"לוגו של מצב אור: משמש כאשר המערכת במצב אור, המבטיח ראות טובה על רקע לבן או "
+"בהיר."
+
+msgid ""
+"Dark mode logos: used when the system is in dark mode, ensuring contrast and "
+"readability on black or dark backgrounds."
+msgstr ""
+"סמלי לוגו של מצב כהה: משמש כאשר המערכת במצב כהה, מה שמבטיח ניגודיות וקריאה "
+"על רקע שחור או כהה."
+
+msgid ""
+"The favicon is the small icon that appears in the browser tab (and also in "
+"bookmarks)."
+msgstr "ה-favicon הוא האייקון הקטן שמופיע בלשונית הדפדפן (וגם בסימניות)."
+
+msgid ""
+"Expanded menu logo: the logo displayed when the sidebar menu is open, with "
+"more space available."
+msgstr ""
+"לוגו תפריט מורחב: הלוגו המוצג כאשר תפריט סרגל הצד פתוח, עם יותר מקום פנוי."
+
+msgid ""
+"Collapsed menu logo: the logo displayed when the sidebar menu is collapsed, "
+"so it needs to be a more compact version."
+msgstr ""
+"לוגו תפריט מכווץ: הלוגו המוצג כאשר תפריט סרגל הצד מכווץ, כך שהוא צריך להיות "
+"גרסה קומפקטית יותר."
+
+msgid ""
+"Login page logo: the logo displayed on the login screen before the user "
+"enters the system."
+msgstr "לוגו עמוד הכניסה: הלוגו המוצג במסך הכניסה לפני כניסת המשתמש למערכת."
+
+msgid "Logo size (%)"
+msgstr "גודל לוגו (%)"
+
+msgid "Favicon active"
+msgstr "Favicon פעיל"
+
+msgid "Button"
+msgstr "לַחְצָן"
+
+msgid "Wallpaper source"
+msgstr "מקור טפט"
+
+msgid "Preset wallpaper"
+msgstr "טפט מוגדר מראש"
+
+msgid "Attachment"
+msgstr "הִתקַשְׁרוּת"
+
+msgid "Button shape"
+msgstr "צורת כפתור"
+
+msgid "Button fill style"
+msgstr "סגנון מילוי כפתורים"
+
+msgid "Button text size (px)"
+msgstr "גודל טקסט לחצן (px)"
+
+msgid "Color mode"
+msgstr "מצב צבע"
+
+msgid "GLPI logo configuration"
+msgstr "GLPI תצורת לוגו"
+
+msgid ""
+"Upload logos that will replace the default GLPI assets using CSS variables."
+msgstr "העלה סמלי לוגו שיחליפו את נכסי ברירת המחדל GLPI באמצעות משתני CSS."
+
+msgid "Expanded menu logo size (%)"
+msgstr "גודל לוגו תפריט מורחב (%)"
+
+msgid "Collapsed menu logo size (%)"
+msgstr "גודל לוגו תפריט מכווץ (%)"
+
+msgid "Favicon (browser tab)"
+msgstr "Favicon (כרטיסיית הדפדפן)"
+
+msgid "Field height (px)"
+msgstr "גובה שדה (px)"
+
+msgid "Preset wallpapers"
+msgstr "טפטים מוגדרים מראש"
+
+msgid "Custom upload"
+msgstr "העלאה מותאמת אישית"
+
+msgid "Classic centered"
+msgstr "מרוכז קלאסי"
+
+msgid "Above panel"
+msgstr "מעל הלוח"
+
+msgid "No"
+msgstr "לֹא"
+
+msgid "Default fill"
+msgstr "מילוי ברירת מחדל"
+
+msgid "Custom color"
+msgstr "צבע מותאם אישית"
+
+msgid "Accent color"
+msgstr "צבע מבטא"
+
+msgid "Turn GLPI into a showcase for your brand in just a few clicks."
+msgstr "הפוך את GLPI לחלון ראווה עבור המותג שלך בכמה קליקים בלבד."
+
+msgid "About"
+msgstr "אוֹדוֹת"
+
+msgid "GLPI logos"
+msgstr "GLPI לוגו"
+
+msgid "Login Page"
+msgstr "עמוד התחברות"
+
+msgid "Premium"
+msgstr "Premium"
+
+msgid "Brandkit by Marcati"
+msgstr "Brandkit מאת Marcati"
+
+msgid "The visual evolution of your GLPI starts here."
+msgstr "האבולוציה החזותית של GLPI שלך מתחילה כאן."
+
+msgid ""
+"Brandkit delivers logos, login screens, and colors aligned with your "
+"identity. No CSS, no effort, just professional results."
+msgstr ""
+"Brandkit מספק לוגואים, מסכי כניסה וצבעים בהתאמה לזהות שלך. בלי CSS, בלי "
+"מאמץ, רק תוצאות מקצועיות."
+
+msgid "Discover Marcati at"
+msgstr "גלה Marcati ב"
+
+msgid "Meet Marcati"
+msgstr "הכירו את Marcati"
+
+msgid "Consistent logos"
+msgstr "לוגואים עקביים"
+
+msgid "Ready uploads for header, favicon, and login."
+msgstr "העלאות מוכנות עבור כותרת, favicon וכניסה."
+
+msgid "Login with presence"
+msgstr "התחבר עם נוכחות"
+
+msgid ""
+"Pick layouts, colors, and effects for an authentication screen that sells "
+"your brand."
+msgstr "בחר פריסות, צבעים ואפקטים עבור מסך אימות שמוכר את המותג שלך."
+
+msgid "Fast delivery"
+msgstr "משלוח מהיר"
+
+msgid "Settings saved directly in GLPI to activate branding without rework."
+msgstr "הגדרות נשמרות ישירות ב-GLPI כדי להפעיל מיתוג ללא עיבוד מחדש."
+
+msgid "Custom hex color"
+msgstr "צבע משושה מותאם אישית"
+
+msgid "Save logo sizes"
+msgstr "שמור גדלי לוגו"
+
+msgid "Restore defaults"
+msgstr "Restore defaults"
+
+msgid "Expanded menu logo"
+msgstr "לוגו תפריט מורחב"
+
+msgid "Collapsed menu logo"
+msgstr "לוגו תפריט מכווץ"
+
+msgid "Login logo"
+msgstr "לוגו התחברות"
+
+msgid "No custom logo uploaded yet."
+msgstr "עדיין לא הועלה לוגו מותאם אישית."
+
+msgid "No favicon yet"
+msgstr "עדיין אין פאביקון"
+
+msgid "Field width (px)"
+msgstr "רוחב שדה (px)"
+
+msgid "Light mode logos"
+msgstr "לוגואים למצב בהיר"
+
+msgid "Dark mode logos"
+msgstr "לוגואים למצב כהה"
+
+msgid "Favicon"
+msgstr "פאביקון"
+
+msgid "Upload logo"
+msgstr "העלה לוגו"
+
+msgid "Remove logo"
+msgstr "הסר לוגו"
+
+msgid "No custom favicon uploaded yet."
+msgstr "עדיין לא הועלה פאביקון מותאם אישית."
+
+msgid "Expanded menu logo (dark mode)"
+msgstr "לוגו תפריט מורחב (מצב כהה)"
+
+msgid "Collapsed menu logo (dark mode)"
+msgstr "לוגו תפריט מצומצם (מצב כהה)"
+

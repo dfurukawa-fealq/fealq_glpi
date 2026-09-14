@@ -1,0 +1,112 @@
+<?php
+
+/*
+ -------------------------------------------------------------------------
+ addressing plugin for GLPI
+ Copyright (C) 2016-2026 by the addressing Development Team.
+
+ https://github.com/pluginsGLPI/addressing
+ -------------------------------------------------------------------------
+
+ LICENSE
+
+ This file is part of addressing.
+
+ addressing is free software; you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation; either version 2 of the License, or
+ (at your option) any later version.
+
+ addressing is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details.
+
+ You should have received a copy of the GNU General Public License
+ along with addressing. If not, see <http://www.gnu.org/licenses/>.
+ --------------------------------------------------------------------------
+ */
+
+use GlpiPlugin\Addressing\Addressing;
+
+Session::checkLoginUser();
+
+if (!isset($_GET["id"])) {
+    $_GET["id"] = "";
+}
+
+$start = $_GET["start"] ?? 0;
+
+$addressing = new Addressing();
+
+if (isset($_POST["add"])) {
+    $addressing->check(-1, CREATE, $_POST);
+    if (!empty($_POST["name"])) {
+        if ($addressing->checkip($_POST)) {
+            $_POST['begin_ip'] = (int) $_POST['begin_ip0'] . "." . (int) $_POST['begin_ip1'] . ".";
+            $_POST['begin_ip'] .= (int) $_POST['begin_ip2'] . "." . (int) $_POST['begin_ip3'];
+            $_POST['end_ip'] = (int) $_POST['end_ip0'] . "." . (int) $_POST['end_ip1'] . ".";
+            $_POST['end_ip'] .= (int) $_POST['end_ip2'] . "." . (int) $_POST['end_ip3'];
+            $newID = $addressing->add($_POST);
+            if ($_SESSION['glpibackcreated']) {
+                Html::redirect($addressing->getFormURL() . "?id=" . $newID);
+            }
+            Html::back();
+        } else {
+            Html::back();
+        }
+    } else {
+        Session::addMessageAfterRedirect(
+            __('Problem when adding, required fields are not here', 'addressing'),
+            false,
+            ERROR
+        );
+        Html::back();
+    }
+
+} elseif (isset($_POST["delete"])) {
+    $addressing->check($_POST['id'], DELETE);
+    $addressing->delete($_POST);
+    $addressing->redirectToList();
+} elseif (isset($_POST["restore"])) {
+    $addressing->check($_POST['id'], PURGE);
+    $addressing->restore($_POST);
+    $addressing->redirectToList();
+} elseif (isset($_POST["purge"])) {
+    $addressing->check($_POST['id'], PURGE);
+    $addressing->delete($_POST, 1);
+    $addressing->redirectToList();
+} elseif (isset($_POST["update"])) {
+    $addressing->check($_POST['id'], UPDATE);
+    if (!empty($_POST["name"])) {
+
+        if ($addressing->checkip($_POST)) {
+            $_POST['begin_ip'] = (int) $_POST['begin_ip0'] . "." . (int) $_POST['begin_ip1'] . ".";
+            $_POST['begin_ip'] .= (int) $_POST['begin_ip2'] . "." . (int) $_POST['begin_ip3'];
+            $_POST['end_ip'] = (int) $_POST['end_ip0'] . "." . (int) $_POST['end_ip1'] . ".";
+            $_POST['end_ip'] .= (int) $_POST['end_ip2'] . "." . (int) $_POST['end_ip3'];
+            $addressing->update($_POST);
+            Html::back();
+        } else {
+            Html::back();
+        }
+    } else {
+        Session::addMessageAfterRedirect(
+            __('Problem when adding, required fields are not here', 'addressing'),
+            false,
+            ERROR
+        );
+        Html::back();
+    }
+
+} elseif (isset($_POST["search"])) {
+    $addressing->checkGlobal(READ);
+    Html::header(Addressing::getTypeName(2), '', "tools", Addressing::class);
+    $addressing->display($_POST);
+    Html::footer();
+} else {
+    $addressing->checkGlobal(READ);
+    Html::header(Addressing::getTypeName(2), '', "tools", Addressing::class);
+    $addressing->display($_GET);
+    Html::footer();
+}

@@ -1,0 +1,547 @@
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: brandkit\n"
+"Language: de_DE\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "Dynamic cut for a bolder call-to-action."
+msgstr "Dynamischer Schnitt für einen mutigeren Call-to-Action."
+
+msgid "Email"
+msgstr "E-Mail"
+
+msgid "Field background"
+msgstr "Feldhintergrund"
+
+msgid "Field border"
+msgstr "Feldgrenze"
+
+msgid "Field border width (px)"
+msgstr "Feldrandbreite (px)"
+
+msgid "Field focus glow"
+msgstr "Feldfokusglühen"
+
+msgid "Field icons"
+msgstr "Feldsymbole"
+
+msgid "Field radius (px)"
+msgstr "Feldradius (px)"
+
+msgid "Fields"
+msgstr "Felder"
+
+msgid "Field spacing (px)"
+msgstr "Feldabstand (px)"
+
+msgid "Field style"
+msgstr "Feldstil"
+
+msgid "Field text"
+msgstr "Feldtext"
+
+msgid "Field text size (px)"
+msgstr "Feldtextgröße (px)"
+
+msgid "Fill with color"
+msgstr "Mit Farbe füllen"
+
+msgid "Fixed"
+msgstr "Behoben"
+
+msgid "Friendly, fully rounded shape."
+msgstr "Freundliche, rundliche Form."
+
+msgid "Glass blur"
+msgstr "Glasunschärfe"
+
+msgid "Hide login text"
+msgstr "Anmeldetext ausblenden"
+
+msgid "Hover effect"
+msgstr "Hover-Effekt"
+
+msgid "Hover fill custom color"
+msgstr "Benutzerdefinierte Farbe für Hover-Füllung"
+
+msgid "Hover text color"
+msgstr "Hover-Textfarbe"
+
+msgid "Icon color"
+msgstr "Symbolfarbe"
+
+msgid "Icon position"
+msgstr "Symbolposition"
+
+msgid "ID card"
+msgstr "Ausweis"
+
+msgid "Info"
+msgstr "Info"
+
+msgid "Inside panel"
+msgstr "Innenverkleidung"
+
+msgid "Key"
+msgstr "Schlüssel"
+
+msgid "Layout"
+msgstr "Layout"
+
+msgid "Layout & logo"
+msgstr "Layout & Logo"
+
+msgid "Left"
+msgstr "Links"
+
+msgid "Light"
+msgstr "Licht"
+
+msgid "Lock"
+msgstr "Sperren"
+
+msgid "Login icon"
+msgstr "Anmeldesymbol"
+
+msgid "Login logo size (px)"
+msgstr "Größe des Login-Logos (px)"
+
+msgid "Login page configuration"
+msgstr "Konfiguration der Anmeldeseite"
+
+msgid "Logo offset from top (px)"
+msgstr "Logo-Versatz von oben (px)"
+
+msgid "Logo position"
+msgstr "Logo-Position"
+
+msgid "Neon glow"
+msgstr "Neonlicht"
+
+msgid "No (disable)"
+msgstr "Nein (deaktivieren)"
+
+msgid "None"
+msgstr "Keiner"
+
+msgid "No (show panel)"
+msgstr "Nein (Panel anzeigen)"
+
+msgid "Original size"
+msgstr "Originalgröße"
+
+msgid "Outline"
+msgstr "Gliederung"
+
+msgid "Outline danger"
+msgstr "Gefahr skizzieren"
+
+msgid "Outline dark"
+msgstr "Umriss dunkel"
+
+msgid "Outline info"
+msgstr "Übersichtsinformationen"
+
+msgid "Outline only"
+msgstr "Nur Umriss"
+
+msgid "Outline primary"
+msgstr "Umriss der Grundschule"
+
+msgid "Outline secondary"
+msgstr "Umriss sekundär"
+
+msgid "Outline success"
+msgstr "Skizzieren Sie den Erfolg"
+
+msgid "Outline warning"
+msgstr "Umrisswarnung"
+
+msgid "Overlay color"
+msgstr "Overlay-Farbe"
+
+msgid "Overlay opacity (%)"
+msgstr "Overlay-Deckkraft (%)"
+
+msgid "Page text size (px)"
+msgstr "Seitentextgröße (px)"
+
+msgid "Panel blur (px)"
+msgstr "Panel-Unschärfe (px)"
+
+msgid "Panel color"
+msgstr "Panelfarbe"
+
+msgid "Panel height (px)"
+msgstr "Panelhöhe (px)"
+
+msgid "Panel hover effect"
+msgstr "Panel-Hover-Effekt"
+
+msgid "Panel opacity (%)"
+msgstr "Panel-Deckkraft (%)"
+
+msgid "Panel & split styling"
+msgstr "Panel- und Split-Styling"
+
+msgid "Panel width (px)"
+msgstr "Panelbreite (px)"
+
+msgid "Password icon"
+msgstr "Passwort-Symbol"
+
+msgid "Pick a custom color"
+msgstr "Wählen Sie eine benutzerdefinierte Farbe"
+
+msgid "Pick a layout and visual treatments for the GLPI login page."
+msgstr ""
+"Wählen Sie ein Layout und visuelle Gestaltung für die GLPI-Anmeldeseite."
+
+msgid "Pill"
+msgstr "Pille"
+
+msgid "Position"
+msgstr "Position"
+
+msgid "Preset palette"
+msgstr "Voreingestellte Palette"
+
+msgid "Press on hover"
+msgstr "Drücken Sie beim Schweben"
+
+msgid "Primary (default)"
+msgstr "Primär (Standard)"
+
+msgid "Recommended: 1920x1080 or larger."
+msgstr "Empfohlen: 1920 x 1080 oder größer."
+
+msgid "Right"
+msgstr "Rechts"
+
+msgid "Rounded"
+msgstr "Gerundet"
+
+msgid "Save login page"
+msgstr "Anmeldeseite speichern"
+
+msgid "Scroll"
+msgstr "Scrollen"
+
+msgid "Secondary"
+msgstr "Sekundär"
+
+msgid "Sharp edges with a confident shadow."
+msgstr "Scharfe Kanten mit einem selbstbewussten Schatten."
+
+msgid "Shield"
+msgstr "Schild"
+
+msgid "Size"
+msgstr "Größe"
+
+msgid "Soft depth"
+msgstr "Sanfte Tiefe"
+
+msgid "Soft shadow"
+msgstr "Weicher Schatten"
+
+msgid "Solid"
+msgstr "Solide"
+
+msgid "Split blur (px)"
+msgstr "Geteilte Unschärfe (px)"
+
+msgid "Split color"
+msgstr "Geteilte Farbe"
+
+msgid "Split left"
+msgstr "Links geteilt"
+
+msgid "Split opacity (%)"
+msgstr "Geteilte Deckkraft (%)"
+
+msgid "Split right"
+msgstr "Rechts teilen"
+
+msgid "Split width (%)"
+msgstr "Spaltbreite (%)"
+
+msgid "Square"
+msgstr "Quadrat"
+
+msgid "Stretch"
+msgstr "Strecken"
+
+msgid "Success"
+msgstr "Erfolg"
+
+msgid "Text color"
+msgstr "Textfarbe"
+
+msgid "Title text size (px)"
+msgstr "Titeltextgröße (px)"
+
+msgid "Top"
+msgstr "Spitze"
+
+msgid "Transparent panel"
+msgstr "Transparente Platte"
+
+msgid "Underline"
+msgstr "Unterstreichen"
+
+msgid "Upload wallpaper"
+msgstr "Hintergrundbild hochladen"
+
+msgid "Use button color"
+msgstr "Verwenden Sie die Schaltflächenfarbe"
+
+msgid "User"
+msgstr "Benutzer"
+
+msgid "Wallpaper"
+msgstr "Tapete"
+
+msgid "Warning"
+msgstr "Warnung"
+
+msgid "Yes"
+msgstr "Ja"
+
+msgid "Yes (enable)"
+msgstr "Ja (aktivieren)"
+
+msgid "Yes (hide panel)"
+msgstr "Ja (Panel ausblenden)"
+
+msgid ""
+"Light mode logos: used when the system is in light mode, ensuring good "
+"visibility on white or light backgrounds."
+msgstr ""
+"Lichtmodus-Logos: werden verwendet, wenn sich das System im Lichtmodus "
+"befindet, und sorgen für gute Sichtbarkeit auf weißen oder hellen "
+"Hintergründen."
+
+msgid ""
+"Dark mode logos: used when the system is in dark mode, ensuring contrast and "
+"readability on black or dark backgrounds."
+msgstr ""
+"Dunkelmodus-Logos: werden verwendet, wenn sich das System im Dunkelmodus "
+"befindet, und sorgen für Kontrast und Lesbarkeit auf schwarzem oder dunklem "
+"Hintergrund."
+
+msgid ""
+"The favicon is the small icon that appears in the browser tab (and also in "
+"bookmarks)."
+msgstr ""
+"Das Favicon ist das kleine Symbol, das im Browser-Tab (und auch in "
+"Lesezeichen) erscheint."
+
+msgid ""
+"Expanded menu logo: the logo displayed when the sidebar menu is open, with "
+"more space available."
+msgstr ""
+"Erweitertes Menülogo: Das Logo wird angezeigt, wenn das Seitenleistenmenü "
+"geöffnet ist und mehr Platz zur Verfügung steht."
+
+msgid ""
+"Collapsed menu logo: the logo displayed when the sidebar menu is collapsed, "
+"so it needs to be a more compact version."
+msgstr ""
+"Logo des minimierten Menüs: Das Logo, das angezeigt wird, wenn das "
+"Seitenleistenmenü minimiert ist, daher muss es eine kompaktere Version sein."
+
+msgid ""
+"Login page logo: the logo displayed on the login screen before the user "
+"enters the system."
+msgstr ""
+"Logo der Anmeldeseite: Das Logo, das auf dem Anmeldebildschirm angezeigt "
+"wird, bevor der Benutzer das System betritt."
+
+msgid "Logo size (%)"
+msgstr "Logo-Größe (%)"
+
+msgid "Favicon active"
+msgstr "Favicon aktiv"
+
+msgid "Button"
+msgstr "Schaltfläche"
+
+msgid "Wallpaper source"
+msgstr "Quelle des Hintergrundbilds"
+
+msgid "Preset wallpaper"
+msgstr "Voreingestelltes Hintergrundbild"
+
+msgid "Attachment"
+msgstr "Fixierung"
+
+msgid "Button shape"
+msgstr "Form der Schaltfläche"
+
+msgid "Button fill style"
+msgstr "Füllstil der Schaltfläche"
+
+msgid "Button text size (px)"
+msgstr "Textgröße der Schaltfläche (px)"
+
+msgid "Color mode"
+msgstr "Farbmodus"
+
+msgid "GLPI logo configuration"
+msgstr "GLPI-Logo-Konfiguration"
+
+msgid ""
+"Upload logos that will replace the default GLPI assets using CSS variables."
+msgstr ""
+"Laden Sie Logos hoch, die die Standard-GLPI-Assets mithilfe von CSS-"
+"Variablen ersetzen."
+
+msgid "Expanded menu logo size (%)"
+msgstr "Größe des Logos für das erweiterte Menü (%)"
+
+msgid "Collapsed menu logo size (%)"
+msgstr "Größe des Logos für das eingeklappte Menü (%)"
+
+msgid "Favicon (browser tab)"
+msgstr "Favicon (Browser-Tab)"
+
+msgid "Field height (px)"
+msgstr "Feldhöhe (px)"
+
+msgid "Preset wallpapers"
+msgstr "Voreingestellte Hintergrundbilder"
+
+msgid "Custom upload"
+msgstr "Benutzerdefinierter Upload"
+
+msgid "Classic centered"
+msgstr "Klassisch zentriert"
+
+msgid "Above panel"
+msgstr "Über dem Panel"
+
+msgid "No"
+msgstr "Nein"
+
+msgid "Default fill"
+msgstr "Standardfüllung"
+
+msgid "Custom color"
+msgstr "Benutzerdefinierte Farbe"
+
+msgid "Accent color"
+msgstr "Akzentfarbe"
+
+msgid "Turn GLPI into a showcase for your brand in just a few clicks."
+msgstr ""
+"Verwandeln Sie GLPI in wenigen Klicks in eine Präsentation Ihrer Marke."
+
+msgid "About"
+msgstr "Über"
+
+msgid "GLPI logos"
+msgstr "GLPI-Logos"
+
+msgid "Login Page"
+msgstr "Login-Seite"
+
+msgid "Premium"
+msgstr "Premium"
+
+msgid "Brandkit by Marcati"
+msgstr "Brandkit von Marcati"
+
+msgid "The visual evolution of your GLPI starts here."
+msgstr "Die visuelle Entwicklung Ihres GLPI beginnt hier."
+
+msgid ""
+"Brandkit delivers logos, login screens, and colors aligned with your "
+"identity. No CSS, no effort, just professional results."
+msgstr ""
+"Brandkit liefert Logos, Login-Seiten und Farben, die zu Ihrer Identität "
+"passen. Kein CSS, kein Aufwand, nur professionelle Ergebnisse."
+
+msgid "Discover Marcati at"
+msgstr "Entdecken Sie Marcati unter"
+
+msgid "Meet Marcati"
+msgstr "Lernen Sie Marcati kennen"
+
+msgid "Consistent logos"
+msgstr "Konsistente Logos"
+
+msgid "Ready uploads for header, favicon, and login."
+msgstr "Fertige Uploads für Kopfzeile, Favicon und Login."
+
+msgid "Login with presence"
+msgstr "Login mit Präsenz"
+
+msgid ""
+"Pick layouts, colors, and effects for an authentication screen that sells "
+"your brand."
+msgstr ""
+"Wählen Sie Layouts, Farben und Effekte für einen "
+"Authentifizierungsbildschirm, der Ihre Marke präsentiert."
+
+msgid "Fast delivery"
+msgstr "Schnelle Bereitstellung"
+
+msgid "Settings saved directly in GLPI to activate branding without rework."
+msgstr ""
+"Einstellungen werden direkt in GLPI gespeichert, um Branding ohne Nacharbeit "
+"zu aktivieren."
+
+msgid "Custom hex color"
+msgstr "Benutzerdefinierte Hex-Farbe"
+
+msgid "Save logo sizes"
+msgstr "Logogrößen speichern"
+
+msgid "Restore defaults"
+msgstr "Restore defaults"
+
+msgid "Expanded menu logo"
+msgstr "Logo des erweiterten Menüs"
+
+msgid "Collapsed menu logo"
+msgstr "Logo des eingeklappten Menüs"
+
+msgid "Login logo"
+msgstr "Anmelde-Logo"
+
+msgid "No custom logo uploaded yet."
+msgstr "Noch kein benutzerdefiniertes Logo hochgeladen."
+
+msgid "No favicon yet"
+msgstr "Noch kein Favicon"
+
+msgid "Field width (px)"
+msgstr "Feldbreite (px)"
+
+msgid "Light mode logos"
+msgstr "Logos für den hellen Modus"
+
+msgid "Dark mode logos"
+msgstr "Logos für den dunklen Modus"
+
+msgid "Favicon"
+msgstr "Favicon"
+
+msgid "Upload logo"
+msgstr "Logo hochladen"
+
+msgid "Remove logo"
+msgstr "Logo entfernen"
+
+msgid "No custom favicon uploaded yet."
+msgstr "Es wurde noch kein benutzerdefiniertes Favicon hochgeladen."
+
+msgid "Expanded menu logo (dark mode)"
+msgstr "Logo des erweiterten Menüs (dunkler Modus)"
+
+msgid "Collapsed menu logo (dark mode)"
+msgstr "Logo des eingeklappten Menüs (dunkler Modus)"
+

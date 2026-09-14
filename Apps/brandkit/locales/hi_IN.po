@@ -1,0 +1,536 @@
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: brandkit\n"
+"Language: hi_IN\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "Dynamic cut for a bolder call-to-action."
+msgstr "अधिक बोल्ड कॉल-टू-एक्शन के लिए डायनामिक कट।"
+
+msgid "Email"
+msgstr "ईमेल"
+
+msgid "Field background"
+msgstr "फ़ील्ड पृष्ठभूमि"
+
+msgid "Field border"
+msgstr "मैदान की सीमा"
+
+msgid "Field border width (px)"
+msgstr "फ़ील्ड सीमा चौड़ाई (पीएक्स)"
+
+msgid "Field focus glow"
+msgstr "फ़ील्ड फोकस चमक"
+
+msgid "Field icons"
+msgstr "फ़ील्ड चिह्न"
+
+msgid "Field radius (px)"
+msgstr "फ़ील्ड त्रिज्या (पीएक्स)"
+
+msgid "Fields"
+msgstr "खेत"
+
+msgid "Field spacing (px)"
+msgstr "फ़ील्ड रिक्ति (पीएक्स)"
+
+msgid "Field style"
+msgstr "फ़ील्ड शैली"
+
+msgid "Field text"
+msgstr "फ़ील्ड पाठ"
+
+msgid "Field text size (px)"
+msgstr "फ़ील्ड टेक्स्ट का आकार (px)"
+
+msgid "Fill with color"
+msgstr "रंग भरें"
+
+msgid "Fixed"
+msgstr "तय"
+
+msgid "Friendly, fully rounded shape."
+msgstr "मैत्रीपूर्ण, पूरी तरह गोल आकार।"
+
+msgid "Glass blur"
+msgstr "कांच का धुंधलापन"
+
+msgid "Hide login text"
+msgstr "लॉगिन टेक्स्ट छिपाएँ"
+
+msgid "Hover effect"
+msgstr "होवर प्रभाव"
+
+msgid "Hover fill custom color"
+msgstr "होवर कस्टम रंग भरें"
+
+msgid "Hover text color"
+msgstr "पाठ का रंग होवर करें"
+
+msgid "Icon color"
+msgstr "चिह्न का रंग"
+
+msgid "Icon position"
+msgstr "चिह्न स्थिति"
+
+msgid "ID card"
+msgstr "आईडी कार्ड"
+
+msgid "Info"
+msgstr "जानकारी"
+
+msgid "Inside panel"
+msgstr "अंदर का पैनल"
+
+msgid "Key"
+msgstr "चाबी"
+
+msgid "Layout"
+msgstr "लेआउट"
+
+msgid "Layout & logo"
+msgstr "लेआउट और लोगो"
+
+msgid "Left"
+msgstr "बाएं"
+
+msgid "Light"
+msgstr "रोशनी"
+
+msgid "Lock"
+msgstr "ताला"
+
+msgid "Login icon"
+msgstr "लॉगिन आइकन"
+
+msgid "Login logo size (px)"
+msgstr "लॉगिन लोगो का आकार (px)"
+
+msgid "Login page configuration"
+msgstr "लॉगिन पेज कॉन्फ़िगरेशन"
+
+msgid "Logo offset from top (px)"
+msgstr "शीर्ष से लोगो ऑफसेट (px)"
+
+msgid "Logo position"
+msgstr "लोगो की स्थिति"
+
+msgid "Neon glow"
+msgstr "नियॉन चमक"
+
+msgid "No (disable)"
+msgstr "नहीं (अक्षम करें)"
+
+msgid "None"
+msgstr "कोई नहीं"
+
+msgid "No (show panel)"
+msgstr "नहीं (पैनल दिखाएँ)"
+
+msgid "Original size"
+msgstr "मूल आकार"
+
+msgid "Outline"
+msgstr "रूपरेखा"
+
+msgid "Outline danger"
+msgstr "खतरे की रूपरेखा तैयार करें"
+
+msgid "Outline dark"
+msgstr "रूपरेखा अंधकारमय"
+
+msgid "Outline info"
+msgstr "रूपरेखा जानकारी"
+
+msgid "Outline only"
+msgstr "केवल रूपरेखा"
+
+msgid "Outline primary"
+msgstr "रूपरेखा प्राथमिक"
+
+msgid "Outline secondary"
+msgstr "रूपरेखा गौण"
+
+msgid "Outline success"
+msgstr "सफलता की रूपरेखा"
+
+msgid "Outline warning"
+msgstr "रूपरेखा चेतावनी"
+
+msgid "Overlay color"
+msgstr "ओवरले रंग"
+
+msgid "Overlay opacity (%)"
+msgstr "ओवरले अपारदर्शिता (%)"
+
+msgid "Page text size (px)"
+msgstr "पेज टेक्स्ट का आकार (px)"
+
+msgid "Panel blur (px)"
+msgstr "पैनल धुंधला (पीएक्स)"
+
+msgid "Panel color"
+msgstr "पैनल का रंग"
+
+msgid "Panel height (px)"
+msgstr "पैनल की ऊंचाई (पीएक्स)"
+
+msgid "Panel hover effect"
+msgstr "पैनल होवर प्रभाव"
+
+msgid "Panel opacity (%)"
+msgstr "पैनल अपारदर्शिता (%)"
+
+msgid "Panel & split styling"
+msgstr "पैनल और स्प्लिट स्टाइलिंग"
+
+msgid "Panel width (px)"
+msgstr "पैनल की चौड़ाई (पीएक्स)"
+
+msgid "Password icon"
+msgstr "पासवर्ड आइकन"
+
+msgid "Pick a custom color"
+msgstr "एक कस्टम रंग चुनें"
+
+msgid "Pick a layout and visual treatments for the GLPI login page."
+msgstr "GLPI लॉगिन पेज के लिए एक लेआउट और विज़ुअल उपचार चुनें।"
+
+msgid "Pill"
+msgstr "गोली"
+
+msgid "Position"
+msgstr "पद"
+
+msgid "Preset palette"
+msgstr "प्रीसेट पैलेट"
+
+msgid "Press on hover"
+msgstr "होवर पर दबाएँ"
+
+msgid "Primary (default)"
+msgstr "प्राथमिक (डिफ़ॉल्ट)"
+
+msgid "Recommended: 1920x1080 or larger."
+msgstr "अनुशंसित: 1920x1080 या इससे बड़ा."
+
+msgid "Right"
+msgstr "सही"
+
+msgid "Rounded"
+msgstr "गोल"
+
+msgid "Save login page"
+msgstr "लॉगिन पेज सहेजें"
+
+msgid "Scroll"
+msgstr "स्क्रॉल"
+
+msgid "Secondary"
+msgstr "माध्यमिक"
+
+msgid "Sharp edges with a confident shadow."
+msgstr "आत्मविश्वासपूर्ण छाया के साथ तेज किनारें।"
+
+msgid "Shield"
+msgstr "कवच"
+
+msgid "Size"
+msgstr "आकार"
+
+msgid "Soft depth"
+msgstr "नरम गहराई"
+
+msgid "Soft shadow"
+msgstr "कोमल छाया"
+
+msgid "Solid"
+msgstr "ठोस"
+
+msgid "Split blur (px)"
+msgstr "स्प्लिट ब्लर (पीएक्स)"
+
+msgid "Split color"
+msgstr "विभाजित रंग"
+
+msgid "Split left"
+msgstr "बाएँ विभाजित"
+
+msgid "Split opacity (%)"
+msgstr "विभाजित अपारदर्शिता (%)"
+
+msgid "Split right"
+msgstr "दाएँ विभाजित करें"
+
+msgid "Split width (%)"
+msgstr "विभाजित चौड़ाई (%)"
+
+msgid "Square"
+msgstr "वर्ग"
+
+msgid "Stretch"
+msgstr "खींचना"
+
+msgid "Success"
+msgstr "सफलता"
+
+msgid "Text color"
+msgstr "पाठ का रंग"
+
+msgid "Title text size (px)"
+msgstr "शीर्षक पाठ का आकार (px)"
+
+msgid "Top"
+msgstr "शीर्ष"
+
+msgid "Transparent panel"
+msgstr "पारदर्शी पैनल"
+
+msgid "Underline"
+msgstr "रेखांकन"
+
+msgid "Upload wallpaper"
+msgstr "वॉलपेपर अपलोड करें"
+
+msgid "Use button color"
+msgstr "बटन रंग का प्रयोग करें"
+
+msgid "User"
+msgstr "उपयोगकर्ता"
+
+msgid "Wallpaper"
+msgstr "वॉलपेपर"
+
+msgid "Warning"
+msgstr "चेतावनी"
+
+msgid "Yes"
+msgstr "हाँ"
+
+msgid "Yes (enable)"
+msgstr "हाँ (सक्षम करें)"
+
+msgid "Yes (hide panel)"
+msgstr "हाँ (पैनल छिपाएँ)"
+
+msgid ""
+"Light mode logos: used when the system is in light mode, ensuring good "
+"visibility on white or light backgrounds."
+msgstr ""
+"लाइट मोड लोगो: इसका उपयोग तब किया जाता है जब सिस्टम लाइट मोड में होता है, जिससे "
+"सफेद या हल्के पृष्ठभूमि पर अच्छी दृश्यता सुनिश्चित होती है।"
+
+msgid ""
+"Dark mode logos: used when the system is in dark mode, ensuring contrast and "
+"readability on black or dark backgrounds."
+msgstr ""
+"डार्क मोड लोगो: इसका उपयोग तब किया जाता है जब सिस्टम डार्क मोड में होता है, जिससे "
+"काले या गहरे रंग की पृष्ठभूमि पर कंट्रास्ट और पठनीयता सुनिश्चित होती है।"
+
+msgid ""
+"The favicon is the small icon that appears in the browser tab (and also in "
+"bookmarks)."
+msgstr "फ़ेविकॉन एक छोटा आइकन है जो ब्राउज़र टैब में (और बुकमार्क में भी) दिखाई देता है।"
+
+msgid ""
+"Expanded menu logo: the logo displayed when the sidebar menu is open, with "
+"more space available."
+msgstr ""
+"विस्तारित मेनू लोगो: अधिक स्थान उपलब्ध होने पर साइडबार मेनू खुला होने पर प्रदर्शित लोगो।"
+
+msgid ""
+"Collapsed menu logo: the logo displayed when the sidebar menu is collapsed, "
+"so it needs to be a more compact version."
+msgstr ""
+"संक्षिप्त मेनू लोगो: साइडबार मेनू के संक्षिप्त होने पर प्रदर्शित होने वाला लोगो, इसलिए इसे "
+"अधिक कॉम्पैक्ट संस्करण की आवश्यकता है।"
+
+msgid ""
+"Login page logo: the logo displayed on the login screen before the user "
+"enters the system."
+msgstr ""
+"लॉगिन पेज लोगो: उपयोगकर्ता के सिस्टम में प्रवेश करने से पहले लॉगिन स्क्रीन पर प्रदर्शित "
+"लोगो।"
+
+msgid "Logo size (%)"
+msgstr "लोगो का आकार (%)"
+
+msgid "Favicon active"
+msgstr "फ़ेविकॉन सक्रिय"
+
+msgid "Button"
+msgstr "बटन"
+
+msgid "Wallpaper source"
+msgstr "वॉलपेपर स्रोत"
+
+msgid "Preset wallpaper"
+msgstr "प्रीसेट वॉलपेपर"
+
+msgid "Attachment"
+msgstr "लगाव"
+
+msgid "Button shape"
+msgstr "बटन का आकार"
+
+msgid "Button fill style"
+msgstr "बटन भरने की शैली"
+
+msgid "Button text size (px)"
+msgstr "बटन टेक्स्ट का आकार (px)"
+
+msgid "Color mode"
+msgstr "रंग मोड"
+
+msgid "GLPI logo configuration"
+msgstr "GLPI लोगो कॉन्फ़िगरेशन"
+
+msgid ""
+"Upload logos that will replace the default GLPI assets using CSS variables."
+msgstr ""
+"ऐसे लोगो अपलोड करें जो CSS वेरिएबल्स का उपयोग करके डिफ़ॉल्ट GLPI संपत्तियों को बदल देंगे।"
+
+msgid "Expanded menu logo size (%)"
+msgstr "विस्तारित मेनू लोगो आकार (%)"
+
+msgid "Collapsed menu logo size (%)"
+msgstr "संक्षिप्त मेनू लोगो आकार (%)"
+
+msgid "Favicon (browser tab)"
+msgstr "फ़ेविकॉन (ब्राउज़र टैब)"
+
+msgid "Field height (px)"
+msgstr "फ़ील्ड ऊंचाई (पीएक्स)"
+
+msgid "Preset wallpapers"
+msgstr "प्रीसेट वॉलपेपर"
+
+msgid "Custom upload"
+msgstr "कस्टम अपलोड"
+
+msgid "Classic centered"
+msgstr "क्लासिक केन्द्रित"
+
+msgid "Above panel"
+msgstr "ऊपर पैनल"
+
+msgid "No"
+msgstr "नहीं"
+
+msgid "Default fill"
+msgstr "डिफ़ॉल्ट भरण"
+
+msgid "Custom color"
+msgstr "कस्टम रंग"
+
+msgid "Accent color"
+msgstr "उच्चारण रंग"
+
+msgid "Turn GLPI into a showcase for your brand in just a few clicks."
+msgstr "कुछ ही क्लिक में GLPI को अपने ब्रांड के शोकेस में बदलें।"
+
+msgid "About"
+msgstr "के बारे में"
+
+msgid "GLPI logos"
+msgstr "GLPI लोगो"
+
+msgid "Login Page"
+msgstr "लोग इन वाला पन्ना"
+
+msgid "Premium"
+msgstr "Premium"
+
+msgid "Brandkit by Marcati"
+msgstr "Brandkit द्वारा Marcati"
+
+msgid "The visual evolution of your GLPI starts here."
+msgstr "आपके GLPI का दृश्य विकास यहां से शुरू होता है।"
+
+msgid ""
+"Brandkit delivers logos, login screens, and colors aligned with your "
+"identity. No CSS, no effort, just professional results."
+msgstr ""
+"Brandkit आपकी पहचान के अनुरूप लोगो, लॉगिन स्क्रीन और रंग प्रदान करता है। कोई CSS "
+"नहीं, कोई प्रयास नहीं, केवल पेशेवर परिणाम।"
+
+msgid "Discover Marcati at"
+msgstr "Marcati को यहां खोजें"
+
+msgid "Meet Marcati"
+msgstr "मिलें Marcati"
+
+msgid "Consistent logos"
+msgstr "सुसंगत लोगो"
+
+msgid "Ready uploads for header, favicon, and login."
+msgstr "हेडर, फ़ेविकॉन और लॉगिन के लिए तैयार अपलोड।"
+
+msgid "Login with presence"
+msgstr "उपस्थिति के साथ लॉगिन करें"
+
+msgid ""
+"Pick layouts, colors, and effects for an authentication screen that sells "
+"your brand."
+msgstr "आपके ब्रांड को बेचने वाली प्रमाणीकरण स्क्रीन के लिए लेआउट, रंग और प्रभाव चुनें।"
+
+msgid "Fast delivery"
+msgstr "तेजी से वितरण"
+
+msgid "Settings saved directly in GLPI to activate branding without rework."
+msgstr ""
+"बिना दोबारा काम किए ब्रांडिंग को सक्रिय करने के लिए सेटिंग्स सीधे GLPI में सहेजी गईं।"
+
+msgid "Custom hex color"
+msgstr "कस्टम हेक्स रंग"
+
+msgid "Save logo sizes"
+msgstr "लोगो आकार सहेजें"
+
+msgid "Restore defaults"
+msgstr "Restore defaults"
+
+msgid "Expanded menu logo"
+msgstr "विस्तारित मेनू लोगो"
+
+msgid "Collapsed menu logo"
+msgstr "संकुचित मेनू लोगो"
+
+msgid "Login logo"
+msgstr "लॉगिन लोगो"
+
+msgid "No custom logo uploaded yet."
+msgstr "अभी तक कोई कस्टम लोगो अपलोड नहीं हुआ है।"
+
+msgid "No favicon yet"
+msgstr "अभी तक कोई फेविकॉन नहीं है"
+
+msgid "Field width (px)"
+msgstr "फ़ील्ड चौड़ाई (px)"
+
+msgid "Light mode logos"
+msgstr "लाइट मोड लोगो"
+
+msgid "Dark mode logos"
+msgstr "डार्क मोड लोगो"
+
+msgid "Favicon"
+msgstr "फेविकॉन"
+
+msgid "Upload logo"
+msgstr "लोगो अपलोड करें"
+
+msgid "Remove logo"
+msgstr "लोगो हटाएँ"
+
+msgid "No custom favicon uploaded yet."
+msgstr "अभी तक कोई कस्टम फेविकॉन अपलोड नहीं किया गया है।"
+
+msgid "Expanded menu logo (dark mode)"
+msgstr "विस्तारित मेनू लोगो (डार्क मोड)"
+
+msgid "Collapsed menu logo (dark mode)"
+msgstr "संक्षिप्त मेनू लोगो (डार्क मोड)"
+

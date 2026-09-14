@@ -1,0 +1,540 @@
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: brandkit\n"
+"Language: ar_DZ\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "Dynamic cut for a bolder call-to-action."
+msgstr "قطع ديناميكي لدعوة أكثر جرأة إلى اتخاذ إجراء."
+
+msgid "Email"
+msgstr "بريد إلكتروني"
+
+msgid "Field background"
+msgstr "الخلفية الميدانية"
+
+msgid "Field border"
+msgstr "الحدود الميدانية"
+
+msgid "Field border width (px)"
+msgstr "عرض حدود الحقل (بكسل)"
+
+msgid "Field focus glow"
+msgstr "توهج التركيز الميداني"
+
+msgid "Field icons"
+msgstr "أيقونات الحقول"
+
+msgid "Field radius (px)"
+msgstr "نصف قطر المجال (بكسل)"
+
+msgid "Fields"
+msgstr "الحقول"
+
+msgid "Field spacing (px)"
+msgstr "تباعد الحقول (بكسل)"
+
+msgid "Field style"
+msgstr "النمط الميداني"
+
+msgid "Field text"
+msgstr "النص الميداني"
+
+msgid "Field text size (px)"
+msgstr "حجم نص الحقل (بكسل)"
+
+msgid "Fill with color"
+msgstr "املأ باللون"
+
+msgid "Fixed"
+msgstr "مُثَبَّت"
+
+msgid "Friendly, fully rounded shape."
+msgstr "ودية، شكل مستدير بالكامل."
+
+msgid "Glass blur"
+msgstr "طمس الزجاج"
+
+msgid "Hide login text"
+msgstr "إخفاء نص تسجيل الدخول"
+
+msgid "Hover effect"
+msgstr "تأثير التحويم"
+
+msgid "Hover fill custom color"
+msgstr "قم بالتمرير لملء اللون المخصص"
+
+msgid "Hover text color"
+msgstr "تحوم لون النص"
+
+msgid "Icon color"
+msgstr "لون الأيقونة"
+
+msgid "Icon position"
+msgstr "موقف الأيقونة"
+
+msgid "ID card"
+msgstr "بطاقة الهوية"
+
+msgid "Info"
+msgstr "معلومات"
+
+msgid "Inside panel"
+msgstr "لوحة داخلية"
+
+msgid "Key"
+msgstr "مفتاح"
+
+msgid "Layout"
+msgstr "تَخطِيط"
+
+msgid "Layout & logo"
+msgstr "التخطيط والشعار"
+
+msgid "Left"
+msgstr "غادر"
+
+msgid "Light"
+msgstr "ضوء"
+
+msgid "Lock"
+msgstr "قفل"
+
+msgid "Login icon"
+msgstr "أيقونة تسجيل الدخول"
+
+msgid "Login logo size (px)"
+msgstr "حجم شعار تسجيل الدخول (بكسل)"
+
+msgid "Login page configuration"
+msgstr "تكوين صفحة تسجيل الدخول"
+
+msgid "Logo offset from top (px)"
+msgstr "إزاحة الشعار من الأعلى (بكسل)"
+
+msgid "Logo position"
+msgstr "موقف الشعار"
+
+msgid "Neon glow"
+msgstr "توهج النيون"
+
+msgid "No (disable)"
+msgstr "لا (تعطيل)"
+
+msgid "None"
+msgstr "لا أحد"
+
+msgid "No (show panel)"
+msgstr "لا (إظهار اللوحة)"
+
+msgid "Original size"
+msgstr "الحجم الأصلي"
+
+msgid "Outline"
+msgstr "الخطوط العريضة"
+
+msgid "Outline danger"
+msgstr "الخطوط العريضة للخطر"
+
+msgid "Outline dark"
+msgstr "الخطوط العريضة مظلمة"
+
+msgid "Outline info"
+msgstr "معلومات المخطط التفصيلي"
+
+msgid "Outline only"
+msgstr "الخطوط العريضة فقط"
+
+msgid "Outline primary"
+msgstr "الخطوط العريضة الأولية"
+
+msgid "Outline secondary"
+msgstr "الخطوط العريضة الثانوية"
+
+msgid "Outline success"
+msgstr "الخطوط العريضة للنجاح"
+
+msgid "Outline warning"
+msgstr "تحذير الخطوط العريضة"
+
+msgid "Overlay color"
+msgstr "لون التراكب"
+
+msgid "Overlay opacity (%)"
+msgstr "عتامة التراكب (%)"
+
+msgid "Page text size (px)"
+msgstr "حجم نص الصفحة (بكسل)"
+
+msgid "Panel blur (px)"
+msgstr "طمس اللوحة (بكسل)"
+
+msgid "Panel color"
+msgstr "لون اللوحة"
+
+msgid "Panel height (px)"
+msgstr "ارتفاع اللوحة (بكسل)"
+
+msgid "Panel hover effect"
+msgstr "تأثير تحوم اللوحة"
+
+msgid "Panel opacity (%)"
+msgstr "عتامة اللوحة (%)"
+
+msgid "Panel & split styling"
+msgstr "تصميم اللوحة والانقسام"
+
+msgid "Panel width (px)"
+msgstr "عرض اللوحة (بكسل)"
+
+msgid "Password icon"
+msgstr "رمز كلمة المرور"
+
+msgid "Pick a custom color"
+msgstr "اختر لونًا مخصصًا"
+
+msgid "Pick a layout and visual treatments for the GLPI login page."
+msgstr "اختر تخطيطًا ومعالجات مرئية لصفحة تسجيل الدخول GLPI."
+
+msgid "Pill"
+msgstr "حبة"
+
+msgid "Position"
+msgstr "موضع"
+
+msgid "Preset palette"
+msgstr "لوحة محددة مسبقا"
+
+msgid "Press on hover"
+msgstr "اضغط على التحويم"
+
+msgid "Primary (default)"
+msgstr "الأساسي (الافتراضي)"
+
+msgid "Recommended: 1920x1080 or larger."
+msgstr "الموصى بها: 1920 × 1080 أو أكبر."
+
+msgid "Right"
+msgstr "يمين"
+
+msgid "Rounded"
+msgstr "مدور"
+
+msgid "Save login page"
+msgstr "حفظ صفحة تسجيل الدخول"
+
+msgid "Scroll"
+msgstr "قم بالتمرير"
+
+msgid "Secondary"
+msgstr "ثانوي"
+
+msgid "Sharp edges with a confident shadow."
+msgstr "حواف حادة مع ظل واثق."
+
+msgid "Shield"
+msgstr "درع"
+
+msgid "Size"
+msgstr "مقاس"
+
+msgid "Soft depth"
+msgstr "عمق ناعم"
+
+msgid "Soft shadow"
+msgstr "الظل الناعم"
+
+msgid "Solid"
+msgstr "صلب"
+
+msgid "Split blur (px)"
+msgstr "انقسام التمويه (بكسل)"
+
+msgid "Split color"
+msgstr "لون الانقسام"
+
+msgid "Split left"
+msgstr "انقسام اليسار"
+
+msgid "Split opacity (%)"
+msgstr "عتامة الانقسام (%)"
+
+msgid "Split right"
+msgstr "انقسام الحق"
+
+msgid "Split width (%)"
+msgstr "عرض الانقسام (٪)"
+
+msgid "Square"
+msgstr "مربع"
+
+msgid "Stretch"
+msgstr "تمتد"
+
+msgid "Success"
+msgstr "نجاح"
+
+msgid "Text color"
+msgstr "لون النص"
+
+msgid "Title text size (px)"
+msgstr "حجم نص العنوان (بكسل)"
+
+msgid "Top"
+msgstr "قمة"
+
+msgid "Transparent panel"
+msgstr "لوحة شفافة"
+
+msgid "Underline"
+msgstr "تسطير"
+
+msgid "Upload wallpaper"
+msgstr "تحميل خلفية"
+
+msgid "Use button color"
+msgstr "استخدام لون الزر"
+
+msgid "User"
+msgstr "مستخدم"
+
+msgid "Wallpaper"
+msgstr "ورق جدران"
+
+msgid "Warning"
+msgstr "تحذير"
+
+msgid "Yes"
+msgstr "نعم"
+
+msgid "Yes (enable)"
+msgstr "نعم (تمكين)"
+
+msgid "Yes (hide panel)"
+msgstr "نعم (إخفاء اللوحة)"
+
+msgid ""
+"Light mode logos: used when the system is in light mode, ensuring good "
+"visibility on white or light backgrounds."
+msgstr ""
+"شعارات الوضع الفاتح: تستخدم عندما يكون النظام في الوضع الفاتح، مما يضمن رؤية "
+"جيدة على الخلفيات البيضاء أو الفاتحة."
+
+msgid ""
+"Dark mode logos: used when the system is in dark mode, ensuring contrast and "
+"readability on black or dark backgrounds."
+msgstr ""
+"شعارات الوضع الداكن: تُستخدم عندما يكون النظام في الوضع الداكن، مما يضمن "
+"التباين وسهولة القراءة على الخلفيات السوداء أو الداكنة."
+
+msgid ""
+"The favicon is the small icon that appears in the browser tab (and also in "
+"bookmarks)."
+msgstr ""
+"الرمز المفضل هو الرمز الصغير الذي يظهر في علامة تبويب المتصفح (وأيضًا في "
+"الإشارات المرجعية)."
+
+msgid ""
+"Expanded menu logo: the logo displayed when the sidebar menu is open, with "
+"more space available."
+msgstr ""
+"شعار القائمة الموسعة: الشعار الذي يتم عرضه عندما تكون قائمة الشريط الجانبي "
+"مفتوحة، مع توفر مساحة أكبر."
+
+msgid ""
+"Collapsed menu logo: the logo displayed when the sidebar menu is collapsed, "
+"so it needs to be a more compact version."
+msgstr ""
+"شعار القائمة المطوية: الشعار الذي يتم عرضه عند طي قائمة الشريط الجانبي، لذا "
+"يجب أن يكون إصدارًا أكثر إحكاما."
+
+msgid ""
+"Login page logo: the logo displayed on the login screen before the user "
+"enters the system."
+msgstr ""
+"شعار صفحة تسجيل الدخول: الشعار الذي يتم عرضه على شاشة تسجيل الدخول قبل دخول "
+"المستخدم إلى النظام."
+
+msgid "Logo size (%)"
+msgstr "حجم الشعار (%)"
+
+msgid "Favicon active"
+msgstr "الأيقونة المفضلة نشطة"
+
+msgid "Button"
+msgstr "زر"
+
+msgid "Wallpaper source"
+msgstr "مصدر ورق الجدران"
+
+msgid "Preset wallpaper"
+msgstr "خلفية محددة مسبقا"
+
+msgid "Attachment"
+msgstr "مرفق"
+
+msgid "Button shape"
+msgstr "شكل الزر"
+
+msgid "Button fill style"
+msgstr "نمط ملء الزر"
+
+msgid "Button text size (px)"
+msgstr "حجم نص الزر (بيكسل)"
+
+msgid "Color mode"
+msgstr "وضع اللون"
+
+msgid "GLPI logo configuration"
+msgstr "تكوين الشعار GLPI"
+
+msgid ""
+"Upload logos that will replace the default GLPI assets using CSS variables."
+msgstr ""
+"قم بتحميل الشعارات التي ستحل محل أصول GLPI الافتراضية باستخدام متغيرات CSS."
+
+msgid "Expanded menu logo size (%)"
+msgstr "حجم شعار القائمة الموسعة (%)"
+
+msgid "Collapsed menu logo size (%)"
+msgstr "حجم شعار القائمة المطوية (%)"
+
+msgid "Favicon (browser tab)"
+msgstr "أيقونة المفضلة (علامة تبويب المتصفح)"
+
+msgid "Field height (px)"
+msgstr "ارتفاع الحقل (بكسل)"
+
+msgid "Preset wallpapers"
+msgstr "خلفيات محددة مسبقا"
+
+msgid "Custom upload"
+msgstr "تحميل مخصص"
+
+msgid "Classic centered"
+msgstr "كلاسيكية مركزة"
+
+msgid "Above panel"
+msgstr "فوق اللوحة"
+
+msgid "No"
+msgstr "لا"
+
+msgid "Default fill"
+msgstr "التعبئة الافتراضية"
+
+msgid "Custom color"
+msgstr "لون مخصص"
+
+msgid "Accent color"
+msgstr "لون مميز"
+
+msgid "Turn GLPI into a showcase for your brand in just a few clicks."
+msgstr "حوّل GLPI إلى واجهة عرض لعلامتك التجارية ببضع نقرات فقط."
+
+msgid "About"
+msgstr "عن"
+
+msgid "GLPI logos"
+msgstr "GLPI الشعارات"
+
+msgid "Login Page"
+msgstr "صفحة تسجيل الدخول"
+
+msgid "Premium"
+msgstr "Premium"
+
+msgid "Brandkit by Marcati"
+msgstr "Brandkit بواسطة Marcati"
+
+msgid "The visual evolution of your GLPI starts here."
+msgstr "يبدأ التطور البصري لـ GLPI من هنا."
+
+msgid ""
+"Brandkit delivers logos, login screens, and colors aligned with your "
+"identity. No CSS, no effort, just professional results."
+msgstr ""
+"يقدم Brandkit الشعارات وشاشات تسجيل الدخول والألوان المتوافقة مع هويتك. لا "
+"CSS، لا يوجد جهد، فقط نتائج احترافية."
+
+msgid "Discover Marcati at"
+msgstr "اكتشف Marcati في"
+
+msgid "Meet Marcati"
+msgstr "تعرف على Marcati"
+
+msgid "Consistent logos"
+msgstr "شعارات متناسقة"
+
+msgid "Ready uploads for header, favicon, and login."
+msgstr "تحميلات جاهزة للرأس والرمز المفضل وتسجيل الدخول."
+
+msgid "Login with presence"
+msgstr "تسجيل الدخول مع الحضور"
+
+msgid ""
+"Pick layouts, colors, and effects for an authentication screen that sells "
+"your brand."
+msgstr ""
+"اختر التخطيطات والألوان والتأثيرات لشاشة المصادقة التي تبيع علامتك التجارية."
+
+msgid "Fast delivery"
+msgstr "تسليم سريع"
+
+msgid "Settings saved directly in GLPI to activate branding without rework."
+msgstr ""
+"تم حفظ الإعدادات مباشرة في GLPI لتنشيط العلامة التجارية دون إعادة العمل."
+
+msgid "Custom hex color"
+msgstr "لون سداسي مخصص"
+
+msgid "Save logo sizes"
+msgstr "حفظ أحجام الشعار"
+
+msgid "Restore defaults"
+msgstr "Restore defaults"
+
+msgid "Expanded menu logo"
+msgstr "شعار القائمة الموسعة"
+
+msgid "Collapsed menu logo"
+msgstr "شعار القائمة المطوية"
+
+msgid "Login logo"
+msgstr "شعار تسجيل الدخول"
+
+msgid "No custom logo uploaded yet."
+msgstr "لم يتم رفع شعار مخصص بعد."
+
+msgid "No favicon yet"
+msgstr "لا يوجد أيقونة مفضلة بعد"
+
+msgid "Field width (px)"
+msgstr "عرض الحقل (بكسل)"
+
+msgid "Light mode logos"
+msgstr "شعارات الوضع الفاتح"
+
+msgid "Dark mode logos"
+msgstr "شعارات الوضع الداكن"
+
+msgid "Favicon"
+msgstr "أيقونة الموقع"
+
+msgid "Upload logo"
+msgstr "رفع الشعار"
+
+msgid "Remove logo"
+msgstr "إزالة الشعار"
+
+msgid "No custom favicon uploaded yet."
+msgstr "لم يتم رفع أيقونة موقع مخصصة بعد."
+
+msgid "Expanded menu logo (dark mode)"
+msgstr "شعار القائمة الموسعة (الوضع الداكن)"
+
+msgid "Collapsed menu logo (dark mode)"
+msgstr "شعار القائمة المطوية (الوضع الداكن)"
+

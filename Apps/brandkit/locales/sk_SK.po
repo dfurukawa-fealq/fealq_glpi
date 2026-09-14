@@ -1,0 +1,542 @@
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: brandkit\n"
+"Language: sk_SK\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "Dynamic cut for a bolder call-to-action."
+msgstr "Dynamický strih pre odvážnejšiu výzvu k akcii."
+
+msgid "Email"
+msgstr "Email"
+
+msgid "Field background"
+msgstr "Pozadie poľa"
+
+msgid "Field border"
+msgstr "Hranica poľa"
+
+msgid "Field border width (px)"
+msgstr "Šírka okraja poľa (px)"
+
+msgid "Field focus glow"
+msgstr "Pole zaostrenie žiara"
+
+msgid "Field icons"
+msgstr "Ikony polí"
+
+msgid "Field radius (px)"
+msgstr "Polomer poľa (px)"
+
+msgid "Fields"
+msgstr "Polia"
+
+msgid "Field spacing (px)"
+msgstr "Medzera polí (px)"
+
+msgid "Field style"
+msgstr "Štýl poľa"
+
+msgid "Field text"
+msgstr "Text poľa"
+
+msgid "Field text size (px)"
+msgstr "Veľkosť textu poľa (px)"
+
+msgid "Fill with color"
+msgstr "Vyplňte farbou"
+
+msgid "Fixed"
+msgstr "Opravené"
+
+msgid "Friendly, fully rounded shape."
+msgstr "Priateľský, plne zaoblený tvar."
+
+msgid "Glass blur"
+msgstr "Rozostrenie skla"
+
+msgid "Hide login text"
+msgstr "Skryť prihlasovací text"
+
+msgid "Hover effect"
+msgstr "Efekt vznášania"
+
+msgid "Hover fill custom color"
+msgstr "Vlastná farba výplne umiestnením kurzora myši"
+
+msgid "Hover text color"
+msgstr "Farba textu po umiestnení kurzora myši"
+
+msgid "Icon color"
+msgstr "Farba ikony"
+
+msgid "Icon position"
+msgstr "Pozícia ikony"
+
+msgid "ID card"
+msgstr "občiansky preukaz"
+
+msgid "Info"
+msgstr "Info"
+
+msgid "Inside panel"
+msgstr "Vnútorný panel"
+
+msgid "Key"
+msgstr "kľúč"
+
+msgid "Layout"
+msgstr "Rozloženie"
+
+msgid "Layout & logo"
+msgstr "Rozloženie a logo"
+
+msgid "Left"
+msgstr "Vľavo"
+
+msgid "Light"
+msgstr "Svetlo"
+
+msgid "Lock"
+msgstr "Zámok"
+
+msgid "Login icon"
+msgstr "Ikona prihlásenia"
+
+msgid "Login logo size (px)"
+msgstr "Veľkosť loga prihlásenia (px)"
+
+msgid "Login page configuration"
+msgstr "Konfigurácia prihlasovacej stránky"
+
+msgid "Logo offset from top (px)"
+msgstr "Odsadenie loga zhora (px)"
+
+msgid "Logo position"
+msgstr "Pozícia loga"
+
+msgid "Neon glow"
+msgstr "Neónová žiara"
+
+msgid "No (disable)"
+msgstr "Nie (zakázať)"
+
+msgid "None"
+msgstr "žiadne"
+
+msgid "No (show panel)"
+msgstr "Nie (zobraziť panel)"
+
+msgid "Original size"
+msgstr "Pôvodná veľkosť"
+
+msgid "Outline"
+msgstr "Obrys"
+
+msgid "Outline danger"
+msgstr "Naznačiť nebezpečenstvo"
+
+msgid "Outline dark"
+msgstr "Obrys tmavý"
+
+msgid "Outline info"
+msgstr "Obrysové informácie"
+
+msgid "Outline only"
+msgstr "Iba obrys"
+
+msgid "Outline primary"
+msgstr "Primárny obrys"
+
+msgid "Outline secondary"
+msgstr "Sekundárny obrys"
+
+msgid "Outline success"
+msgstr "Načrtnite úspech"
+
+msgid "Outline warning"
+msgstr "Obrysové upozornenie"
+
+msgid "Overlay color"
+msgstr "Farba prekrytia"
+
+msgid "Overlay opacity (%)"
+msgstr "Nepriehľadnosť prekrytia (%)"
+
+msgid "Page text size (px)"
+msgstr "Veľkosť textu na stránke (px)"
+
+msgid "Panel blur (px)"
+msgstr "Rozmazanie panela (px)"
+
+msgid "Panel color"
+msgstr "Farba panelu"
+
+msgid "Panel height (px)"
+msgstr "Výška panela (px)"
+
+msgid "Panel hover effect"
+msgstr "Efekt vznášania sa na paneli"
+
+msgid "Panel opacity (%)"
+msgstr "Nepriehľadnosť panela (%)"
+
+msgid "Panel & split styling"
+msgstr "Panel & split styling"
+
+msgid "Panel width (px)"
+msgstr "Šírka panela (px)"
+
+msgid "Password icon"
+msgstr "Ikona hesla"
+
+msgid "Pick a custom color"
+msgstr "Vyberte si vlastnú farbu"
+
+msgid "Pick a layout and visual treatments for the GLPI login page."
+msgstr ""
+"Vyberte si rozloženie a vizuálne spracovanie prihlasovacej stránky GLPI."
+
+msgid "Pill"
+msgstr "Pilulka"
+
+msgid "Position"
+msgstr "pozícia"
+
+msgid "Preset palette"
+msgstr "Prednastavená paleta"
+
+msgid "Press on hover"
+msgstr "Stlačte pri umiestnení kurzora myši"
+
+msgid "Primary (default)"
+msgstr "Primárne (predvolené)"
+
+msgid "Recommended: 1920x1080 or larger."
+msgstr "Odporúčané: 1920 x 1080 alebo väčšie."
+
+msgid "Right"
+msgstr "Správne"
+
+msgid "Rounded"
+msgstr "Zaoblené"
+
+msgid "Save login page"
+msgstr "Uložiť prihlasovaciu stránku"
+
+msgid "Scroll"
+msgstr "Prejdite"
+
+msgid "Secondary"
+msgstr "Sekundárne"
+
+msgid "Sharp edges with a confident shadow."
+msgstr "Ostré hrany so sebavedomým tieňom."
+
+msgid "Shield"
+msgstr "Štít"
+
+msgid "Size"
+msgstr "Veľkosť"
+
+msgid "Soft depth"
+msgstr "Mäkká hĺbka"
+
+msgid "Soft shadow"
+msgstr "Mäkký tieň"
+
+msgid "Solid"
+msgstr "Pevné"
+
+msgid "Split blur (px)"
+msgstr "Rozdeliť rozostrenie (px)"
+
+msgid "Split color"
+msgstr "Delená farba"
+
+msgid "Split left"
+msgstr "Rozdeliť vľavo"
+
+msgid "Split opacity (%)"
+msgstr "Rozdeliť nepriehľadnosť (%)"
+
+msgid "Split right"
+msgstr "Rozdeliť vpravo"
+
+msgid "Split width (%)"
+msgstr "Šírka rozdelenia (%)"
+
+msgid "Square"
+msgstr "Štvorcový"
+
+msgid "Stretch"
+msgstr "Natiahnuť"
+
+msgid "Success"
+msgstr "Úspech"
+
+msgid "Text color"
+msgstr "Farba textu"
+
+msgid "Title text size (px)"
+msgstr "Veľkosť textu nadpisu (px)"
+
+msgid "Top"
+msgstr "Hore"
+
+msgid "Transparent panel"
+msgstr "Priehľadný panel"
+
+msgid "Underline"
+msgstr "Podčiarknite"
+
+msgid "Upload wallpaper"
+msgstr "Nahrajte tapetu"
+
+msgid "Use button color"
+msgstr "Použite farbu tlačidla"
+
+msgid "User"
+msgstr "Používateľ"
+
+msgid "Wallpaper"
+msgstr "Tapeta"
+
+msgid "Warning"
+msgstr "POZOR"
+
+msgid "Yes"
+msgstr "áno"
+
+msgid "Yes (enable)"
+msgstr "Áno (povoliť)"
+
+msgid "Yes (hide panel)"
+msgstr "Áno (skryť panel)"
+
+msgid ""
+"Light mode logos: used when the system is in light mode, ensuring good "
+"visibility on white or light backgrounds."
+msgstr ""
+"Logá svetelného režimu: používajú sa, keď je systém v režime svetla, čím sa "
+"zabezpečuje dobrá viditeľnosť na bielom alebo svetlom pozadí."
+
+msgid ""
+"Dark mode logos: used when the system is in dark mode, ensuring contrast and "
+"readability on black or dark backgrounds."
+msgstr ""
+"Logá v tmavom režime: používajú sa, keď je systém v tmavom režime, čím sa "
+"zabezpečuje kontrast a čitateľnosť na čiernom alebo tmavom pozadí."
+
+msgid ""
+"The favicon is the small icon that appears in the browser tab (and also in "
+"bookmarks)."
+msgstr ""
+"Favicon je malá ikona, ktorá sa zobrazuje na karte prehliadača (a tiež v "
+"záložkách)."
+
+msgid ""
+"Expanded menu logo: the logo displayed when the sidebar menu is open, with "
+"more space available."
+msgstr ""
+"Logo rozšírenej ponuky: logo zobrazené, keď je otvorená ponuka bočného "
+"panela, s väčším dostupným priestorom."
+
+msgid ""
+"Collapsed menu logo: the logo displayed when the sidebar menu is collapsed, "
+"so it needs to be a more compact version."
+msgstr ""
+"Logo zbalenej ponuky: logo, ktoré sa zobrazí, keď je ponuka bočného panela "
+"zbalená, takže musí byť kompaktnejšia."
+
+msgid ""
+"Login page logo: the logo displayed on the login screen before the user "
+"enters the system."
+msgstr ""
+"Logo prihlasovacej stránky: logo zobrazené na prihlasovacej obrazovke "
+"predtým, ako používateľ vstúpi do systému."
+
+msgid "Logo size (%)"
+msgstr "Veľkosť loga (%)"
+
+msgid "Favicon active"
+msgstr "Favicon je aktívny"
+
+msgid "Button"
+msgstr "Tlačidlo"
+
+msgid "Wallpaper source"
+msgstr "Zdroj tapety"
+
+msgid "Preset wallpaper"
+msgstr "Prednastavená tapeta"
+
+msgid "Attachment"
+msgstr "Príloha"
+
+msgid "Button shape"
+msgstr "Tvar gombíka"
+
+msgid "Button fill style"
+msgstr "Štýl výplne tlačidiel"
+
+msgid "Button text size (px)"
+msgstr "Veľkosť textu tlačidla (px)"
+
+msgid "Color mode"
+msgstr "Farebný režim"
+
+msgid "GLPI logo configuration"
+msgstr "konfigurácia loga GLPI"
+
+msgid ""
+"Upload logos that will replace the default GLPI assets using CSS variables."
+msgstr ""
+"Nahrajte logá, ktoré nahradia predvolené prvky GLPI pomocou premenných CSS."
+
+msgid "Expanded menu logo size (%)"
+msgstr "Veľkosť loga rozbalenej ponuky (%)"
+
+msgid "Collapsed menu logo size (%)"
+msgstr "Veľkosť loga zbalenej ponuky (%)"
+
+msgid "Favicon (browser tab)"
+msgstr "Favicon (karta prehliadača)"
+
+msgid "Field height (px)"
+msgstr "Výška poľa (px)"
+
+msgid "Preset wallpapers"
+msgstr "Prednastavené tapety"
+
+msgid "Custom upload"
+msgstr "Vlastné nahrávanie"
+
+msgid "Classic centered"
+msgstr "Klasický stred"
+
+msgid "Above panel"
+msgstr "Nad panelom"
+
+msgid "No"
+msgstr "Nie"
+
+msgid "Default fill"
+msgstr "Predvolená výplň"
+
+msgid "Custom color"
+msgstr "Vlastná farba"
+
+msgid "Accent color"
+msgstr "Farba akcentu"
+
+msgid "Turn GLPI into a showcase for your brand in just a few clicks."
+msgstr "Premeňte GLPI na prezentáciu svojej značky len niekoľkými kliknutiami."
+
+msgid "About"
+msgstr "O"
+
+msgid "GLPI logos"
+msgstr "logá GLPI"
+
+msgid "Login Page"
+msgstr "Prihlasovacia stránka"
+
+msgid "Premium"
+msgstr "Premium"
+
+msgid "Brandkit by Marcati"
+msgstr "Brandkit od Marcati"
+
+msgid "The visual evolution of your GLPI starts here."
+msgstr "Vizuálny vývoj vášho GLPI začína tu."
+
+msgid ""
+"Brandkit delivers logos, login screens, and colors aligned with your "
+"identity. No CSS, no effort, just professional results."
+msgstr ""
+"Brandkit poskytuje logá, prihlasovacie obrazovky a farby v súlade s vašou "
+"identitou. Žiadne CSS, žiadne úsilie, len profesionálne výsledky."
+
+msgid "Discover Marcati at"
+msgstr "Objavte Marcati na"
+
+msgid "Meet Marcati"
+msgstr "Zoznámte sa s Marcati"
+
+msgid "Consistent logos"
+msgstr "Konzistentné logá"
+
+msgid "Ready uploads for header, favicon, and login."
+msgstr "Pripravené nahrávanie pre hlavičku, favicon a prihlásenie."
+
+msgid "Login with presence"
+msgstr "Prihláste sa pomocou prítomnosti"
+
+msgid ""
+"Pick layouts, colors, and effects for an authentication screen that sells "
+"your brand."
+msgstr ""
+"Vyberte si rozloženia, farby a efekty pre overovaciu obrazovku, ktorá "
+"predáva vašu značku."
+
+msgid "Fast delivery"
+msgstr "Rýchle dodanie"
+
+msgid "Settings saved directly in GLPI to activate branding without rework."
+msgstr ""
+"Nastavenia uložené priamo v GLPI na aktiváciu značky bez prepracovania."
+
+msgid "Custom hex color"
+msgstr "Vlastná šesťhranná farba"
+
+msgid "Save logo sizes"
+msgstr "Uložiť veľkosti loga"
+
+msgid "Restore defaults"
+msgstr "Restore defaults"
+
+msgid "Expanded menu logo"
+msgstr "Logo rozbaleného menu"
+
+msgid "Collapsed menu logo"
+msgstr "Logo zbaleného menu"
+
+msgid "Login logo"
+msgstr "Logo prihlásenia"
+
+msgid "No custom logo uploaded yet."
+msgstr "Zatiaľ nebolo nahrané žiadne vlastné logo."
+
+msgid "No favicon yet"
+msgstr "Zatiaľ žiadny favicon"
+
+msgid "Field width (px)"
+msgstr "Šírka poľa (px)"
+
+msgid "Light mode logos"
+msgstr "Logá svetlého režimu"
+
+msgid "Dark mode logos"
+msgstr "Logá tmavého režimu"
+
+msgid "Favicon"
+msgstr "Favicon"
+
+msgid "Upload logo"
+msgstr "Nahrať logo"
+
+msgid "Remove logo"
+msgstr "Odstrániť logo"
+
+msgid "No custom favicon uploaded yet."
+msgstr "Zatiaľ nebolo nahraté žiadne vlastné favicon."
+
+msgid "Expanded menu logo (dark mode)"
+msgstr "Logo rozbaleného menu (tmavý režim)"
+
+msgid "Collapsed menu logo (dark mode)"
+msgstr "Logo zbaleného menu (tmavý režim)"
+

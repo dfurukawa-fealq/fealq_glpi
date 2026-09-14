@@ -1,0 +1,290 @@
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: brandkit\n"
+"Language: \n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "Save login page"
+msgstr ""
+
+#: /var/www/glpi/plugins/brandkit/front/index.php:2471
+msgid "Premium features"
+msgstr ""
+
+#: /var/www/glpi/plugins/brandkit/front/index.php:2472
+msgid "Unlock advanced Brandkit upgrades."
+msgstr ""
+
+#: /var/www/glpi/plugins/brandkit/front/index.php:2473
+msgid ""
+"This area is available in the paid version. Get more control and deeper "
+"customization for your GLPI experience."
+msgstr ""
+
+#: /var/www/glpi/plugins/brandkit/front/index.php:2475
+msgid "Download and upload configuration presets."
+msgstr ""
+
+#: /var/www/glpi/plugins/brandkit/front/index.php:2476
+msgid "Theme customization with one-click presets."
+msgstr ""
+
+#: /var/www/glpi/plugins/brandkit/front/index.php:2477
+msgid "Menu color variations and layout tuning for GLPI."
+msgstr ""
+
+#: /var/www/glpi/plugins/brandkit/front/index.php:2478
+msgid "Extra custom colors beyond the default GLPI palette."
+msgstr ""
+
+#: /var/www/glpi/plugins/brandkit/front/index.php:2481
+msgid "See plans"
+msgstr ""
+
+#: /var/www/glpi/plugins/brandkit/front/index.php:2487
+msgid "Premium access"
+msgstr ""
+
+#: /var/www/glpi/plugins/brandkit/front/index.php:2488
+msgid "Request access to unlock these features for your team."
+msgstr ""
+
+#: /var/www/glpi/plugins/brandkit/setup.php:149
+#, php-format
+msgid "Plugin Brandkit requires GLPI version %s to %s."
+msgstr ""
+
+#: /var/www/glpi/plugins/brandkit/setup.php:164
+#, php-format
+msgid "Plugin Brandkit requires PHP extension: %s"
+msgstr ""
+
+msgid ""
+"Light mode logos: used when the system is in light mode, ensuring good "
+"visibility on white or light backgrounds."
+msgstr ""
+
+msgid ""
+"Dark mode logos: used when the system is in dark mode, ensuring contrast and "
+"readability on black or dark backgrounds."
+msgstr ""
+
+msgid ""
+"The favicon is the small icon that appears in the browser tab (and also in "
+"bookmarks)."
+msgstr ""
+
+msgid ""
+"Expanded menu logo: the logo displayed when the sidebar menu is open, with "
+"more space available."
+msgstr ""
+
+msgid ""
+"Collapsed menu logo: the logo displayed when the sidebar menu is collapsed, "
+"so it needs to be a more compact version."
+msgstr ""
+
+msgid ""
+"Login page logo: the logo displayed on the login screen before the user "
+"enters the system."
+msgstr ""
+
+msgid "Logo size (%)"
+msgstr ""
+
+msgid "Favicon active"
+msgstr ""
+
+msgid "Button"
+msgstr ""
+
+msgid "Wallpaper source"
+msgstr ""
+
+msgid "Preset wallpaper"
+msgstr ""
+
+msgid "Attachment"
+msgstr ""
+
+msgid "Button shape"
+msgstr ""
+
+msgid "Button fill style"
+msgstr ""
+
+msgid "Button text size (px)"
+msgstr ""
+
+msgid "Color mode"
+msgstr ""
+
+msgid "GLPI logo configuration"
+msgstr ""
+
+msgid ""
+"Upload logos that will replace the default GLPI assets using CSS variables."
+msgstr ""
+
+msgid "Expanded menu logo size (%)"
+msgstr ""
+
+msgid "Collapsed menu logo size (%)"
+msgstr ""
+
+msgid "Favicon (browser tab)"
+msgstr ""
+
+msgid "Field height (px)"
+msgstr ""
+
+msgid "Preset wallpapers"
+msgstr ""
+
+msgid "Custom upload"
+msgstr ""
+
+msgid "Classic centered"
+msgstr ""
+
+msgid "Above panel"
+msgstr ""
+
+msgid "No"
+msgstr ""
+
+msgid "Yes"
+msgstr ""
+
+msgid "Default fill"
+msgstr ""
+
+msgid "Custom color"
+msgstr ""
+
+msgid "Accent color"
+msgstr ""
+
+msgid "Turn GLPI into a showcase for your brand in just a few clicks."
+msgstr ""
+
+msgid "About"
+msgstr ""
+
+msgid "GLPI logos"
+msgstr ""
+
+msgid "Login Page"
+msgstr ""
+
+msgid "Premium"
+msgstr ""
+
+msgid "Brandkit by Marcati"
+msgstr ""
+
+msgid "The visual evolution of your GLPI starts here."
+msgstr ""
+
+msgid ""
+"Brandkit delivers logos, login screens, and colors aligned with your "
+"identity. No CSS, no effort, just professional results."
+msgstr ""
+
+msgid "Discover Marcati at"
+msgstr ""
+
+msgid "Meet Marcati"
+msgstr ""
+
+msgid "Consistent logos"
+msgstr ""
+
+msgid "Ready uploads for header, favicon, and login."
+msgstr ""
+
+msgid "Login with presence"
+msgstr ""
+
+msgid ""
+"Pick layouts, colors, and effects for an authentication screen that sells "
+"your brand."
+msgstr ""
+
+msgid "Fast delivery"
+msgstr ""
+
+msgid "Settings saved directly in GLPI to activate branding without rework."
+msgstr ""
+
+msgid "Custom hex color"
+msgstr ""
+
+msgid "Save logo sizes"
+msgstr ""
+
+msgid "Restore defaults"
+msgstr ""
+
+msgid "Expanded menu logo"
+msgstr ""
+
+msgid "Collapsed menu logo"
+msgstr ""
+
+msgid "Login logo"
+msgstr ""
+
+msgid "No custom logo uploaded yet."
+msgstr ""
+
+msgid "No favicon yet"
+msgstr ""
+
+msgid "Field width (px)"
+msgstr ""
+
+msgid "Light mode logos"
+msgstr ""
+
+msgid "Dark mode logos"
+msgstr ""
+
+msgid "Favicon"
+msgstr ""
+
+msgid "Upload logo"
+msgstr ""
+
+msgid "Remove logo"
+msgstr ""
+
+msgid "No custom favicon uploaded yet."
+msgstr ""
+
+msgid "Expanded menu logo (dark mode)"
+msgstr ""
+
+msgid "Collapsed menu logo (dark mode)"
+msgstr ""
+
+msgid "Wallpaper upload failed. The file is larger than the allowed size."
+msgstr ""
+
+msgid "Wallpaper upload failed because the file was only partially uploaded."
+msgstr ""
+
+msgid "Wallpaper upload failed because the temporary upload folder is missing on the server."
+msgstr ""
+
+msgid "Wallpaper upload failed because the server could not write the temporary file."
+msgstr ""
+
+msgid "Wallpaper upload was blocked by a PHP extension on the server."
+msgstr ""
+
+#, php-format
+msgid "Wallpaper upload failed due to an unexpected error (code %d)."
+msgstr ""

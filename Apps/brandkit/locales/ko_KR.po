@@ -1,0 +1,536 @@
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: brandkit\n"
+"Language: ko_KR\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "Dynamic cut for a bolder call-to-action."
+msgstr "보다 대담한 클릭 유도 문구를 위한 다이내믹 컷."
+
+msgid "Email"
+msgstr "이메일"
+
+msgid "Field background"
+msgstr "필드 배경"
+
+msgid "Field border"
+msgstr "필드 테두리"
+
+msgid "Field border width (px)"
+msgstr "필드 테두리 너비(px)"
+
+msgid "Field focus glow"
+msgstr "필드 포커스 글로우"
+
+msgid "Field icons"
+msgstr "필드 아이콘"
+
+msgid "Field radius (px)"
+msgstr "필드 반경(px)"
+
+msgid "Fields"
+msgstr "전지"
+
+msgid "Field spacing (px)"
+msgstr "필드 간격(px)"
+
+msgid "Field style"
+msgstr "필드 스타일"
+
+msgid "Field text"
+msgstr "필드 텍스트"
+
+msgid "Field text size (px)"
+msgstr "필드 텍스트 크기(px)"
+
+msgid "Fill with color"
+msgstr "색상으로 채우기"
+
+msgid "Fixed"
+msgstr "결정된"
+
+msgid "Friendly, fully rounded shape."
+msgstr "친숙하고 완전히 둥근 모양입니다."
+
+msgid "Glass blur"
+msgstr "유리 흐림"
+
+msgid "Hide login text"
+msgstr "로그인 텍스트 숨기기"
+
+msgid "Hover effect"
+msgstr "호버 효과"
+
+msgid "Hover fill custom color"
+msgstr "마우스오버로 맞춤 색상 채우기"
+
+msgid "Hover text color"
+msgstr "마우스오버 텍스트 색상"
+
+msgid "Icon color"
+msgstr "아이콘 색상"
+
+msgid "Icon position"
+msgstr "아이콘 위치"
+
+msgid "ID card"
+msgstr "신분증"
+
+msgid "Info"
+msgstr "정보"
+
+msgid "Inside panel"
+msgstr "내부 패널"
+
+msgid "Key"
+msgstr "열쇠"
+
+msgid "Layout"
+msgstr "공들여 나열한 것"
+
+msgid "Layout & logo"
+msgstr "레이아웃 및 로고"
+
+msgid "Left"
+msgstr "왼쪽"
+
+msgid "Light"
+msgstr "빛"
+
+msgid "Lock"
+msgstr "잠그다"
+
+msgid "Login icon"
+msgstr "로그인 아이콘"
+
+msgid "Login logo size (px)"
+msgstr "로그인 로고 크기(px)"
+
+msgid "Login page configuration"
+msgstr "로그인 페이지 구성"
+
+msgid "Logo offset from top (px)"
+msgstr "상단으로부터의 로고 오프셋(px)"
+
+msgid "Logo position"
+msgstr "로고 위치"
+
+msgid "Neon glow"
+msgstr "네온 글로우"
+
+msgid "No (disable)"
+msgstr "아니요(비활성화)"
+
+msgid "None"
+msgstr "없음"
+
+msgid "No (show panel)"
+msgstr "아니요(패널 표시)"
+
+msgid "Original size"
+msgstr "원본 크기"
+
+msgid "Outline"
+msgstr "개요"
+
+msgid "Outline danger"
+msgstr "개요 위험"
+
+msgid "Outline dark"
+msgstr "어두운 윤곽선"
+
+msgid "Outline info"
+msgstr "개요 정보"
+
+msgid "Outline only"
+msgstr "개요만"
+
+msgid "Outline primary"
+msgstr "기본 개요"
+
+msgid "Outline secondary"
+msgstr "개요 보조"
+
+msgid "Outline success"
+msgstr "개요 성공"
+
+msgid "Outline warning"
+msgstr "개요 경고"
+
+msgid "Overlay color"
+msgstr "오버레이 색상"
+
+msgid "Overlay opacity (%)"
+msgstr "오버레이 불투명도(%)"
+
+msgid "Page text size (px)"
+msgstr "페이지 텍스트 크기(px)"
+
+msgid "Panel blur (px)"
+msgstr "패널 블러(px)"
+
+msgid "Panel color"
+msgstr "패널 색상"
+
+msgid "Panel height (px)"
+msgstr "패널 높이(px)"
+
+msgid "Panel hover effect"
+msgstr "패널 호버 효과"
+
+msgid "Panel opacity (%)"
+msgstr "패널 불투명도(%)"
+
+msgid "Panel & split styling"
+msgstr "패널 및 분할 스타일링"
+
+msgid "Panel width (px)"
+msgstr "패널 너비(px)"
+
+msgid "Password icon"
+msgstr "비밀번호 아이콘"
+
+msgid "Pick a custom color"
+msgstr "맞춤 색상 선택"
+
+msgid "Pick a layout and visual treatments for the GLPI login page."
+msgstr "GLPI 로그인 페이지의 레이아웃과 시각적 처리를 선택하세요."
+
+msgid "Pill"
+msgstr "알약"
+
+msgid "Position"
+msgstr "위치"
+
+msgid "Preset palette"
+msgstr "프리셋 팔레트"
+
+msgid "Press on hover"
+msgstr "호버 누르기"
+
+msgid "Primary (default)"
+msgstr "기본(기본값)"
+
+msgid "Recommended: 1920x1080 or larger."
+msgstr "권장: 1920x1080 이상."
+
+msgid "Right"
+msgstr "오른쪽"
+
+msgid "Rounded"
+msgstr "둥근"
+
+msgid "Save login page"
+msgstr "로그인 페이지 저장"
+
+msgid "Scroll"
+msgstr "스크롤"
+
+msgid "Secondary"
+msgstr "반성"
+
+msgid "Sharp edges with a confident shadow."
+msgstr "자신감 넘치는 그림자가 있는 날카로운 모서리."
+
+msgid "Shield"
+msgstr "방패"
+
+msgid "Size"
+msgstr "크기"
+
+msgid "Soft depth"
+msgstr "부드러운 깊이"
+
+msgid "Soft shadow"
+msgstr "부드러운 그림자"
+
+msgid "Solid"
+msgstr "단단한"
+
+msgid "Split blur (px)"
+msgstr "분할 흐림(px)"
+
+msgid "Split color"
+msgstr "색상 분할"
+
+msgid "Split left"
+msgstr "왼쪽으로 분할"
+
+msgid "Split opacity (%)"
+msgstr "분할 불투명도(%)"
+
+msgid "Split right"
+msgstr "오른쪽으로 분할"
+
+msgid "Split width (%)"
+msgstr "분할 폭(%)"
+
+msgid "Square"
+msgstr "정사각형"
+
+msgid "Stretch"
+msgstr "뻗기"
+
+msgid "Success"
+msgstr "성공"
+
+msgid "Text color"
+msgstr "텍스트 색상"
+
+msgid "Title text size (px)"
+msgstr "제목 텍스트 크기(px)"
+
+msgid "Top"
+msgstr "맨 위"
+
+msgid "Transparent panel"
+msgstr "투명 패널"
+
+msgid "Underline"
+msgstr "밑줄"
+
+msgid "Upload wallpaper"
+msgstr "배경화면 업로드"
+
+msgid "Use button color"
+msgstr "버튼 색상 사용"
+
+msgid "User"
+msgstr "사용자"
+
+msgid "Wallpaper"
+msgstr "벽지"
+
+msgid "Warning"
+msgstr "경고"
+
+msgid "Yes"
+msgstr "예"
+
+msgid "Yes (enable)"
+msgstr "예(활성화)"
+
+msgid "Yes (hide panel)"
+msgstr "예(패널 숨기기)"
+
+msgid ""
+"Light mode logos: used when the system is in light mode, ensuring good "
+"visibility on white or light backgrounds."
+msgstr ""
+"조명 모드 로고: 시스템이 조명 모드에 있을 때 사용되며 흰색 또는 밝은 배경에"
+"서 좋은 가시성을 보장합니다."
+
+msgid ""
+"Dark mode logos: used when the system is in dark mode, ensuring contrast and "
+"readability on black or dark backgrounds."
+msgstr ""
+"다크 모드 로고: 시스템이 다크 모드에 있을 때 사용되며 검은색 또는 어두운 배경"
+"에서 대비와 가독성을 보장합니다."
+
+msgid ""
+"The favicon is the small icon that appears in the browser tab (and also in "
+"bookmarks)."
+msgstr "파비콘은 브라우저 탭(및 북마크)에 표시되는 작은 아이콘입니다."
+
+msgid ""
+"Expanded menu logo: the logo displayed when the sidebar menu is open, with "
+"more space available."
+msgstr ""
+"확장된 메뉴 로고: 사이드바 메뉴가 열릴 때 표시되는 로고로, 더 많은 공간을 사"
+"용할 수 있습니다."
+
+msgid ""
+"Collapsed menu logo: the logo displayed when the sidebar menu is collapsed, "
+"so it needs to be a more compact version."
+msgstr ""
+"축소된 메뉴 로고: 사이드바 메뉴가 축소되었을 때 표시되는 로고이므로 더 컴팩트"
+"한 버전이 필요합니다."
+
+msgid ""
+"Login page logo: the logo displayed on the login screen before the user "
+"enters the system."
+msgstr ""
+"로그인 페이지 로고: 사용자가 시스템에 진입하기 전 로그인 화면에 표시되는 로고"
+"입니다."
+
+msgid "Logo size (%)"
+msgstr "로고 크기(%)"
+
+msgid "Favicon active"
+msgstr "파비콘 활성"
+
+msgid "Button"
+msgstr "단추"
+
+msgid "Wallpaper source"
+msgstr "배경화면 소스"
+
+msgid "Preset wallpaper"
+msgstr "사전 설정된 배경화면"
+
+msgid "Attachment"
+msgstr "부착"
+
+msgid "Button shape"
+msgstr "버튼 모양"
+
+msgid "Button fill style"
+msgstr "버튼 채우기 스타일"
+
+msgid "Button text size (px)"
+msgstr "버튼 텍스트 크기(px)"
+
+msgid "Color mode"
+msgstr "컬러 모드"
+
+msgid "GLPI logo configuration"
+msgstr "GLPI 로고 구성"
+
+msgid ""
+"Upload logos that will replace the default GLPI assets using CSS variables."
+msgstr "CSS 변수를 사용하여 기본 GLPI 자산을 대체할 로고를 업로드하세요."
+
+msgid "Expanded menu logo size (%)"
+msgstr "확장된 메뉴 로고 크기(%)"
+
+msgid "Collapsed menu logo size (%)"
+msgstr "축소된 메뉴 로고 크기(%)"
+
+msgid "Favicon (browser tab)"
+msgstr "파비콘(브라우저 탭)"
+
+msgid "Field height (px)"
+msgstr "필드 높이(px)"
+
+msgid "Preset wallpapers"
+msgstr "사전 설정된 배경화면"
+
+msgid "Custom upload"
+msgstr "맞춤 업로드"
+
+msgid "Classic centered"
+msgstr "클래식 중심"
+
+msgid "Above panel"
+msgstr "패널 위"
+
+msgid "No"
+msgstr "아니요"
+
+msgid "Default fill"
+msgstr "기본 채우기"
+
+msgid "Custom color"
+msgstr "맞춤 색상"
+
+msgid "Accent color"
+msgstr "악센트 색상"
+
+msgid "Turn GLPI into a showcase for your brand in just a few clicks."
+msgstr "단 몇 번의 클릭만으로 GLPI을(를) 귀하의 브랜드 쇼케이스로 바꿔보세요."
+
+msgid "About"
+msgstr "에 대한"
+
+msgid "GLPI logos"
+msgstr "GLPI 로고"
+
+msgid "Login Page"
+msgstr "로그인 페이지"
+
+msgid "Premium"
+msgstr "Premium"
+
+msgid "Brandkit by Marcati"
+msgstr "Brandkit by Marcati"
+
+msgid "The visual evolution of your GLPI starts here."
+msgstr "GLPI의 시각적 진화는 여기에서 시작됩니다."
+
+msgid ""
+"Brandkit delivers logos, login screens, and colors aligned with your "
+"identity. No CSS, no effort, just professional results."
+msgstr ""
+"Brandkit은 귀하의 아이덴티티에 맞는 로고, 로그인 화면 및 색상을 제공합니다. "
+"CSS도, 노력도 필요 없고, 단지 전문적인 결과만 있을 뿐입니다."
+
+msgid "Discover Marcati at"
+msgstr "Marcati을(를) 찾아보세요"
+
+msgid "Meet Marcati"
+msgstr "Marcati을 만나보세요"
+
+msgid "Consistent logos"
+msgstr "일관된 로고"
+
+msgid "Ready uploads for header, favicon, and login."
+msgstr "헤더, 파비콘, 로그인에 대한 업로드가 준비되었습니다."
+
+msgid "Login with presence"
+msgstr "현재 상태로 로그인"
+
+msgid ""
+"Pick layouts, colors, and effects for an authentication screen that sells "
+"your brand."
+msgstr ""
+"귀하의 브랜드를 판매하는 인증 화면의 레이아웃, 색상 및 효과를 선택하세요."
+
+msgid "Fast delivery"
+msgstr "빠른 배송"
+
+msgid "Settings saved directly in GLPI to activate branding without rework."
+msgstr "재작업 없이 브랜딩을 활성화하기 위해 GLPI에 직접 저장된 설정입니다."
+
+msgid "Custom hex color"
+msgstr "맞춤 16진수 색상"
+
+msgid "Save logo sizes"
+msgstr "로고 크기 저장"
+
+msgid "Restore defaults"
+msgstr "Restore defaults"
+
+msgid "Expanded menu logo"
+msgstr "확장 메뉴 로고"
+
+msgid "Collapsed menu logo"
+msgstr "축소 메뉴 로고"
+
+msgid "Login logo"
+msgstr "로그인 로고"
+
+msgid "No custom logo uploaded yet."
+msgstr "아직 사용자 지정 로고가 업로드되지 않았습니다."
+
+msgid "No favicon yet"
+msgstr "아직 파비콘이 없습니다"
+
+msgid "Field width (px)"
+msgstr "필드 너비 (px)"
+
+msgid "Light mode logos"
+msgstr "라이트 모드 로고"
+
+msgid "Dark mode logos"
+msgstr "다크 모드 로고"
+
+msgid "Favicon"
+msgstr "파비콘"
+
+msgid "Upload logo"
+msgstr "로고 업로드"
+
+msgid "Remove logo"
+msgstr "로고 제거"
+
+msgid "No custom favicon uploaded yet."
+msgstr "아직 사용자 지정 파비콘이 업로드되지 않았습니다."
+
+msgid "Expanded menu logo (dark mode)"
+msgstr "확장 메뉴 로고(다크 모드)"
+
+msgid "Collapsed menu logo (dark mode)"
+msgstr "축소 메뉴 로고(다크 모드)"
+

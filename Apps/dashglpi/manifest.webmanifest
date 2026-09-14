@@ -1,0 +1,26 @@
+{
+  "name": "Fealq - GLPI",
+  "short_name": "Fealq - GLPI",
+  "description": "WebApp operacional da Fealq para o GLPI",
+  "lang": "pt-BR",
+  "start_url": "./front/dashboard.php",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "theme_color": "#101827",
+  "background_color": "#101827",
+  "icons": [
+    {
+      "src": "./pwa-icons/icon-192.svg",
+      "sizes": "192x192",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "./pwa-icons/icon-512.svg",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

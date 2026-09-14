@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+   <name>Fealq - BrandKit</name>
+   <key>brandkit</key>
+   <state>stable</state>
+   <description>
+      <short>
+         <pt_BR><![CDATA[Personalize a identidade visual do GLPI em poucos cliques.]]></pt_BR>
+         <en_GB><![CDATA[Customize GLPI branding in just a few clicks.]]></en_GB>
+         <es_ES><![CDATA[Personaliza la identidad visual de GLPI en pocos clics.]]></es_ES>
+         <fr_FR><![CDATA[Personnalisez l'identité visuelle de GLPI en quelques clics.]]></fr_FR>
+      </short>
+      <long>
+         <pt_BR><![CDATA[Facilita a personalização da identidade visual do GLPI para iniciantes, com ajustes de logotipos e da página de login sem necessidade de CSS.]]></pt_BR>
+         <en_GB><![CDATA[Helps beginners customize GLPI visual identity by changing logos and the login page without diving into CSS.]]></en_GB>
+         <es_ES><![CDATA[Facilita la personalización de la identidad visual de GLPI con cambios en logotipos y en la página de inicio de sesión sin necesidad de CSS.]]></es_ES>
+         <fr_FR><![CDATA[Facilite la personnalisation de l'identité visuelle de GLPI avec des modifications des logos et de la page de connexion, sans avoir à toucher au CSS.]]></fr_FR>
+      </long>
+   </description>
+   <homepage>https://fealq.org.br/</homepage>
+   <download>https://fealq.org.br/</download>
+   <issues>https://fealq.org.br/</issues>
+   <readme>https://fealq.org.br/</readme>
+   <authors>
+      <author>Fealq</author>
+   </authors>
+   <versions>
+      <version>
+         <num>0.1.9</num>
+         <compatibility>10.0</compatibility>
+         <compatibility>10.1</compatibility>
+         <compatibility>11.0</compatibility>
+      </version>
+   </versions>
+   <langs>
+      <lang>pt_BR</lang>
+      <lang>en_GB</lang>
+      <lang>es_ES</lang>
+      <lang>fr_FR</lang>
+   </langs>
+   <license><![CDATA[AGPL-3.0-or-later]]></license>
+   <tags>
+      <pt_BR>
+         <tag>marca</tag>
+         <tag>logo</tag>
+         <tag>login</tag>
+         <tag>personalizacao</tag>
+      </pt_BR>
+      <en_GB>
+         <tag>branding</tag>
+         <tag>logo</tag>
+         <tag>login</tag>
+         <tag>customization</tag>
+      </en_GB>
+      <es_ES>
+         <tag>marca</tag>
+         <tag>logo</tag>
+         <tag>inicio-de-sesion</tag>
+         <tag>personalizacion</tag>
+      </es_ES>
+      <fr_FR>
+         <tag>marque</tag>
+         <tag>logo</tag>
+         <tag>connexion</tag>
+         <tag>personnalisation</tag>
+      </fr_FR>
+   </tags>
+</root>

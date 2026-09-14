@@ -1,0 +1,541 @@
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: brandkit\n"
+"Language: et_EE\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "Dynamic cut for a bolder call-to-action."
+msgstr "Dünaamiline lõige julgemaks tegevusele kutsumiseks."
+
+msgid "Email"
+msgstr "Meil"
+
+msgid "Field background"
+msgstr "Välja taust"
+
+msgid "Field border"
+msgstr "Põllu piir"
+
+msgid "Field border width (px)"
+msgstr "Välja äärise laius (px)"
+
+msgid "Field focus glow"
+msgstr "Väljafookuse sära"
+
+msgid "Field icons"
+msgstr "Välja ikoonid"
+
+msgid "Field radius (px)"
+msgstr "Välja raadius (px)"
+
+msgid "Fields"
+msgstr "Väljad"
+
+msgid "Field spacing (px)"
+msgstr "Väljade vahe (px)"
+
+msgid "Field style"
+msgstr "Välja stiil"
+
+msgid "Field text"
+msgstr "Välja tekst"
+
+msgid "Field text size (px)"
+msgstr "Välja teksti suurus (px)"
+
+msgid "Fill with color"
+msgstr "Täida värviga"
+
+msgid "Fixed"
+msgstr "Parandatud"
+
+msgid "Friendly, fully rounded shape."
+msgstr "Sõbralik, täielikult ümar kuju."
+
+msgid "Glass blur"
+msgstr "Klaasi hägusus"
+
+msgid "Hide login text"
+msgstr "Peida sisselogimistekst"
+
+msgid "Hover effect"
+msgstr "Hõljuja efekt"
+
+msgid "Hover fill custom color"
+msgstr "Hõljutage kursorit täite kohandatud värviga"
+
+msgid "Hover text color"
+msgstr "Hõljutage teksti värvi"
+
+msgid "Icon color"
+msgstr "Ikooni värv"
+
+msgid "Icon position"
+msgstr "Ikooni asukoht"
+
+msgid "ID card"
+msgstr "ID-kaart"
+
+msgid "Info"
+msgstr "Info"
+
+msgid "Inside panel"
+msgstr "Sisemine paneel"
+
+msgid "Key"
+msgstr "Võti"
+
+msgid "Layout"
+msgstr "Paigutus"
+
+msgid "Layout & logo"
+msgstr "Paigutus ja logo"
+
+msgid "Left"
+msgstr "Vasakule"
+
+msgid "Light"
+msgstr "Valgus"
+
+msgid "Lock"
+msgstr "Lukk"
+
+msgid "Login icon"
+msgstr "Sisselogimisikoon"
+
+msgid "Login logo size (px)"
+msgstr "Logi sisselogimise logo suurus (px)"
+
+msgid "Login page configuration"
+msgstr "Sisselogimislehe konfiguratsioon"
+
+msgid "Logo offset from top (px)"
+msgstr "Logo nihe ülevalt (px)"
+
+msgid "Logo position"
+msgstr "Logo asend"
+
+msgid "Neon glow"
+msgstr "Neoon sära"
+
+msgid "No (disable)"
+msgstr "Ei (keela)"
+
+msgid "None"
+msgstr "Mitte ühtegi"
+
+msgid "No (show panel)"
+msgstr "Ei (kuva paneel)"
+
+msgid "Original size"
+msgstr "Algne suurus"
+
+msgid "Outline"
+msgstr "Kontuur"
+
+msgid "Outline danger"
+msgstr "Joonistage oht"
+
+msgid "Outline dark"
+msgstr "Kontuur tume"
+
+msgid "Outline info"
+msgstr "Kontuuriteave"
+
+msgid "Outline only"
+msgstr "Ainult kontuur"
+
+msgid "Outline primary"
+msgstr "Kontuuri esmane"
+
+msgid "Outline secondary"
+msgstr "Kontuuri sekundaarne"
+
+msgid "Outline success"
+msgstr "Esitage edu"
+
+msgid "Outline warning"
+msgstr "Kontuuri hoiatus"
+
+msgid "Overlay color"
+msgstr "Ülekatte värv"
+
+msgid "Overlay opacity (%)"
+msgstr "Katte läbipaistmatus (%)"
+
+msgid "Page text size (px)"
+msgstr "Lehekülje teksti suurus (px)"
+
+msgid "Panel blur (px)"
+msgstr "Paneeli hägusus (px)"
+
+msgid "Panel color"
+msgstr "Paneeli värv"
+
+msgid "Panel height (px)"
+msgstr "Paneeli kõrgus (px)"
+
+msgid "Panel hover effect"
+msgstr "Paneeli hõljumise efekt"
+
+msgid "Panel opacity (%)"
+msgstr "Paneeli läbipaistmatus (%)"
+
+msgid "Panel & split styling"
+msgstr "Paneel ja poolitatud stiil"
+
+msgid "Panel width (px)"
+msgstr "Paneeli laius (px)"
+
+msgid "Password icon"
+msgstr "Parooliikoon"
+
+msgid "Pick a custom color"
+msgstr "Valige kohandatud värv"
+
+msgid "Pick a layout and visual treatments for the GLPI login page."
+msgstr "Valige GLPI sisselogimislehe paigutus ja visuaalsed töötlused."
+
+msgid "Pill"
+msgstr "Pill"
+
+msgid "Position"
+msgstr "positsioon"
+
+msgid "Preset palette"
+msgstr "Eelseadistatud palett"
+
+msgid "Press on hover"
+msgstr "Vajutage kursorit"
+
+msgid "Primary (default)"
+msgstr "Esmane (vaikimisi)"
+
+msgid "Recommended: 1920x1080 or larger."
+msgstr "Soovitatav: 1920 x 1080 või suurem."
+
+msgid "Right"
+msgstr "Õige"
+
+msgid "Rounded"
+msgstr "Ümardatud"
+
+msgid "Save login page"
+msgstr "Salvesta sisselogimisleht"
+
+msgid "Scroll"
+msgstr "Kerige"
+
+msgid "Secondary"
+msgstr "Sekundaarne"
+
+msgid "Sharp edges with a confident shadow."
+msgstr "Teravad servad enesekindla varjuga."
+
+msgid "Shield"
+msgstr "Kilp"
+
+msgid "Size"
+msgstr "Suurus"
+
+msgid "Soft depth"
+msgstr "Pehme sügavus"
+
+msgid "Soft shadow"
+msgstr "Pehme vari"
+
+msgid "Solid"
+msgstr "Tahke"
+
+msgid "Split blur (px)"
+msgstr "Jaotatud hägu (pikslit)"
+
+msgid "Split color"
+msgstr "Lõhestatud värv"
+
+msgid "Split left"
+msgstr "Poolita vasakule"
+
+msgid "Split opacity (%)"
+msgstr "Läbipaistmatus (%)"
+
+msgid "Split right"
+msgstr "Lõigake paremale"
+
+msgid "Split width (%)"
+msgstr "Jaotuse laius (%)"
+
+msgid "Square"
+msgstr "Ruut"
+
+msgid "Stretch"
+msgstr "Venitada"
+
+msgid "Success"
+msgstr "Edu"
+
+msgid "Text color"
+msgstr "Teksti värv"
+
+msgid "Title text size (px)"
+msgstr "Pealkirja teksti suurus (px)"
+
+msgid "Top"
+msgstr "Üles"
+
+msgid "Transparent panel"
+msgstr "Läbipaistev paneel"
+
+msgid "Underline"
+msgstr "Allajoonimine"
+
+msgid "Upload wallpaper"
+msgstr "Laadige üles tapeet"
+
+msgid "Use button color"
+msgstr "Kasutage nupu värvi"
+
+msgid "User"
+msgstr "Kasutaja"
+
+msgid "Wallpaper"
+msgstr "Tapeet"
+
+msgid "Warning"
+msgstr "Hoiatus"
+
+msgid "Yes"
+msgstr "Jah"
+
+msgid "Yes (enable)"
+msgstr "Jah (luba)"
+
+msgid "Yes (hide panel)"
+msgstr "Jah (peida paneel)"
+
+msgid ""
+"Light mode logos: used when the system is in light mode, ensuring good "
+"visibility on white or light backgrounds."
+msgstr ""
+"Valgusrežiimi logod: kasutatakse, kui süsteem on valgusrežiimis, tagades hea "
+"nähtavuse valgel või heledal taustal."
+
+msgid ""
+"Dark mode logos: used when the system is in dark mode, ensuring contrast and "
+"readability on black or dark backgrounds."
+msgstr ""
+"Tumeda režiimi logod: kasutatakse, kui süsteem on pimedas režiimis, tagades "
+"kontrasti ja loetavuse mustal või tumedal taustal."
+
+msgid ""
+"The favicon is the small icon that appears in the browser tab (and also in "
+"bookmarks)."
+msgstr ""
+"Favicon on väike ikoon, mis kuvatakse brauseri vahekaardil (ja ka "
+"järjehoidjates)."
+
+msgid ""
+"Expanded menu logo: the logo displayed when the sidebar menu is open, with "
+"more space available."
+msgstr ""
+"Laiendatud menüü logo: logo, mis kuvatakse, kui külgriba menüü on avatud ja "
+"vaba ruumi on rohkem."
+
+msgid ""
+"Collapsed menu logo: the logo displayed when the sidebar menu is collapsed, "
+"so it needs to be a more compact version."
+msgstr ""
+"Ahendatud menüü logo: logo, mis kuvatakse külgriba menüü ahendamisel, seega "
+"peab see olema kompaktsem versioon."
+
+msgid ""
+"Login page logo: the logo displayed on the login screen before the user "
+"enters the system."
+msgstr ""
+"Sisselogimislehe logo: logo, mis kuvatakse sisselogimisekraanil enne "
+"kasutaja süsteemi sisenemist."
+
+msgid "Logo size (%)"
+msgstr "Logo suurus (%)"
+
+msgid "Favicon active"
+msgstr "Favicon aktiivne"
+
+msgid "Button"
+msgstr "Nupp"
+
+msgid "Wallpaper source"
+msgstr "Taustapildi allikas"
+
+msgid "Preset wallpaper"
+msgstr "Eelseadistatud tapeet"
+
+msgid "Attachment"
+msgstr "Manus"
+
+msgid "Button shape"
+msgstr "Nupu kuju"
+
+msgid "Button fill style"
+msgstr "Nupu täitmise stiil"
+
+msgid "Button text size (px)"
+msgstr "Nupu teksti suurus (px)"
+
+msgid "Color mode"
+msgstr "Värvirežiim"
+
+msgid "GLPI logo configuration"
+msgstr "GLPI logo konfiguratsioon"
+
+msgid ""
+"Upload logos that will replace the default GLPI assets using CSS variables."
+msgstr ""
+"Laadige üles logod, mis asendavad vaikevarad GLPI, kasutades muutujaid CSS."
+
+msgid "Expanded menu logo size (%)"
+msgstr "Laiendatud menüü logo suurus (%)"
+
+msgid "Collapsed menu logo size (%)"
+msgstr "Ahendatud menüü logo suurus (%)"
+
+msgid "Favicon (browser tab)"
+msgstr "Favicon (brauseri vahekaart)"
+
+msgid "Field height (px)"
+msgstr "Välja kõrgus (px)"
+
+msgid "Preset wallpapers"
+msgstr "Eelseadistatud taustapildid"
+
+msgid "Custom upload"
+msgstr "Kohandatud üleslaadimine"
+
+msgid "Classic centered"
+msgstr "Klassikakeskne"
+
+msgid "Above panel"
+msgstr "Paneeli kohal"
+
+msgid "No"
+msgstr "Ei"
+
+msgid "Default fill"
+msgstr "Vaiketäitmine"
+
+msgid "Custom color"
+msgstr "Kohandatud värv"
+
+msgid "Accent color"
+msgstr "Aktsentvärv"
+
+msgid "Turn GLPI into a showcase for your brand in just a few clicks."
+msgstr "Muutke GLPI oma brändi esitlemiseks vaid mõne klikiga."
+
+msgid "About"
+msgstr "Umbes"
+
+msgid "GLPI logos"
+msgstr "GLPI logod"
+
+msgid "Login Page"
+msgstr "Sisselogimisleht"
+
+msgid "Premium"
+msgstr "Premium"
+
+msgid "Brandkit by Marcati"
+msgstr "Brandkit autor Marcati"
+
+msgid "The visual evolution of your GLPI starts here."
+msgstr "Teie GLPI visuaalne areng algab siit."
+
+msgid ""
+"Brandkit delivers logos, login screens, and colors aligned with your "
+"identity. No CSS, no effort, just professional results."
+msgstr ""
+"Brandkit pakub teie identiteediga joondatud logosid, sisselogimisekraane ja "
+"värve. Ei CSS, ei mingit pingutust, vaid professionaalsed tulemused."
+
+msgid "Discover Marcati at"
+msgstr "Avastage Marcati aadressil"
+
+msgid "Meet Marcati"
+msgstr "Tutvuge Marcati"
+
+msgid "Consistent logos"
+msgstr "Järjepidevad logod"
+
+msgid "Ready uploads for header, favicon, and login."
+msgstr "Valmis üleslaadimised päise, faviconi ja sisselogimise jaoks."
+
+msgid "Login with presence"
+msgstr "Logige sisse kohalolekuga"
+
+msgid ""
+"Pick layouts, colors, and effects for an authentication screen that sells "
+"your brand."
+msgstr ""
+"Valige teie kaubamärki müüva autentimisekraani paigutused, värvid ja efektid."
+
+msgid "Fast delivery"
+msgstr "Kiire kohaletoimetamine"
+
+msgid "Settings saved directly in GLPI to activate branding without rework."
+msgstr ""
+"Seaded salvestati otse kausta GLPI, et aktiveerida bränding ilma "
+"ümbertegemiseta."
+
+msgid "Custom hex color"
+msgstr "Kohandatud kuuskantvärv"
+
+msgid "Save logo sizes"
+msgstr "Salvestage logo suurused"
+
+msgid "Restore defaults"
+msgstr "Restore defaults"
+
+msgid "Expanded menu logo"
+msgstr "Laiendatud menüü logo"
+
+msgid "Collapsed menu logo"
+msgstr "Kokkupandud menüü logo"
+
+msgid "Login logo"
+msgstr "Sisselogimise logo"
+
+msgid "No custom logo uploaded yet."
+msgstr "Kohandatud logo pole veel üles laaditud."
+
+msgid "No favicon yet"
+msgstr "Faviconi pole veel"
+
+msgid "Field width (px)"
+msgstr "Välja laius (px)"
+
+msgid "Light mode logos"
+msgstr "Heleda režiimi logod"
+
+msgid "Dark mode logos"
+msgstr "Tumeda režiimi logod"
+
+msgid "Favicon"
+msgstr "Favicon"
+
+msgid "Upload logo"
+msgstr "Laadi logo üles"
+
+msgid "Remove logo"
+msgstr "Eemalda logo"
+
+msgid "No custom favicon uploaded yet."
+msgstr "Kohandatud faviconi pole veel üles laaditud."
+
+msgid "Expanded menu logo (dark mode)"
+msgstr "Laiendatud menüü logo (tume režiim)"
+
+msgid "Collapsed menu logo (dark mode)"
+msgstr "Ahendatud menüü logo (tume režiim)"
+

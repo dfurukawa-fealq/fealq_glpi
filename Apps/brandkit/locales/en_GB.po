@@ -1,0 +1,540 @@
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: brandkit\n"
+"Language: en_GB\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "Dynamic cut for a bolder call-to-action."
+msgstr "Dynamic cut for a bolder call-to-action."
+
+msgid "Email"
+msgstr "Email"
+
+msgid "Field background"
+msgstr "Field background"
+
+msgid "Field border"
+msgstr "Field border"
+
+msgid "Field border width (px)"
+msgstr "Field border width (px)"
+
+msgid "Field focus glow"
+msgstr "Field focus glow"
+
+msgid "Field icons"
+msgstr "Field icons"
+
+msgid "Field radius (px)"
+msgstr "Field radius (px)"
+
+msgid "Fields"
+msgstr "Fields"
+
+msgid "Field spacing (px)"
+msgstr "Field spacing (px)"
+
+msgid "Field style"
+msgstr "Field style"
+
+msgid "Field text"
+msgstr "Field text"
+
+msgid "Field text size (px)"
+msgstr "Field text size (px)"
+
+msgid "Fill with color"
+msgstr "Fill with color"
+
+msgid "Fixed"
+msgstr "Fixed"
+
+msgid "Friendly, fully rounded shape."
+msgstr "Friendly, fully rounded shape."
+
+msgid "Glass blur"
+msgstr "Glass blur"
+
+msgid "Hide login text"
+msgstr "Hide login text"
+
+msgid "Hover effect"
+msgstr "Hover effect"
+
+msgid "Hover fill custom color"
+msgstr "Hover fill custom color"
+
+msgid "Hover text color"
+msgstr "Hover text color"
+
+msgid "Icon color"
+msgstr "Icon color"
+
+msgid "Icon position"
+msgstr "Icon position"
+
+msgid "ID card"
+msgstr "ID card"
+
+msgid "Info"
+msgstr "Info"
+
+msgid "Inside panel"
+msgstr "Inside panel"
+
+msgid "Key"
+msgstr "Key"
+
+msgid "Layout"
+msgstr "Layout"
+
+msgid "Layout & logo"
+msgstr "Layout & logo"
+
+msgid "Left"
+msgstr "Left"
+
+msgid "Light"
+msgstr "Light"
+
+msgid "Lock"
+msgstr "Lock"
+
+msgid "Login icon"
+msgstr "Login icon"
+
+msgid "Login logo size (px)"
+msgstr "Login logo size (px)"
+
+msgid "Login page configuration"
+msgstr "Login page configuration"
+
+msgid "Logo offset from top (px)"
+msgstr "Logo offset from top (px)"
+
+msgid "Logo position"
+msgstr "Logo position"
+
+msgid "Neon glow"
+msgstr "Neon glow"
+
+msgid "No (disable)"
+msgstr "No (disable)"
+
+msgid "None"
+msgstr "None"
+
+msgid "No (show panel)"
+msgstr "No (show panel)"
+
+msgid "Original size"
+msgstr "Original size"
+
+msgid "Outline"
+msgstr "Outline"
+
+msgid "Outline danger"
+msgstr "Outline danger"
+
+msgid "Outline dark"
+msgstr "Outline dark"
+
+msgid "Outline info"
+msgstr "Outline info"
+
+msgid "Outline only"
+msgstr "Outline only"
+
+msgid "Outline primary"
+msgstr "Outline primary"
+
+msgid "Outline secondary"
+msgstr "Outline secondary"
+
+msgid "Outline success"
+msgstr "Outline success"
+
+msgid "Outline warning"
+msgstr "Outline warning"
+
+msgid "Overlay color"
+msgstr "Overlay color"
+
+msgid "Overlay opacity (%)"
+msgstr "Overlay opacity (%)"
+
+msgid "Page text size (px)"
+msgstr "Page text size (px)"
+
+msgid "Panel blur (px)"
+msgstr "Panel blur (px)"
+
+msgid "Panel color"
+msgstr "Panel color"
+
+msgid "Panel height (px)"
+msgstr "Panel height (px)"
+
+msgid "Panel hover effect"
+msgstr "Panel hover effect"
+
+msgid "Panel opacity (%)"
+msgstr "Panel opacity (%)"
+
+msgid "Panel & split styling"
+msgstr "Panel & split styling"
+
+msgid "Panel width (px)"
+msgstr "Panel width (px)"
+
+msgid "Password icon"
+msgstr "Password icon"
+
+msgid "Pick a custom color"
+msgstr "Pick a custom color"
+
+msgid "Pick a layout and visual treatments for the GLPI login page."
+msgstr "Pick a layout and visual treatments for the GLPI login page."
+
+msgid "Pill"
+msgstr "Pill"
+
+msgid "Position"
+msgstr "Position"
+
+msgid "Preset palette"
+msgstr "Preset palette"
+
+msgid "Press on hover"
+msgstr "Press on hover"
+
+msgid "Primary (default)"
+msgstr "Primary (default)"
+
+msgid "Recommended: 1920x1080 or larger."
+msgstr "Recommended: 1920x1080 or larger."
+
+msgid "Right"
+msgstr "Right"
+
+msgid "Rounded"
+msgstr "Rounded"
+
+msgid "Save login page"
+msgstr "Save login page"
+
+msgid "Scroll"
+msgstr "Scroll"
+
+msgid "Secondary"
+msgstr "Secondary"
+
+msgid "Sharp edges with a confident shadow."
+msgstr "Sharp edges with a confident shadow."
+
+msgid "Shield"
+msgstr "Shield"
+
+msgid "Size"
+msgstr "Size"
+
+msgid "Soft depth"
+msgstr "Soft depth"
+
+msgid "Soft shadow"
+msgstr "Soft shadow"
+
+msgid "Solid"
+msgstr "Solid"
+
+msgid "Split blur (px)"
+msgstr "Split blur (px)"
+
+msgid "Split color"
+msgstr "Split color"
+
+msgid "Split left"
+msgstr "Split left"
+
+msgid "Split opacity (%)"
+msgstr "Split opacity (%)"
+
+msgid "Split right"
+msgstr "Split right"
+
+msgid "Split width (%)"
+msgstr "Split width (%)"
+
+msgid "Square"
+msgstr "Square"
+
+msgid "Stretch"
+msgstr "Stretch"
+
+msgid "Success"
+msgstr "Success"
+
+msgid "Text color"
+msgstr "Text color"
+
+msgid "Title text size (px)"
+msgstr "Title text size (px)"
+
+msgid "Top"
+msgstr "Top"
+
+msgid "Transparent panel"
+msgstr "Transparent panel"
+
+msgid "Underline"
+msgstr "Underline"
+
+msgid "Upload wallpaper"
+msgstr "Upload wallpaper"
+
+msgid "Use button color"
+msgstr "Use button color"
+
+msgid "User"
+msgstr "User"
+
+msgid "Wallpaper"
+msgstr "Wallpaper"
+
+msgid "Warning"
+msgstr "Warning"
+
+msgid "Yes"
+msgstr "Yes"
+
+msgid "Yes (enable)"
+msgstr "Yes (enable)"
+
+msgid "Yes (hide panel)"
+msgstr "Yes (hide panel)"
+
+msgid ""
+"Light mode logos: used when the system is in light mode, ensuring good "
+"visibility on white or light backgrounds."
+msgstr ""
+"Light mode logos: used when the system is in light mode, ensuring good "
+"visibility on white or light backgrounds."
+
+msgid ""
+"Dark mode logos: used when the system is in dark mode, ensuring contrast and "
+"readability on black or dark backgrounds."
+msgstr ""
+"Dark mode logos: used when the system is in dark mode, ensuring contrast and "
+"readability on black or dark backgrounds."
+
+msgid ""
+"The favicon is the small icon that appears in the browser tab (and also in "
+"bookmarks)."
+msgstr ""
+"The favicon is the small icon that appears in the browser tab (and also in "
+"bookmarks)."
+
+msgid ""
+"Expanded menu logo: the logo displayed when the sidebar menu is open, with "
+"more space available."
+msgstr ""
+"Expanded menu logo: the logo displayed when the sidebar menu is open, with "
+"more space available."
+
+msgid ""
+"Collapsed menu logo: the logo displayed when the sidebar menu is collapsed, "
+"so it needs to be a more compact version."
+msgstr ""
+"Collapsed menu logo: the logo displayed when the sidebar menu is collapsed, "
+"so it needs to be a more compact version."
+
+msgid ""
+"Login page logo: the logo displayed on the login screen before the user "
+"enters the system."
+msgstr ""
+"Login page logo: the logo displayed on the login screen before the user "
+"enters the system."
+
+msgid "Logo size (%)"
+msgstr "Logo size (%)"
+
+msgid "Favicon active"
+msgstr "Favicon active"
+
+msgid "Button"
+msgstr "Button"
+
+msgid "Wallpaper source"
+msgstr "Wallpaper source"
+
+msgid "Preset wallpaper"
+msgstr "Preset wallpaper"
+
+msgid "Attachment"
+msgstr "Attachment"
+
+msgid "Button shape"
+msgstr "Button shape"
+
+msgid "Button fill style"
+msgstr "Button fill style"
+
+msgid "Button text size (px)"
+msgstr "Button text size (px)"
+
+msgid "Color mode"
+msgstr "Color mode"
+
+msgid "GLPI logo configuration"
+msgstr "GLPI logo configuration"
+
+msgid ""
+"Upload logos that will replace the default GLPI assets using CSS variables."
+msgstr ""
+"Upload logos that will replace the default GLPI assets using CSS variables."
+
+msgid "Expanded menu logo size (%)"
+msgstr "Expanded menu logo size (%)"
+
+msgid "Collapsed menu logo size (%)"
+msgstr "Collapsed menu logo size (%)"
+
+msgid "Favicon (browser tab)"
+msgstr "Favicon (browser tab)"
+
+msgid "Field height (px)"
+msgstr "Field height (px)"
+
+msgid "Preset wallpapers"
+msgstr "Preset wallpapers"
+
+msgid "Custom upload"
+msgstr "Custom upload"
+
+msgid "Classic centered"
+msgstr "Classic centered"
+
+msgid "Above panel"
+msgstr "Above panel"
+
+msgid "No"
+msgstr "No"
+
+msgid "Default fill"
+msgstr "Default fill"
+
+msgid "Custom color"
+msgstr "Custom color"
+
+msgid "Accent color"
+msgstr "Accent color"
+
+msgid "Turn GLPI into a showcase for your brand in just a few clicks."
+msgstr "Turn GLPI into a showcase for your brand in just a few clicks."
+
+msgid "About"
+msgstr "About"
+
+msgid "GLPI logos"
+msgstr "GLPI logos"
+
+msgid "Login Page"
+msgstr "Login Page"
+
+msgid "Premium"
+msgstr "Premium"
+
+msgid "Brandkit by Marcati"
+msgstr "Brandkit by Marcati"
+
+msgid "The visual evolution of your GLPI starts here."
+msgstr "The visual evolution of your GLPI starts here."
+
+msgid ""
+"Brandkit delivers logos, login screens, and colors aligned with your "
+"identity. No CSS, no effort, just professional results."
+msgstr ""
+"Brandkit delivers logos, login screens, and colors aligned with your "
+"identity. No CSS, no effort, just professional results."
+
+msgid "Discover Marcati at"
+msgstr "Discover Marcati at"
+
+msgid "Meet Marcati"
+msgstr "Meet Marcati"
+
+msgid "Consistent logos"
+msgstr "Consistent logos"
+
+msgid "Ready uploads for header, favicon, and login."
+msgstr "Ready uploads for header, favicon, and login."
+
+msgid "Login with presence"
+msgstr "Login with presence"
+
+msgid ""
+"Pick layouts, colors, and effects for an authentication screen that sells "
+"your brand."
+msgstr ""
+"Pick layouts, colors, and effects for an authentication screen that sells "
+"your brand."
+
+msgid "Fast delivery"
+msgstr "Fast delivery"
+
+msgid "Settings saved directly in GLPI to activate branding without rework."
+msgstr "Settings saved directly in GLPI to activate branding without rework."
+
+msgid "Custom hex color"
+msgstr "Custom hex color"
+
+msgid "Save logo sizes"
+msgstr "Save logo sizes"
+
+msgid "Restore defaults"
+msgstr "Restore defaults"
+
+msgid "Expanded menu logo"
+msgstr "Expanded menu logo"
+
+msgid "Collapsed menu logo"
+msgstr "Collapsed menu logo"
+
+msgid "Login logo"
+msgstr "Login logo"
+
+msgid "No custom logo uploaded yet."
+msgstr "No custom logo uploaded yet."
+
+msgid "No favicon yet"
+msgstr "No favicon yet"
+
+msgid "Field width (px)"
+msgstr "Field width (px)"
+
+msgid "Light mode logos"
+msgstr "Light mode logos"
+
+msgid "Dark mode logos"
+msgstr "Dark mode logos"
+
+msgid "Favicon"
+msgstr "Favicon"
+
+msgid "Upload logo"
+msgstr "Upload logo"
+
+msgid "Remove logo"
+msgstr "Remove logo"
+
+msgid "No custom favicon uploaded yet."
+msgstr "No custom favicon uploaded yet."
+
+msgid "Expanded menu logo (dark mode)"
+msgstr "Expanded menu logo (dark mode)"
+
+msgid "Collapsed menu logo (dark mode)"
+msgstr "Collapsed menu logo (dark mode)"
+

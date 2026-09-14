@@ -1,0 +1,32 @@
+<?php
+
+// Autenticação por sessão Dash; permissões nativas no bridge (PLAN-20260905-001).
+require_once __DIR__ . '/../inc/bootstrap.php';
+require_once __DIR__ . '/../inc/ticket_attendance.php';
+
+dashglpi_require_auth();
+dashglpi_assert_page_access('tickets');
+
+try {
+    if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+        $ticketId = dashglpi_ajax_require_ticket_id($_GET);
+        $result = dashglpi_attendance_request('ticket_followup_config.php', $ticketId, [
+            'action' => 'list', 'cursor' => (string) ($_GET['cursor'] ?? ''),
+            'limit' => (int) ($_GET['limit'] ?? 30),
+        ]);
+        dashglpi_json($result);
+    }
+} catch (Throwable $e) {
+    error_log('[DashGLPI] attendance timeline: ' . $e->getMessage());
+    dashglpi_json(['ok' => false, 'error' => $e->getMessage()], 403);
+}
+
+dashglpi_ajax_bridge_endpoint('ticket attendance', function (): array {
+    $ticketId = dashglpi_ajax_require_ticket_id($_POST);
+    $payload = array_intersect_key($_POST, array_flip([
+        'action', 'revision', 'content', 'is_private', 'status', 'user_id', 'reason',
+        'role', 'itemtype', 'items_id', 'operation', 'pendingreasons_id', 'solutiontypes_id',
+        'duration_minutes', 'state', 'users_id_tech', 'groups_id_tech', 'taskcategories_id', 'begin', 'end',
+    ]));
+    return dashglpi_attendance_request('ticket_followup_config.php', $ticketId, $payload, dashglpi_attendance_uploads($_FILES));
+});

@@ -1,0 +1,485 @@
+<?php
+
+/*
+ -------------------------------------------------------------------------
+ addressing plugin for GLPI
+ Copyright (C) 2016-2026 by the addressing Development Team.
+
+ https://github.com/pluginsGLPI/addressing
+ -------------------------------------------------------------------------
+
+ LICENSE
+
+ This file is part of addressing.
+
+ addressing is free software; you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation; either version 2 of the License, or
+ (at your option) any later version.
+
+ addressing is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details.
+
+ You should have received a copy of the GNU General Public License
+ along with addressing. If not, see <http://www.gnu.org/licenses/>.
+ --------------------------------------------------------------------------
+ */
+
+use Glpi\Plugin\Hooks;
+use GlpiPlugin\Addressing\Addressing;
+use GlpiPlugin\Addressing\AddressingInjection;
+use GlpiPlugin\Addressing\Filter;
+use GlpiPlugin\Addressing\PingInfo;
+use GlpiPlugin\Addressing\Profile;
+use GlpiPlugin\Addressing\Report;
+
+function plugin_addressing_install()
+{
+    global $DB;
+
+    $update = false;
+    if (!$DB->tableExists("glpi_plugin_addressing_display")
+        && !$DB->tableExists("glpi_plugin_addressing")
+        && !$DB->tableExists("glpi_plugin_addressing_configs")) {
+        $DB->runFile(PLUGIN_ADDRESSING_DIR . "/sql/empty-3.1.0.sql");
+    } else {
+        if (!$DB->tableExists("glpi_plugin_addressing_profiles")
+            && $DB->tableExists("glpi_plugin_addressing_display")
+            && !$DB->fieldExists("glpi_plugin_addressing_display", "ipconf1")) {//1.4
+            $update = true;
+            $DB->runFile(PLUGIN_ADDRESSING_DIR . "/sql/update-1.4.sql");
+        }
+
+        if (!$DB->tableExists("glpi_plugin_addressing")
+            && $DB->tableExists("glpi_plugin_addressing_display")
+            && $DB->fieldExists("glpi_plugin_addressing_display", "ipconf1")) {
+            $update = true;
+            $DB->runFile(PLUGIN_ADDRESSING_DIR . "/sql/update-1.5.sql");
+        }
+
+        if ($DB->tableExists("glpi_plugin_addressing_display")
+            && !$DB->fieldExists("glpi_plugin_addressing", "ipdeb")) {
+            $update = true;
+            $DB->runFile(PLUGIN_ADDRESSING_DIR . "/sql/update-1.6.sql");
+        }
+
+        if ($DB->tableExists("glpi_plugin_addressing_profiles")
+            && $DB->fieldExists("glpi_plugin_addressing_profiles", "interface")) {
+            $update = true;
+            $DB->runFile(PLUGIN_ADDRESSING_DIR . "/sql/update-1.7.0.sql");
+        }
+
+        if (!$DB->tableExists("glpi_plugin_addressing_configs")) {
+            $DB->runFile(PLUGIN_ADDRESSING_DIR . "/sql/update-1.8.0.sql");
+            $update = true;
+        }
+
+        if ($DB->tableExists("glpi_plugin_addressing_profiles")
+            && !$DB->fieldExists("glpi_plugin_addressing_profiles", "use_ping_in_equipment")) {
+            $DB->runFile(PLUGIN_ADDRESSING_DIR . "/sql/update-1.9.0.sql");
+            $update = true;
+        }
+        //Version 2.4.0
+        if (!$DB->tableExists("glpi_plugin_addressing_filters")) {
+            $DB->runFile(PLUGIN_ADDRESSING_DIR . "/sql/update-2.4.0.sql");
+        }
+
+        //Version 2.5.0
+        if (!$DB->fieldExists("glpi_plugin_addressing_addressings", "locations_id")
+            && !$DB->fieldExists("glpi_plugin_addressing_addressings", "fqdns_id")) {
+            $DB->runFile(PLUGIN_ADDRESSING_DIR . "/sql/update-2.5.0.sql");
+        }
+        //Version 2.9.1
+        if (!$DB->tableExists("glpi_plugin_addressing_pinginfos")) {
+            $DB->runFile(PLUGIN_ADDRESSING_DIR . "/sql/update-2.9.1.sql");
+        }
+        //Version 3.0.1
+        if (!$DB->fieldExists("glpi_plugin_addressing_addressings", "vlans_id")) {
+            $DB->runFile(PLUGIN_ADDRESSING_DIR . "/sql/update-3.0.1.sql");
+        }
+
+        $DB->runFile(PLUGIN_ADDRESSING_DIR . "/sql/update-3.1.1.sql");
+    }
+
+    //DisplayPreferences Migration
+    $classes = ['PluginAddressingAddressing' => Addressing::class];
+
+    foreach ($classes as $old => $new) {
+        $displayusers = $DB->request([
+            'SELECT' => [
+                'users_id'
+            ],
+            'DISTINCT' => true,
+            'FROM' => 'glpi_displaypreferences',
+            'WHERE' => [
+                'itemtype' => $old,
+            ],
+        ]);
+
+        if (count($displayusers) > 0) {
+            foreach ($displayusers as $displayuser) {
+                $iterator = $DB->request([
+                    'SELECT' => [
+                        'num',
+                        'id'
+                    ],
+                    'FROM' => 'glpi_displaypreferences',
+                    'WHERE' => [
+                        'itemtype' => $old,
+                        'users_id' => $displayuser['users_id'],
+                        'interface' => 'central'
+                    ],
+                ]);
+
+                if (count($iterator) > 0) {
+                    foreach ($iterator as $data) {
+                        $iterator2 = $DB->request([
+                            'SELECT' => [
+                                'id'
+                            ],
+                            'FROM' => 'glpi_displaypreferences',
+                            'WHERE' => [
+                                'itemtype' => $new,
+                                'users_id' => $displayuser['users_id'],
+                                'num' => $data['num'],
+                                'interface' => 'central'
+                            ],
+                        ]);
+                        if (count($iterator2) > 0) {
+                            foreach ($iterator2 as $dataid) {
+                                $query = $DB->buildDelete(
+                                    'glpi_displaypreferences',
+                                    [
+                                        'id' => $dataid['id'],
+                                    ]
+                                );
+                                $DB->doQuery($query);
+                            }
+                        } else {
+                            $query = $DB->buildUpdate(
+                                'glpi_displaypreferences',
+                                [
+                                    'itemtype' => $new,
+                                ],
+                                [
+                                    'id' => $data['id'],
+                                ]
+                            );
+                            $DB->doQuery($query);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    // Version 3.2.2 - Migration des IDs de recherche 1000/1001 vers 100/101
+    $num_mapping = [1000 => 100, 1001 => 101];
+
+    $has_old_prefs = $DB->request([
+        'COUNT' => 'cpt',
+        'FROM'  => 'glpi_displaypreferences',
+        'WHERE' => [
+            'itemtype' => Addressing::class,
+            'num'      => array_keys($num_mapping),
+        ],
+    ])->current()['cpt'] > 0;
+
+    if ($has_old_prefs) {
+        foreach ($num_mapping as $old_num => $new_num) {
+            $conflicts = $DB->request([
+                'SELECT' => ['users_id', 'interface'],
+                'FROM'   => 'glpi_displaypreferences',
+                'WHERE'  => [
+                    'itemtype' => Addressing::class,
+                    'num'      => $new_num,
+                ],
+            ]);
+
+            foreach ($conflicts as $conflict) {
+                $DB->delete('glpi_displaypreferences', [
+                    'itemtype'  => Addressing::class,
+                    'num'       => $old_num,
+                    'users_id'  => $conflict['users_id'],
+                    'interface' => $conflict['interface'],
+                ]);
+            }
+
+            $DB->update('glpi_displaypreferences', ['num' => $new_num], [
+                'itemtype' => Addressing::class,
+                'num'      => $old_num,
+            ]);
+        }
+
+        $saved_searches = $DB->request([
+            'FROM'  => 'glpi_savedsearches',
+            'WHERE' => ['itemtype' => Addressing::class],
+        ]);
+
+        foreach ($saved_searches as $saved_search) {
+            parse_str($saved_search['query'], $params);
+            $modified = false;
+
+            if (isset($params['criteria']) && is_array($params['criteria'])) {
+                foreach ($params['criteria'] as &$criterion) {
+                    if (isset($criterion['field']) && isset($num_mapping[(int) $criterion['field']])) {
+                        $criterion['field'] = (string) $num_mapping[(int) $criterion['field']];
+                        $modified = true;
+                    }
+                }
+                unset($criterion);
+            }
+
+            if (isset($params['sort']) && isset($num_mapping[(int) $params['sort']])) {
+                $params['sort'] = (string) $num_mapping[(int) $params['sort']];
+                $modified = true;
+            }
+
+            if ($modified) {
+                $DB->update('glpi_savedsearches', [
+                    'query' => http_build_query($params),
+                ], [
+                    'id' => $saved_search['id'],
+                ]);
+            }
+        }
+    }
+
+    if ($update) {
+        $query_  = "SELECT *
+                  FROM `glpi_plugin_addressing_profiles` ";
+        $result_ = $DB->doQuery($query_);
+
+        if ($DB->numrows($result_) > 0) {
+            while ($data = $DB->fetchArray($result_)) {
+                $query  = "UPDATE `glpi_plugin_addressing_profiles`
+                      SET `profiles_id` = '" . $data["id"] . "'
+                      WHERE `id` = '" . $data["id"] . "'";
+                $result = $DB->doQuery($query);
+            }
+        }
+
+        if ($DB->fieldExists("glpi_plugin_addressing_profiles", "name")) {
+            $query  = "ALTER TABLE `glpi_plugin_addressing_profiles`
+                    DROP `name` ";
+            $result = $DB->doQuery($query);
+        }
+    }
+
+    //0.85 : new profile system
+    Profile::migrateProfiles();
+    //Add all rights for current user profile
+    Profile::createFirstAccess($_SESSION['glpiactiveprofile']['id']);
+    //Drop old profile table : not used anymore
+    $migration = new Migration(PLUGIN_ADDRESSING_VERSION);
+    $migration->dropTable('glpi_plugin_addressing_profiles');
+    CronTask::Register(PingInfo::class, 'UpdatePing', DAY_TIMESTAMP);
+
+    return true;
+}
+
+
+/**
+ * @return bool
+ */
+function plugin_addressing_uninstall()
+{
+    global $DB;
+
+    $migration = new Migration(PLUGIN_ADDRESSING_VERSION);
+    $tables    = ["glpi_plugin_addressing_addressings",
+                  "glpi_plugin_addressing_configs",
+                  "glpi_plugin_addressing_filters",
+                  "glpi_plugin_addressing_pinginfos",
+                  "glpi_plugin_addressing_ipcomments"];
+
+    foreach ($tables as $table) {
+        $migration->dropTable($table);
+    }
+
+    $itemtypes = ['DisplayPreference', 'SavedSearch'];
+    foreach ($itemtypes as $itemtype) {
+        $item = new $itemtype;
+        $item->deleteByCriteria(['itemtype' => Addressing::class]);
+    }
+
+    //Delete rights associated with the plugin
+    $profileRight = new ProfileRight();
+
+    foreach (Profile::getAllRights() as $right) {
+        $profileRight->deleteByCriteria(['name' => $right['field']]);
+    }
+
+    //Remove rigth from $_SESSION['glpiactiveprofile'] if exists
+    Profile::removeRightsFromSession();
+
+    Profile::removeRightsFromSession();
+    CronTask::unregister("addressing");
+    return true;
+}
+
+
+/**
+ * Define database relations
+ *
+ * @return array
+ */
+function plugin_addressing_getDatabaseRelations()
+{
+    if (Plugin::isPluginActive("addressing")) {
+        return ["glpi_networks"  => ["glpi_plugin_addressing_addressings" => "networks_id"],
+                "glpi_vlans"     => ["glpi_plugin_addressing_addressings" => "vlans_id"],
+                "glpi_fqdns"     => ["glpi_plugin_addressing_addressings" => "fqdns_id"],
+                "glpi_locations" => ["glpi_plugin_addressing_addressings" => "locations_id"],
+                "glpi_entities"  => ["glpi_plugin_addressing_addressings" => "entities_id"]];
+    }
+    return [];
+}
+
+/**
+ * @param $itemtype
+ *
+ * @return array
+ */
+function plugin_addressing_getAddSearchOptions($itemtype)
+{
+    $sopt = [];
+
+    if (in_array($itemtype, Addressing::getTypes(true))) {
+        if (Session::haveRight("plugin_addressing", READ)) {
+            $sopt[5000]['table']         = 'glpi_plugin_addressing_pinginfos';
+            $sopt[5000]['field']         = 'ping_response';
+            $sopt[5000]['name']          = __('Ping result', 'addressing');
+            $sopt[5000]['forcegroupby']  = true;
+            $sopt[5000]['linkfield']     = 'id';
+            $sopt[5000]['massiveaction'] = false;
+            $sopt[5000]['joinparams']    = ['beforejoin' => ['table'      => 'glpi_plugin_addressing_pinginfos',
+                                                             'joinparams' => ['jointype' => 'itemtype_item']]];
+        }
+    }
+    return $sopt;
+}
+
+/**
+ * @param $type
+ * @param $ID
+ * @param $data
+ * @param $num
+ *
+ * @return string
+ */
+function plugin_addressing_giveItem($type, $ID, $data, $num)
+{
+    global $DB;
+
+    $dbu = new DbUtils();
+
+    $options = Search::getOptions($type);
+    $searchopt =& $options;
+    $table     = $searchopt[$ID]["table"];
+    $field     = $searchopt[$ID]["field"];
+    $out       = "";
+    if (in_array($type, Addressing::getTypes(true))) {
+        switch ($table . '.' . $field) {
+            case "glpi_plugin_addressing_pinginfos.ping_response":
+                if ($data[$num][0]['name'] == "1") {
+                    $out .= "<i class=\"ti ti-square-check\" style='color: darkgreen;font-size: 2em;'></i><br>" . __(
+                        'Last ping OK',
+                        'addressing'
+                    );
+                } elseif ($data[$num][0]['name'] == "0") {
+                    $out .= "<i class=\"ti ti-square-x\" style='color: darkred;font-size: 2em;'></i><br>" . __(
+                        'Last ping KO',
+                        'addressing'
+                    );
+                } else {
+                    $out .= "<i class=\"ti ti-question\" style='color: orange;font-size: 2em;'></i><br>" . __(
+                        "Ping informations not available",
+                        'addressing'
+                    );
+                }
+                return $out;
+                break;
+        }
+    }
+    return "";
+}
+
+/**
+ * Do special actions for dynamic report
+ *
+ * @param $params
+ *
+ * @return bool
+ */
+function plugin_addressing_dynamicReport($params)
+{
+    $Addressing = new Addressing();
+
+    if ($params["item_type"] == Report::class
+        && isset($params["id"])
+        && isset($params["display_type"])
+        && $Addressing->getFromDB($params["id"])) {
+        $Report = new Report();
+        $Addressing->getFromDB($params['id']);
+
+        $addressingFilter = new Filter();
+        if (isset($params['filter']) && $params['filter'] > 0) {
+            if ($addressingFilter->getFromDB($params['filter'])) {
+                $ipdeb  = sprintf("%u", ip2long($addressingFilter->fields['begin_ip']));
+                $ipfin  = sprintf("%u", ip2long($addressingFilter->fields['end_ip']));
+                $result = $Addressing->compute($params["start"], ['ipdeb'       => $ipdeb,
+                                                                                  'ipfin'       => $ipfin,
+                    'entities_id' => $addressingFilter->fields['entities_id'],
+                    'type_filter' => $addressingFilter->fields['type']]);
+            }
+        } else {
+            $ipdeb  = sprintf("%u", ip2long($Addressing->fields["begin_ip"]));
+            $ipfin  = sprintf("%u", ip2long($Addressing->fields["end_ip"]));
+            $result = $Addressing->compute($params["start"], ['ipdeb' => $ipdeb,
+                                                                              'ipfin' => $ipfin]);
+        }
+        $Report->displayReport($result, $Addressing, $params);
+
+        return true;
+    }
+
+    // Return false if no specific display is done, then use standard display
+    return false;
+}
+
+/**
+ * @param $itemtype
+ * @param $ID
+ * @param $order
+ * @param $key
+ *
+ * @return string
+ */
+function plugin_addressing_addOrderBy($itemtype, $ID, $order, $key)
+{
+    if ($itemtype == Addressing::class
+        && ($ID == 100 || $ID == 101)) {
+        return "ORDER BY INET_ATON(ITEM_$key) $order";
+    }
+}
+
+function plugin_addressing_postinit()
+{
+    global $PLUGIN_HOOKS;
+
+    $PLUGIN_HOOKS[Hooks::ITEM_PURGE]['addressing'] = [];
+
+    foreach (Addressing::getTypes() as $type) {
+        $PLUGIN_HOOKS[Hooks::ITEM_PURGE]['addressing'][$type]
+           = [PingInfo::class, 'cleanForItem'];
+    }
+}
+
+function plugin_datainjection_populate_addressing()
+{
+    global $INJECTABLE_TYPES;
+    $INJECTABLE_TYPES[AddressingInjection::class] = 'addressing';
+}

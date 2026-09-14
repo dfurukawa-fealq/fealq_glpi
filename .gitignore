@@ -1,0 +1,6 @@
+.env
+.reports
+docs/glpi-categoria-ITL.csv
+.Agent/.prompts
+.playwright-mcp
+docs/

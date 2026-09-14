@@ -1,0 +1,543 @@
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: brandkit\n"
+"Language: tr_TR\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "Dynamic cut for a bolder call-to-action."
+msgstr "Daha cesur bir harekete geçirici mesaj için dinamik kesim."
+
+msgid "Email"
+msgstr "E-posta"
+
+msgid "Field background"
+msgstr "Alan arka planı"
+
+msgid "Field border"
+msgstr "Tarla sınırı"
+
+msgid "Field border width (px)"
+msgstr "Alan kenarlığı genişliği (px)"
+
+msgid "Field focus glow"
+msgstr "Alan odağı parlıyor"
+
+msgid "Field icons"
+msgstr "Alan simgeleri"
+
+msgid "Field radius (px)"
+msgstr "Alan yarıçapı (px)"
+
+msgid "Fields"
+msgstr "Alanlar"
+
+msgid "Field spacing (px)"
+msgstr "Alan aralığı (px)"
+
+msgid "Field style"
+msgstr "Alan stili"
+
+msgid "Field text"
+msgstr "Alan metni"
+
+msgid "Field text size (px)"
+msgstr "Alan metni boyutu (px)"
+
+msgid "Fill with color"
+msgstr "Renkle doldurun"
+
+msgid "Fixed"
+msgstr "Sabit"
+
+msgid "Friendly, fully rounded shape."
+msgstr "Dost canlısı, tamamen yuvarlak şekil."
+
+msgid "Glass blur"
+msgstr "Cam bulanıklığı"
+
+msgid "Hide login text"
+msgstr "Giriş metnini gizle"
+
+msgid "Hover effect"
+msgstr "Vurgulu efekti"
+
+msgid "Hover fill custom color"
+msgstr "Özel rengin üzerine gelin"
+
+msgid "Hover text color"
+msgstr "Fareyle üzerine gelindiğinde metin rengi"
+
+msgid "Icon color"
+msgstr "Simge rengi"
+
+msgid "Icon position"
+msgstr "Simge konumu"
+
+msgid "ID card"
+msgstr "kimlik kartı"
+
+msgid "Info"
+msgstr "Bilgi"
+
+msgid "Inside panel"
+msgstr "İç panel"
+
+msgid "Key"
+msgstr "Anahtar"
+
+msgid "Layout"
+msgstr "Düzen"
+
+msgid "Layout & logo"
+msgstr "Düzen ve logo"
+
+msgid "Left"
+msgstr "Sol"
+
+msgid "Light"
+msgstr "Işık"
+
+msgid "Lock"
+msgstr "Kilit"
+
+msgid "Login icon"
+msgstr "Oturum açma simgesi"
+
+msgid "Login logo size (px)"
+msgstr "Giriş logosu boyutu (px)"
+
+msgid "Login page configuration"
+msgstr "Giriş sayfası yapılandırması"
+
+msgid "Logo offset from top (px)"
+msgstr "Logonun üstten uzaklığı (px)"
+
+msgid "Logo position"
+msgstr "Logo konumu"
+
+msgid "Neon glow"
+msgstr "Neon parıltısı"
+
+msgid "No (disable)"
+msgstr "Hayır (devre dışı bırak)"
+
+msgid "None"
+msgstr "Hiçbiri"
+
+msgid "No (show panel)"
+msgstr "Hayır (paneli göster)"
+
+msgid "Original size"
+msgstr "Orijinal boyut"
+
+msgid "Outline"
+msgstr "Taslak"
+
+msgid "Outline danger"
+msgstr "Anahat tehlike"
+
+msgid "Outline dark"
+msgstr "Anahat koyu"
+
+msgid "Outline info"
+msgstr "Anahat bilgisi"
+
+msgid "Outline only"
+msgstr "Yalnızca taslak"
+
+msgid "Outline primary"
+msgstr "Ana hat birincil"
+
+msgid "Outline secondary"
+msgstr "Anahat ikincil"
+
+msgid "Outline success"
+msgstr "Başarının ana hatlarını çizin"
+
+msgid "Outline warning"
+msgstr "Anahat uyarısı"
+
+msgid "Overlay color"
+msgstr "Kaplama rengi"
+
+msgid "Overlay opacity (%)"
+msgstr "Kaplama opaklığı (%)"
+
+msgid "Page text size (px)"
+msgstr "Sayfa metin boyutu (px)"
+
+msgid "Panel blur (px)"
+msgstr "Panel bulanıklığı (px)"
+
+msgid "Panel color"
+msgstr "Panel rengi"
+
+msgid "Panel height (px)"
+msgstr "Panel yüksekliği (px)"
+
+msgid "Panel hover effect"
+msgstr "Panel vurgulu efekti"
+
+msgid "Panel opacity (%)"
+msgstr "Panel opaklığı (%)"
+
+msgid "Panel & split styling"
+msgstr "Panel ve bölünmüş stil"
+
+msgid "Panel width (px)"
+msgstr "Panel genişliği (px)"
+
+msgid "Password icon"
+msgstr "Şifre simgesi"
+
+msgid "Pick a custom color"
+msgstr "Özel bir renk seçin"
+
+msgid "Pick a layout and visual treatments for the GLPI login page."
+msgstr "GLPI giriş sayfası için bir düzen ve görsel düzenlemeler seçin."
+
+msgid "Pill"
+msgstr "Hap"
+
+msgid "Position"
+msgstr "Konum"
+
+msgid "Preset palette"
+msgstr "Ön ayarlı palet"
+
+msgid "Press on hover"
+msgstr "Fareyle üzerine gelindiğinde basın"
+
+msgid "Primary (default)"
+msgstr "Birincil (varsayılan)"
+
+msgid "Recommended: 1920x1080 or larger."
+msgstr "Önerilen: 1920x1080 veya daha büyük."
+
+msgid "Right"
+msgstr "Sağ"
+
+msgid "Rounded"
+msgstr "Yuvarlak"
+
+msgid "Save login page"
+msgstr "Giriş sayfasını kaydet"
+
+msgid "Scroll"
+msgstr "Taslak"
+
+msgid "Secondary"
+msgstr "İkincil"
+
+msgid "Sharp edges with a confident shadow."
+msgstr "Kendinden emin bir gölgeye sahip keskin kenarlar."
+
+msgid "Shield"
+msgstr "Kalkan"
+
+msgid "Size"
+msgstr "Boyut"
+
+msgid "Soft depth"
+msgstr "Yumuşak derinlik"
+
+msgid "Soft shadow"
+msgstr "Yumuşak gölge"
+
+msgid "Solid"
+msgstr "Sağlam"
+
+msgid "Split blur (px)"
+msgstr "Bulanıklığı böl (px)"
+
+msgid "Split color"
+msgstr "Bölünmüş renk"
+
+msgid "Split left"
+msgstr "Sola böl"
+
+msgid "Split opacity (%)"
+msgstr "Bölünmüş opaklık (%)"
+
+msgid "Split right"
+msgstr "Sağa böl"
+
+msgid "Split width (%)"
+msgstr "Bölünmüş genişlik (%)"
+
+msgid "Square"
+msgstr "Kare"
+
+msgid "Stretch"
+msgstr "Uzatmak"
+
+msgid "Success"
+msgstr "Başarı"
+
+msgid "Text color"
+msgstr "Metin rengi"
+
+msgid "Title text size (px)"
+msgstr "Başlık metni boyutu (px)"
+
+msgid "Top"
+msgstr "Tepe"
+
+msgid "Transparent panel"
+msgstr "Şeffaf panel"
+
+msgid "Underline"
+msgstr "Altı çizili"
+
+msgid "Upload wallpaper"
+msgstr "Duvar kağıdı yükle"
+
+msgid "Use button color"
+msgstr "Düğme rengini kullan"
+
+msgid "User"
+msgstr "Kullanıcı"
+
+msgid "Wallpaper"
+msgstr "Duvar kağıdı"
+
+msgid "Warning"
+msgstr "Uyarı"
+
+msgid "Yes"
+msgstr "Evet"
+
+msgid "Yes (enable)"
+msgstr "Evet (etkinleştir)"
+
+msgid "Yes (hide panel)"
+msgstr "Evet (paneli gizle)"
+
+msgid ""
+"Light mode logos: used when the system is in light mode, ensuring good "
+"visibility on white or light backgrounds."
+msgstr ""
+"Işık modu logoları: sistem ışık modundayken kullanılır ve beyaz veya açık "
+"renkli arka planlarda iyi görünürlük sağlar."
+
+msgid ""
+"Dark mode logos: used when the system is in dark mode, ensuring contrast and "
+"readability on black or dark backgrounds."
+msgstr ""
+"Karanlık mod logoları: sistem karanlık moddayken kullanılır ve siyah veya "
+"koyu arka planlarda kontrast ve okunabilirlik sağlar."
+
+msgid ""
+"The favicon is the small icon that appears in the browser tab (and also in "
+"bookmarks)."
+msgstr ""
+"Favicon, tarayıcı sekmesinde (ve ayrıca yer imlerinde) görünen küçük "
+"simgedir."
+
+msgid ""
+"Expanded menu logo: the logo displayed when the sidebar menu is open, with "
+"more space available."
+msgstr ""
+"Genişletilmiş menü logosu: Kenar çubuğu menüsü açıldığında daha fazla alanla "
+"görüntülenen logo."
+
+msgid ""
+"Collapsed menu logo: the logo displayed when the sidebar menu is collapsed, "
+"so it needs to be a more compact version."
+msgstr ""
+"Daraltılmış menü logosu: Kenar çubuğu menüsü daraltıldığında görüntülenen "
+"logo, bu nedenle daha kompakt bir versiyon olması gerekiyor."
+
+msgid ""
+"Login page logo: the logo displayed on the login screen before the user "
+"enters the system."
+msgstr ""
+"Giriş sayfası logosu: Kullanıcı sisteme girmeden önce giriş ekranında "
+"görüntülenen logo."
+
+msgid "Logo size (%)"
+msgstr "Logo boyutu (%)"
+
+msgid "Favicon active"
+msgstr "Site simgesi etkin"
+
+msgid "Button"
+msgstr "Düğme"
+
+msgid "Wallpaper source"
+msgstr "Duvar kağıdı kaynağı"
+
+msgid "Preset wallpaper"
+msgstr "Önceden ayarlanmış duvar kağıdı"
+
+msgid "Attachment"
+msgstr "EK"
+
+msgid "Button shape"
+msgstr "Düğme şekli"
+
+msgid "Button fill style"
+msgstr "Düğme doldurma stili"
+
+msgid "Button text size (px)"
+msgstr "Düğme metni boyutu (px)"
+
+msgid "Color mode"
+msgstr "Renk modu"
+
+msgid "GLPI logo configuration"
+msgstr "GLPI logo yapılandırması"
+
+msgid ""
+"Upload logos that will replace the default GLPI assets using CSS variables."
+msgstr ""
+"CSS değişkenlerini kullanarak varsayılan GLPI varlıklarının yerini alacak "
+"logoları yükleyin."
+
+msgid "Expanded menu logo size (%)"
+msgstr "Genişletilmiş menü logosu boyutu (%)"
+
+msgid "Collapsed menu logo size (%)"
+msgstr "Daraltılmış menü logosu boyutu (%)"
+
+msgid "Favicon (browser tab)"
+msgstr "Favicon (tarayıcı sekmesi)"
+
+msgid "Field height (px)"
+msgstr "Alan yüksekliği (px)"
+
+msgid "Preset wallpapers"
+msgstr "Önceden ayarlanmış duvar kağıtları"
+
+msgid "Custom upload"
+msgstr "Özel yükleme"
+
+msgid "Classic centered"
+msgstr "Klasik merkezli"
+
+msgid "Above panel"
+msgstr "Panelin üstünde"
+
+msgid "No"
+msgstr "HAYIR"
+
+msgid "Default fill"
+msgstr "Varsayılan dolgu"
+
+msgid "Custom color"
+msgstr "Özel renk"
+
+msgid "Accent color"
+msgstr "Vurgu rengi"
+
+msgid "Turn GLPI into a showcase for your brand in just a few clicks."
+msgstr "Sadece birkaç tıklamayla GLPI'ı markanız için bir vitrine dönüştürün."
+
+msgid "About"
+msgstr "Hakkında"
+
+msgid "GLPI logos"
+msgstr "GLPI logoları"
+
+msgid "Login Page"
+msgstr "Giriş Sayfası"
+
+msgid "Premium"
+msgstr "Premium"
+
+msgid "Brandkit by Marcati"
+msgstr "Brandkit yazan Marcati"
+
+msgid "The visual evolution of your GLPI starts here."
+msgstr "GLPI cihazınızın görsel gelişimi burada başlıyor."
+
+msgid ""
+"Brandkit delivers logos, login screens, and colors aligned with your "
+"identity. No CSS, no effort, just professional results."
+msgstr ""
+"Brandkit kimliğinizle uyumlu logolar, giriş ekranları ve renkler sunar. "
+"Hayır CSS, çaba yok, sadece profesyonel sonuçlar."
+
+msgid "Discover Marcati at"
+msgstr "Marcati'yi şu adreste keşfedin:"
+
+msgid "Meet Marcati"
+msgstr "Marcati ile tanışın"
+
+msgid "Consistent logos"
+msgstr "Tutarlı logolar"
+
+msgid "Ready uploads for header, favicon, and login."
+msgstr "Başlık, site simgesi ve oturum açma için hazır yüklemeler."
+
+msgid "Login with presence"
+msgstr "Varlıkla giriş yap"
+
+msgid ""
+"Pick layouts, colors, and effects for an authentication screen that sells "
+"your brand."
+msgstr ""
+"Markanızı satan bir kimlik doğrulama ekranı için düzenleri, renkleri ve "
+"efektleri seçin."
+
+msgid "Fast delivery"
+msgstr "Hızlı teslimat"
+
+msgid "Settings saved directly in GLPI to activate branding without rework."
+msgstr ""
+"Yeniden işleme gerek kalmadan markalamayı etkinleştirmek için ayarlar "
+"doğrudan GLPI'ye kaydedildi."
+
+msgid "Custom hex color"
+msgstr "Özel altıgen rengi"
+
+msgid "Save logo sizes"
+msgstr "Logo boyutlarını kaydet"
+
+msgid "Restore defaults"
+msgstr "Restore defaults"
+
+msgid "Expanded menu logo"
+msgstr "Genişletilmiş menü logosu"
+
+msgid "Collapsed menu logo"
+msgstr "Daraltılmış menü logosu"
+
+msgid "Login logo"
+msgstr "Giriş logosu"
+
+msgid "No custom logo uploaded yet."
+msgstr "Henüz özel bir logo yüklenmedi."
+
+msgid "No favicon yet"
+msgstr "Henüz favicon yok"
+
+msgid "Field width (px)"
+msgstr "Alan genişliği (px)"
+
+msgid "Light mode logos"
+msgstr "Açık mod logoları"
+
+msgid "Dark mode logos"
+msgstr "Koyu mod logoları"
+
+msgid "Favicon"
+msgstr "Favicon"
+
+msgid "Upload logo"
+msgstr "Logo yükle"
+
+msgid "Remove logo"
+msgstr "Logoyu kaldır"
+
+msgid "No custom favicon uploaded yet."
+msgstr "Henüz özel bir favicon yüklenmedi."
+
+msgid "Expanded menu logo (dark mode)"
+msgstr "Genişletilmiş menü logosu (koyu mod)"
+
+msgid "Collapsed menu logo (dark mode)"
+msgstr "Daraltılmış menü logosu (koyu mod)"
+

@@ -1,0 +1,542 @@
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: brandkit\n"
+"Language: fi_FI\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "Dynamic cut for a bolder call-to-action."
+msgstr "Dynaaminen leikkaus rohkeampaan toimintakehotukseen."
+
+msgid "Email"
+msgstr "Sähköposti"
+
+msgid "Field background"
+msgstr "Kenttä tausta"
+
+msgid "Field border"
+msgstr "Kentän raja"
+
+msgid "Field border width (px)"
+msgstr "Kentän reunan leveys (px)"
+
+msgid "Field focus glow"
+msgstr "Kentän tarkennus hehku"
+
+msgid "Field icons"
+msgstr "Kentän kuvakkeet"
+
+msgid "Field radius (px)"
+msgstr "Kentän säde (px)"
+
+msgid "Fields"
+msgstr "Kentät"
+
+msgid "Field spacing (px)"
+msgstr "Kenttäväli (px)"
+
+msgid "Field style"
+msgstr "Kenttätyyli"
+
+msgid "Field text"
+msgstr "Kentän teksti"
+
+msgid "Field text size (px)"
+msgstr "Kentän tekstin koko (px)"
+
+msgid "Fill with color"
+msgstr "Täytä värillä"
+
+msgid "Fixed"
+msgstr "Korjattu"
+
+msgid "Friendly, fully rounded shape."
+msgstr "Ystävällinen, täysin pyöristetty muoto."
+
+msgid "Glass blur"
+msgstr "Lasi hämärtää"
+
+msgid "Hide login text"
+msgstr "Piilota kirjautumisteksti"
+
+msgid "Hover effect"
+msgstr "Hover-tehoste"
+
+msgid "Hover fill custom color"
+msgstr "Vie hiiri täyttö mukautettu väri"
+
+msgid "Hover text color"
+msgstr "Vie hiiri tekstin väri"
+
+msgid "Icon color"
+msgstr "Ikonin väri"
+
+msgid "Icon position"
+msgstr "Kuvakkeen sijainti"
+
+msgid "ID card"
+msgstr "henkilökortti"
+
+msgid "Info"
+msgstr "Tiedot"
+
+msgid "Inside panel"
+msgstr "Sisäpaneeli"
+
+msgid "Key"
+msgstr "Avain"
+
+msgid "Layout"
+msgstr "Layout"
+
+msgid "Layout & logo"
+msgstr "Ulkoasu & logo"
+
+msgid "Left"
+msgstr "Vasen"
+
+msgid "Light"
+msgstr "Kevyt"
+
+msgid "Lock"
+msgstr "Lukko"
+
+msgid "Login icon"
+msgstr "Kirjautumiskuvake"
+
+msgid "Login logo size (px)"
+msgstr "Kirjautumislogon koko (px)"
+
+msgid "Login page configuration"
+msgstr "Kirjautumissivun asetukset"
+
+msgid "Logo offset from top (px)"
+msgstr "Logo siirtynyt ylhäältä (px)"
+
+msgid "Logo position"
+msgstr "Logon sijainti"
+
+msgid "Neon glow"
+msgstr "Neon hehku"
+
+msgid "No (disable)"
+msgstr "Ei (poista käytöstä)"
+
+msgid "None"
+msgstr "Ei mitään"
+
+msgid "No (show panel)"
+msgstr "Ei (näytä paneeli)"
+
+msgid "Original size"
+msgstr "Alkuperäinen koko"
+
+msgid "Outline"
+msgstr "Outline"
+
+msgid "Outline danger"
+msgstr "Piirrä vaara"
+
+msgid "Outline dark"
+msgstr "Ääriviivat tumma"
+
+msgid "Outline info"
+msgstr "Esittelytiedot"
+
+msgid "Outline only"
+msgstr "Vain ääriviivat"
+
+msgid "Outline primary"
+msgstr "Esittele ensisijainen"
+
+msgid "Outline secondary"
+msgstr "Outline toissijainen"
+
+msgid "Outline success"
+msgstr "Kuvaa menestystä"
+
+msgid "Outline warning"
+msgstr "Ääriviivavaroitus"
+
+msgid "Overlay color"
+msgstr "Päällystyksen väri"
+
+msgid "Overlay opacity (%)"
+msgstr "Peittokuvan peittävyys (%)"
+
+msgid "Page text size (px)"
+msgstr "Sivun tekstin koko (px)"
+
+msgid "Panel blur (px)"
+msgstr "Paneelin sumennus (px)"
+
+msgid "Panel color"
+msgstr "Paneelin väri"
+
+msgid "Panel height (px)"
+msgstr "Paneelin korkeus (px)"
+
+msgid "Panel hover effect"
+msgstr "Paneelin hover-tehoste"
+
+msgid "Panel opacity (%)"
+msgstr "Paneelin peittävyys (%)"
+
+msgid "Panel & split styling"
+msgstr "Paneeli ja jaettu muotoilu"
+
+msgid "Panel width (px)"
+msgstr "Paneelin leveys (px)"
+
+msgid "Password icon"
+msgstr "Salasana-kuvake"
+
+msgid "Pick a custom color"
+msgstr "Valitse mukautettu väri"
+
+msgid "Pick a layout and visual treatments for the GLPI login page."
+msgstr "Valitse GLPI kirjautumissivun asettelu ja visuaaliset käsittelyt."
+
+msgid "Pill"
+msgstr "Pilleri"
+
+msgid "Position"
+msgstr "asema"
+
+msgid "Preset palette"
+msgstr "Esiasetettu paletti"
+
+msgid "Press on hover"
+msgstr "Paina osoitinta"
+
+msgid "Primary (default)"
+msgstr "Ensisijainen (oletus)"
+
+msgid "Recommended: 1920x1080 or larger."
+msgstr "Suositus: 1920x1080 tai suurempi."
+
+msgid "Right"
+msgstr "Oikein"
+
+msgid "Rounded"
+msgstr "Pyöristetty"
+
+msgid "Save login page"
+msgstr "Tallenna kirjautumissivu"
+
+msgid "Scroll"
+msgstr "Selaa"
+
+msgid "Secondary"
+msgstr "Toissijainen"
+
+msgid "Sharp edges with a confident shadow."
+msgstr "Terävät reunat varjolla."
+
+msgid "Shield"
+msgstr "Kilpi"
+
+msgid "Size"
+msgstr "Koko"
+
+msgid "Soft depth"
+msgstr "Pehmeä syvyys"
+
+msgid "Soft shadow"
+msgstr "Pehmeä varjo"
+
+msgid "Solid"
+msgstr "Kiinteä"
+
+msgid "Split blur (px)"
+msgstr "Jaettu sumennus (px)"
+
+msgid "Split color"
+msgstr "Jaettu väri"
+
+msgid "Split left"
+msgstr "Jaa vasemmalle"
+
+msgid "Split opacity (%)"
+msgstr "Jaettu opasiteetti (%)"
+
+msgid "Split right"
+msgstr "Jaa oikealle"
+
+msgid "Split width (%)"
+msgstr "Halon leveys (%)"
+
+msgid "Square"
+msgstr "Neliö"
+
+msgid "Stretch"
+msgstr "Venyttää"
+
+msgid "Success"
+msgstr "Menestys"
+
+msgid "Text color"
+msgstr "Tekstin väri"
+
+msgid "Title text size (px)"
+msgstr "Otsikon tekstin koko (px)"
+
+msgid "Top"
+msgstr "Ylös"
+
+msgid "Transparent panel"
+msgstr "Läpinäkyvä paneeli"
+
+msgid "Underline"
+msgstr "Korostaa"
+
+msgid "Upload wallpaper"
+msgstr "Lataa taustakuva"
+
+msgid "Use button color"
+msgstr "Käytä painikkeen väriä"
+
+msgid "User"
+msgstr "Käyttäjä"
+
+msgid "Wallpaper"
+msgstr "Taustakuva"
+
+msgid "Warning"
+msgstr "Varoitus"
+
+msgid "Yes"
+msgstr "Kyllä"
+
+msgid "Yes (enable)"
+msgstr "Kyllä (käytössä)"
+
+msgid "Yes (hide panel)"
+msgstr "Kyllä (piilota paneeli)"
+
+msgid ""
+"Light mode logos: used when the system is in light mode, ensuring good "
+"visibility on white or light backgrounds."
+msgstr ""
+"Light mode -logot: käytetään, kun järjestelmä on valotilassa, mikä takaa "
+"hyvän näkyvyyden valkoisella tai vaalealla taustalla."
+
+msgid ""
+"Dark mode logos: used when the system is in dark mode, ensuring contrast and "
+"readability on black or dark backgrounds."
+msgstr ""
+"Tumman tilan logot: käytetään, kun järjestelmä on pimeässä tilassa, mikä "
+"varmistaa kontrastin ja luettavuuden mustalla tai tummalla taustalla."
+
+msgid ""
+"The favicon is the small icon that appears in the browser tab (and also in "
+"bookmarks)."
+msgstr ""
+"Favicon on pieni kuvake, joka näkyy selaimen välilehdessä (ja myös "
+"kirjanmerkeissä)."
+
+msgid ""
+"Expanded menu logo: the logo displayed when the sidebar menu is open, with "
+"more space available."
+msgstr ""
+"Laajennetun valikon logo: logo, joka näytetään, kun sivupalkin valikko on "
+"auki, jolloin tilaa on enemmän."
+
+msgid ""
+"Collapsed menu logo: the logo displayed when the sidebar menu is collapsed, "
+"so it needs to be a more compact version."
+msgstr ""
+"Tiivistetyn valikon logo: logo, joka näytetään, kun sivupalkin valikko on "
+"tiivistetty, joten sen on oltava kompaktimpi versio."
+
+msgid ""
+"Login page logo: the logo displayed on the login screen before the user "
+"enters the system."
+msgstr ""
+"Kirjautumissivun logo: logo, joka näkyy kirjautumisnäytössä ennen kuin "
+"käyttäjä tulee järjestelmään."
+
+msgid "Logo size (%)"
+msgstr "Logon koko (%)"
+
+msgid "Favicon active"
+msgstr "Favicon aktiivinen"
+
+msgid "Button"
+msgstr "Painike"
+
+msgid "Wallpaper source"
+msgstr "Taustakuvan lähde"
+
+msgid "Preset wallpaper"
+msgstr "Esiasetettu taustakuva"
+
+msgid "Attachment"
+msgstr "Liite"
+
+msgid "Button shape"
+msgstr "Napin muoto"
+
+msgid "Button fill style"
+msgstr "Painikkeen täyttötyyli"
+
+msgid "Button text size (px)"
+msgstr "Painikkeen tekstin koko (px)"
+
+msgid "Color mode"
+msgstr "Väritila"
+
+msgid "GLPI logo configuration"
+msgstr "GLPI logon määritys"
+
+msgid ""
+"Upload logos that will replace the default GLPI assets using CSS variables."
+msgstr ""
+"Lataa logoja, jotka korvaavat oletusarvoisen GLPI-sisällön CSS-muuttujien "
+"avulla."
+
+msgid "Expanded menu logo size (%)"
+msgstr "Laajennetun valikon logon koko (%)"
+
+msgid "Collapsed menu logo size (%)"
+msgstr "Tiivistetyn valikon logon koko (%)"
+
+msgid "Favicon (browser tab)"
+msgstr "Favicon (selain-välilehti)"
+
+msgid "Field height (px)"
+msgstr "Kentän korkeus (px)"
+
+msgid "Preset wallpapers"
+msgstr "Esiasetetut taustakuvat"
+
+msgid "Custom upload"
+msgstr "Mukautettu lataus"
+
+msgid "Classic centered"
+msgstr "Klassinen keskitetty"
+
+msgid "Above panel"
+msgstr "Paneelin yläpuolella"
+
+msgid "No"
+msgstr "Ei"
+
+msgid "Default fill"
+msgstr "Oletustäyttö"
+
+msgid "Custom color"
+msgstr "Mukautettu väri"
+
+msgid "Accent color"
+msgstr "Aksenttiväri"
+
+msgid "Turn GLPI into a showcase for your brand in just a few clicks."
+msgstr "Muuta GLPI brändisi esittelytilaksi muutamalla napsautuksella."
+
+msgid "About"
+msgstr "Noin"
+
+msgid "GLPI logos"
+msgstr "GLPI logot"
+
+msgid "Login Page"
+msgstr "Kirjautumissivu"
+
+msgid "Premium"
+msgstr "Premium"
+
+msgid "Brandkit by Marcati"
+msgstr "Brandkit tekijältä Marcati"
+
+msgid "The visual evolution of your GLPI starts here."
+msgstr "Laitteesi GLPI visuaalinen kehitys alkaa tästä."
+
+msgid ""
+"Brandkit delivers logos, login screens, and colors aligned with your "
+"identity. No CSS, no effort, just professional results."
+msgstr ""
+"Brandkit toimittaa logoja, kirjautumisnäyttöjä ja värejä identiteettisi "
+"mukaan. Ei CSS, ei vaivaa, vain ammattimaisia ​​tuloksia."
+
+msgid "Discover Marcati at"
+msgstr "Tutustu Marcati osoitteessa"
+
+msgid "Meet Marcati"
+msgstr "Tapaa Marcati"
+
+msgid "Consistent logos"
+msgstr "Yhdenmukaiset logot"
+
+msgid "Ready uploads for header, favicon, and login."
+msgstr "Valmiit lataukset otsikoille, faviconille ja kirjautumiselle."
+
+msgid "Login with presence"
+msgstr "Kirjaudu sisään läsnäololla"
+
+msgid ""
+"Pick layouts, colors, and effects for an authentication screen that sells "
+"your brand."
+msgstr ""
+"Valitse asettelut, värit ja tehosteet todennusnäytölle, joka myy brändiäsi."
+
+msgid "Fast delivery"
+msgstr "Nopea toimitus"
+
+msgid "Settings saved directly in GLPI to activate branding without rework."
+msgstr ""
+"Asetukset on tallennettu suoraan kansioon GLPI, jotta brändäys voidaan "
+"aktivoida ilman uudelleenkäsittelyä."
+
+msgid "Custom hex color"
+msgstr "Mukautettu kuusioväri"
+
+msgid "Save logo sizes"
+msgstr "Tallenna logokoot"
+
+msgid "Restore defaults"
+msgstr "Restore defaults"
+
+msgid "Expanded menu logo"
+msgstr "Laajennetun valikon logo"
+
+msgid "Collapsed menu logo"
+msgstr "Supistetun valikon logo"
+
+msgid "Login logo"
+msgstr "Kirjautumislogo"
+
+msgid "No custom logo uploaded yet."
+msgstr "Mukautettua logoa ei ole vielä ladattu."
+
+msgid "No favicon yet"
+msgstr "Ei faviconia vielä"
+
+msgid "Field width (px)"
+msgstr "Kentän leveys (px)"
+
+msgid "Light mode logos"
+msgstr "Vaalean tilan logot"
+
+msgid "Dark mode logos"
+msgstr "Tumman tilan logot"
+
+msgid "Favicon"
+msgstr "Favicon"
+
+msgid "Upload logo"
+msgstr "Lataa logo"
+
+msgid "Remove logo"
+msgstr "Poista logo"
+
+msgid "No custom favicon uploaded yet."
+msgstr "Mukautettua faviconia ei ole vielä ladattu."
+
+msgid "Expanded menu logo (dark mode)"
+msgstr "Laajennetun valikon logo (tumma tila)"
+
+msgid "Collapsed menu logo (dark mode)"
+msgstr "Supistetun valikon logo (tumma tila)"
+

@@ -1,0 +1,547 @@
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: brandkit\n"
+"Language: el_GR\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "Dynamic cut for a bolder call-to-action."
+msgstr "Δυναμική κοπή για πιο τολμηρή παρότρυνση για δράση."
+
+msgid "Email"
+msgstr "E-mail"
+
+msgid "Field background"
+msgstr "Φόντο πεδίου"
+
+msgid "Field border"
+msgstr "Περίγραμμα πεδίου"
+
+msgid "Field border width (px)"
+msgstr "Πλάτος περιγράμματος πεδίου (px)"
+
+msgid "Field focus glow"
+msgstr "Λάμψη εστίασης πεδίου"
+
+msgid "Field icons"
+msgstr "Εικονίδια πεδίου"
+
+msgid "Field radius (px)"
+msgstr "Ακτίνα πεδίου (px)"
+
+msgid "Fields"
+msgstr "Πεδία"
+
+msgid "Field spacing (px)"
+msgstr "Διάστιχο πεδίων (px)"
+
+msgid "Field style"
+msgstr "Στυλ πεδίου"
+
+msgid "Field text"
+msgstr "Κείμενο πεδίου"
+
+msgid "Field text size (px)"
+msgstr "Μέγεθος κειμένου πεδίου (px)"
+
+msgid "Fill with color"
+msgstr "Γεμίστε με χρώμα"
+
+msgid "Fixed"
+msgstr "Σταθερός"
+
+msgid "Friendly, fully rounded shape."
+msgstr "Φιλικό, πλήρως στρογγυλεμένο σχήμα."
+
+msgid "Glass blur"
+msgstr "Θάμπωμα γυαλιού"
+
+msgid "Hide login text"
+msgstr "Απόκρυψη κειμένου σύνδεσης"
+
+msgid "Hover effect"
+msgstr "Εφέ αιώρησης"
+
+msgid "Hover fill custom color"
+msgstr "Τοποθετήστε το δείκτη του ποντικιού προσαρμοσμένο χρώμα γεμίσματος"
+
+msgid "Hover text color"
+msgstr "Τοποθετήστε το χρώμα του κειμένου"
+
+msgid "Icon color"
+msgstr "Χρώμα εικονιδίου"
+
+msgid "Icon position"
+msgstr "Θέση εικονιδίου"
+
+msgid "ID card"
+msgstr "δελτίο ταυτότητας"
+
+msgid "Info"
+msgstr "Πληροφορίες"
+
+msgid "Inside panel"
+msgstr "Εσωτερικό πάνελ"
+
+msgid "Key"
+msgstr "Κλειδί"
+
+msgid "Layout"
+msgstr "Σχέδιο"
+
+msgid "Layout & logo"
+msgstr "Διάταξη & λογότυπο"
+
+msgid "Left"
+msgstr "Αριστερά"
+
+msgid "Light"
+msgstr "Φως"
+
+msgid "Lock"
+msgstr "Κλειδαριά"
+
+msgid "Login icon"
+msgstr "Εικονίδιο σύνδεσης"
+
+msgid "Login logo size (px)"
+msgstr "Μέγεθος λογότυπου σύνδεσης (px)"
+
+msgid "Login page configuration"
+msgstr "Διαμόρφωση σελίδας σύνδεσης"
+
+msgid "Logo offset from top (px)"
+msgstr "Μετατόπιση λογότυπου από πάνω (px)"
+
+msgid "Logo position"
+msgstr "Θέση λογότυπου"
+
+msgid "Neon glow"
+msgstr "Λάμψη νέον"
+
+msgid "No (disable)"
+msgstr "Όχι (απενεργοποίηση)"
+
+msgid "None"
+msgstr "Κανένας"
+
+msgid "No (show panel)"
+msgstr "Όχι (εμφάνιση πίνακα)"
+
+msgid "Original size"
+msgstr "Αρχικό μέγεθος"
+
+msgid "Outline"
+msgstr "Περίγραμμα"
+
+msgid "Outline danger"
+msgstr "Περιγράψτε τον κίνδυνο"
+
+msgid "Outline dark"
+msgstr "Σκούρο περίγραμμα"
+
+msgid "Outline info"
+msgstr "Περιγραφή πληροφοριών"
+
+msgid "Outline only"
+msgstr "Μόνο περίγραμμα"
+
+msgid "Outline primary"
+msgstr "Περίγραμμα πρωτοβάθμιας"
+
+msgid "Outline secondary"
+msgstr "Περίγραμμα δευτερεύον"
+
+msgid "Outline success"
+msgstr "Περιγράψτε την επιτυχία"
+
+msgid "Outline warning"
+msgstr "Προειδοποίηση περίγραμμα"
+
+msgid "Overlay color"
+msgstr "Χρώμα επικάλυψης"
+
+msgid "Overlay opacity (%)"
+msgstr "Αδιαφάνεια επικάλυψης (%)"
+
+msgid "Page text size (px)"
+msgstr "Μέγεθος κειμένου σελίδας (px)"
+
+msgid "Panel blur (px)"
+msgstr "Θάμπωμα πίνακα (px)"
+
+msgid "Panel color"
+msgstr "Χρώμα πάνελ"
+
+msgid "Panel height (px)"
+msgstr "Ύψος πίνακα (px)"
+
+msgid "Panel hover effect"
+msgstr "Εφέ αιώρησης πίνακα"
+
+msgid "Panel opacity (%)"
+msgstr "Αδιαφάνεια πίνακα (%)"
+
+msgid "Panel & split styling"
+msgstr "Στιλ πάνελ & split"
+
+msgid "Panel width (px)"
+msgstr "Πλάτος πίνακα (px)"
+
+msgid "Password icon"
+msgstr "εικονίδιο κωδικού πρόσβασης"
+
+msgid "Pick a custom color"
+msgstr "Επιλέξτε ένα προσαρμοσμένο χρώμα"
+
+msgid "Pick a layout and visual treatments for the GLPI login page."
+msgstr ""
+"Επιλέξτε μια διάταξη και οπτικές επεξεργασίες για τη σελίδα σύνδεσης GLPI."
+
+msgid "Pill"
+msgstr "Χάπι"
+
+msgid "Position"
+msgstr "Θέση"
+
+msgid "Preset palette"
+msgstr "Προκαθορισμένη παλέτα"
+
+msgid "Press on hover"
+msgstr "Πατήστε το δείκτη του ποντικιού"
+
+msgid "Primary (default)"
+msgstr "Κύριο (προεπιλογή)"
+
+msgid "Recommended: 1920x1080 or larger."
+msgstr "Συνιστάται: 1920x1080 ή μεγαλύτερο."
+
+msgid "Right"
+msgstr "Δικαίωμα"
+
+msgid "Rounded"
+msgstr "Στρογγυλεμένο"
+
+msgid "Save login page"
+msgstr "Αποθήκευση σελίδας σύνδεσης"
+
+msgid "Scroll"
+msgstr "Πάπυρος"
+
+msgid "Secondary"
+msgstr "Δευτερεύων"
+
+msgid "Sharp edges with a confident shadow."
+msgstr "Αιχμηρές άκρες με σίγουρη σκιά."
+
+msgid "Shield"
+msgstr "Ασπίδα"
+
+msgid "Size"
+msgstr "Μέγεθος"
+
+msgid "Soft depth"
+msgstr "Μαλακό βάθος"
+
+msgid "Soft shadow"
+msgstr "Απαλή σκιά"
+
+msgid "Solid"
+msgstr "Στερεός"
+
+msgid "Split blur (px)"
+msgstr "Διαίρεση θαμπώματος (px)"
+
+msgid "Split color"
+msgstr "Χωρισμένο χρώμα"
+
+msgid "Split left"
+msgstr "Διαχωρίστε αριστερά"
+
+msgid "Split opacity (%)"
+msgstr "Διαίρεση αδιαφάνειας (%)"
+
+msgid "Split right"
+msgstr "Διαχωρίστε δεξιά"
+
+msgid "Split width (%)"
+msgstr "Διαίρεση πλάτους (%)"
+
+msgid "Square"
+msgstr "Πλατεία"
+
+msgid "Stretch"
+msgstr "Τέντωμα"
+
+msgid "Success"
+msgstr "Επιτυχία"
+
+msgid "Text color"
+msgstr "Χρώμα κειμένου"
+
+msgid "Title text size (px)"
+msgstr "Μέγεθος κειμένου τίτλου (px)"
+
+msgid "Top"
+msgstr "Κορυφή"
+
+msgid "Transparent panel"
+msgstr "Διαφανές πάνελ"
+
+msgid "Underline"
+msgstr "Υπογραμμίζω"
+
+msgid "Upload wallpaper"
+msgstr "Ανεβάστε ταπετσαρία"
+
+msgid "Use button color"
+msgstr "Χρησιμοποιήστε χρώμα κουμπιού"
+
+msgid "User"
+msgstr "Μεταχειριζόμενος"
+
+msgid "Wallpaper"
+msgstr "Ταπετσαρία"
+
+msgid "Warning"
+msgstr "Προειδοποίηση"
+
+msgid "Yes"
+msgstr "Ναί"
+
+msgid "Yes (enable)"
+msgstr "Ναι (ενεργοποίηση)"
+
+msgid "Yes (hide panel)"
+msgstr "Ναι (απόκρυψη πλαισίου)"
+
+msgid ""
+"Light mode logos: used when the system is in light mode, ensuring good "
+"visibility on white or light backgrounds."
+msgstr ""
+"Λογότυπα λειτουργίας φωτός: χρησιμοποιούνται όταν το σύστημα βρίσκεται σε "
+"λειτουργία φωτός, εξασφαλίζοντας καλή ορατότητα σε λευκό ή ανοιχτό φόντο."
+
+msgid ""
+"Dark mode logos: used when the system is in dark mode, ensuring contrast and "
+"readability on black or dark backgrounds."
+msgstr ""
+"Λογότυπα Dark mode: χρησιμοποιούνται όταν το σύστημα βρίσκεται σε σκοτεινή "
+"λειτουργία, εξασφαλίζοντας αντίθεση και αναγνωσιμότητα σε μαύρο ή σκούρο "
+"φόντο."
+
+msgid ""
+"The favicon is the small icon that appears in the browser tab (and also in "
+"bookmarks)."
+msgstr ""
+"Το favicon είναι το μικρό εικονίδιο που εμφανίζεται στην καρτέλα του "
+"προγράμματος περιήγησης (και επίσης στους σελιδοδείκτες)."
+
+msgid ""
+"Expanded menu logo: the logo displayed when the sidebar menu is open, with "
+"more space available."
+msgstr ""
+"Λογότυπο διευρυμένου μενού: το λογότυπο που εμφανίζεται όταν είναι ανοιχτό "
+"το μενού της πλευρικής γραμμής, με περισσότερο διαθέσιμο χώρο."
+
+msgid ""
+"Collapsed menu logo: the logo displayed when the sidebar menu is collapsed, "
+"so it needs to be a more compact version."
+msgstr ""
+"Λογότυπο συμπτυγμένου μενού: το λογότυπο που εμφανίζεται όταν το μενού της "
+"πλευρικής γραμμής συμπτύσσεται, επομένως πρέπει να είναι μια πιο συμπαγής "
+"έκδοση."
+
+msgid ""
+"Login page logo: the logo displayed on the login screen before the user "
+"enters the system."
+msgstr ""
+"Λογότυπο σελίδας σύνδεσης: το λογότυπο που εμφανίζεται στην οθόνη σύνδεσης "
+"πριν ο χρήστης εισέλθει στο σύστημα."
+
+msgid "Logo size (%)"
+msgstr "Μέγεθος λογότυπου (%)"
+
+msgid "Favicon active"
+msgstr "Favicon ενεργό"
+
+msgid "Button"
+msgstr "Κουμπί"
+
+msgid "Wallpaper source"
+msgstr "Πηγή ταπετσαρίας"
+
+msgid "Preset wallpaper"
+msgstr "Προκαθορισμένη ταπετσαρία"
+
+msgid "Attachment"
+msgstr "Προσάρτημα"
+
+msgid "Button shape"
+msgstr "Σχήμα κουμπιού"
+
+msgid "Button fill style"
+msgstr "Στυλ γεμίσματος κουμπιού"
+
+msgid "Button text size (px)"
+msgstr "Μέγεθος κειμένου κουμπιού (px)"
+
+msgid "Color mode"
+msgstr "Λειτουργία χρώματος"
+
+msgid "GLPI logo configuration"
+msgstr "Διαμόρφωση λογότυπου GLPI"
+
+msgid ""
+"Upload logos that will replace the default GLPI assets using CSS variables."
+msgstr ""
+"Μεταφορτώστε λογότυπα που θα αντικαταστήσουν τα προεπιλεγμένα στοιχεία GLPI "
+"χρησιμοποιώντας μεταβλητές CSS."
+
+msgid "Expanded menu logo size (%)"
+msgstr "Μέγεθος λογότυπου διευρυμένου μενού (%)"
+
+msgid "Collapsed menu logo size (%)"
+msgstr "Μέγεθος λογότυπου συμπτυγμένου μενού (%)"
+
+msgid "Favicon (browser tab)"
+msgstr "Favicon (καρτέλα προγράμματος περιήγησης)"
+
+msgid "Field height (px)"
+msgstr "Ύψος πεδίου (px)"
+
+msgid "Preset wallpapers"
+msgstr "Προκαθορισμένες ταπετσαρίες"
+
+msgid "Custom upload"
+msgstr "Προσαρμοσμένη μεταφόρτωση"
+
+msgid "Classic centered"
+msgstr "Κλασικό κέντρο"
+
+msgid "Above panel"
+msgstr "Πάνω πίνακας"
+
+msgid "No"
+msgstr "Οχι"
+
+msgid "Default fill"
+msgstr "Προεπιλεγμένη συμπλήρωση"
+
+msgid "Custom color"
+msgstr "Προσαρμοσμένο χρώμα"
+
+msgid "Accent color"
+msgstr "Χρώμα έμφασης"
+
+msgid "Turn GLPI into a showcase for your brand in just a few clicks."
+msgstr "Μετατρέψτε το GLPI σε βιτρίνα για την επωνυμία σας με λίγα μόνο κλικ."
+
+msgid "About"
+msgstr "Για"
+
+msgid "GLPI logos"
+msgstr "Λογότυπα GLPI"
+
+msgid "Login Page"
+msgstr "Σελίδα σύνδεσης"
+
+msgid "Premium"
+msgstr "Premium"
+
+msgid "Brandkit by Marcati"
+msgstr "Brandkit από Marcati"
+
+msgid "The visual evolution of your GLPI starts here."
+msgstr "Η οπτική εξέλιξη του GLPI σας ξεκινά εδώ."
+
+msgid ""
+"Brandkit delivers logos, login screens, and colors aligned with your "
+"identity. No CSS, no effort, just professional results."
+msgstr ""
+"Το Brandkit παρέχει λογότυπα, οθόνες σύνδεσης και χρώματα ευθυγραμμισμένα με "
+"την ταυτότητά σας. Όχι CSS, χωρίς προσπάθεια, μόνο επαγγελματικά "
+"αποτελέσματα."
+
+msgid "Discover Marcati at"
+msgstr "Ανακαλύψτε Marcati στο"
+
+msgid "Meet Marcati"
+msgstr "Γνωρίστε Marcati"
+
+msgid "Consistent logos"
+msgstr "Συνεπή λογότυπα"
+
+msgid "Ready uploads for header, favicon, and login."
+msgstr "Έτοιμες μεταφορτώσεις για κεφαλίδα, favicon και σύνδεση."
+
+msgid "Login with presence"
+msgstr "Είσοδος με παρουσία"
+
+msgid ""
+"Pick layouts, colors, and effects for an authentication screen that sells "
+"your brand."
+msgstr ""
+"Επιλέξτε διατάξεις, χρώματα και εφέ για μια οθόνη ελέγχου ταυτότητας που "
+"πουλά την επωνυμία σας."
+
+msgid "Fast delivery"
+msgstr "Γρήγορη παράδοση"
+
+msgid "Settings saved directly in GLPI to activate branding without rework."
+msgstr ""
+"Οι ρυθμίσεις αποθηκεύτηκαν απευθείας στο GLPI για να ενεργοποιηθεί η "
+"επωνυμία χωρίς νέα επεξεργασία."
+
+msgid "Custom hex color"
+msgstr "Προσαρμοσμένο εξάγωνο χρώμα"
+
+msgid "Save logo sizes"
+msgstr "Αποθηκεύστε μεγέθη λογότυπων"
+
+msgid "Restore defaults"
+msgstr "Restore defaults"
+
+msgid "Expanded menu logo"
+msgstr "Λογότυπο εκτεταμένου μενού"
+
+msgid "Collapsed menu logo"
+msgstr "Λογότυπο συμπτυγμένου μενού"
+
+msgid "Login logo"
+msgstr "Λογότυπο σύνδεσης"
+
+msgid "No custom logo uploaded yet."
+msgstr "Δεν έχει μεταφορτωθεί ακόμη προσαρμοσμένο λογότυπο."
+
+msgid "No favicon yet"
+msgstr "Δεν υπάρχει ακόμη favicon"
+
+msgid "Field width (px)"
+msgstr "Πλάτος πεδίου (px)"
+
+msgid "Light mode logos"
+msgstr "Λογότυπα φωτεινής λειτουργίας"
+
+msgid "Dark mode logos"
+msgstr "Λογότυπα σκοτεινής λειτουργίας"
+
+msgid "Favicon"
+msgstr "Εικονίδιο ιστότοπου"
+
+msgid "Upload logo"
+msgstr "Μεταφόρτωση λογότυπου"
+
+msgid "Remove logo"
+msgstr "Αφαίρεση λογότυπου"
+
+msgid "No custom favicon uploaded yet."
+msgstr "Δεν έχει μεταφορτωθεί ακόμη προσαρμοσμένο favicon."
+
+msgid "Expanded menu logo (dark mode)"
+msgstr "Λογότυπο αναπτυγμένου μενού (σκοτεινή λειτουργία)"
+
+msgid "Collapsed menu logo (dark mode)"
+msgstr "Λογότυπο συμπτυγμένου μενού (σκοτεινή λειτουργία)"
+

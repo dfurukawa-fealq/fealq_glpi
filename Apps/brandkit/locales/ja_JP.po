@@ -1,0 +1,541 @@
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: brandkit\n"
+"Language: ja_JP\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "Dynamic cut for a bolder call-to-action."
+msgstr "より大胆な行動喚起のためのダイナミックなカット。"
+
+msgid "Email"
+msgstr "電子メール"
+
+msgid "Field background"
+msgstr "フィールドの背景"
+
+msgid "Field border"
+msgstr "畑の境界線"
+
+msgid "Field border width (px)"
+msgstr "フィールド境界線の幅 (px)"
+
+msgid "Field focus glow"
+msgstr "フィールドフォーカスグロー"
+
+msgid "Field icons"
+msgstr "フィールドアイコン"
+
+msgid "Field radius (px)"
+msgstr "フィールド半径 (px)"
+
+msgid "Fields"
+msgstr "フィールド"
+
+msgid "Field spacing (px)"
+msgstr "フィールド間隔 (px)"
+
+msgid "Field style"
+msgstr "フィールドスタイル"
+
+msgid "Field text"
+msgstr "フィールドテキスト"
+
+msgid "Field text size (px)"
+msgstr "フィールドのテキスト サイズ (px)"
+
+msgid "Fill with color"
+msgstr "色で塗りつぶす"
+
+msgid "Fixed"
+msgstr "修理済み"
+
+msgid "Friendly, fully rounded shape."
+msgstr "親しみやすい、丸みを帯びた形状。"
+
+msgid "Glass blur"
+msgstr "ガラスぼかし"
+
+msgid "Hide login text"
+msgstr "ログインテキストを隠す"
+
+msgid "Hover effect"
+msgstr "ホバー効果"
+
+msgid "Hover fill custom color"
+msgstr "ホバー塗りつぶしのカスタムカラー"
+
+msgid "Hover text color"
+msgstr "ホバーテキストの色"
+
+msgid "Icon color"
+msgstr "アイコンの色"
+
+msgid "Icon position"
+msgstr "アイコンの位置"
+
+msgid "ID card"
+msgstr "IDカード"
+
+msgid "Info"
+msgstr "情報"
+
+msgid "Inside panel"
+msgstr "内側パネル"
+
+msgid "Key"
+msgstr "鍵"
+
+msgid "Layout"
+msgstr "レイアウト"
+
+msgid "Layout & logo"
+msgstr "レイアウトとロゴ"
+
+msgid "Left"
+msgstr "左"
+
+msgid "Light"
+msgstr "ライト"
+
+msgid "Lock"
+msgstr "ロック"
+
+msgid "Login icon"
+msgstr "ログインアイコン"
+
+msgid "Login logo size (px)"
+msgstr "ログインロゴのサイズ (px)"
+
+msgid "Login page configuration"
+msgstr "ログインページの構成"
+
+msgid "Logo offset from top (px)"
+msgstr "ロゴの上からのオフセット (px)"
+
+msgid "Logo position"
+msgstr "ロゴの位置"
+
+msgid "Neon glow"
+msgstr "ネオンの輝き"
+
+msgid "No (disable)"
+msgstr "いいえ (無効にする)"
+
+msgid "None"
+msgstr "なし"
+
+msgid "No (show panel)"
+msgstr "いいえ（パネルを表示）"
+
+msgid "Original size"
+msgstr "元のサイズ"
+
+msgid "Outline"
+msgstr "概要"
+
+msgid "Outline danger"
+msgstr "危険の概要"
+
+msgid "Outline dark"
+msgstr "アウトラインダーク"
+
+msgid "Outline info"
+msgstr "概要情報"
+
+msgid "Outline only"
+msgstr "アウトラインのみ"
+
+msgid "Outline primary"
+msgstr "概要プライマリー"
+
+msgid "Outline secondary"
+msgstr "概要二次"
+
+msgid "Outline success"
+msgstr "成功の概要を説明する"
+
+msgid "Outline warning"
+msgstr "概要警告"
+
+msgid "Overlay color"
+msgstr "オーバーレイの色"
+
+msgid "Overlay opacity (%)"
+msgstr "オーバーレイの不透明度 (%)"
+
+msgid "Page text size (px)"
+msgstr "ページのテキスト サイズ (px)"
+
+msgid "Panel blur (px)"
+msgstr "パネルブラー (px)"
+
+msgid "Panel color"
+msgstr "パネルカラー"
+
+msgid "Panel height (px)"
+msgstr "パネルの高さ (px)"
+
+msgid "Panel hover effect"
+msgstr "パネルホバー効果"
+
+msgid "Panel opacity (%)"
+msgstr "パネルの不透明度 (%)"
+
+msgid "Panel & split styling"
+msgstr "パネル＆スプリットスタイル"
+
+msgid "Panel width (px)"
+msgstr "パネル幅 (px)"
+
+msgid "Password icon"
+msgstr "パスワードアイコン"
+
+msgid "Pick a custom color"
+msgstr "カスタムカラーを選択してください"
+
+msgid "Pick a layout and visual treatments for the GLPI login page."
+msgstr "GLPI ログイン ページのレイアウトと視覚的処理を選択します。"
+
+msgid "Pill"
+msgstr "ピル"
+
+msgid "Position"
+msgstr "位置"
+
+msgid "Preset palette"
+msgstr "プリセットパレット"
+
+msgid "Press on hover"
+msgstr "ホバーを押します"
+
+msgid "Primary (default)"
+msgstr "プライマリ (デフォルト)"
+
+msgid "Recommended: 1920x1080 or larger."
+msgstr "推奨: 1920x1080 以上。"
+
+msgid "Right"
+msgstr "右"
+
+msgid "Rounded"
+msgstr "丸い"
+
+msgid "Save login page"
+msgstr "ログインページを保存する"
+
+msgid "Scroll"
+msgstr "スクロール"
+
+msgid "Secondary"
+msgstr "二次"
+
+msgid "Sharp edges with a confident shadow."
+msgstr "シャープなエッジと自信に満ちた影。"
+
+msgid "Shield"
+msgstr "シールド"
+
+msgid "Size"
+msgstr "サイズ"
+
+msgid "Soft depth"
+msgstr "柔らかな深み"
+
+msgid "Soft shadow"
+msgstr "ソフトシャドウ"
+
+msgid "Solid"
+msgstr "固体"
+
+msgid "Split blur (px)"
+msgstr "分割ブラー (ピクセル)"
+
+msgid "Split color"
+msgstr "スプリットカラー"
+
+msgid "Split left"
+msgstr "左に分割"
+
+msgid "Split opacity (%)"
+msgstr "分割の不透明度 (%)"
+
+msgid "Split right"
+msgstr "右に分割"
+
+msgid "Split width (%)"
+msgstr "分割幅(%)"
+
+msgid "Square"
+msgstr "四角"
+
+msgid "Stretch"
+msgstr "ストレッチ"
+
+msgid "Success"
+msgstr "成功"
+
+msgid "Text color"
+msgstr "文字の色"
+
+msgid "Title text size (px)"
+msgstr "タイトルの文字サイズ (px)"
+
+msgid "Top"
+msgstr "トップ"
+
+msgid "Transparent panel"
+msgstr "透明パネル"
+
+msgid "Underline"
+msgstr "下線"
+
+msgid "Upload wallpaper"
+msgstr "壁紙をアップロードする"
+
+msgid "Use button color"
+msgstr "ボタンの色を使用する"
+
+msgid "User"
+msgstr "ユーザー"
+
+msgid "Wallpaper"
+msgstr "壁紙"
+
+msgid "Warning"
+msgstr "警告"
+
+msgid "Yes"
+msgstr "はい"
+
+msgid "Yes (enable)"
+msgstr "はい (有効)"
+
+msgid "Yes (hide panel)"
+msgstr "はい (パネルを非表示)"
+
+msgid ""
+"Light mode logos: used when the system is in light mode, ensuring good "
+"visibility on white or light backgrounds."
+msgstr ""
+"ライト モード ロゴ: システムがライト モードのときに使用され、白または明るい背"
+"景でも良好な視認性が保証されます。"
+
+msgid ""
+"Dark mode logos: used when the system is in dark mode, ensuring contrast and "
+"readability on black or dark backgrounds."
+msgstr ""
+"ダーク モード ロゴ: システムがダーク モードのときに使用され、黒または暗い背景"
+"でもコントラストと読みやすさを確保します。"
+
+msgid ""
+"The favicon is the small icon that appears in the browser tab (and also in "
+"bookmarks)."
+msgstr ""
+"ファビコンは、ブラウザーのタブ (ブックマークにも) に表示される小さなアイコン"
+"です。"
+
+msgid ""
+"Expanded menu logo: the logo displayed when the sidebar menu is open, with "
+"more space available."
+msgstr ""
+"拡張メニュー ロゴ: サイドバー メニューが開いているときに表示されるロゴ。利用"
+"可能なスペースが増えます。"
+
+msgid ""
+"Collapsed menu logo: the logo displayed when the sidebar menu is collapsed, "
+"so it needs to be a more compact version."
+msgstr ""
+"折りたたまれたメニューのロゴ: サイドバー メニューが折りたたまれたときに表示さ"
+"れるロゴなので、よりコンパクトなバージョンにする必要があります。"
+
+msgid ""
+"Login page logo: the logo displayed on the login screen before the user "
+"enters the system."
+msgstr ""
+"ログインページのロゴ: ユーザーがシステムに入る前にログイン画面に表示されるロ"
+"ゴ。"
+
+msgid "Logo size (%)"
+msgstr "ロゴのサイズ (%)"
+
+msgid "Favicon active"
+msgstr "ファビコンがアクティブです"
+
+msgid "Button"
+msgstr "ボタン"
+
+msgid "Wallpaper source"
+msgstr "壁紙ソース"
+
+msgid "Preset wallpaper"
+msgstr "プリセットの壁紙"
+
+msgid "Attachment"
+msgstr "アタッチメント"
+
+msgid "Button shape"
+msgstr "ボタンの形状"
+
+msgid "Button fill style"
+msgstr "ボタンの塗りつぶしスタイル"
+
+msgid "Button text size (px)"
+msgstr "ボタンのテキストサイズ (px)"
+
+msgid "Color mode"
+msgstr "カラーモード"
+
+msgid "GLPI logo configuration"
+msgstr "GLPI ロゴ構成"
+
+msgid ""
+"Upload logos that will replace the default GLPI assets using CSS variables."
+msgstr ""
+"CSS 変数を使用して、デフォルトの GLPI アセットを置き換えるロゴをアップロード"
+"します。"
+
+msgid "Expanded menu logo size (%)"
+msgstr "展開されたメニューロゴのサイズ (%)"
+
+msgid "Collapsed menu logo size (%)"
+msgstr "折りたたまれたメニューロゴのサイズ (%)"
+
+msgid "Favicon (browser tab)"
+msgstr "ファビコン（ブラウザタブ）"
+
+msgid "Field height (px)"
+msgstr "フィールドの高さ (ピクセル)"
+
+msgid "Preset wallpapers"
+msgstr "プリセットの壁紙"
+
+msgid "Custom upload"
+msgstr "カスタムアップロード"
+
+msgid "Classic centered"
+msgstr "クラシック中心"
+
+msgid "Above panel"
+msgstr "パネルの上"
+
+msgid "No"
+msgstr "いいえ"
+
+msgid "Default fill"
+msgstr "デフォルトの塗りつぶし"
+
+msgid "Custom color"
+msgstr "カスタムカラー"
+
+msgid "Accent color"
+msgstr "アクセントカラー"
+
+msgid "Turn GLPI into a showcase for your brand in just a few clicks."
+msgstr ""
+"数回クリックするだけで、GLPI をあなたのブランドのショーケースに変えます。"
+
+msgid "About"
+msgstr "について"
+
+msgid "GLPI logos"
+msgstr "GLPI ロゴ"
+
+msgid "Login Page"
+msgstr "ログインページ"
+
+msgid "Premium"
+msgstr "Premium"
+
+msgid "Brandkit by Marcati"
+msgstr "Brandkit by Marcati"
+
+msgid "The visual evolution of your GLPI starts here."
+msgstr "GLPI の視覚的な進化はここから始まります。"
+
+msgid ""
+"Brandkit delivers logos, login screens, and colors aligned with your "
+"identity. No CSS, no effort, just professional results."
+msgstr ""
+"Brandkit は、あなたのアイデンティティに合わせたロゴ、ログイン画面、色を提供し"
+"ます。 CSS は必要ありません。努力は必要ありません。プロとしての結果だけが得ら"
+"れます。"
+
+msgid "Discover Marcati at"
+msgstr "Marcati を発見してください"
+
+msgid "Meet Marcati"
+msgstr "Marcati に会います"
+
+msgid "Consistent logos"
+msgstr "一貫したロゴ"
+
+msgid "Ready uploads for header, favicon, and login."
+msgstr "ヘッダー、ファビコン、ログインのアップロードの準備ができました。"
+
+msgid "Login with presence"
+msgstr "プレゼンスを使用してログインする"
+
+msgid ""
+"Pick layouts, colors, and effects for an authentication screen that sells "
+"your brand."
+msgstr "ブランドを宣伝する認証画面のレイアウト、色、効果を選択します。"
+
+msgid "Fast delivery"
+msgstr "短納期"
+
+msgid "Settings saved directly in GLPI to activate branding without rework."
+msgstr "設定を GLPI に直接保存し、再作業せずにブランド化を有効にします。"
+
+msgid "Custom hex color"
+msgstr "カスタム 16 進カラー"
+
+msgid "Save logo sizes"
+msgstr "ロゴのサイズを保存する"
+
+msgid "Restore defaults"
+msgstr "Restore defaults"
+
+msgid "Expanded menu logo"
+msgstr "展開メニューのロゴ"
+
+msgid "Collapsed menu logo"
+msgstr "折りたたみメニューのロゴ"
+
+msgid "Login logo"
+msgstr "ログインロゴ"
+
+msgid "No custom logo uploaded yet."
+msgstr "カスタムロゴはまだアップロードされていません。"
+
+msgid "No favicon yet"
+msgstr "ファビコンはまだありません"
+
+msgid "Field width (px)"
+msgstr "フィールド幅 (px)"
+
+msgid "Light mode logos"
+msgstr "ライトモードのロゴ"
+
+msgid "Dark mode logos"
+msgstr "ダークモードのロゴ"
+
+msgid "Favicon"
+msgstr "ファビコン"
+
+msgid "Upload logo"
+msgstr "ロゴをアップロード"
+
+msgid "Remove logo"
+msgstr "ロゴを削除"
+
+msgid "No custom favicon uploaded yet."
+msgstr "カスタムファビコンはまだアップロードされていません。"
+
+msgid "Expanded menu logo (dark mode)"
+msgstr "展開メニューのロゴ（ダークモード）"
+
+msgid "Collapsed menu logo (dark mode)"
+msgstr "折りたたみメニューのロゴ（ダークモード）"
+

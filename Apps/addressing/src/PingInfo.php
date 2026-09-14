@@ -1,0 +1,249 @@
+<?php
+
+/*
+ -------------------------------------------------------------------------
+ addressing plugin for GLPI
+ Copyright (C) 2016-2026 by the addressing Development Team.
+
+ https://github.com/pluginsGLPI/addressing
+ -------------------------------------------------------------------------
+
+ LICENSE
+
+ This file is part of addressing.
+
+ addressing is free software; you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation; either version 2 of the License, or
+ (at your option) any later version.
+
+ addressing is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details.
+
+ You should have received a copy of the GNU General Public License
+ along with addressing. If not, see <http://www.gnu.org/licenses/>.
+ --------------------------------------------------------------------------
+ */
+
+namespace GlpiPlugin\Addressing;
+
+use Ajax;
+use CommonDBTM;
+use Glpi\Application\View\TemplateRenderer;
+use GlpiPlugin\Addressing\Config;
+use GlpiPlugin\Addressing\Report;
+use Html;
+use Session;
+
+if (!defined('GLPI_ROOT')) {
+    die("Sorry. You can't access directly to this file");
+}
+
+/**
+ * Class PingInfo
+ */
+class PingInfo extends CommonDBTM
+{
+    public static $rightname = "plugin_addressing";
+
+    public static function getTypeName($nb = 0)
+    {
+
+        return _n('IP Addressing', 'IP Addressing', $nb, 'addressing');
+    }
+
+   /**
+    * @param $name
+    **/
+    public static function cronInfo($name)
+    {
+
+        switch ($name) {
+            case 'UpdatePing':
+                return [
+               'description' => __('Launch ping for each ip report', 'addressing'),
+            ];
+        }
+        return [];
+    }
+
+   /**
+    * Cron action on addressing : auto ping
+    *
+    * @param $task for log, if NULL display
+    *
+    **/
+    public static function cronUpdatePing($task = null)
+    {
+
+        $cron_status = 1;
+        $self        = new self();
+        $vol         = $self->updateAllAddressing();
+        $task->addVolume($vol);
+       //      $task->log(Dropdown::getDropdownName("glpi_entities",
+       //                                           $entity) . ":  $message\n");
+
+        return $cron_status;
+    }
+
+
+    public function updateAllAddressing()
+    {
+        $old_memory           = ini_set("memory_limit", "-1");
+        $old_execution        = ini_set("max_execution_time", "0");
+        $addressing           = new Addressing();
+        $addressings          = $addressing->find(['is_deleted' => 0,
+                                                 'use_ping'   => 1]);
+        $total_ping_responses = 0;
+        foreach ($addressings as $addressing_array) {
+            $addressing->getFromDB($addressing_array['id']);
+            $ping_responses       = $this->updateAnAddressing($addressing);
+            $total_ping_responses += $ping_responses;
+        }
+        ini_set("memory_limit", $old_memory);
+        ini_set("max_execution_time", $old_execution);
+        return $total_ping_responses;
+    }
+
+    public function updateAnAddressing(Addressing $addressing)
+    {
+
+        $ipdeb = sprintf("%u", ip2long($addressing->fields["begin_ip"]));
+        $ipfin = sprintf("%u", ip2long($addressing->fields["end_ip"]));
+
+        $result                     = $addressing->compute(0, ['ipdeb'    => $ipdeb,
+                                                             'ipfin'    => $ipfin,
+                                                             'entities' => $addressing->fields['entities_id']]);
+        $plugin_addressing_pinginfo = new PingInfo();
+        $save = $plugin_addressing_pinginfo->find(['plugin_addressing_addressings_id' => $addressing->getID()]);
+        $plugin_addressing_pinginfo->deleteByCriteria(['plugin_addressing_addressings_id' => $addressing->getID()]);
+
+        $ping_responses = $this->updatePingInfos($result, $addressing);
+
+        return $ping_responses;
+    }
+
+    private function updatePingInfos($result, Addressing $Addressing)
+    {
+
+       // Get config
+        $Config         = new Config();
+        $Ping_Equipment = new Ping_Equipment();
+        $Config->getFromDB('1');
+        $system = $Config->fields["used_system"];
+
+        $ping_response = 0;
+
+        $plugin_addressing_pinginfo = new PingInfo();
+
+        foreach ($result as $num => $lines) {
+            $ip = Report::string2ip(substr($num, 2));
+
+            $ping_value                               = $Ping_Equipment->ping($system, $ip, "true");
+            $data                                     = [];
+            $data['plugin_addressing_addressings_id'] = $Addressing->getID();
+            $data['ipname']                           = $num;
+
+            $data['itemtype']      = isset($lines['0']['itemtype']) ? $lines['0']['itemtype'] : "";
+            $data['items_id']      = isset($lines['0']['on_device']) ? $lines['0']['on_device'] : "0";
+            $data['ping_response'] = $ping_value ?? 0;
+            $data['ping_date']     = date('Y-m-d H:i:s');
+
+            $plugin_addressing_pinginfo->add($data);
+
+            if (!is_null($ping_value)) {
+                $ping_response++;
+            }
+        }
+        return $ping_response;
+    }
+
+    public static function getPingResponseForItem($params)
+    {
+
+        $ping_right = Session::haveRight('plugin_addressing_use_ping_in_equipment', '1');
+        $item       = $params['item'];
+
+        if ($ping_right
+          && in_array($item->getType(), Addressing::getTypes()) && $item->getID() > 0) {
+            $items_id                   = $item->getID();
+            $itemtype                   = $item->getType();
+            $plugin_addressing_pinginfo = new PingInfo();
+
+            $ping_action = 0;
+            $ping_value  = 0;
+            if ($pings = $plugin_addressing_pinginfo->find(['itemtype' => $itemtype,
+                                                         'items_id' => $items_id])) {
+                foreach ($pings as $ping) {
+                    $ping_value = $ping['ping_response'];
+                    $ping_date  = $ping['ping_date'];
+                    $ipname     = $ping['ipname'];
+                }
+                $ping_action = 1;
+            }
+
+            if ($ping_action == 0) {
+                $content = "<i class=\"ti ti-question\" style='color: orange;font-size: 2em;' title=\"" . __(
+                    "Automatic action has not be launched",
+                    'addressing'
+                ) . "\">
+                    </i><br>" . __("Ping informations not available", 'addressing');
+            } else {
+                if ($ping_value == 1) {
+                    $content = "<i class=\"ti ti-square-check\" style='color: darkgreen;font-size: 2em;' title='" . __(
+                        "Last ping attempt",
+                        'addressing'
+                    ) . " : "
+                          . Html::convDateTime($ping_date) . "'></i><br>" . __(
+                              "Last ping attempt",
+                              'addressing'
+                          ) . " : "
+                          . Html::convDateTime($ping_date);
+                    $content .= "<br>" . __('IP') . "&nbsp;" . $ip = Report::string2ip(
+                        substr($ipname, 2)
+                    );
+                } else {
+                    $content = "<i class=\"ti ti-square-x\" style='color: darkred;font-size: 2em;' title='" . __(
+                        "Last ping attempt",
+                        'addressing'
+                    ) . " : "
+                          . Html::convDateTime($ping_date) . "'></i><br>" . __(
+                              "Last ping attempt",
+                              'addressing'
+                          ) . " : "
+                          . Html::convDateTime($ping_date);
+                    $content .= "<br>" . __('IP') . "&nbsp;" . $ip = Report::string2ip(substr(
+                        $ipname,
+                        2
+                    ));
+                }
+            }
+
+            $rand = mt_rand();
+
+            TemplateRenderer::getInstance()->display('@addressing/pinginfo.html.twig', [
+                'content' => $content,
+                'items_id' => $items_id,
+                'itemtype' => $itemtype,
+                'rand' => $rand,
+                'root_dir' => PLUGIN_ADDRESSING_WEBDIR,
+            ]);
+        }
+    }
+
+
+   /**
+    * @param \CommonDBTM $item
+    */
+    public static function cleanForItem(CommonDBTM $item)
+    {
+
+        $temp = new self();
+        $temp->deleteByCriteria(
+            ['itemtype' => $item->getType(),
+            'items_id' => $item->getField('id')]
+        );
+    }
+}

@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192 192" role="img" aria-labelledby="title desc">
+  <title id="title">Fealq GLPI</title>
+  <desc id="desc">Ticket GLPI com rosto tecnologico e monograma Fealq</desc>
+  <defs>
+    <linearGradient id="bg" x1="18" y1="12" x2="174" y2="180" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#132e58"/>
+      <stop offset="1" stop-color="#08101f"/>
+    </linearGradient>
+    <linearGradient id="ticket" x1="48" y1="55" x2="145" y2="139" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#f5fbff"/>
+      <stop offset="1" stop-color="#b9d8e8"/>
+    </linearGradient>
+    <filter id="glow" x="-40%" y="-40%" width="180%" height="180%">
+      <feGaussianBlur stdDeviation="3" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+  <rect width="192" height="192" rx="42" fill="url(#bg)"/>
+  <circle cx="96" cy="96" r="72" fill="none" stroke="#1ed5f5" stroke-opacity=".32" stroke-width="3"/>
+  <path d="M52 57h88v20c-10 0-10 16 0 16v22H52v-22c10 0 10-16 0-16z" fill="url(#ticket)" stroke="#1ed5f5" stroke-width="4"/>
+  <path d="M59 67h74" stroke="#ffbd59" stroke-linecap="round" stroke-width="4"/>
+  <circle cx="96" cy="95" r="25" fill="#0b1730" stroke="#ffbd59" stroke-width="3"/>
+  <path d="m82 90 8-4 6 4M102 90l6-4 8 4" fill="none" stroke="#1ed5f5" stroke-linecap="round" stroke-linejoin="round" stroke-width="3"/>
+  <circle cx="90" cy="94" r="3" fill="#f5fbff" filter="url(#glow)"/>
+  <circle cx="108" cy="94" r="3" fill="#f5fbff" filter="url(#glow)"/>
+  <path d="M87 105c5 6 13 6 18 0M88 113l8-7 8 7" fill="none" stroke="#ffbd59" stroke-linecap="round" stroke-linejoin="round" stroke-width="3"/>
+  <path d="M79 124h34" stroke="#1ed5f5" stroke-linecap="round" stroke-width="3"/>
+  <path d="M74 145h44" stroke="#ffbd59" stroke-linecap="round" stroke-width="5"/>
+  <circle cx="68" cy="145" r="3" fill="#1ed5f5"/>
+  <circle cx="124" cy="145" r="3" fill="#1ed5f5"/>
+</svg>

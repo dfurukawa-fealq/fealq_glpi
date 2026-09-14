@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-labelledby="title desc">
+  <title id="title">Fealq GLPI</title>
+  <desc id="desc">Ticket GLPI com rosto tecnologico e monograma Fealq</desc>
+  <defs>
+    <linearGradient id="bg" x1="48" y1="32" x2="464" y2="480" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#132e58"/>
+      <stop offset="1" stop-color="#08101f"/>
+    </linearGradient>
+    <linearGradient id="ticket" x1="128" y1="147" x2="387" y2="371" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#f5fbff"/>
+      <stop offset="1" stop-color="#b9d8e8"/>
+    </linearGradient>
+    <filter id="glow" x="-40%" y="-40%" width="180%" height="180%">
+      <feGaussianBlur stdDeviation="8" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+  <rect width="512" height="512" rx="112" fill="url(#bg)"/>
+  <circle cx="256" cy="256" r="192" fill="none" stroke="#1ed5f5" stroke-opacity=".32" stroke-width="8"/>
+  <path d="M139 152h234v53c-27 0-27 43 0 43v59H139v-59c27 0 27-43 0-43z" fill="url(#ticket)" stroke="#1ed5f5" stroke-width="11"/>
+  <path d="M157 179h198" stroke="#ffbd59" stroke-linecap="round" stroke-width="11"/>
+  <circle cx="256" cy="253" r="67" fill="#0b1730" stroke="#ffbd59" stroke-width="8"/>
+  <path d="m218 240 21-11 17 11M273 240l17-11 21 11" fill="none" stroke="#1ed5f5" stroke-linecap="round" stroke-linejoin="round" stroke-width="8"/>
+  <circle cx="240" cy="251" r="8" fill="#f5fbff" filter="url(#glow)"/>
+  <circle cx="288" cy="251" r="8" fill="#f5fbff" filter="url(#glow)"/>
+  <path d="M232 280c13 16 35 16 48 0M235 301l21-19 21 19" fill="none" stroke="#ffbd59" stroke-linecap="round" stroke-linejoin="round" stroke-width="8"/>
+  <path d="M211 330h90" stroke="#1ed5f5" stroke-linecap="round" stroke-width="8"/>
+  <path d="M197 386h118" stroke="#ffbd59" stroke-linecap="round" stroke-width="13"/>
+  <circle cx="181" cy="386" r="8" fill="#1ed5f5"/>
+  <circle cx="331" cy="386" r="8" fill="#1ed5f5"/>
+</svg>

@@ -1,0 +1,544 @@
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: brandkit\n"
+"Language: ru_RU\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "Dynamic cut for a bolder call-to-action."
+msgstr "Динамичный формат для более смелого призыва к действию."
+
+msgid "Email"
+msgstr "Электронная почта"
+
+msgid "Field background"
+msgstr "Фон поля"
+
+msgid "Field border"
+msgstr "Граница поля"
+
+msgid "Field border width (px)"
+msgstr "Ширина границы поля (пикселей)"
+
+msgid "Field focus glow"
+msgstr "Свечение фокуса поля"
+
+msgid "Field icons"
+msgstr "Значки полей"
+
+msgid "Field radius (px)"
+msgstr "Радиус поля (пикселей)"
+
+msgid "Fields"
+msgstr "Поля"
+
+msgid "Field spacing (px)"
+msgstr "Расстояние между полями (пикселей)"
+
+msgid "Field style"
+msgstr "Стиль поля"
+
+msgid "Field text"
+msgstr "Текст поля"
+
+msgid "Field text size (px)"
+msgstr "Размер текста поля (пикселей)"
+
+msgid "Fill with color"
+msgstr "Заполните цветом"
+
+msgid "Fixed"
+msgstr "Зафиксированный"
+
+msgid "Friendly, fully rounded shape."
+msgstr "Дружелюбная, полностью округлая форма."
+
+msgid "Glass blur"
+msgstr "Размытие стекла"
+
+msgid "Hide login text"
+msgstr "Скрыть текст для входа"
+
+msgid "Hover effect"
+msgstr "Эффект наведения"
+
+msgid "Hover fill custom color"
+msgstr "Наведите курсор на заливку произвольного цвета"
+
+msgid "Hover text color"
+msgstr "Цвет текста при наведении"
+
+msgid "Icon color"
+msgstr "Цвет значка"
+
+msgid "Icon position"
+msgstr "Положение значка"
+
+msgid "ID card"
+msgstr "Удостоверение личности"
+
+msgid "Info"
+msgstr "Информация"
+
+msgid "Inside panel"
+msgstr "Внутренняя панель"
+
+msgid "Key"
+msgstr "Ключ"
+
+msgid "Layout"
+msgstr "Макет"
+
+msgid "Layout & logo"
+msgstr "Макет и логотип"
+
+msgid "Left"
+msgstr "Левый"
+
+msgid "Light"
+msgstr "Свет"
+
+msgid "Lock"
+msgstr "Замок"
+
+msgid "Login icon"
+msgstr "Значок входа в систему"
+
+msgid "Login logo size (px)"
+msgstr "Размер логотипа для входа (пикселей)"
+
+msgid "Login page configuration"
+msgstr "Конфигурация страницы входа"
+
+msgid "Logo offset from top (px)"
+msgstr "Смещение логотипа сверху (пикселей)"
+
+msgid "Logo position"
+msgstr "Расположение логотипа"
+
+msgid "Neon glow"
+msgstr "Неоновое свечение"
+
+msgid "No (disable)"
+msgstr "Нет (отключить)"
+
+msgid "None"
+msgstr "Никто"
+
+msgid "No (show panel)"
+msgstr "Нет (показать панель)"
+
+msgid "Original size"
+msgstr "Исходный размер"
+
+msgid "Outline"
+msgstr "Контур"
+
+msgid "Outline danger"
+msgstr "Очертите опасность"
+
+msgid "Outline dark"
+msgstr "Контур темный"
+
+msgid "Outline info"
+msgstr "Информация о контуре"
+
+msgid "Outline only"
+msgstr "Только контур"
+
+msgid "Outline primary"
+msgstr "Схема основного"
+
+msgid "Outline secondary"
+msgstr "Схема вторичная"
+
+msgid "Outline success"
+msgstr "Очерк успеха"
+
+msgid "Outline warning"
+msgstr "Контурное предупреждение"
+
+msgid "Overlay color"
+msgstr "Цвет наложения"
+
+msgid "Overlay opacity (%)"
+msgstr "Непрозрачность наложения (%)"
+
+msgid "Page text size (px)"
+msgstr "Размер текста страницы (пикселей)"
+
+msgid "Panel blur (px)"
+msgstr "Размытие панели (пикселей)"
+
+msgid "Panel color"
+msgstr "Цвет панели"
+
+msgid "Panel height (px)"
+msgstr "Высота панели (пикселей)"
+
+msgid "Panel hover effect"
+msgstr "Эффект наведения панели"
+
+msgid "Panel opacity (%)"
+msgstr "Непрозрачность панели (%)"
+
+msgid "Panel & split styling"
+msgstr "Панельный и разделенный стиль"
+
+msgid "Panel width (px)"
+msgstr "Ширина панели (пикселей)"
+
+msgid "Password icon"
+msgstr "Значок пароля"
+
+msgid "Pick a custom color"
+msgstr "Выберите индивидуальный цвет"
+
+msgid "Pick a layout and visual treatments for the GLPI login page."
+msgstr "Выберите макет и визуальное оформление страницы входа GLPI."
+
+msgid "Pill"
+msgstr "Таблетка"
+
+msgid "Position"
+msgstr "Позиция"
+
+msgid "Preset palette"
+msgstr "Предустановленная палитра"
+
+msgid "Press on hover"
+msgstr "Нажмите при наведении"
+
+msgid "Primary (default)"
+msgstr "Первичный (по умолчанию)"
+
+msgid "Recommended: 1920x1080 or larger."
+msgstr "Рекомендуется: 1920x1080 или больше."
+
+msgid "Right"
+msgstr "Верно"
+
+msgid "Rounded"
+msgstr "Закругленный"
+
+msgid "Save login page"
+msgstr "Сохранить страницу входа"
+
+msgid "Scroll"
+msgstr "Прокрутка"
+
+msgid "Secondary"
+msgstr "Вторичный"
+
+msgid "Sharp edges with a confident shadow."
+msgstr "Острые края с уверенной тенью."
+
+msgid "Shield"
+msgstr "Щит"
+
+msgid "Size"
+msgstr "Размер"
+
+msgid "Soft depth"
+msgstr "Мягкая глубина"
+
+msgid "Soft shadow"
+msgstr "Мягкая тень"
+
+msgid "Solid"
+msgstr "Твердый"
+
+msgid "Split blur (px)"
+msgstr "Разделенное размытие (пикселей)"
+
+msgid "Split color"
+msgstr "Разделение цвета"
+
+msgid "Split left"
+msgstr "Разделить слева"
+
+msgid "Split opacity (%)"
+msgstr "Разделить непрозрачность (%)"
+
+msgid "Split right"
+msgstr "Разделить вправо"
+
+msgid "Split width (%)"
+msgstr "Ширина разделения (%)"
+
+msgid "Square"
+msgstr "Квадрат"
+
+msgid "Stretch"
+msgstr "Потягиваться"
+
+msgid "Success"
+msgstr "Успех"
+
+msgid "Text color"
+msgstr "Цвет текста"
+
+msgid "Title text size (px)"
+msgstr "Размер текста заголовка (пикселей)"
+
+msgid "Top"
+msgstr "Вершина"
+
+msgid "Transparent panel"
+msgstr "Прозрачная панель"
+
+msgid "Underline"
+msgstr "Подчеркнуть"
+
+msgid "Upload wallpaper"
+msgstr "Загрузить обои"
+
+msgid "Use button color"
+msgstr "Использовать цвет кнопки"
+
+msgid "User"
+msgstr "Пользователь"
+
+msgid "Wallpaper"
+msgstr "Обои"
+
+msgid "Warning"
+msgstr "Предупреждение"
+
+msgid "Yes"
+msgstr "Да"
+
+msgid "Yes (enable)"
+msgstr "Да (включить)"
+
+msgid "Yes (hide panel)"
+msgstr "Да (скрыть панель)"
+
+msgid ""
+"Light mode logos: used when the system is in light mode, ensuring good "
+"visibility on white or light backgrounds."
+msgstr ""
+"Логотипы светлого режима: используются, когда система находится в светлом "
+"режиме, обеспечивая хорошую видимость на белом или светлом фоне."
+
+msgid ""
+"Dark mode logos: used when the system is in dark mode, ensuring contrast and "
+"readability on black or dark backgrounds."
+msgstr ""
+"Логотипы темного режима: используются, когда система находится в темном "
+"режиме, обеспечивая контрастность и читаемость на черном или темном фоне."
+
+msgid ""
+"The favicon is the small icon that appears in the browser tab (and also in "
+"bookmarks)."
+msgstr ""
+"Фавикон — это небольшой значок, который появляется на вкладке браузера (а "
+"также в закладках)."
+
+msgid ""
+"Expanded menu logo: the logo displayed when the sidebar menu is open, with "
+"more space available."
+msgstr ""
+"Логотип расширенного меню: логотип, отображаемый, когда боковое меню "
+"открыто, при этом доступно больше места."
+
+msgid ""
+"Collapsed menu logo: the logo displayed when the sidebar menu is collapsed, "
+"so it needs to be a more compact version."
+msgstr ""
+"Логотип свернутого меню: логотип, отображаемый при свернутом меню боковой "
+"панели, поэтому его версия должна быть более компактной."
+
+msgid ""
+"Login page logo: the logo displayed on the login screen before the user "
+"enters the system."
+msgstr ""
+"Логотип страницы входа: логотип, отображаемый на экране входа в систему "
+"перед входом пользователя в систему."
+
+msgid "Logo size (%)"
+msgstr "Размер логотипа (%)"
+
+msgid "Favicon active"
+msgstr "Фавикон активен"
+
+msgid "Button"
+msgstr "Кнопка"
+
+msgid "Wallpaper source"
+msgstr "Источник обоев"
+
+msgid "Preset wallpaper"
+msgstr "Предустановленные обои"
+
+msgid "Attachment"
+msgstr "Вложение"
+
+msgid "Button shape"
+msgstr "Форма кнопки"
+
+msgid "Button fill style"
+msgstr "Стиль заливки кнопки"
+
+msgid "Button text size (px)"
+msgstr "Размер текста кнопки (пикселей)"
+
+msgid "Color mode"
+msgstr "Цветовой режим"
+
+msgid "GLPI logo configuration"
+msgstr "GLPI конфигурация логотипа"
+
+msgid ""
+"Upload logos that will replace the default GLPI assets using CSS variables."
+msgstr ""
+"Загрузите логотипы, которые заменят ресурсы GLPI по умолчанию, используя "
+"переменные CSS."
+
+msgid "Expanded menu logo size (%)"
+msgstr "Размер логотипа развернутого меню (%)"
+
+msgid "Collapsed menu logo size (%)"
+msgstr "Размер логотипа свернутого меню (%)"
+
+msgid "Favicon (browser tab)"
+msgstr "Фавикон (вкладка браузера)"
+
+msgid "Field height (px)"
+msgstr "Высота поля (пикселей)"
+
+msgid "Preset wallpapers"
+msgstr "Предустановленные обои"
+
+msgid "Custom upload"
+msgstr "Пользовательская загрузка"
+
+msgid "Classic centered"
+msgstr "Классический по центру"
+
+msgid "Above panel"
+msgstr "Над панелью"
+
+msgid "No"
+msgstr "Нет"
+
+msgid "Default fill"
+msgstr "Заливка по умолчанию"
+
+msgid "Custom color"
+msgstr "Пользовательский цвет"
+
+msgid "Accent color"
+msgstr "Акцентный цвет"
+
+msgid "Turn GLPI into a showcase for your brand in just a few clicks."
+msgstr "Превратите GLPI в витрину своего бренда всего за несколько кликов."
+
+msgid "About"
+msgstr "О"
+
+msgid "GLPI logos"
+msgstr "GLPI логотипы"
+
+msgid "Login Page"
+msgstr "Страница входа"
+
+msgid "Premium"
+msgstr "Premium"
+
+msgid "Brandkit by Marcati"
+msgstr "Brandkit от Marcati"
+
+msgid "The visual evolution of your GLPI starts here."
+msgstr "Визуальная эволюция вашего GLPI начинается здесь."
+
+msgid ""
+"Brandkit delivers logos, login screens, and colors aligned with your "
+"identity. No CSS, no effort, just professional results."
+msgstr ""
+"Brandkit предоставляет логотипы, экраны входа и цвета, соответствующие вашей "
+"индивидуальности. Никаких CSS, никаких усилий, только профессиональные "
+"результаты."
+
+msgid "Discover Marcati at"
+msgstr "Откройте для себя Marcati на"
+
+msgid "Meet Marcati"
+msgstr "Знакомьтесь, Marcati"
+
+msgid "Consistent logos"
+msgstr "Последовательные логотипы"
+
+msgid "Ready uploads for header, favicon, and login."
+msgstr "Готовые загрузки для шапки, значка и логина."
+
+msgid "Login with presence"
+msgstr "Вход с присутствием"
+
+msgid ""
+"Pick layouts, colors, and effects for an authentication screen that sells "
+"your brand."
+msgstr ""
+"Выбирайте макеты, цвета и эффекты для экрана аутентификации, который продает "
+"ваш бренд."
+
+msgid "Fast delivery"
+msgstr "Быстрая доставка"
+
+msgid "Settings saved directly in GLPI to activate branding without rework."
+msgstr ""
+"Настройки сохраняются непосредственно в GLPI для активации брендинга без "
+"доработок."
+
+msgid "Custom hex color"
+msgstr "Пользовательский шестнадцатеричный цвет"
+
+msgid "Save logo sizes"
+msgstr "Сохраните размеры логотипа"
+
+msgid "Restore defaults"
+msgstr "Restore defaults"
+
+msgid "Expanded menu logo"
+msgstr "Логотип развернутого меню"
+
+msgid "Collapsed menu logo"
+msgstr "Логотип свернутого меню"
+
+msgid "Login logo"
+msgstr "Логотип входа"
+
+msgid "No custom logo uploaded yet."
+msgstr "Пользовательский логотип еще не загружен."
+
+msgid "No favicon yet"
+msgstr "Пока нет favicon"
+
+msgid "Field width (px)"
+msgstr "Ширина поля (px)"
+
+msgid "Light mode logos"
+msgstr "Логотипы светлой темы"
+
+msgid "Dark mode logos"
+msgstr "Логотипы темной темы"
+
+msgid "Favicon"
+msgstr "Фавикон"
+
+msgid "Upload logo"
+msgstr "Загрузить логотип"
+
+msgid "Remove logo"
+msgstr "Удалить логотип"
+
+msgid "No custom favicon uploaded yet."
+msgstr "Пользовательский фавикон еще не загружен."
+
+msgid "Expanded menu logo (dark mode)"
+msgstr "Логотип развернутого меню (темный режим)"
+
+msgid "Collapsed menu logo (dark mode)"
+msgstr "Логотип свернутого меню (темный режим)"
+

@@ -1,0 +1,1660 @@
+:root {
+  --brandkit-login-panel-color: rgba(15, 23, 42, 0.65);
+  --brandkit-login-panel-blur: 6px;
+  --brandkit-login-panel-width: 520px;
+  --brandkit-login-panel-height: 560px;
+  --brandkit-login-panel-scale: 0.718;
+  --brandkit-login-panel-overflow: auto;
+  --brandkit-login-text-color: #ffffff;
+  --brandkit-login-split-color: rgba(255, 255, 255, 0.40);
+  --brandkit-login-split-blur: 3px;
+  --brandkit-login-split-width: 34vw;
+  --brandkit-login-split-left: 0;
+  --brandkit-login-split-right: auto;
+  --brandkit-login-container-max: calc(var(--brandkit-login-split-width) - 1.5vw);
+  --brandkit-login-container-max-effective: var(--brandkit-login-container-max);
+  --brandkit-login-container-left: calc(var(--brandkit-login-split-width) / 2);
+  --brandkit-login-container-right: auto;
+  --brandkit-login-container-translate: -50%;
+  --brandkit-login-text-align: left;
+  --brandkit-login-logo-width: 290px;
+  --brandkit-login-logo-height: 160px;
+  --brandkit-login-logo-offset: 0px;
+  --brandkit-login-button-color: #000000;
+  --brandkit-login-button-bg: #000000;
+  --brandkit-login-button-border: #000000;
+  --brandkit-login-button-text: #ffffff;
+  --brandkit-login-button-hover-fill: #000000;
+  --brandkit-login-button-hover-text: #ffffff;
+  --brandkit-login-button-text-size: 20px;
+  --brandkit-login-button-radius: 10px;
+  --brandkit-login-button-clip: none;
+  --brandkit-login-field-bg: #ffffff;
+  --brandkit-login-field-bg-autofill: var(--brandkit-login-field-bg);
+  --brandkit-login-field-border: #ffffff;
+  --brandkit-login-field-border-width: 0px;
+  --brandkit-login-field-text: #000000;
+  --brandkit-login-field-text-autofill: var(--tblr-body-color);
+  --brandkit-login-field-text-size: 20px;
+  --brandkit-login-field-height: 50px;
+  --brandkit-login-field-width: 370px;
+  --brandkit-login-text-size: 20px;
+  --brandkit-login-field-focus: #0ea5e9;
+  --brandkit-login-field-focus-border: #000000;
+  --brandkit-login-field-focus-glow: #000000;
+  --brandkit-login-accent-color: #000000;
+  --brandkit-login-icon-user: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%23000000%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Ccircle%20cx%3D%2212%22%20cy%3D%228%22%20r%3D%224%22%2F%3E%3Cpath%20d%3D%22M4%2020c2-4%206-6%208-6s6%202%208%206%22%2F%3E%3C%2Fsvg%3E");
+  --brandkit-login-icon-password: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%23000000%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Crect%20x%3D%224%22%20y%3D%2211%22%20width%3D%2216%22%20height%3D%229%22%20rx%3D%222%22%2F%3E%3Cpath%20d%3D%22M8%2011V8a4%204%200%200%201%208%200v3%22%2F%3E%3C%2Fsvg%3E");
+  --brandkit-login-icon-user-padding-left: 2.5rem;
+  --brandkit-login-icon-user-padding-right: 0.75rem;
+  --brandkit-login-icon-password-padding-left: 2.5rem;
+  --brandkit-login-icon-password-padding-right: 0.75rem;
+  --brandkit-login-icon-position: left 0.9rem center;
+  --brandkit-login-field-placeholder: rgba(0, 0, 0, 0.6);
+  --brandkit-login-field-radius: 10px;
+  --brandkit-login-field-shadow: none;
+  --glpi-logo-dark-login: url("/pics/logos/logo-GLPI-250-black.png") !important;
+  --glpi-logo-light-login: url("/pics/logos/logo-GLPI-250-white.png") !important;
+  --brandkit-login-logo-image: var(--glpi-logo-dark-login, var(--logo));
+  --brandkit-login-error-wallpaper: url("/pics/brandkit-wallpapers/top-view-of-office.png?v=1769893714");
+  --brandkit-login-error-overlay: rgba(0, 0, 0, 0.20);
+}
+:root[data-glpi-theme-dark="1"] {
+  --brandkit-login-logo-image: var(--glpi-logo-light-login, var(--logo));
+}
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+.page-anonymous,
+body.welcome-anonymous,
+body.brandkit-error-page {
+  position: relative;
+  min-height: 100vh;
+  width: 100%;
+  background-image: linear-gradient(rgba(0, 0, 0, 0.20), rgba(0, 0, 0, 0.20)), url("/pics/brandkit-wallpapers/top-view-of-office.png?v=1769893714") !important;
+  background-color: rgba(0, 0, 0, 0.20) !important;
+  background-size: cover !important;
+  background-position: center !important;
+  background-repeat: no-repeat !important;
+  background-attachment: fixed !important;
+}
+.page-anonymous .flex-fill,
+body.welcome-anonymous .flex-fill {
+  position: relative;
+  z-index: 1;
+  min-height: 100vh;
+  margin-top: 0 !important;
+  padding-top: 0 !important;
+  padding-bottom: 2rem !important;
+}
+body.welcome-anonymous {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  overflow-x: hidden;
+  overflow-y: auto;
+  font-family: system-ui, -apple-system, sans-serif;
+  transition: background-color 0.5s ease;
+}
+body.brandkit-error-page {
+  font-family: system-ui, -apple-system, sans-serif;
+  transition: background-color 0.5s ease;
+}
+.page-anonymous .glpi-logo,
+body.welcome-anonymous .glpi-logo {
+  background: var(--brandkit-login-logo-image) no-repeat center;
+  background-size: contain;
+  width: calc(var(--brandkit-login-logo-width) * var(--brandkit-login-panel-scale));
+  height: calc(var(--brandkit-login-logo-height) * var(--brandkit-login-panel-scale));
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  content: none !important;
+}
+.page-anonymous .main-content-card,
+body.welcome-anonymous .main-content-card {
+  background: transparent !important;
+  box-shadow: none !important;
+  border-color: transparent !important;
+  box-sizing: border-box;
+}
+body.welcome-anonymous .page-anonymous .card {
+  background: transparent !important;
+  box-shadow: none !important;
+  border-color: transparent !important;
+}
+.page-anonymous .main-content-card,
+body.welcome-anonymous .main-content-card {
+  font-size: calc(var(--brandkit-login-text-size) * var(--brandkit-login-panel-scale));
+}
+body.welcome-anonymous .page-anonymous .card {
+  padding: calc(2rem * var(--brandkit-login-panel-scale)) calc(2.5rem * var(--brandkit-login-panel-scale));
+}
+.page-anonymous .main-content-card .card-body,
+body.welcome-anonymous .main-content-card .card-body {
+  padding: calc(1.5rem * var(--brandkit-login-panel-scale));
+}
+.page-anonymous .main-content-card .mb-3,
+body.welcome-anonymous .main-content-card .mb-3 {
+  margin-bottom: calc(1rem * var(--brandkit-login-panel-scale));
+}
+.page-anonymous .main-content-card .form-label,
+body.welcome-anonymous .main-content-card .form-label {
+  font-size: calc(var(--brandkit-login-text-size) * 0.95 * var(--brandkit-login-panel-scale));
+  margin-bottom: calc(0.4rem * var(--brandkit-login-panel-scale));
+  width: min(100%, var(--brandkit-login-field-width));
+  max-width: var(--brandkit-login-field-width);
+  margin-left: auto;
+  margin-right: auto;
+}
+.page-anonymous form[action*="lostpassword"] .card-title,
+body.welcome-anonymous form[action*="lostpassword"] .card-title,
+.page-anonymous form[action*="lostpassword"] p.text-muted,
+body.welcome-anonymous form[action*="lostpassword"] p.text-muted {
+  width: min(100%, var(--brandkit-login-field-width));
+  max-width: var(--brandkit-login-field-width);
+  margin-left: auto;
+  margin-right: auto;
+  text-align: left;
+}
+.page-anonymous form[action*="lostpassword"] .form-field.row,
+body.welcome-anonymous form[action*="lostpassword"] .form-field.row {
+  width: min(100%, var(--brandkit-login-field-width));
+  max-width: var(--brandkit-login-field-width);
+  margin-left: auto;
+  margin-right: auto;
+  flex-direction: column;
+  align-items: stretch;
+}
+.page-anonymous form[action*="lostpassword"] .form-field.row .col-form-label,
+body.welcome-anonymous form[action*="lostpassword"] .form-field.row .col-form-label {
+  width: 100%;
+  max-width: 100%;
+  text-align: left !important;
+  justify-content: flex-start;
+  align-self: flex-start;
+  padding-left: 0;
+  padding-right: 0;
+  margin-bottom: calc(0.4rem * var(--brandkit-login-panel-scale));
+}
+.page-anonymous form[action*="lostpassword"] .form-field.row .field-container,
+body.welcome-anonymous form[action*="lostpassword"] .form-field.row .field-container {
+  width: 100%;
+  max-width: 100%;
+  padding-left: 0;
+  padding-right: 0;
+}
+.page-anonymous form[action*="lostpassword"] .form-footer,
+body.welcome-anonymous form[action*="lostpassword"] .form-footer {
+  width: min(100%, var(--brandkit-login-field-width));
+  max-width: var(--brandkit-login-field-width);
+  margin-left: auto;
+  margin-right: auto;
+}
+.page-anonymous form[action*="lostpassword"] .form-footer .btn,
+body.welcome-anonymous form[action*="lostpassword"] .form-footer .btn {
+  color: var(--brandkit-login-button-text) !important;
+}
+.page-anonymous form[action*="lostpassword"] .form-footer .btn .ti,
+body.welcome-anonymous form[action*="lostpassword"] .form-footer .btn .ti {
+  color: currentColor;
+}
+.page-anonymous .text-center.text-muted.mt-3,
+body.welcome-anonymous .text-center.text-muted.mt-3 {
+  width: min(100%, var(--brandkit-login-field-width));
+  max-width: var(--brandkit-login-field-width);
+  margin-left: auto;
+  margin-right: auto;
+}
+.page-anonymous .main-content-card .d-flex:has(.forgot_password),
+body.welcome-anonymous .main-content-card .d-flex:has(.forgot_password) {
+  width: min(100%, var(--brandkit-login-field-width));
+  max-width: var(--brandkit-login-field-width);
+  margin-left: auto;
+  margin-right: auto;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+.page-anonymous .main-content-card .d-flex:has(.forgot_password) .form-label,
+body.welcome-anonymous .main-content-card .d-flex:has(.forgot_password) .form-label {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 0.4rem;
+  width: auto;
+  max-width: none;
+  margin-left: 0;
+  margin-right: 0;
+}
+.page-anonymous .main-content-card .form-label + .forgot_password,
+body.welcome-anonymous .main-content-card .form-label + .forgot_password {
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+}
+.page-anonymous .main-content-card .form-label + .forgot_password a,
+body.welcome-anonymous .main-content-card .form-label + .forgot_password a {
+  white-space: nowrap;
+}
+.page-anonymous .main-content-card .card-header,
+body.welcome-anonymous .main-content-card .card-header {
+  border-bottom: none !important;
+}
+.page-anonymous .main-content-card hr,
+body.welcome-anonymous .main-content-card hr,
+.page-anonymous .main-content-card .hr-text,
+body.welcome-anonymous .main-content-card .hr-text {
+  display: none !important;
+}
+.page-anonymous .main-content-card .form-control,
+.page-anonymous .main-content-card .form-select,
+body.welcome-anonymous .main-content-card .form-control,
+body.welcome-anonymous .main-content-card .form-select {
+  padding: calc(0.6rem * var(--brandkit-login-panel-scale)) calc(0.8rem * var(--brandkit-login-panel-scale));
+  font-size: calc(var(--brandkit-login-field-text-size) * var(--brandkit-login-panel-scale));
+  height: calc(var(--brandkit-login-field-height) * var(--brandkit-login-panel-scale));
+  width: min(100%, var(--brandkit-login-field-width));
+  max-width: var(--brandkit-login-field-width);
+  margin-left: auto;
+  margin-right: auto;
+  box-sizing: border-box;
+}
+.page-anonymous select[name="auth"],
+body.welcome-anonymous select[name="auth"],
+.page-anonymous select[name="auth"] + .select2,
+body.welcome-anonymous select[name="auth"] + .select2 {
+  width: min(100%, var(--brandkit-login-field-width)) !important;
+  max-width: var(--brandkit-login-field-width) !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+.page-anonymous select[name="auth"] + .select2,
+body.welcome-anonymous select[name="auth"] + .select2 {
+  display: block;
+}
+.page-anonymous select[name="auth"],
+body.welcome-anonymous select[name="auth"] {
+  text-align: left !important;
+  text-align-last: left !important;
+}
+.page-anonymous .main-content-card .form-check,
+body.welcome-anonymous .main-content-card .form-check {
+  margin-bottom: calc(0.75rem * var(--brandkit-login-panel-scale));
+  width: min(100%, var(--brandkit-login-field-width));
+  max-width: var(--brandkit-login-field-width);
+  margin-left: auto;
+  margin-right: auto;
+}
+.page-anonymous .form-footer a[href*="lostpassword"],
+body.welcome-anonymous .form-footer a[href*="lostpassword"] {
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+body.welcome-anonymous button[type="submit"],
+body.welcome-anonymous .form-footer .btn {
+  padding: calc(0.9rem * var(--brandkit-login-panel-scale)) calc(1.6rem * var(--brandkit-login-panel-scale));
+  font-size: calc(var(--brandkit-login-button-text-size) * var(--brandkit-login-panel-scale));
+  width: min(100%, var(--brandkit-login-field-width));
+  max-width: var(--brandkit-login-field-width);
+  margin-left: auto;
+  margin-right: auto;
+  display: block;
+  transition: transform 0.15s ease, box-shadow 0.2s ease, background-color 0.2s ease, color 0.2s ease;
+}
+body.welcome-anonymous button[type="submit"]:hover,
+body.welcome-anonymous .form-footer .btn:hover,
+body.welcome-anonymous .btn.btn-primary:not(.brandkit-login-button):hover {
+  transform: translateY(1px) scale(0.98);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+}
+body.welcome-anonymous button[type="submit"]:active,
+body.welcome-anonymous .form-footer .btn:active,
+body.welcome-anonymous .btn.btn-primary:not(.brandkit-login-button):active {
+  transform: translateY(2px) scale(0.97);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+}
+.page-anonymous::before,
+body.welcome-anonymous::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: var(--brandkit-login-split-left);
+  right: var(--brandkit-login-split-right);
+  width: var(--brandkit-login-split-width);
+  background: var(--brandkit-login-split-color);
+  backdrop-filter: blur(var(--brandkit-login-split-blur));
+  -webkit-backdrop-filter: blur(var(--brandkit-login-split-blur));
+  z-index: 0;
+  pointer-events: none;
+}
+.page-anonymous .container-tight,
+body.welcome-anonymous .container-tight {
+  max-width: var(--brandkit-login-container-max-effective) !important;
+  width: min(100%, var(--brandkit-login-container-max-effective));
+  margin-left: var(--brandkit-login-container-left);
+  margin-right: var(--brandkit-login-container-right);
+  transform: translateX(var(--brandkit-login-container-translate));
+}
+body.welcome-anonymous .container-tight {
+  width: 100%;
+  perspective: 1000px;
+  position: relative;
+}
+@media screen and (min-width: 768px) {
+  body.welcome-anonymous .container-tight {
+    min-width: 650px;
+    max-width: 700px;
+  }
+}
+@media screen and (max-width: 767px) {
+  body.welcome-anonymous .container-tight {
+    max-width: 450px;
+    min-width: unset;
+  }
+  .page-anonymous,
+  body.welcome-anonymous,
+  body.brandkit-error-page {
+    background-size: cover !important;
+    background-position: center !important;
+    background-attachment: scroll !important;
+  }
+  body.welcome-anonymous .page-anonymous .card-body,
+  body.welcome-anonymous .main-content-card .card-body,
+  .page-anonymous .main-content-card .card-body {
+    padding: calc(1.1rem * var(--brandkit-login-panel-scale));
+  }
+}
+@media screen and (max-height: 760px) {
+  body.welcome-anonymous {
+    align-items: flex-start;
+  }
+  body.welcome-anonymous .flex-fill {
+    padding-top: 2rem !important;
+  }
+}
+.page-anonymous .container-tight .text-center,
+body.welcome-anonymous .container-tight .text-center {
+  text-align: var(--brandkit-login-text-align) !important;
+}
+.page-anonymous.brandkit-logo-inside .container-tight > .text-center,
+body.welcome-anonymous.brandkit-logo-inside .container-tight > .text-center {
+  display: block !important;
+}
+.page-anonymous.brandkit-logo-inside .container-tight > .text-center .glpi-logo,
+body.welcome-anonymous.brandkit-logo-inside .container-tight > .text-center .glpi-logo {
+  display: none !important;
+}
+.page-anonymous .main-content-card,
+.page-anonymous .main-content-card a,
+.page-anonymous .main-content-card .text-muted,
+body.welcome-anonymous .main-content-card,
+body.welcome-anonymous .main-content-card a,
+body.welcome-anonymous .main-content-card .text-muted {
+  color: var(--brandkit-login-text-color) !important;
+}
+.page-anonymous .main-content-card input,
+.page-anonymous .main-content-card select,
+.page-anonymous .main-content-card textarea,
+body.welcome-anonymous .main-content-card input,
+body.welcome-anonymous .main-content-card select,
+body.welcome-anonymous .main-content-card textarea {
+  color: var(--brandkit-login-field-text) !important;
+  caret-color: var(--brandkit-login-field-text);
+}
+body.welcome-anonymous .page-anonymous,
+body.welcome-anonymous .page-anonymous * {
+  color: var(--brandkit-login-text-color) !important;
+}
+.page-anonymous .main-content-card input:not([type="checkbox"]):not([type="radio"]),
+.page-anonymous .main-content-card select,
+.page-anonymous .main-content-card textarea,
+.page-anonymous .main-content-card .form-control,
+.page-anonymous .main-content-card .form-select,
+body.welcome-anonymous .main-content-card input:not([type="checkbox"]):not([type="radio"]),
+body.welcome-anonymous .main-content-card select,
+body.welcome-anonymous .main-content-card textarea,
+body.welcome-anonymous .main-content-card .form-control,
+body.welcome-anonymous .main-content-card .form-select {
+  background-color: var(--brandkit-login-field-bg) !important;
+  color: var(--brandkit-login-field-text) !important;
+  border: var(--brandkit-login-field-border-width) solid var(--brandkit-login-field-border) !important;
+  border-radius: var(--brandkit-login-field-radius) !important;
+  box-shadow: var(--brandkit-login-field-shadow) !important;
+  --brandkit-login-field-shadow-current: var(--brandkit-login-field-shadow);
+}
+.page-anonymous #login_name,
+body.welcome-anonymous #login_name {
+  background-image: var(--brandkit-login-icon-user) !important;
+  background-repeat: no-repeat !important;
+  background-position: var(--brandkit-login-icon-position) !important;
+  background-size: 18px 18px !important;
+  padding-left: var(--brandkit-login-icon-user-padding-left) !important;
+  padding-right: var(--brandkit-login-icon-user-padding-right) !important;
+}
+.page-anonymous #login_password,
+body.welcome-anonymous #login_password {
+  background-image: var(--brandkit-login-icon-password) !important;
+  background-repeat: no-repeat !important;
+  background-position: var(--brandkit-login-icon-position) !important;
+  background-size: 18px 18px !important;
+  padding-left: var(--brandkit-login-icon-password-padding-left) !important;
+  padding-right: var(--brandkit-login-icon-password-padding-right) !important;
+}
+.page-anonymous .main-content-card input::placeholder,
+.page-anonymous .main-content-card textarea::placeholder,
+body.welcome-anonymous .main-content-card input::placeholder,
+body.welcome-anonymous .main-content-card textarea::placeholder {
+  color: var(--brandkit-login-field-placeholder) !important;
+}
+.page-anonymous .main-content-card .form-control:focus,
+.page-anonymous .main-content-card .form-select:focus,
+body.welcome-anonymous .main-content-card .form-control:focus,
+body.welcome-anonymous .main-content-card .form-select:focus {
+  border-color: var(--brandkit-login-field-focus-border) !important;
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--brandkit-login-field-focus-glow) 35%, transparent) !important;
+}
+.page-anonymous .main-content-card .select2-container--default .select2-selection--single,
+body.welcome-anonymous .main-content-card .select2-container--default .select2-selection--single {
+  background-color: var(--brandkit-login-field-bg) !important;
+  border: var(--brandkit-login-field-border-width) solid var(--brandkit-login-field-border) !important;
+  border-radius: var(--brandkit-login-field-radius) !important;
+  box-shadow: var(--brandkit-login-field-shadow) !important;
+  height: calc(var(--brandkit-login-field-height) * var(--brandkit-login-panel-scale)) !important;
+}
+.page-anonymous .main-content-card .select2-selection__rendered,
+body.welcome-anonymous .main-content-card .select2-selection__rendered {
+  color: var(--brandkit-login-field-text) !important;
+  line-height: calc(var(--brandkit-login-field-height) * var(--brandkit-login-panel-scale) - 2px);
+}
+.page-anonymous .select2-dropdown,
+body.welcome-anonymous .select2-dropdown {
+  background-color: var(--brandkit-login-field-bg) !important;
+  border-color: var(--brandkit-login-field-border) !important;
+}
+.page-anonymous .select2-results__option,
+body.welcome-anonymous .select2-results__option {
+  color: var(--brandkit-login-field-text) !important;
+}
+.page-anonymous .select2-container--default .select2-selection--single:focus,
+body.welcome-anonymous .select2-container--default .select2-selection--single:focus {
+  border-color: var(--brandkit-login-field-focus-border) !important;
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--brandkit-login-field-focus-glow) 35%, transparent) !important;
+}
+body.welcome-anonymous .select2-container--default .select2-selection--single .select2-selection__rendered {
+  color: var(--brandkit-login-field-text) !important;
+}
+body.welcome-anonymous .select2-container--default .select2-results__option,
+body.welcome-anonymous .select2-container--default .select2-results__group {
+  color: var(--brandkit-login-field-text) !important;
+}
+body.welcome-anonymous .select2-container--open .select2-dropdown {
+  color: var(--brandkit-login-field-text) !important;
+}
+.page-anonymous select[name="auth"] + .select2 .select2-selection__rendered,
+.page-anonymous select[name="auth"] + .select2 .select2-selection__rendered span,
+.page-anonymous select[name="auth"] + .select2 .select2-selection__placeholder,
+body.welcome-anonymous select[name="auth"] + .select2 .select2-selection__rendered,
+body.welcome-anonymous select[name="auth"] + .select2 .select2-selection__rendered span,
+body.welcome-anonymous select[name="auth"] + .select2 .select2-selection__placeholder {
+  color: var(--brandkit-login-field-text) !important;
+  text-align: left !important;
+}
+.page-anonymous select[name="auth"] + .select2 .select2-selection__rendered,
+body.welcome-anonymous select[name="auth"] + .select2 .select2-selection__rendered {
+  line-height: normal !important;
+  padding-left: calc(0.8rem * var(--brandkit-login-panel-scale)) !important;
+  padding-right: calc(2rem * var(--brandkit-login-panel-scale)) !important;
+}
+.page-anonymous select[name="auth"] + .select2 .select2-selection--single,
+body.welcome-anonymous select[name="auth"] + .select2 .select2-selection--single {
+  display: flex !important;
+  align-items: center !important;
+}
+.page-anonymous select,
+body.welcome-anonymous select,
+.page-anonymous .form-select,
+body.welcome-anonymous .form-select,
+.page-anonymous .select2-selection__rendered,
+body.welcome-anonymous .select2-selection__rendered,
+.page-anonymous .select2-search__field,
+body.welcome-anonymous .select2-search__field {
+  color: var(--brandkit-login-field-text) !important;
+}
+.page-anonymous select option,
+body.welcome-anonymous select option {
+  color: var(--brandkit-login-field-text) !important;
+}
+.page-anonymous .form-check-input:checked,
+body.welcome-anonymous .form-check-input:checked {
+  background-color: var(--brandkit-login-accent-color) !important;
+  border-color: var(--brandkit-login-accent-color) !important;
+}
+.page-anonymous .form-check-input:focus,
+body.welcome-anonymous .form-check-input:focus {
+  box-shadow: 0 0 0 0.2rem color-mix(in srgb, var(--brandkit-login-accent-color) 35%, transparent) !important;
+}
+.page-anonymous .select2-results__option--highlighted,
+body.welcome-anonymous .select2-results__option--highlighted {
+  background-color: var(--brandkit-login-accent-color) !important;
+  color: #ffffff !important;
+}
+.page-anonymous .select2-results__option[aria-selected="true"],
+body.welcome-anonymous .select2-results__option[aria-selected="true"] {
+  background-color: color-mix(in srgb, var(--brandkit-login-accent-color) 75%, transparent) !important;
+  color: #ffffff !important;
+}
+.page-anonymous input::selection,
+.page-anonymous textarea::selection,
+.page-anonymous .select2-search__field::selection,
+body.welcome-anonymous input::selection,
+body.welcome-anonymous textarea::selection,
+body.welcome-anonymous .select2-search__field::selection {
+  background: var(--brandkit-login-accent-color) !important;
+  color: #ffffff !important;
+}
+.page-anonymous .main-content-card input:not([type="checkbox"]):not([type="radio"]),
+.page-anonymous .main-content-card textarea,
+.page-anonymous .main-content-card .form-control,
+body.welcome-anonymous .main-content-card input:not([type="checkbox"]):not([type="radio"]),
+body.welcome-anonymous .main-content-card textarea,
+body.welcome-anonymous .main-content-card .form-control {
+  background-color: var(--brandkit-login-field-bg) !important;
+}
+.page-anonymous #login_name,
+.page-anonymous #login_password,
+body.welcome-anonymous #login_name,
+body.welcome-anonymous #login_password {
+  background-color: var(--brandkit-login-field-bg) !important;
+}
+.page-anonymous #login_name,
+body.welcome-anonymous #login_name {
+  background-image: linear-gradient(var(--brandkit-login-field-bg), var(--brandkit-login-field-bg)), var(--brandkit-login-icon-user) !important;
+  background-repeat: no-repeat, no-repeat !important;
+  background-position: 0 0, var(--brandkit-login-icon-position) !important;
+  background-size: 100% 100%, 18px 18px !important;
+}
+.page-anonymous #login_password,
+body.welcome-anonymous #login_password {
+  background-image: linear-gradient(var(--brandkit-login-field-bg), var(--brandkit-login-field-bg)), var(--brandkit-login-icon-password) !important;
+  background-repeat: no-repeat, no-repeat !important;
+  background-position: 0 0, var(--brandkit-login-icon-position) !important;
+  background-size: 100% 100%, 18px 18px !important;
+}
+.page-anonymous .main-content-card input:not([type="checkbox"]):not([type="radio"]):focus,
+.page-anonymous .main-content-card input[type="password"]:focus,
+.page-anonymous .main-content-card textarea:focus,
+.page-anonymous .main-content-card .form-control:focus,
+body.welcome-anonymous .main-content-card input:not([type="checkbox"]):not([type="radio"]):focus,
+body.welcome-anonymous .main-content-card input[type="password"]:focus,
+body.welcome-anonymous .main-content-card textarea:focus,
+body.welcome-anonymous .main-content-card .form-control:focus {
+  background-color: var(--brandkit-login-field-bg) !important;
+}
+.page-anonymous .main-content-card input:-webkit-autofill,
+.page-anonymous .main-content-card input:-webkit-autofill:hover,
+.page-anonymous .main-content-card input:-webkit-autofill:focus,
+.page-anonymous .main-content-card input:-webkit-autofill:active,
+.page-anonymous .main-content-card input.form-control:-webkit-autofill,
+.page-anonymous .main-content-card input.form-control:-webkit-autofill:hover,
+.page-anonymous .main-content-card input.form-control:-webkit-autofill:focus,
+.page-anonymous .main-content-card input:autofill,
+.page-anonymous .main-content-card input:-internal-autofill-selected,
+.page-anonymous .main-content-card input:-moz-autofill,
+.page-anonymous .main-content-card input:-moz-autofill:focus,
+.page-anonymous .main-content-card input.form-control:-moz-autofill,
+.page-anonymous .main-content-card input.form-control:-moz-autofill:focus,
+.page-anonymous #login_name:-webkit-autofill,
+.page-anonymous #login_name:-webkit-autofill:hover,
+.page-anonymous #login_name:-webkit-autofill:focus,
+.page-anonymous #login_name:autofill,
+.page-anonymous #login_name:-internal-autofill-selected,
+.page-anonymous #login_name:-moz-autofill,
+.page-anonymous #login_name:-moz-autofill:focus,
+.page-anonymous #login_password:-webkit-autofill,
+.page-anonymous #login_password:-webkit-autofill:hover,
+.page-anonymous #login_password:-webkit-autofill:focus,
+.page-anonymous #login_password:autofill,
+.page-anonymous #login_password:-internal-autofill-selected,
+.page-anonymous #login_password:-moz-autofill,
+.page-anonymous #login_password:-moz-autofill:focus,
+body.welcome-anonymous .main-content-card input:-webkit-autofill,
+body.welcome-anonymous .main-content-card input:-webkit-autofill:hover,
+body.welcome-anonymous .main-content-card input:-webkit-autofill:focus,
+body.welcome-anonymous .main-content-card input:-webkit-autofill:active,
+body.welcome-anonymous .main-content-card input.form-control:-webkit-autofill,
+body.welcome-anonymous .main-content-card input.form-control:-webkit-autofill:hover,
+body.welcome-anonymous .main-content-card input.form-control:-webkit-autofill:focus,
+body.welcome-anonymous .main-content-card input:autofill,
+body.welcome-anonymous .main-content-card input:-internal-autofill-selected,
+body.welcome-anonymous .main-content-card input:-moz-autofill,
+body.welcome-anonymous .main-content-card input:-moz-autofill:focus,
+body.welcome-anonymous .main-content-card input.form-control:-moz-autofill,
+body.welcome-anonymous .main-content-card input.form-control:-moz-autofill:focus {
+  -webkit-box-shadow: 0 0 0px 1000px var(--brandkit-login-field-bg-autofill) inset, var(--brandkit-login-field-shadow-current, var(--brandkit-login-field-shadow)) !important;
+  box-shadow: 0 0 0px 1000px var(--brandkit-login-field-bg-autofill) inset, var(--brandkit-login-field-shadow-current, var(--brandkit-login-field-shadow)) !important;
+  background-color: var(--brandkit-login-field-bg-autofill) !important;
+  -webkit-text-fill-color: var(--brandkit-login-field-text-autofill, var(--tblr-body-color)) !important;
+  color: var(--brandkit-login-field-text-autofill, var(--tblr-body-color)) !important;
+  caret-color: var(--brandkit-login-field-text-autofill, var(--tblr-body-color)) !important;
+  transition: background-color 99999s ease-in-out 0s !important;
+  -webkit-background-clip: padding-box !important;
+  background-clip: padding-box !important;
+  filter: none !important;
+}
+.page-anonymous #login_name:-webkit-autofill,
+.page-anonymous #login_name:-webkit-autofill:hover,
+.page-anonymous #login_name:-webkit-autofill:focus,
+.page-anonymous #login_name:-webkit-autofill:active,
+.page-anonymous #login_name:autofill,
+.page-anonymous #login_name:-internal-autofill-selected,
+.page-anonymous #login_name:-moz-autofill,
+.page-anonymous #login_name:-moz-autofill:focus,
+body.welcome-anonymous #login_name:-webkit-autofill,
+body.welcome-anonymous #login_name:-webkit-autofill:hover,
+body.welcome-anonymous #login_name:-webkit-autofill:focus,
+body.welcome-anonymous #login_name:-webkit-autofill:active,
+body.welcome-anonymous #login_name:autofill,
+body.welcome-anonymous #login_name:-internal-autofill-selected,
+body.welcome-anonymous #login_name:-moz-autofill,
+body.welcome-anonymous #login_name:-moz-autofill:focus {
+  background: var(--brandkit-login-icon-user), linear-gradient(var(--brandkit-login-field-bg-autofill), var(--brandkit-login-field-bg-autofill)) !important;
+  background-repeat: no-repeat, no-repeat !important;
+  background-position: var(--brandkit-login-icon-position), 0 0 !important;
+  background-size: 18px 18px, 100% 100% !important;
+}
+.page-anonymous #login_password:-webkit-autofill,
+.page-anonymous #login_password:-webkit-autofill:hover,
+.page-anonymous #login_password:-webkit-autofill:focus,
+.page-anonymous #login_password:-webkit-autofill:active,
+.page-anonymous #login_password:autofill,
+.page-anonymous #login_password:-internal-autofill-selected,
+.page-anonymous #login_password:-moz-autofill,
+.page-anonymous #login_password:-moz-autofill:focus,
+body.welcome-anonymous #login_password:-webkit-autofill,
+body.welcome-anonymous #login_password:-webkit-autofill:hover,
+body.welcome-anonymous #login_password:-webkit-autofill:focus,
+body.welcome-anonymous #login_password:-webkit-autofill:active,
+body.welcome-anonymous #login_password:autofill,
+body.welcome-anonymous #login_password:-internal-autofill-selected,
+body.welcome-anonymous #login_password:-moz-autofill,
+body.welcome-anonymous #login_password:-moz-autofill:focus {
+  background: var(--brandkit-login-icon-password), linear-gradient(var(--brandkit-login-field-bg-autofill), var(--brandkit-login-field-bg-autofill)) !important;
+  background-repeat: no-repeat, no-repeat !important;
+  background-position: var(--brandkit-login-icon-position), 0 0 !important;
+  background-size: 18px 18px, 100% 100% !important;
+}
+.page-anonymous #login_name:-webkit-autofill,
+.page-anonymous #login_name:-webkit-autofill:hover,
+.page-anonymous #login_name:-webkit-autofill:focus,
+.page-anonymous #login_name:autofill,
+.page-anonymous #login_name:-internal-autofill-selected,
+.page-anonymous #login_name:-moz-autofill,
+.page-anonymous #login_name:-moz-autofill:focus,
+body.welcome-anonymous #login_name:-webkit-autofill,
+body.welcome-anonymous #login_name:-webkit-autofill:hover,
+body.welcome-anonymous #login_name:-webkit-autofill:focus,
+body.welcome-anonymous #login_name:autofill,
+body.welcome-anonymous #login_name:-internal-autofill-selected,
+body.welcome-anonymous #login_name:-moz-autofill,
+body.welcome-anonymous #login_name:-moz-autofill:focus {
+  -webkit-box-shadow: 0 0 0px 1000px var(--brandkit-login-field-bg-autofill) inset, var(--brandkit-login-field-shadow-current, var(--brandkit-login-field-shadow)) !important;
+  box-shadow: 0 0 0px 1000px var(--brandkit-login-field-bg-autofill) inset, var(--brandkit-login-field-shadow-current, var(--brandkit-login-field-shadow)) !important;
+  background-color: var(--brandkit-login-field-bg-autofill) !important;
+  background-image: var(--brandkit-login-icon-user) !important;
+  background-repeat: no-repeat !important;
+  background-position: var(--brandkit-login-icon-position) !important;
+  background-size: 18px 18px !important;
+  padding-left: var(--brandkit-login-icon-user-padding-left) !important;
+  padding-right: var(--brandkit-login-icon-user-padding-right) !important;
+  -webkit-text-fill-color: var(--brandkit-login-field-text-autofill, var(--tblr-body-color)) !important;
+  color: var(--brandkit-login-field-text-autofill, var(--tblr-body-color)) !important;
+  caret-color: var(--brandkit-login-field-text-autofill, var(--tblr-body-color)) !important;
+  -webkit-background-clip: padding-box !important;
+  background-clip: padding-box !important;
+}
+.page-anonymous .card input.form-control#login_name,
+body.welcome-anonymous .card input.form-control#login_name {
+  background-color: var(--brandkit-login-field-bg) !important;
+  background-image: var(--brandkit-login-icon-user) !important;
+  background-repeat: no-repeat !important;
+  background-position: var(--brandkit-login-icon-position) !important;
+  background-size: 18px 18px !important;
+  -webkit-background-clip: padding-box !important;
+  background-clip: padding-box !important;
+}
+.page-anonymous .card input.form-control#login_password,
+body.welcome-anonymous .card input.form-control#login_password {
+  background-color: var(--brandkit-login-field-bg) !important;
+  background-image: var(--brandkit-login-icon-password) !important;
+  background-repeat: no-repeat !important;
+  background-position: var(--brandkit-login-icon-position) !important;
+  background-size: 18px 18px !important;
+  -webkit-background-clip: padding-box !important;
+  background-clip: padding-box !important;
+}
+.page-anonymous .card input.form-control#login_name:-webkit-autofill,
+.page-anonymous .card input.form-control#login_name:-webkit-autofill:hover,
+.page-anonymous .card input.form-control#login_name:-webkit-autofill:focus,
+.page-anonymous .card input.form-control#login_name:-webkit-autofill:active,
+body.welcome-anonymous .card input.form-control#login_name:-webkit-autofill,
+body.welcome-anonymous .card input.form-control#login_name:-webkit-autofill:hover,
+body.welcome-anonymous .card input.form-control#login_name:-webkit-autofill:focus,
+body.welcome-anonymous .card input.form-control#login_name:-webkit-autofill:active,
+.page-anonymous .card input.form-control#login_name:autofill,
+.page-anonymous .card input.form-control#login_name:autofill:hover,
+.page-anonymous .card input.form-control#login_name:autofill:focus,
+.page-anonymous .card input.form-control#login_name:autofill:active,
+.page-anonymous .card input.form-control#login_name:-moz-autofill,
+.page-anonymous .card input.form-control#login_name:-moz-autofill:focus,
+body.welcome-anonymous .card input.form-control#login_name:autofill,
+body.welcome-anonymous .card input.form-control#login_name:autofill:hover,
+body.welcome-anonymous .card input.form-control#login_name:autofill:focus,
+body.welcome-anonymous .card input.form-control#login_name:autofill:active,
+body.welcome-anonymous .card input.form-control#login_name:-moz-autofill,
+body.welcome-anonymous .card input.form-control#login_name:-moz-autofill:focus {
+  background: var(--brandkit-login-icon-user), linear-gradient(var(--brandkit-login-field-bg-autofill), var(--brandkit-login-field-bg-autofill)) !important;
+  background-repeat: no-repeat, no-repeat !important;
+  background-position: var(--brandkit-login-icon-position), 0 0 !important;
+  background-size: 18px 18px, 100% 100% !important;
+  padding-left: var(--brandkit-login-icon-user-padding-left) !important;
+  padding-right: var(--brandkit-login-icon-user-padding-right) !important;
+  -webkit-box-shadow: 0 0 0 1000px var(--brandkit-login-field-bg-autofill) inset, var(--brandkit-login-field-shadow-current, var(--brandkit-login-field-shadow)) !important;
+  box-shadow: 0 0 0 1000px var(--brandkit-login-field-bg-autofill) inset, var(--brandkit-login-field-shadow-current, var(--brandkit-login-field-shadow)) !important;
+  background-color: var(--brandkit-login-field-bg-autofill) !important;
+  -webkit-background-clip: padding-box !important;
+  background-clip: padding-box !important;
+  -webkit-text-fill-color: var(--brandkit-login-field-text-autofill, var(--tblr-body-color)) !important;
+  color: var(--brandkit-login-field-text-autofill, var(--tblr-body-color)) !important;
+  filter: none !important;
+  appearance: none !important;
+  -moz-appearance: none !important;
+  -webkit-appearance: none !important;
+}
+.page-anonymous .card input.form-control#login_password:-webkit-autofill,
+.page-anonymous .card input.form-control#login_password:-webkit-autofill:hover,
+.page-anonymous .card input.form-control#login_password:-webkit-autofill:focus,
+.page-anonymous .card input.form-control#login_password:-webkit-autofill:active,
+body.welcome-anonymous .card input.form-control#login_password:-webkit-autofill,
+body.welcome-anonymous .card input.form-control#login_password:-webkit-autofill:hover,
+body.welcome-anonymous .card input.form-control#login_password:-webkit-autofill:focus,
+body.welcome-anonymous .card input.form-control#login_password:-webkit-autofill:active,
+.page-anonymous .card input.form-control#login_password:autofill,
+.page-anonymous .card input.form-control#login_password:autofill:hover,
+.page-anonymous .card input.form-control#login_password:autofill:focus,
+.page-anonymous .card input.form-control#login_password:autofill:active,
+.page-anonymous .card input.form-control#login_password:-moz-autofill,
+.page-anonymous .card input.form-control#login_password:-moz-autofill:focus,
+body.welcome-anonymous .card input.form-control#login_password:autofill,
+body.welcome-anonymous .card input.form-control#login_password:autofill:hover,
+body.welcome-anonymous .card input.form-control#login_password:autofill:focus,
+body.welcome-anonymous .card input.form-control#login_password:autofill:active,
+body.welcome-anonymous .card input.form-control#login_password:-moz-autofill,
+body.welcome-anonymous .card input.form-control#login_password:-moz-autofill:focus {
+  background: var(--brandkit-login-icon-password), linear-gradient(var(--brandkit-login-field-bg-autofill), var(--brandkit-login-field-bg-autofill)) !important;
+  background-repeat: no-repeat, no-repeat !important;
+  background-position: var(--brandkit-login-icon-position), 0 0 !important;
+  background-size: 18px 18px, 100% 100% !important;
+  padding-left: var(--brandkit-login-icon-password-padding-left) !important;
+  padding-right: var(--brandkit-login-icon-password-padding-right) !important;
+  -webkit-box-shadow: 0 0 0 1000px var(--brandkit-login-field-bg-autofill) inset, var(--brandkit-login-field-shadow-current, var(--brandkit-login-field-shadow)) !important;
+  box-shadow: 0 0 0 1000px var(--brandkit-login-field-bg-autofill) inset, var(--brandkit-login-field-shadow-current, var(--brandkit-login-field-shadow)) !important;
+  background-color: var(--brandkit-login-field-bg-autofill) !important;
+  -webkit-background-clip: padding-box !important;
+  background-clip: padding-box !important;
+  -webkit-text-fill-color: var(--brandkit-login-field-text-autofill, var(--tblr-body-color)) !important;
+  color: var(--brandkit-login-field-text-autofill, var(--tblr-body-color)) !important;
+  filter: none !important;
+  appearance: none !important;
+  -moz-appearance: none !important;
+  -webkit-appearance: none !important;
+}
+.page-anonymous #login_password:-webkit-autofill,
+.page-anonymous #login_password:-webkit-autofill:hover,
+.page-anonymous #login_password:-webkit-autofill:focus,
+.page-anonymous #login_password:autofill,
+.page-anonymous #login_password:-internal-autofill-selected,
+.page-anonymous #login_password:-moz-autofill,
+.page-anonymous #login_password:-moz-autofill:focus,
+body.welcome-anonymous #login_password:-webkit-autofill,
+body.welcome-anonymous #login_password:-webkit-autofill:hover,
+body.welcome-anonymous #login_password:-webkit-autofill:focus,
+body.welcome-anonymous #login_password:autofill,
+body.welcome-anonymous #login_password:-internal-autofill-selected,
+body.welcome-anonymous #login_password:-moz-autofill,
+body.welcome-anonymous #login_password:-moz-autofill:focus {
+  -webkit-box-shadow: 0 0 0px 1000px var(--brandkit-login-field-bg-autofill) inset, var(--brandkit-login-field-shadow-current, var(--brandkit-login-field-shadow)) !important;
+  box-shadow: 0 0 0px 1000px var(--brandkit-login-field-bg-autofill) inset, var(--brandkit-login-field-shadow-current, var(--brandkit-login-field-shadow)) !important;
+  background-color: var(--brandkit-login-field-bg-autofill) !important;
+  background-image: var(--brandkit-login-icon-password) !important;
+  background-repeat: no-repeat !important;
+  background-position: var(--brandkit-login-icon-position) !important;
+  background-size: 18px 18px !important;
+  padding-left: var(--brandkit-login-icon-password-padding-left) !important;
+  padding-right: var(--brandkit-login-icon-password-padding-right) !important;
+  -webkit-text-fill-color: var(--brandkit-login-field-text-autofill, var(--tblr-body-color)) !important;
+  color: var(--brandkit-login-field-text-autofill, var(--tblr-body-color)) !important;
+  caret-color: var(--brandkit-login-field-text-autofill, var(--tblr-body-color)) !important;
+}
+.page-anonymous #login_name:-webkit-autofill,
+.page-anonymous #login_name:-webkit-autofill:hover,
+.page-anonymous #login_name:-webkit-autofill:focus,
+.page-anonymous #login_name:autofill,
+.page-anonymous #login_name:-internal-autofill-selected,
+.page-anonymous #login_name:-moz-autofill,
+.page-anonymous #login_name:-moz-autofill:focus,
+body.welcome-anonymous #login_name:-webkit-autofill,
+body.welcome-anonymous #login_name:-webkit-autofill:hover,
+body.welcome-anonymous #login_name:-webkit-autofill:focus,
+body.welcome-anonymous #login_name:autofill,
+body.welcome-anonymous #login_name:-internal-autofill-selected,
+body.welcome-anonymous #login_name:-moz-autofill,
+body.welcome-anonymous #login_name:-moz-autofill:focus {
+  background-image: var(--brandkit-login-icon-user) !important;
+  background-repeat: no-repeat !important;
+  background-position: var(--brandkit-login-icon-position) !important;
+  background-size: 18px 18px !important;
+  padding-left: var(--brandkit-login-icon-user-padding-left) !important;
+  padding-right: var(--brandkit-login-icon-user-padding-right) !important;
+}
+.page-anonymous #login_password:-webkit-autofill,
+.page-anonymous #login_password:-webkit-autofill:hover,
+.page-anonymous #login_password:-webkit-autofill:focus,
+.page-anonymous #login_password:autofill,
+.page-anonymous #login_password:-internal-autofill-selected,
+.page-anonymous #login_password:-moz-autofill,
+.page-anonymous #login_password:-moz-autofill:focus,
+body.welcome-anonymous #login_password:-webkit-autofill,
+body.welcome-anonymous #login_password:-webkit-autofill:hover,
+body.welcome-anonymous #login_password:-webkit-autofill:focus,
+body.welcome-anonymous #login_password:autofill,
+body.welcome-anonymous #login_password:-internal-autofill-selected,
+body.welcome-anonymous #login_password:-moz-autofill,
+body.welcome-anonymous #login_password:-moz-autofill:focus {
+  background-image: var(--brandkit-login-icon-password) !important;
+  background-repeat: no-repeat !important;
+  background-position: var(--brandkit-login-icon-position) !important;
+  background-size: 18px 18px !important;
+  padding-left: var(--brandkit-login-icon-password-padding-left) !important;
+  padding-right: var(--brandkit-login-icon-password-padding-right) !important;
+}
+.page-anonymous .main-content-card input:-webkit-autofill,
+.page-anonymous .main-content-card input:-webkit-autofill:hover,
+.page-anonymous .main-content-card input:-webkit-autofill:focus,
+.page-anonymous .main-content-card input:-webkit-autofill:active,
+.page-anonymous .main-content-card input.form-control:-webkit-autofill,
+.page-anonymous .main-content-card input.form-control:-webkit-autofill:hover,
+.page-anonymous .main-content-card input.form-control:-webkit-autofill:focus,
+.page-anonymous .main-content-card input:autofill,
+.page-anonymous .main-content-card input:autofill:hover,
+.page-anonymous .main-content-card input:autofill:focus,
+.page-anonymous .main-content-card input:autofill:active,
+.page-anonymous .main-content-card input:-internal-autofill-selected,
+.page-anonymous .main-content-card input:-moz-autofill,
+.page-anonymous .main-content-card input:-moz-autofill:focus,
+.page-anonymous .main-content-card input.form-control:-moz-autofill,
+.page-anonymous .main-content-card input.form-control:-moz-autofill:focus,
+body.welcome-anonymous .main-content-card input:-webkit-autofill,
+body.welcome-anonymous .main-content-card input:-webkit-autofill:hover,
+body.welcome-anonymous .main-content-card input:-webkit-autofill:focus,
+body.welcome-anonymous .main-content-card input:-webkit-autofill:active,
+body.welcome-anonymous .main-content-card input.form-control:-webkit-autofill,
+body.welcome-anonymous .main-content-card input.form-control:-webkit-autofill:hover,
+body.welcome-anonymous .main-content-card input.form-control:-webkit-autofill:focus,
+body.welcome-anonymous .main-content-card input:autofill,
+body.welcome-anonymous .main-content-card input:autofill:hover,
+body.welcome-anonymous .main-content-card input:autofill:focus,
+body.welcome-anonymous .main-content-card input:autofill:active,
+body.welcome-anonymous .main-content-card input:-internal-autofill-selected,
+body.welcome-anonymous .main-content-card input:-moz-autofill,
+body.welcome-anonymous .main-content-card input:-moz-autofill:focus,
+body.welcome-anonymous .main-content-card input.form-control:-moz-autofill,
+body.welcome-anonymous .main-content-card input.form-control:-moz-autofill:focus {
+  --brandkit-login-field-shadow-current: none;
+  background-color: var(--brandkit-login-field-bg-autofill) !important;
+  border: var(--brandkit-login-field-border-width) solid var(--brandkit-login-field-border) !important;
+  border-radius: var(--brandkit-login-field-radius) !important;
+  -webkit-box-shadow: 0 0 0 1000px var(--brandkit-login-field-bg-autofill) inset, var(--brandkit-login-field-shadow-current) !important;
+  box-shadow: 0 0 0 1000px var(--brandkit-login-field-bg-autofill) inset, var(--brandkit-login-field-shadow-current) !important;
+  -webkit-text-fill-color: var(--brandkit-login-field-text-autofill, var(--tblr-body-color)) !important;
+  color: var(--brandkit-login-field-text-autofill, var(--tblr-body-color)) !important;
+  caret-color: var(--brandkit-login-field-text-autofill, var(--tblr-body-color)) !important;
+  background-clip: padding-box !important;
+  filter: none !important;
+  appearance: none !important;
+  -moz-appearance: none !important;
+  -webkit-appearance: none !important;
+}
+.page-anonymous .card input.form-control#login_name:-webkit-autofill,
+.page-anonymous .card input.form-control#login_name:-webkit-autofill:hover,
+.page-anonymous .card input.form-control#login_name:-webkit-autofill:focus,
+.page-anonymous .card input.form-control#login_name:-webkit-autofill:active,
+.page-anonymous .card input.form-control#login_name:autofill,
+.page-anonymous .card input.form-control#login_name:autofill:hover,
+.page-anonymous .card input.form-control#login_name:autofill:focus,
+.page-anonymous .card input.form-control#login_name:autofill:active,
+.page-anonymous .card input.form-control#login_name:-moz-autofill,
+.page-anonymous .card input.form-control#login_name:-moz-autofill:focus,
+body.welcome-anonymous .card input.form-control#login_name:-webkit-autofill,
+body.welcome-anonymous .card input.form-control#login_name:-webkit-autofill:hover,
+body.welcome-anonymous .card input.form-control#login_name:-webkit-autofill:focus,
+body.welcome-anonymous .card input.form-control#login_name:-webkit-autofill:active,
+body.welcome-anonymous .card input.form-control#login_name:autofill,
+body.welcome-anonymous .card input.form-control#login_name:autofill:hover,
+body.welcome-anonymous .card input.form-control#login_name:autofill:focus,
+body.welcome-anonymous .card input.form-control#login_name:autofill:active,
+body.welcome-anonymous .card input.form-control#login_name:-moz-autofill,
+body.welcome-anonymous .card input.form-control#login_name:-moz-autofill:focus {
+  background: var(--brandkit-login-icon-user), linear-gradient(var(--brandkit-login-field-bg-autofill), var(--brandkit-login-field-bg-autofill)) !important;
+  background-repeat: no-repeat, no-repeat !important;
+  background-position: var(--brandkit-login-icon-position), 0 0 !important;
+  background-size: 18px 18px, 100% 100% !important;
+  padding-left: var(--brandkit-login-icon-user-padding-left) !important;
+  padding-right: var(--brandkit-login-icon-user-padding-right) !important;
+}
+.page-anonymous .card input.form-control#login_password:-webkit-autofill,
+.page-anonymous .card input.form-control#login_password:-webkit-autofill:hover,
+.page-anonymous .card input.form-control#login_password:-webkit-autofill:focus,
+.page-anonymous .card input.form-control#login_password:-webkit-autofill:active,
+.page-anonymous .card input.form-control#login_password:autofill,
+.page-anonymous .card input.form-control#login_password:autofill:hover,
+.page-anonymous .card input.form-control#login_password:autofill:focus,
+.page-anonymous .card input.form-control#login_password:autofill:active,
+.page-anonymous .card input.form-control#login_password:-moz-autofill,
+.page-anonymous .card input.form-control#login_password:-moz-autofill:focus,
+body.welcome-anonymous .card input.form-control#login_password:-webkit-autofill,
+body.welcome-anonymous .card input.form-control#login_password:-webkit-autofill:hover,
+body.welcome-anonymous .card input.form-control#login_password:-webkit-autofill:focus,
+body.welcome-anonymous .card input.form-control#login_password:-webkit-autofill:active,
+body.welcome-anonymous .card input.form-control#login_password:autofill,
+body.welcome-anonymous .card input.form-control#login_password:autofill:hover,
+body.welcome-anonymous .card input.form-control#login_password:autofill:focus,
+body.welcome-anonymous .card input.form-control#login_password:autofill:active,
+body.welcome-anonymous .card input.form-control#login_password:-moz-autofill,
+body.welcome-anonymous .card input.form-control#login_password:-moz-autofill:focus {
+  background: var(--brandkit-login-icon-password), linear-gradient(var(--brandkit-login-field-bg-autofill), var(--brandkit-login-field-bg-autofill)) !important;
+  background-repeat: no-repeat, no-repeat !important;
+  background-position: var(--brandkit-login-icon-position), 0 0 !important;
+  background-size: 18px 18px, 100% 100% !important;
+  padding-left: var(--brandkit-login-icon-password-padding-left) !important;
+  padding-right: var(--brandkit-login-icon-password-padding-right) !important;
+}
+body.welcome-anonymous .page-anonymous .card {
+  padding: 2rem 2.5rem;
+  margin-top: 5px;
+  transition: none;
+}
+@media (max-width: 850px) {
+  .page-anonymous .main-content-card,
+  body.welcome-anonymous .main-content-card {
+    width: 90vw !important;
+    height: 90vh !important;
+    max-height: none !important;
+  }
+  body.welcome-anonymous {
+    align-items: flex-start;
+  }
+  body.welcome-anonymous .flex-fill {
+    padding-top: 2rem !important;
+  }
+  .page-anonymous .container-tight,
+  body.welcome-anonymous .container-tight {
+    max-width: 90vw !important;
+    width: 90vw !important;
+  }
+  .page-anonymous .main-content-card,
+  body.welcome-anonymous .main-content-card {
+    padding: 1.25rem 1.5rem !important;
+  }
+  .page-anonymous .main-content-card::before,
+  body.welcome-anonymous .main-content-card::before,
+  .page-anonymous .glpi-logo,
+  body.welcome-anonymous .glpi-logo {
+    width: min(var(--brandkit-login-logo-width), 70vw) !important;
+    height: min(var(--brandkit-login-logo-height), 120px) !important;
+  }
+  .page-anonymous .login-title,
+  body.welcome-anonymous .login-title {
+    font-size: 1.1rem !important;
+  }
+  .page-anonymous,
+  body.welcome-anonymous {
+    --brandkit-login-split-width: 100% !important;
+  }
+  .page-anonymous .container-tight,
+  body.welcome-anonymous .container-tight {
+    margin-left: auto !important;
+    margin-right: auto !important;
+    transform: translateX(0) !important;
+  }
+  .page-anonymous .container-tight .text-center,
+  body.welcome-anonymous .container-tight .text-center {
+    text-align: center !important;
+  }
+}
+@media (max-width: 640px) {
+  .page-anonymous,
+  body.welcome-anonymous,
+  body.brandkit-error-page {
+    background-size: cover !important;
+    background-repeat: no-repeat !important;
+    background-position: center !important;
+    background-attachment: scroll !important;
+  }
+  .page-anonymous .main-content-card,
+  body.welcome-anonymous .main-content-card {
+    height: auto !important;
+    max-height: none !important;
+  }
+  .page-anonymous .main-content-card .card-body,
+  body.welcome-anonymous .main-content-card .card-body {
+    padding-bottom: calc(1rem * var(--brandkit-login-panel-scale));
+  }
+  body.welcome-anonymous .page-anonymous .card {
+    padding-bottom: calc(1.25rem * var(--brandkit-login-panel-scale));
+  }
+  .page-anonymous .form-footer,
+  body.welcome-anonymous .form-footer {
+    margin-bottom: 0 !important;
+  }
+}
+@-moz-document url-prefix() {
+  body.welcome-anonymous .main-content-card {
+    padding-top: 12px;
+    padding-bottom: 12px;
+  }
+  body.welcome-anonymous .page-anonymous .card {
+    margin-top: 12px;
+  }
+  .page-anonymous .main-content-card input:-moz-autofill,
+  .page-anonymous .main-content-card input:-moz-autofill:focus,
+  .page-anonymous .main-content-card input.form-control:-moz-autofill,
+  .page-anonymous .main-content-card input.form-control:-moz-autofill:focus,
+  body.welcome-anonymous .main-content-card input:-moz-autofill,
+  body.welcome-anonymous .main-content-card input:-moz-autofill:focus,
+  body.welcome-anonymous .main-content-card input.form-control:-moz-autofill,
+  body.welcome-anonymous .main-content-card input.form-control:-moz-autofill:focus {
+    box-shadow: 0 0 0px 1000px var(--brandkit-login-field-bg-autofill) inset, var(--brandkit-login-field-shadow-current, var(--brandkit-login-field-shadow)) !important;
+    background-color: var(--brandkit-login-field-bg-autofill) !important;
+    color: var(--brandkit-login-field-text) !important;
+    caret-color: var(--brandkit-login-field-text) !important;
+    background-clip: padding-box !important;
+  }
+  .page-anonymous #login_name:-moz-autofill,
+  .page-anonymous #login_name:-moz-autofill:focus,
+  body.welcome-anonymous #login_name:-moz-autofill,
+  body.welcome-anonymous #login_name:-moz-autofill:focus {
+    background: var(--brandkit-login-icon-user), linear-gradient(var(--brandkit-login-field-bg-autofill), var(--brandkit-login-field-bg-autofill)) !important;
+    background-repeat: no-repeat, no-repeat !important;
+    background-position: var(--brandkit-login-icon-position), 0 0 !important;
+    background-size: 18px 18px, 100% 100% !important;
+    padding-left: var(--brandkit-login-icon-user-padding-left) !important;
+    padding-right: var(--brandkit-login-icon-user-padding-right) !important;
+  }
+  .page-anonymous #login_password:-moz-autofill,
+  .page-anonymous #login_password:-moz-autofill:focus,
+  body.welcome-anonymous #login_password:-moz-autofill,
+  body.welcome-anonymous #login_password:-moz-autofill:focus {
+    background: var(--brandkit-login-icon-password), linear-gradient(var(--brandkit-login-field-bg-autofill), var(--brandkit-login-field-bg-autofill)) !important;
+    background-repeat: no-repeat, no-repeat !important;
+    background-position: var(--brandkit-login-icon-position), 0 0 !important;
+    background-size: 18px 18px, 100% 100% !important;
+    padding-left: var(--brandkit-login-icon-password-padding-left) !important;
+    padding-right: var(--brandkit-login-icon-password-padding-right) !important;
+  }
+}
+body.welcome-anonymous .card-header {
+  margin: 0;
+  padding: 0 !important;
+  min-height: 0 !important;
+}
+body.welcome-anonymous .card-header.mb-4 {
+  margin-bottom: calc(0.2rem * var(--brandkit-login-panel-scale)) !important;
+}
+body.welcome-anonymous .card-header h2,
+body.welcome-anonymous .card-header .mx-auto {
+  margin-bottom: 0 !important;
+}
+body.welcome-anonymous .card-header:empty {
+  display: none !important;
+}
+body.welcome-anonymous .alert,
+body.welcome-anonymous .alert-danger,
+body.welcome-anonymous .alert-warning,
+body.welcome-anonymous .alert-info {
+  background-color: transparent !important;
+  border: 1px solid rgba(220, 53, 69, 0.3) !important;
+  border-radius: 0.75rem !important;
+  color: var(--brandkit-login-text-color) !important;
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  box-shadow: 0 4px 15px rgba(220, 53, 69, 0.2);
+  margin-bottom: 1rem;
+  padding: 1rem 1.25rem;
+}
+body.welcome-anonymous .alert-danger {
+  border-color: rgba(220, 53, 69, 0.4) !important;
+  background-color: rgba(220, 53, 69, 0.1) !important;
+}
+body.welcome-anonymous .alert-warning {
+  border-color: rgba(245, 158, 11, 0.45) !important;
+  background-color: rgba(245, 158, 11, 0.12) !important;
+}
+body.welcome-anonymous .alert *,
+body.welcome-anonymous .alert-danger *,
+body.welcome-anonymous .alert p,
+body.welcome-anonymous .alert span,
+body.welcome-anonymous .alert div {
+  color: var(--brandkit-login-text-color) !important;
+  background-color: transparent !important;
+}
+body.welcome-anonymous .alert .btn,
+body.welcome-anonymous .alert-danger .btn {
+  background: rgba(255, 255, 255, 0.1) !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  color: var(--brandkit-login-text-color) !important;
+  border-radius: 0.5rem;
+  transition: all 0.3s ease;
+}
+body.welcome-anonymous .alert .btn.btn-primary {
+  background: var(--brandkit-login-button-bg) !important;
+  border-color: var(--brandkit-login-button-border) !important;
+  color: var(--brandkit-login-button-text) !important;
+  font-size: calc(var(--brandkit-login-button-text-size) * var(--brandkit-login-panel-scale));
+  border-radius: var(--brandkit-login-button-radius) !important;
+  clip-path: var(--brandkit-login-button-clip);
+}
+body.welcome-anonymous .alert .btn:hover,
+body.welcome-anonymous .alert-danger .btn:hover {
+  background: rgba(255, 255, 255, 0.2) !important;
+  border-color: rgba(255, 255, 255, 0.3) !important;
+  transform: translateY(-1px);
+}
+body.welcome-anonymous .btn.btn-primary:not(.brandkit-login-button) {
+  background: var(--brandkit-login-button-bg) !important;
+  border-color: var(--brandkit-login-button-border) !important;
+  color: var(--brandkit-login-button-text) !important;
+  font-size: calc(var(--brandkit-login-button-text-size) * var(--brandkit-login-panel-scale));
+  border-radius: var(--brandkit-login-button-radius) !important;
+  clip-path: var(--brandkit-login-button-clip);
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  padding: 0.9rem 1.75rem;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+  width: 100%;
+}
+body.welcome-anonymous button[type="submit"][name="submit"],
+body.welcome-anonymous .form-footer .btn {
+  background: var(--brandkit-login-button-bg) !important;
+  border-color: var(--brandkit-login-button-border) !important;
+  color: var(--brandkit-login-button-text) !important;
+  font-size: calc(var(--brandkit-login-button-text-size) * var(--brandkit-login-panel-scale));
+  border-radius: var(--brandkit-login-button-radius) !important;
+  clip-path: var(--brandkit-login-button-clip);
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  padding: 0.9rem 1.75rem;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+  width: 100%;
+}
+body.welcome-anonymous,
+body.welcome-anonymous #page,
+body.welcome-anonymous main {
+  background-color: var(--brandkit-login-error-overlay, rgba(0, 0, 0, 0.20)) !important;
+  background-image: linear-gradient(var(--brandkit-login-error-overlay, rgba(0, 0, 0, 0.20)), var(--brandkit-login-error-overlay, rgba(0, 0, 0, 0.20))), var(--brandkit-login-error-wallpaper, none) !important;
+  background-size: cover !important;
+  background-position: center !important;
+  background-repeat: no-repeat !important;
+  background-attachment: fixed !important;
+}
+body.brandkit-error-page .navbar {
+  display: none !important;
+}
+body.brandkit-error-page .page,
+body.brandkit-error-page .page-wrapper,
+body.brandkit-error-page .page-body {
+  min-height: 100vh;
+}
+body.brandkit-error-page #page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 1.5rem;
+}
+body.brandkit-error-page #page > .card {
+  background: var(--brandkit-login-panel-color) !important;
+  backdrop-filter: blur(var(--brandkit-login-panel-blur)) !important;
+  -webkit-backdrop-filter: blur(var(--brandkit-login-panel-blur)) !important;
+  border-radius: 1.5rem !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4), 0 5px 15px rgba(0, 0, 0, 0.3), 0 0 20px rgba(255, 255, 255, 0.05) !important;
+  width: min(100%, 700px);
+  padding: 2rem 2.5rem;
+}
+body.brandkit-error-page #page .alert,
+body.brandkit-error-page #page .alert-danger,
+body.brandkit-error-page #page .alert-warning,
+body.brandkit-error-page #page .alert-info {
+  background-color: transparent !important;
+  border: 1px solid rgba(220, 53, 69, 0.3) !important;
+  border-radius: 0.75rem !important;
+  color: var(--brandkit-login-text-color) !important;
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  box-shadow: 0 4px 15px rgba(220, 53, 69, 0.2);
+  padding: 1rem 1.25rem;
+}
+body.brandkit-error-page #page .alert-warning {
+  border-color: rgba(245, 158, 11, 0.45) !important;
+  background-color: rgba(245, 158, 11, 0.12) !important;
+}
+body.brandkit-error-page #page .alert * {
+  color: var(--brandkit-login-text-color) !important;
+}
+body.brandkit-error-page #page .alert a,
+body.brandkit-error-page #page .btn.btn-primary {
+  background: var(--brandkit-login-button-bg) !important;
+  border-color: var(--brandkit-login-button-border) !important;
+  color: var(--brandkit-login-button-text) !important;
+  border-radius: var(--brandkit-login-button-radius) !important;
+  clip-path: var(--brandkit-login-button-clip);
+  font-weight: 600;
+  letter-spacing: 0.03em;
+}
+body.horizontal-layout:not(.central):not(.helpdesk) .page,
+body.horizontal-layout:not(.central):not(.helpdesk) .page-wrapper,
+body.horizontal-layout:not(.central):not(.helpdesk) .page-body {
+  min-height: 100vh;
+  background: transparent !important;
+}
+body.horizontal-layout:not(.central):not(.helpdesk) .navbar {
+  display: none !important;
+}
+body.horizontal-layout:not(.central):not(.helpdesk) #page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 1.5rem;
+  background-image: var(--brandkit-login-error-wallpaper, none) !important;
+  background-color: var(--brandkit-login-error-overlay, transparent) !important;
+  background-size: cover !important;
+  background-position: center !important;
+  background-repeat: no-repeat !important;
+  background-attachment: fixed !important;
+  background-blend-mode: darken !important;
+}
+body.horizontal-layout:not(.central):not(.helpdesk) #page.legacy {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 1.5rem;
+  background-image: var(--brandkit-login-error-wallpaper, none) !important;
+  background-color: var(--brandkit-login-error-overlay, transparent) !important;
+  background-size: cover !important;
+  background-position: center !important;
+  background-repeat: no-repeat !important;
+  background-attachment: fixed !important;
+  background-blend-mode: darken !important;
+}
+body.horizontal-layout:not(.central):not(.helpdesk) #page > .card,
+body.horizontal-layout:not(.central):not(.helpdesk) #page .card,
+body.horizontal-layout:not(.central):not(.helpdesk) #page.legacy > .card {
+  background: var(--brandkit-login-panel-color) !important;
+  backdrop-filter: blur(var(--brandkit-login-panel-blur)) !important;
+  -webkit-backdrop-filter: blur(var(--brandkit-login-panel-blur)) !important;
+  border-radius: 1.5rem !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4), 0 5px 15px rgba(0, 0, 0, 0.3), 0 0 20px rgba(255, 255, 255, 0.05) !important;
+  width: min(100%, 700px);
+  padding: 2rem 2.5rem;
+}
+body.horizontal-layout:not(.central):not(.helpdesk) #page .alert,
+body.horizontal-layout:not(.central):not(.helpdesk) #page .alert-danger,
+body.horizontal-layout:not(.central):not(.helpdesk) #page .alert-warning,
+body.horizontal-layout:not(.central):not(.helpdesk) #page .alert-info {
+  background-color: transparent !important;
+  border: 1px solid rgba(220, 53, 69, 0.3) !important;
+  border-radius: 0.75rem !important;
+  color: var(--brandkit-login-text-color) !important;
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  box-shadow: 0 4px 15px rgba(220, 53, 69, 0.2);
+  padding: 1rem 1.25rem;
+}
+body.horizontal-layout:not(.central):not(.helpdesk) #page .alert-warning {
+  border-color: rgba(245, 158, 11, 0.45) !important;
+  background-color: rgba(245, 158, 11, 0.12) !important;
+}
+body.horizontal-layout:not(.central):not(.helpdesk) #page .alert * {
+  color: var(--brandkit-login-text-color) !important;
+}
+body.horizontal-layout:not(.central):not(.helpdesk) #page .alert a,
+body.horizontal-layout:not(.central):not(.helpdesk) #page .btn.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  margin-top: 0.75rem;
+  background: var(--brandkit-login-button-bg) !important;
+  border-color: var(--brandkit-login-button-border) !important;
+  color: var(--brandkit-login-button-text) !important;
+  border-radius: var(--brandkit-login-button-radius) !important;
+  clip-path: var(--brandkit-login-button-clip);
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  padding: 0.9rem 1.75rem;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+  text-decoration: none;
+}
+body.horizontal-layout:has(#page.legacy > .card) {
+  background-image: var(--brandkit-login-error-wallpaper, none);
+  background-color: var(--brandkit-login-error-overlay, transparent);
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-blend-mode: darken;
+  min-height: 100vh;
+}
+body.horizontal-layout:has(#page.legacy > .card) .navbar {
+  display: none !important;
+}
+body.horizontal-layout:has(#page.legacy > .card) .page,
+body.horizontal-layout:has(#page.legacy > .card) .page-wrapper,
+body.horizontal-layout:has(#page.legacy > .card) .page-body {
+  min-height: 100vh;
+}
+body.horizontal-layout:has(#page.legacy > .card) #page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 1.5rem;
+}
+body.horizontal-layout:has(#page.legacy > .card) #page > .card {
+  background: var(--brandkit-login-panel-color) !important;
+  backdrop-filter: blur(var(--brandkit-login-panel-blur)) !important;
+  -webkit-backdrop-filter: blur(var(--brandkit-login-panel-blur)) !important;
+  border-radius: 1.5rem !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4), 0 5px 15px rgba(0, 0, 0, 0.3), 0 0 20px rgba(255, 255, 255, 0.05) !important;
+  width: min(100%, 700px);
+  padding: 2rem 2.5rem;
+}
+body.horizontal-layout:has(#page.legacy > .card) #page .alert,
+body.horizontal-layout:has(#page.legacy > .card) #page .alert-danger,
+body.horizontal-layout:has(#page.legacy > .card) #page .alert-warning,
+body.horizontal-layout:has(#page.legacy > .card) #page .alert-info {
+  background-color: transparent !important;
+  border: 1px solid rgba(220, 53, 69, 0.3) !important;
+  border-radius: 0.75rem !important;
+  color: var(--brandkit-login-text-color) !important;
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  box-shadow: 0 4px 15px rgba(220, 53, 69, 0.2);
+  padding: 1rem 1.25rem;
+}
+body.horizontal-layout:has(#page.legacy > .card) #page .alert-warning {
+  border-color: rgba(245, 158, 11, 0.45) !important;
+  background-color: rgba(245, 158, 11, 0.12) !important;
+}
+body.horizontal-layout:has(#page.legacy > .card) #page .alert * {
+  color: var(--brandkit-login-text-color) !important;
+}
+body.horizontal-layout:has(#page.legacy > .card) #page .alert a,
+body.horizontal-layout:has(#page.legacy > .card) #page .btn.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  margin-top: 0.75rem;
+  background: var(--brandkit-login-button-bg) !important;
+  border-color: var(--brandkit-login-button-border) !important;
+  color: var(--brandkit-login-button-text) !important;
+  border-radius: var(--brandkit-login-button-radius) !important;
+  clip-path: var(--brandkit-login-button-clip);
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  padding: 0.9rem 1.75rem;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+  text-decoration: none;
+}
+#page.legacy > .card {
+  position: relative;
+  background: var(--brandkit-login-panel-color) !important;
+  backdrop-filter: blur(var(--brandkit-login-panel-blur)) !important;
+  -webkit-backdrop-filter: blur(var(--brandkit-login-panel-blur)) !important;
+  border-radius: 1.5rem !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4), 0 5px 15px rgba(0, 0, 0, 0.3), 0 0 20px rgba(255, 255, 255, 0.05) !important;
+  width: min(100%, 700px);
+  margin: 8vh auto 0 auto;
+  padding: 2rem 2.5rem;
+}
+#page.legacy > .card::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: var(--brandkit-login-error-wallpaper, none);
+  background-color: var(--brandkit-login-error-overlay, transparent);
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-blend-mode: darken;
+  z-index: -1;
+}
+#page.legacy > .card .alert,
+#page.legacy > .card .alert-danger,
+#page.legacy > .card .alert-warning,
+#page.legacy > .card .alert-info {
+  background-color: transparent !important;
+  border: 1px solid rgba(220, 53, 69, 0.3) !important;
+  border-radius: 0.75rem !important;
+  color: var(--brandkit-login-text-color) !important;
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  box-shadow: 0 4px 15px rgba(220, 53, 69, 0.2);
+  padding: 1rem 1.25rem;
+}
+#page.legacy > .card .alert-warning {
+  border-color: rgba(245, 158, 11, 0.45) !important;
+  background-color: rgba(245, 158, 11, 0.12) !important;
+}
+#page.legacy > .card .alert * {
+  color: var(--brandkit-login-text-color) !important;
+}
+#page.legacy > .card .alert a,
+#page.legacy > .card .btn.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  margin-top: 0.75rem;
+  background: var(--brandkit-login-button-bg) !important;
+  border-color: var(--brandkit-login-button-border) !important;
+  color: var(--brandkit-login-button-text) !important;
+  border-radius: var(--brandkit-login-button-radius) !important;
+  clip-path: var(--brandkit-login-button-clip);
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  padding: 0.9rem 1.75rem;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+  text-decoration: none;
+}
+body.welcome-anonymous .alert .btn-close,
+body.welcome-anonymous .alert .close {
+  filter: brightness(0) invert(1);
+  opacity: 0.8;
+}
+.page-anonymous .main-content-card .row.justify-content-center > .col-md-5,
+body.welcome-anonymous .main-content-card .row.justify-content-center > .col-md-5 {
+  flex: 0 0 100%;
+  max-width: 100%;
+}
+body.welcome-anonymous .page-anonymous .card-body,
+body.welcome-anonymous .main-content-card .card-body {
+  background: transparent !important;
+  box-sizing: border-box;
+  flex: 1;
+  overflow-y: auto;
+}
+.page-anonymous.brandkit-logo-inside .main-content-card .glpi-logo,
+body.welcome-anonymous.brandkit-logo-inside .main-content-card .glpi-logo {
+  margin: 0 auto 1rem auto;
+}
+.page-anonymous .flex-fill,
+body.welcome-anonymous .flex-fill {
+  padding-top: var(--brandkit-login-logo-offset) !important;
+}
+.page-anonymous .brandkit-login-button,
+body.welcome-anonymous .brandkit-login-button {
+  font-weight: 600;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.page-anonymous .brandkit-login-button.brandkit-button--square,
+body.welcome-anonymous .brandkit-login-button.brandkit-button--square {
+  border-radius: 4px;
+  box-shadow: 0 8px 16px rgba(15, 23, 42, 0.18);
+}
+.page-anonymous .brandkit-login-button.brandkit-button--rounded,
+body.welcome-anonymous .brandkit-login-button.brandkit-button--rounded {
+  border-radius: 10px;
+  box-shadow: 0 10px 22px rgba(15, 23, 42, 0.18);
+}
+.page-anonymous .brandkit-login-button.brandkit-button--pill,
+body.welcome-anonymous .brandkit-login-button.brandkit-button--pill {
+  border-radius: 999px;
+  padding-left: 1.6rem;
+  padding-right: 1.6rem;
+  box-shadow: 0 12px 24px rgba(15, 23, 42, 0.2);
+}
+.page-anonymous .brandkit-login-button.brandkit-button--cut,
+body.welcome-anonymous .brandkit-login-button.brandkit-button--cut {
+  border-radius: 6px 18px 6px 18px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  box-shadow: 0 14px 28px rgba(15, 23, 42, 0.2);
+  clip-path: polygon(0 0, 92% 0, 100% 35%, 100% 100%, 8% 100%, 0 65%);
+}
+.page-anonymous .brandkit-login-button.brandkit-button--soft,
+body.welcome-anonymous .brandkit-login-button.brandkit-button--soft {
+  border-radius: 14px;
+  box-shadow: 0 14px 30px rgba(15, 23, 42, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.35);
+}
+body.brandkit-error-page,
+body.brandkit-error-page #page,
+body.brandkit-error-page main,
+body.brandkit-error-page .page-anonymous {
+  background-color: #000000 !important;
+  background-image: none !important;
+}
+body.brandkit-error-page .card,
+body.brandkit-error-page .card-body {
+  background: transparent !important;
+}
+.page-anonymous .copyright,
+body.welcome-anonymous .copyright {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  position: relative;
+  z-index: 2;
+  width: min(100%, var(--brandkit-login-container-max-effective));
+  margin: 1rem auto 2rem auto;
+  text-align: center;
+  padding: 0 1rem;
+  color: color-mix(in srgb, var(--brandkit-login-text-color) 75%, transparent) !important;
+  font-size: 0.75rem;
+  letter-spacing: 0.02em;
+  text-decoration: none;
+}
+.page-anonymous .copyright:hover,
+body.welcome-anonymous .copyright:hover {
+  color: var(--brandkit-login-text-color) !important;
+  text-decoration: underline;
+}
+.page-anonymous #login_name:-webkit-autofill,
+.page-anonymous #login_name:-webkit-autofill:hover,
+.page-anonymous #login_name:-webkit-autofill:focus,
+.page-anonymous #login_name:-webkit-autofill:active,
+.page-anonymous #login_name:autofill,
+.page-anonymous #login_name:-internal-autofill-selected,
+.page-anonymous #login_name:-moz-autofill,
+.page-anonymous #login_name:-moz-autofill:focus,
+body.welcome-anonymous #login_name:-webkit-autofill,
+body.welcome-anonymous #login_name:-webkit-autofill:hover,
+body.welcome-anonymous #login_name:-webkit-autofill:focus,
+body.welcome-anonymous #login_name:-webkit-autofill:active,
+body.welcome-anonymous #login_name:autofill,
+body.welcome-anonymous #login_name:-internal-autofill-selected,
+body.welcome-anonymous #login_name:-moz-autofill,
+body.welcome-anonymous #login_name:-moz-autofill:focus {
+  background: var(--brandkit-login-icon-user), linear-gradient(var(--brandkit-login-field-bg-autofill), var(--brandkit-login-field-bg-autofill)) !important;
+  background-repeat: no-repeat, no-repeat !important;
+  background-position: var(--brandkit-login-icon-position), 0 0 !important;
+  background-size: 18px 18px, 100% 100% !important;
+  -webkit-box-shadow: 0 0 0px 1000px var(--brandkit-login-field-bg-autofill) inset, var(--brandkit-login-field-shadow-current, var(--brandkit-login-field-shadow)) !important;
+  box-shadow: 0 0 0px 1000px var(--brandkit-login-field-bg-autofill) inset, var(--brandkit-login-field-shadow-current, var(--brandkit-login-field-shadow)) !important;
+  -webkit-text-fill-color: var(--brandkit-login-field-text-autofill, var(--tblr-body-color)) !important;
+  color: var(--brandkit-login-field-text-autofill, var(--tblr-body-color)) !important;
+  caret-color: var(--brandkit-login-field-text-autofill, var(--tblr-body-color)) !important;
+  -webkit-background-clip: padding-box !important;
+  background-clip: padding-box !important;
+}
+.page-anonymous #login_password:-webkit-autofill,
+.page-anonymous #login_password:-webkit-autofill:hover,
+.page-anonymous #login_password:-webkit-autofill:focus,
+.page-anonymous #login_password:-webkit-autofill:active,
+.page-anonymous #login_password:autofill,
+.page-anonymous #login_password:-internal-autofill-selected,
+.page-anonymous #login_password:-moz-autofill,
+.page-anonymous #login_password:-moz-autofill:focus,
+body.welcome-anonymous #login_password:-webkit-autofill,
+body.welcome-anonymous #login_password:-webkit-autofill:hover,
+body.welcome-anonymous #login_password:-webkit-autofill:focus,
+body.welcome-anonymous #login_password:-webkit-autofill:active,
+body.welcome-anonymous #login_password:autofill,
+body.welcome-anonymous #login_password:-internal-autofill-selected,
+body.welcome-anonymous #login_password:-moz-autofill,
+body.welcome-anonymous #login_password:-moz-autofill:focus {
+  background: var(--brandkit-login-icon-password), linear-gradient(var(--brandkit-login-field-bg-autofill), var(--brandkit-login-field-bg-autofill)) !important;
+  background-repeat: no-repeat, no-repeat !important;
+  background-position: var(--brandkit-login-icon-position), 0 0 !important;
+  background-size: 18px 18px, 100% 100% !important;
+  -webkit-box-shadow: 0 0 0px 1000px var(--brandkit-login-field-bg-autofill) inset, var(--brandkit-login-field-shadow-current, var(--brandkit-login-field-shadow)) !important;
+  box-shadow: 0 0 0px 1000px var(--brandkit-login-field-bg-autofill) inset, var(--brandkit-login-field-shadow-current, var(--brandkit-login-field-shadow)) !important;
+  -webkit-text-fill-color: var(--brandkit-login-field-text-autofill, var(--tblr-body-color)) !important;
+  color: var(--brandkit-login-field-text-autofill, var(--tblr-body-color)) !important;
+  caret-color: var(--brandkit-login-field-text-autofill, var(--tblr-body-color)) !important;
+  -webkit-background-clip: padding-box !important;
+  background-clip: padding-box !important;
+}
+.page-anonymous .form-control:autofill,
+.page-anonymous .form-control:autofill:hover,
+.page-anonymous .form-control:autofill:focus,
+.page-anonymous .form-control:autofill:active,
+body.welcome-anonymous .form-control:autofill,
+body.welcome-anonymous .form-control:autofill:hover,
+body.welcome-anonymous .form-control:autofill:focus,
+body.welcome-anonymous .form-control:autofill:active {
+  background-color: var(--brandkit-login-field-bg-autofill) !important;
+  border: var(--brandkit-login-field-border-width) solid var(--brandkit-login-field-border) !important;
+  border-radius: var(--brandkit-login-field-radius) !important;
+  -webkit-box-shadow: 0 0 0 1000px var(--brandkit-login-field-bg-autofill) inset, var(--brandkit-login-field-shadow-current, var(--brandkit-login-field-shadow)) !important;
+  box-shadow: 0 0 0 1000px var(--brandkit-login-field-bg-autofill) inset, var(--brandkit-login-field-shadow-current, var(--brandkit-login-field-shadow)) !important;
+  -webkit-text-fill-color: var(--brandkit-login-field-text-autofill, var(--tblr-body-color)) !important;
+  color: var(--brandkit-login-field-text-autofill, var(--tblr-body-color)) !important;
+  caret-color: var(--brandkit-login-field-text-autofill, var(--tblr-body-color)) !important;
+  -webkit-background-clip: padding-box !important;
+  background-clip: padding-box !important;
+  filter: none !important;
+  appearance: none !important;
+  -moz-appearance: none !important;
+  -webkit-appearance: none !important;
+}
