@@ -21,7 +21,7 @@
                                                 <div
                                                     style="background: linear-gradient(135deg, #004059, #002b3d); padding: 35px 20px; text-align: center;">
                                                     <img style="display: block; margin: 0 auto 25px auto; max-width: 260px; width: 100%; height: auto; border: 0;"
-                                                        src="https://fealq.org.br/wp-content/uploads/2026/01/cropped-08_2025-Fealq-Campanha-50-anos-v10-Brandbook-elementos-visuais-9.png"
+                                                        src="https://drive.google.com/uc?export=view&id=1lrhY07_fxQujiattGnYOJieM0ZEWSdv3"
                                                         alt="FEALQ">
                                                     <div
                                                         style="color: #03bc9c; font-family: Arial, sans-serif; font-size: 14px; font-weight: bold; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 10px;">
@@ -57,10 +57,10 @@
                                                                         <p style="text-align: justify;">&nbsp;</p>
                                                                         <p style="text-align: justify;"><span
                                                                                 style="font-size: 16px;">Informamos que
-                                                                                um analista foi atribuído ao chamado em
-                                                                                nossa Central de Serviços. Abaixo seguem
-                                                                                os dados do atendimento e o último
-                                                                                registro disponível.</span></p>
+                                                                                um novo chamado foi registrado em nossa
+                                                                                Central de Serviços. Abaixo seguem os
+                                                                                dados iniciais do atendimento.</span>
+                                                                        </p>
                                                                         <p style="text-align: justify;"><span
                                                                                 style="font-size: 16px;"><strong>Título:</strong>&nbsp;<a
                                                                                     style="color: #004059;"
@@ -72,31 +72,30 @@
                                                                                 style="font-size: 16px;"><strong>Unidade
                                                                                     de Negócio:</strong>
                                                                                 ##ticket.shortentity##</span></p>
-                                                                        <p style="text-align: justify;"><span
-                                                                                style="font-size: 16px;"><strong>Último
-                                                                                    registro
-                                                                                    disponível:</strong>&nbsp;</span>
-                                                                        </p>
-                                                                        ##FOREACH LAST 1 followups##
                                                                         <div
-                                                                            style="background-color: #e6f7f5; text-align: justify; padding: 10px 20px; border-radius: 5px; width: 35rem; border-left: 4px solid #03bc9c;">
-                                                                            <p style="margin: 12px 0 0 0;"><span
-                                                                                    style="font-size: 15px;"><strong>Autor
-                                                                                        do
-                                                                                        acompanhamento:</strong><br>##followup.author##</span>
-                                                                            </p>
-                                                                            <p style="margin: 18px 0 0 0;"><span
-                                                                                    style="font-size: 15px;"><strong>Data/Hora
-                                                                                        do
-                                                                                        acompanhamento:</strong><br>##followup.date##</span>
-                                                                            </p>
-                                                                            <p style="margin: 18px 0 12px 0;"><span
+                                                                            style="background-color: #f8fafc; text-align: justify; padding: 10px 20px; border-radius: 5px; width: 35rem; border-left: 4px solid #03bc9c;">
+                                                                            <p style="margin: 12px 0;"><span
                                                                                     style="font-size: 15px;"><strong>Conteúdo
-                                                                                        do
-                                                                                        acompanhamento:</strong><br>##followup.description##</span>
+                                                                                        informado na
+                                                                                        abertura:</strong><br>##ticket.content##</span>
                                                                             </p>
                                                                         </div>
-                                                                        ##ENDFOREACHfollowups##
+                                                                        <p style="text-align: justify;">&nbsp;</p>
+                                                                        <div
+                                                                            style="background-color: #e6f7f5; text-align: justify; padding: 10px 20px; border-radius: 5px; width: 35rem; border-left: 4px solid #03bc9c;">
+                                                                            <p style="margin: 12px 0;"><span
+                                                                                    style="font-size: 15px;"><strong>Anexos
+                                                                                        do chamado:</strong><br>Caso
+                                                                                    arquivos ou imagens tenham sido
+                                                                                    enviados na abertura, eles seguem
+                                                                                    anexados a esta notificação quando o
+                                                                                    GLPI estiver configurado como “Todos
+                                                                                    os documentos” ou “Somente
+                                                                                    documentos relacionados ao item que
+                                                                                    aciona o evento”. Os arquivos também
+                                                                                    permanecem disponíveis no histórico
+                                                                                    do chamado.</span></p>
+                                                                        </div>
                                                                         <p style="text-align: justify;">&nbsp;</p>
                                                                         <p style="text-align: justify;"><span
                                                                                 style="font-size: 16px;">O prazo
