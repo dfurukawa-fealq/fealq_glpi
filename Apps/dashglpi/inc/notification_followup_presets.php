@@ -91,7 +91,7 @@ function dashglpi_followup_template_preset_hafen(): array
                           "
                         >
                           <img
-                            src="https://drive.google.com/thumbnail?id=1lrhY07_fxQujiattGnYOJieM0ZEWSdv3&sz=w1920"
+                            src="https://fealq.org.br/wp-content/uploads/2026/01/cropped-08_2025-Fealq-Campanha-50-anos-v10-Brandbook-elementos-visuais-9.png"
                             alt="Fealq"
                             style="
                               display: block;

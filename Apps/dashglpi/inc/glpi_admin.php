@@ -871,9 +871,9 @@ function dashglpi_admin_bridge_request(string $endpoint, array $payload, array $
         $body = dashglpi_admin_bridge_multipart_body($boundary, $payload, $files);
         $headers[] = 'Content-Type: multipart/form-data; boundary=' . $boundary;
     } else {
-        $body = json_encode(['payload' => $payload], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+        $body = json_encode(['payload' => $payload], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_INVALID_UTF8_SUBSTITUTE);
         if ($body === false) {
-            throw new RuntimeException('Falha ao serializar payload.');
+            throw new RuntimeException('Falha ao serializar payload: ' . json_last_error_msg());
         }
         $headers[] = 'Content-Type: application/json';
     }

@@ -335,10 +335,10 @@ function dashglpi_sla_bridge_request(string $action, array $payload): array
     $body = json_encode([
         'action' => $action,
         'payload' => $payload,
-    ], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+    ], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_INVALID_UTF8_SUBSTITUTE);
 
     if ($body === false) {
-        throw new RuntimeException('Falha ao serializar payload de SLA.');
+        throw new RuntimeException('Falha ao serializar payload de SLA: ' . json_last_error_msg());
     }
 
     $context = stream_context_create([

@@ -76,10 +76,10 @@ abstract class DashglpiMessagingChannelBase implements DashglpiMessagingChannel
 
         $payload = is_string($body) ? $body : json_encode(
             $body,
-            JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES
+            JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_INVALID_UTF8_SUBSTITUTE
         );
         if ($payload === false) {
-            return ['ok' => false, 'status' => 0, 'body' => '', 'error' => 'Falha ao serializar payload.'];
+            return ['ok' => false, 'status' => 0, 'body' => '', 'error' => 'Falha ao serializar payload: ' . json_last_error_msg()];
         }
 
         $ch = curl_init($url);
