@@ -273,6 +273,9 @@ async function openAdminForm(type) {
         categoryImport: 'categoryImport',
         user: 'userNew',
         userImport: 'userImport',
+        computerImport: 'computerImport',
+        monitorImport: 'monitorImport',
+        ticketImport: 'ticketImport',
         profile: 'profileNew',
         profileImport: 'profileImport'
     };
@@ -288,6 +291,9 @@ async function openAdminForm(type) {
         categoryImport: 'categories',
         user: 'users',
         userImport: 'users',
+        computerImport: 'assets',
+        monitorImport: 'assets',
+        ticketImport: 'tickets',
         profile: 'profiles',
         profileImport: 'profiles'
     };
@@ -351,6 +357,9 @@ function adminStatusElement(type) {
         categoryImport: 'categoryImportStatus',
         user: 'userStatus',
         userImport: 'userImportStatus',
+        computerImport: 'computerImportStatus',
+        monitorImport: 'monitorImportStatus',
+        ticketImport: 'ticketImportStatus',
         profile: 'profileStatus',
         profileImport: 'profileImportStatus'
     };
@@ -367,6 +376,9 @@ function adminMenuLink(type) {
         categoryImport: 'categories',
         user: 'users',
         userImport: 'users',
+        computerImport: 'assets',
+        monitorImport: 'assets',
+        ticketImport: 'tickets',
         profile: 'profiles',
         profileImport: 'profiles',
         entities: 'entities',
@@ -392,6 +404,9 @@ function resetAdminStatus(type) {
         categoryImport: 'categoryImportStatus',
         user: 'userStatus',
         userImport: 'userImportStatus',
+        computerImport: 'computerImportStatus',
+        monitorImport: 'monitorImportStatus',
+        ticketImport: 'ticketImportStatus',
         profile: 'profileStatus',
         profileImport: 'profileImportStatus'
     };
@@ -407,6 +422,9 @@ function resetAdminStatus(type) {
         categoryImport: 'categoryImportForm',
         user: 'userForm',
         userImport: 'userImportForm',
+        computerImport: 'computerImportForm',
+        monitorImport: 'monitorImportForm',
+        ticketImport: 'ticketImportForm',
         profile: 'profileForm',
         profileImport: 'profileImportForm'
     };
@@ -3021,6 +3039,7 @@ function categoryImportStatusBadge(status) {
         ignored: ['muted', 'Ignorada'],
         created: ['success', 'Criada'],
         existing: ['warning', 'Existente'],
+        updated: ['success', 'Atualizada'],
         error: ['danger', 'Erro'],
         processed: ['success', 'Processada']
     };
@@ -3105,6 +3124,48 @@ const ADMIN_IMPORT_CONFIG = {
         warningLabel: 'Atenção',
         busyMessage: 'Importando usuários no GLPI...',
         errorMessage: 'Erro ao importar usuários.'
+    },
+    computerImport: {
+        endpoint: 'computers.php',
+        listPage: 'assets',
+        formId: 'computerImportForm',
+        statusId: 'computerImportStatus',
+        previewId: 'computerImportPreview',
+        fileLabelId: 'computerImportPreviewFile',
+        confirmId: 'computerImportConfirm',
+        summaryId: 'computerImportSummary',
+        bodyId: 'computerImportPreviewBody',
+        warningLabel: 'Atenção',
+        busyMessage: 'Importando computadores no GLPI...',
+        errorMessage: 'Erro ao importar computadores.'
+    },
+    monitorImport: {
+        endpoint: 'monitors.php',
+        listPage: 'assets',
+        formId: 'monitorImportForm',
+        statusId: 'monitorImportStatus',
+        previewId: 'monitorImportPreview',
+        fileLabelId: 'monitorImportPreviewFile',
+        confirmId: 'monitorImportConfirm',
+        summaryId: 'monitorImportSummary',
+        bodyId: 'monitorImportPreviewBody',
+        warningLabel: 'Atenção',
+        busyMessage: 'Importando monitores no GLPI...',
+        errorMessage: 'Erro ao importar monitores.'
+    },
+    ticketImport: {
+        endpoint: 'tickets_import.php',
+        listPage: 'tickets',
+        formId: 'ticketImportForm',
+        statusId: 'ticketImportStatus',
+        previewId: 'ticketImportPreview',
+        fileLabelId: 'ticketImportPreviewFile',
+        confirmId: 'ticketImportConfirm',
+        summaryId: 'ticketImportSummary',
+        bodyId: 'ticketImportPreviewBody',
+        warningLabel: 'Atenção',
+        busyMessage: 'Importando tickets no GLPI...',
+        errorMessage: 'Erro ao importar tickets.'
     },
     profileImport: {
         endpoint: 'profiles.php',
@@ -3321,7 +3382,7 @@ function renderAdminImportResult(type, result) {
     renderAdminImportRows(type, (result.items || []).map(item => ({
         line: item.source_line || '-',
         status: item.status || 'processed',
-        full_name: item.full_name || item.name || item.login || '',
+        full_name: item.full_name || item.name || item.login || item.title || '',
         entity_name: adminImportResultDestination(item),
         reason: item.error || adminImportItemReason(item)
     })));
@@ -3344,6 +3405,9 @@ function adminImportItemReason(item) {
             return `Criados: ${summary.created}. Existentes: ${summary.existing || 0}.`;
         }
         return 'Registro já existia no GLPI.';
+    }
+    if (item.status === 'updated') {
+        return 'Registro existente atualizado no GLPI.';
     }
     if (item.status === 'existing') {
         return 'Registro já existia no GLPI.';

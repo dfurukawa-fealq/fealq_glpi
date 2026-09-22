@@ -4,6 +4,26 @@
 // Mesmo contrato de resposta do lote de Categorias (admin_tree_lib.php):
 // summary {created, existing, errors} + items[] com source_line/full_name.
 
+function plugin_dashglpi_batch_log_item_error(Throwable $e, string $errorLabel, array $item, int $index): void
+{
+    $line = sprintf(
+        "[DashGLPI batch:%s] source_line=%s name=%s class=%s code=%s message=%s file=%s line=%d trace=%s\n",
+        $errorLabel,
+        (string) ($item['source_line'] ?? ($index + 1)),
+        (string) ($item['full_name'] ?? $item['name'] ?? $item['login'] ?? $item['title'] ?? ''),
+        get_class($e),
+        (string) $e->getCode(),
+        trim((string) $e->getMessage()) ?: '(empty)',
+        $e->getFile(),
+        $e->getLine(),
+        str_replace(["\r", "\n"], ' | ', substr($e->getTraceAsString(), 0, 1800))
+    );
+
+    error_log($line);
+    if (class_exists('Toolbox')) {
+        Toolbox::logInFile('php-errors', $line);
+    }
+}
 function plugin_dashglpi_batch_process(array $payload, callable $saveOne, string $errorLabel): array
 {
     $items = is_array($payload['items'] ?? null) ? $payload['items'] : [$payload];
@@ -20,13 +40,14 @@ function plugin_dashglpi_batch_process(array $payload, callable $saveOne, string
             if (isset($row['summary'])) {
                 $summary['created'] += (int) ($row['summary']['created'] ?? 0);
                 $summary['existing'] += (int) ($row['summary']['existing'] ?? 0);
-            } elseif (($row['status'] ?? '') === 'existing') {
+            } elseif (in_array(($row['status'] ?? ''), ['existing', 'updated'], true)) {
                 $summary['existing']++;
             } else {
                 $summary['created']++;
             }
             $results[] = $row;
         } catch (Throwable $e) {
+            plugin_dashglpi_batch_log_item_error($e, $errorLabel, is_array($item) ? $item : [], $index);
             $summary['errors']++;
             $results[] = [
                 'status' => 'error',

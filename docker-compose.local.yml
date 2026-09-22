@@ -53,7 +53,7 @@ services:
       DASHGLPI_PUSH_VAPID_PRIVATE_KEY: ${DASHGLPI_PUSH_VAPID_PRIVATE_KEY:-}
       GLPI_FILES_DIR: ${GLPI_FILES_DIR:-/var/glpi/files}
       DASHGLPI_ADMIN_USERS: ${DASHGLPI_ADMIN_USERS:-admin}
-      DASHGLPI_BRIDGE_URL: ${DASHGLPI_BRIDGE_URL:-http://glpi/plugins/dashglpi/ajax/sla_config.php}
+      DASHGLPI_BRIDGE_URL: ${DASHGLPI_BRIDGE_URL:-http://${CONTAINER_NAME}/plugins/dashglpi/ajax/sla_config.php}
       DASHGLPI_BRIDGE_TOKEN: ${DASHGLPI_BRIDGE_TOKEN:-change-this-bridge-token}
       DASHGLPI_SQL_WRITE_ENABLED: ${DASHGLPI_SQL_WRITE_ENABLED:-false}
       # Canais de mensageria (fallback; a UI de Canais de Alerta sobrepõe via settings

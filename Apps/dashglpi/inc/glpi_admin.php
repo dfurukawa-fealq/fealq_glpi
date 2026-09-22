@@ -911,11 +911,45 @@ function dashglpi_admin_bridge_request(string $endpoint, array $payload, array $
     }
 
     if ($status >= 400 || empty($data['ok'])) {
-        $error = trim((string) ($data['error'] ?? $data['message'] ?? ''));
-        throw new RuntimeException($error !== '' ? $error : 'Bridge GLPI retornou erro HTTP ' . $status . '.');
+        $error = dashglpi_admin_bridge_error_message($data);
+        $logMessage = sprintf(
+            '[DashGLPI bridge] endpoint=%s http=%s error=%s response=%s',
+            $endpoint,
+            (string) ($status ?: 'sem status'),
+            $error !== '' ? $error : '(vazio)',
+            substr($response, 0, 1200)
+        );
+        error_log($logMessage);
+
+        if ($error === '' || $error === '1') {
+            $error = 'Bridge GLPI retornou erro em ' . $endpoint . ' (HTTP ' . ($status ?: 'sem status') . '). Verifique os logs do GLPI.';
+        }
+        throw new RuntimeException($error);
     }
 
     return $data;
+}
+
+function dashglpi_admin_bridge_error_message(array $data): string
+{
+    foreach (['error', 'message'] as $key) {
+        if (!array_key_exists($key, $data)) {
+            continue;
+        }
+
+        $value = $data[$key];
+        if (is_array($value)) {
+            $encoded = json_encode($value, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+            return trim((string) ($encoded ?: ''));
+        }
+        if (is_bool($value)) {
+            return $value ? '1' : '';
+        }
+
+        return trim((string) $value);
+    }
+
+    return '';
 }
 
 function dashglpi_admin_bridge_multipart_body(string $boundary, array $payload, array $files): string

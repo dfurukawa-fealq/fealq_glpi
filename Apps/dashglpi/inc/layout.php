@@ -64,6 +64,13 @@ function dashglpi_render_sidebar(string $active, string $context = 'dashboard', 
     ];
     $registrationsOpen = $isAdmin && in_array($active, ['entities', 'groups', 'categories', 'users', 'profiles'], true);
 
+    $importItems = [
+        ['key' => 'computerImport', 'label' => 'Computadores', 'icon' => 'fa-desktop', 'page' => 'computerImport'],
+        ['key' => 'monitorImport', 'label' => 'Monitores', 'icon' => 'fa-tv', 'page' => 'monitorImport'],
+        ['key' => 'ticketImport', 'label' => 'Tickets', 'icon' => 'fa-ticket-alt', 'page' => 'ticketImport'],
+    ];
+    $importsOpen = $isAdmin && in_array($active, ['computerImport', 'monitorImport', 'ticketImport'], true);
+
     $settingsItems = [
         ['key' => 'sla', 'label' => 'SLA Simples', 'icon' => 'fa-business-time', 'section' => 'sla'],
         ['key' => 'profile_access', 'label' => 'Acesso por Perfil', 'icon' => 'fa-user-shield', 'section' => 'profile_access'],
@@ -130,6 +137,33 @@ function dashglpi_render_sidebar(string $active, string $context = 'dashboard', 
                     </summary>
                     <div class="menu-subnav">
                         <?php foreach ($registrationItems as $item): ?>
+                            <?php
+                            $subClasses = 'menu-sublink' . ($active === $item['key'] ? ' active' : '');
+                            if ($context === 'dashboard') {
+                                $href = '#' . $item['page'];
+                                $attrs = 'data-page="' . htmlspecialchars($item['page'], ENT_QUOTES, 'UTF-8') . '"';
+                                $onclick = "showPage('" . htmlspecialchars($item['page'], ENT_QUOTES, 'UTF-8') . "', this); return false;";
+                            } else {
+                                $href = '/front/dashboard.php#' . $item['page'];
+                                $attrs = '';
+                                $onclick = '';
+                            }
+                            ?>
+                            <a href="<?= htmlspecialchars($href, ENT_QUOTES, 'UTF-8') ?>" class="<?= htmlspecialchars($subClasses, ENT_QUOTES, 'UTF-8') ?>"<?= $attrs ? ' ' . $attrs : '' ?><?= $onclick !== '' ? ' onclick="' . $onclick . '"' : '' ?>>
+                                <i class="fas <?= htmlspecialchars($item['icon'], ENT_QUOTES, 'UTF-8') ?>"></i>
+                                <span><?= htmlspecialchars($item['label'], ENT_QUOTES, 'UTF-8') ?></span>
+                            </a>
+                        <?php endforeach; ?>
+                    </div>
+                </details>
+                <details class="menu-group<?= $importsOpen ? ' open' : '' ?>"<?= $importsOpen ? ' open' : '' ?>>
+                    <summary class="menu-link menu-group-summary<?= $importsOpen ? ' active' : '' ?>">
+                        <i class="fas fa-file-import"></i>
+                        <span>Importações</span>
+                        <i class="fas fa-chevron-down menu-group-caret"></i>
+                    </summary>
+                    <div class="menu-subnav">
+                        <?php foreach ($importItems as $item): ?>
                             <?php
                             $subClasses = 'menu-sublink' . ($active === $item['key'] ? ' active' : '');
                             if ($context === 'dashboard') {

@@ -136,6 +136,23 @@ function plugin_dashglpi_admin_bridge_name(string $value, string $message): stri
     return substr($value, 0, 255);
 }
 
+function plugin_dashglpi_admin_bridge_last_message(string $fallback): string
+{
+    $messages = $_SESSION['MESSAGE_AFTER_REDIRECT'] ?? [];
+    $bucket = [];
+    foreach ($messages as $items) {
+        foreach ((array) $items as $message) {
+            $message = trim((string) $message);
+            if ($message !== '') {
+                $bucket[] = strip_tags($message);
+            }
+        }
+    }
+
+    unset($_SESSION['MESSAGE_AFTER_REDIRECT']);
+
+    return $bucket ? implode(' ', array_unique($bucket)) : $fallback;
+}
 /**
  * Wrapper para bridges `*_config.php` (Padrão duplicado B do PLAN-20260703-013).
  *
@@ -150,6 +167,10 @@ function plugin_dashglpi_admin_bridge_handle(string $scope, callable $fn, string
 {
     try {
         $payload = plugin_dashglpi_admin_bridge_payload();
+        plugin_dashglpi_admin_bridge_bootstrap_constants();
+        plugin_dashglpi_admin_bridge_bootstrap_logger();
+        plugin_dashglpi_admin_bridge_bootstrap_cache();
+        plugin_dashglpi_admin_bridge_bootstrap_db();
 
         $result = Session::callAsSystem(static function () use ($payload, $fn) {
             return $fn($payload);
@@ -184,19 +205,106 @@ function plugin_dashglpi_admin_bridge_require_ticket(
     return $fields;
 }
 
+function plugin_dashglpi_admin_bridge_bootstrap_constants(): void
+{
+    if (!defined('GLPI_ROOT')) {
+        define('GLPI_ROOT', dirname(__DIR__, 3));
+    }
+    if (!defined('GLPI_CONFIG_DIR')) {
+        define('GLPI_CONFIG_DIR', (string) (getenv('GLPI_CONFIG_DIR') ?: '/var/glpi/config'));
+    }
+    if (!defined('GLPI_VAR_DIR')) {
+        define('GLPI_VAR_DIR', (string) (getenv('GLPI_VAR_DIR') ?: '/var/glpi/files'));
+    }
+    if (!defined('GLPI_LOG_DIR')) {
+        define('GLPI_LOG_DIR', (string) (getenv('GLPI_LOG_DIR') ?: '/var/glpi/logs'));
+    }
+    if (!defined('GLPI_LOG_LVL')) {
+        define('GLPI_LOG_LVL', 'warning');
+    }
+    if (!defined('GLPI_CACHE_DIR')) {
+        define('GLPI_CACHE_DIR', rtrim((string) (getenv('GLPI_VAR_DIR') ?: '/var/glpi'), '/') . '/_cache');
+    }
+    if (!defined('GLPI_MARKETPLACE_DIR')) {
+        define('GLPI_MARKETPLACE_DIR', (string) (getenv('GLPI_MARKETPLACE_DIR') ?: '/var/glpi/marketplace'));
+    }
+    if (!defined('GLPI_PLUGINS_DIRECTORIES')) {
+        define('GLPI_PLUGINS_DIRECTORIES', [GLPI_ROOT . '/plugins', GLPI_MARKETPLACE_DIR]);
+    }
+}
+function plugin_dashglpi_admin_bridge_bootstrap_logger(): void
+{
+    global $PHPLOGGER;
+
+    if ($PHPLOGGER instanceof Psr\Log\LoggerInterface) {
+        return;
+    }
+
+    if (!class_exists(Monolog\Logger::class)) {
+        throw new RuntimeException('Bootstrap GLPI incompleto: logger indisponivel.');
+    }
+
+    $PHPLOGGER = new Monolog\Logger('glpi');
+    if (class_exists(Glpi\Log\ErrorLogHandler::class)) {
+        $PHPLOGGER->pushHandler(new Glpi\Log\ErrorLogHandler());
+    }
+    if (class_exists(Glpi\Log\AccessLogHandler::class)) {
+        $PHPLOGGER->pushHandler(new Glpi\Log\AccessLogHandler());
+    }
+}
+function plugin_dashglpi_admin_bridge_bootstrap_cache(): void
+{
+    global $GLPI_CACHE;
+
+    if ($GLPI_CACHE instanceof Psr\SimpleCache\CacheInterface) {
+        return;
+    }
+
+    if (!class_exists(Glpi\Cache\CacheManager::class)) {
+        throw new RuntimeException('Bootstrap GLPI incompleto: cache indisponivel.');
+    }
+
+    $GLPI_CACHE = (new Glpi\Cache\CacheManager())->getCoreCacheInstance();
+}
+function plugin_dashglpi_admin_bridge_bootstrap_db(): void
+{
+    global $DB;
+
+    if ($DB instanceof DBmysql) {
+        return;
+    }
+
+    if (!class_exists('DB')) {
+        $configDir = (string) (getenv('GLPI_CONFIG_DIR') ?: '/var/glpi/config');
+        $configDb = rtrim($configDir, '/') . '/config_db.php';
+        if (is_file($configDb)) {
+            require_once $configDb;
+        }
+    }
+
+    if (!class_exists('DB')) {
+        throw new RuntimeException('Bootstrap GLPI incompleto: classe DB indisponivel.');
+    }
+
+    $DB = new DB();
+}
 function plugin_dashglpi_admin_bridge_log(Throwable $e, string $scope): void
 {
     $message = trim((string) $e->getMessage());
-    Toolbox::logInFile(
-        'php-errors',
-        sprintf(
-            "[DashGLPI admin bridge:%s] class=%s code=%s message=%s file=%s line=%d\n",
-            $scope,
-            get_class($e),
-            (string) $e->getCode(),
-            $message !== '' ? $message : '(empty)',
-            $e->getFile(),
-            $e->getLine()
-        )
+    $line = sprintf(
+        "[DashGLPI admin bridge:%s] class=%s code=%s message=%s file=%s line=%d",
+        $scope,
+        get_class($e),
+        (string) $e->getCode(),
+        $message !== '' ? $message : '(empty)',
+        $e->getFile(),
+        $e->getLine()
     );
+
+    if (class_exists('Toolbox')) {
+        Toolbox::logInFile('php-errors', $line . "\n");
+        return;
+    }
+
+    error_log($line);
 }

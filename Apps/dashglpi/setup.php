@@ -78,6 +78,9 @@ function plugin_init_dashglpi()
     \Glpi\Http\SessionManager::registerPluginStatelessPath('dashglpi', '#^/ajax/ticket_update_config\.php$#');
     \Glpi\Http\SessionManager::registerPluginStatelessPath('dashglpi', '#^/ajax/health_diagnostics_config\.php$#');
     \Glpi\Http\SessionManager::registerPluginStatelessPath('dashglpi', '#^/ajax/ticket_create_config\.php$#');
+    \Glpi\Http\SessionManager::registerPluginStatelessPath('dashglpi', '#^/ajax/ticket_import_config\.php$#');
+    \Glpi\Http\SessionManager::registerPluginStatelessPath('dashglpi', '#^/ajax/computer_config\.php$#');
+    \Glpi\Http\SessionManager::registerPluginStatelessPath('dashglpi', '#^/ajax/monitor_config\.php$#');
     \Glpi\Http\SessionManager::registerPluginStatelessPath('dashglpi', '#^/ajax/ticket_followup_config\.php$#');
     \Glpi\Http\SessionManager::registerPluginStatelessPath('dashglpi', '#^/ajax/ticket_cancel_config\.php$#');
     \Glpi\Http\SessionManager::registerPluginStatelessPath('dashglpi', '#^/ajax/ticket_solution_config\.php$#');

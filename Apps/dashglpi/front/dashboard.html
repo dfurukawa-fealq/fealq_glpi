@@ -1079,6 +1079,14 @@ $glpiPublicUrl = rtrim((string) dashglpi_env('GLPI_PUBLIC_URL', ''), '/');
                         <span>Pesquisa, ordenação e acompanhamento por estágio</span>
                     </div>
                 </div>
+                <?php if ($isAdmin): ?>
+                <div class="header-actions">
+                    <button class="page-action-btn" type="button" data-admin-new="ticketImport">
+                        <i class="fas fa-file-import"></i>
+                        <span>Importar CSV</span>
+                    </button>
+                </div>
+                <?php endif; ?>
             </header>
             <div class="glass-card table-card">
                 <div class="tickets-toolbar">
@@ -1146,6 +1154,128 @@ $glpiPublicUrl = rtrim((string) dashglpi_env('GLPI_PUBLIC_URL', ''), '/');
                         <input type="search" id="ticketsSearchInputMobile" placeholder="ID, título, técnico ou status..." autocomplete="off">
                     </div>
                 </div>
+            </div>
+        </div>
+        <?php endif; ?>
+
+        <?php if ($isAdmin): ?>
+        <div class="page-section" id="computerImportSection">
+            <header class="page-header">
+                <div class="page-title-wrapper">
+                    <h1>Importar Computadores</h1>
+                    <div class="page-subtitle">
+                        <i class="fas fa-desktop"></i>
+                        <span>Modelo: exportação CSV do GLPI (separador ;)</span>
+                    </div>
+                </div>
+                <div class="header-actions">
+                    <button class="page-action-btn" type="button" data-admin-back="assets">
+                        <i class="fas fa-arrow-left"></i>
+                        <span>Voltar</span>
+                    </button>
+                </div>
+            </header>
+            <form class="glass-card admin-form admin-form-page admin-import-form" id="computerImportForm" enctype="multipart/form-data">
+                <h3 class="admin-card-title">Arquivo CSV</h3>
+                <p class="admin-help-text">Use separador ponto e vírgula com a coluna "Computador". Colunas opcionais: "Status", "Fabricante", "Número de série", "Tipo", "Modelo", "Sistema operacional", "Localização", "Processador", "Usuário" e "Inventário".</p>
+                <div class="ticket-create-upload-shell" data-csv-upload>
+                    <input class="ticket-create-file-input" type="file" name="csv_file" accept=".csv,text/csv" hidden>
+                    <div class="ticket-create-upload-dropzone" role="button" tabindex="0" aria-label="Selecionar arquivo CSV" data-csv-dropzone>
+                        <div class="ticket-create-upload-main"><span class="ticket-create-upload-icon"><i class="fas fa-file-csv"></i></span><div><div class="ticket-create-upload-title">Adicione o arquivo CSV</div><div class="ticket-create-upload-copy">Arraste aqui ou clique para selecionar o CSV exportado do GLPI.</div></div></div>
+                        <button class="page-action-btn" type="button" data-csv-pick><i class="fas fa-paperclip"></i><span>Selecionar arquivo</span></button>
+                    </div>
+                    <div class="ticket-create-attachments-list" data-csv-file-label><div class="ticket-create-attachments-empty">Nenhum arquivo selecionado.</div></div>
+                </div>
+                <button class="admin-submit" type="submit"><i class="fas fa-eye"></i><span>Gerar Prévia</span></button>
+                <div class="admin-status" id="computerImportStatus"></div>
+            </form>
+            <div class="glass-card table-card admin-import-preview" id="computerImportPreview" hidden>
+                <div class="category-preview-header">
+                    <div><h3 class="admin-card-title">Prévia da importação</h3><p id="computerImportPreviewFile">Nenhum arquivo selecionado.</p></div>
+                    <button class="page-action-btn primary" type="button" id="computerImportConfirm" hidden><i class="fas fa-check"></i><span>Confirmar importação</span></button>
+                </div>
+                <div class="import-summary-grid" id="computerImportSummary"></div>
+                <div class="table-responsive"><table class="custom-table admin-table categories-import-table"><thead><tr><th>Linha</th><th>Status</th><th>Computador</th><th>Destino</th><th>Observação</th></tr></thead><tbody id="computerImportPreviewBody"><tr><td colspan="5" class="table-empty">Gere uma prévia para continuar.</td></tr></tbody></table></div>
+            </div>
+        </div>
+
+        <div class="page-section" id="monitorImportSection">
+            <header class="page-header">
+                <div class="page-title-wrapper">
+                    <h1>Importar Monitores</h1>
+                    <div class="page-subtitle">
+                        <i class="fas fa-tv"></i>
+                        <span>Modelo: exportação CSV do GLPI (separador ;)</span>
+                    </div>
+                </div>
+                <div class="header-actions">
+                    <button class="page-action-btn" type="button" data-admin-back="assets">
+                        <i class="fas fa-arrow-left"></i>
+                        <span>Voltar</span>
+                    </button>
+                </div>
+            </header>
+            <form class="glass-card admin-form admin-form-page admin-import-form" id="monitorImportForm" enctype="multipart/form-data">
+                <h3 class="admin-card-title">Arquivo CSV</h3>
+                <p class="admin-help-text">Use separador ponto e vírgula com a coluna "Nome". Colunas opcionais: "Status", "Fabricante", "Localização", "Tipo", "Modelo", "Número de inventário" e "Usuário".</p>
+                <div class="ticket-create-upload-shell" data-csv-upload>
+                    <input class="ticket-create-file-input" type="file" name="csv_file" accept=".csv,text/csv" hidden>
+                    <div class="ticket-create-upload-dropzone" role="button" tabindex="0" aria-label="Selecionar arquivo CSV" data-csv-dropzone>
+                        <div class="ticket-create-upload-main"><span class="ticket-create-upload-icon"><i class="fas fa-file-csv"></i></span><div><div class="ticket-create-upload-title">Adicione o arquivo CSV</div><div class="ticket-create-upload-copy">Arraste aqui ou clique para selecionar o CSV exportado do GLPI.</div></div></div>
+                        <button class="page-action-btn" type="button" data-csv-pick><i class="fas fa-paperclip"></i><span>Selecionar arquivo</span></button>
+                    </div>
+                    <div class="ticket-create-attachments-list" data-csv-file-label><div class="ticket-create-attachments-empty">Nenhum arquivo selecionado.</div></div>
+                </div>
+                <button class="admin-submit" type="submit"><i class="fas fa-eye"></i><span>Gerar Prévia</span></button>
+                <div class="admin-status" id="monitorImportStatus"></div>
+            </form>
+            <div class="glass-card table-card admin-import-preview" id="monitorImportPreview" hidden>
+                <div class="category-preview-header">
+                    <div><h3 class="admin-card-title">Prévia da importação</h3><p id="monitorImportPreviewFile">Nenhum arquivo selecionado.</p></div>
+                    <button class="page-action-btn primary" type="button" id="monitorImportConfirm" hidden><i class="fas fa-check"></i><span>Confirmar importação</span></button>
+                </div>
+                <div class="import-summary-grid" id="monitorImportSummary"></div>
+                <div class="table-responsive"><table class="custom-table admin-table categories-import-table"><thead><tr><th>Linha</th><th>Status</th><th>Monitor</th><th>Destino</th><th>Observação</th></tr></thead><tbody id="monitorImportPreviewBody"><tr><td colspan="5" class="table-empty">Gere uma prévia para continuar.</td></tr></tbody></table></div>
+            </div>
+        </div>
+
+        <div class="page-section" id="ticketImportSection">
+            <header class="page-header">
+                <div class="page-title-wrapper">
+                    <h1>Importar Tickets</h1>
+                    <div class="page-subtitle">
+                        <i class="fas fa-ticket-alt"></i>
+                        <span>Modelo: exportação CSV do GLPI (separador ;)</span>
+                    </div>
+                </div>
+                <div class="header-actions">
+                    <button class="page-action-btn" type="button" data-admin-back="tickets">
+                        <i class="fas fa-arrow-left"></i>
+                        <span>Voltar</span>
+                    </button>
+                </div>
+            </header>
+            <form class="glass-card admin-form admin-form-page admin-import-form" id="ticketImportForm" enctype="multipart/form-data">
+                <h3 class="admin-card-title">Arquivo CSV</h3>
+                <p class="admin-help-text">Use separador ponto e vírgula com a coluna "Título". Colunas opcionais: "Status", "Prioridade", "Requerente", "Atribuído para - Técnico" e "Categoria".</p>
+                <div class="ticket-create-upload-shell" data-csv-upload>
+                    <input class="ticket-create-file-input" type="file" name="csv_file" accept=".csv,text/csv" hidden>
+                    <div class="ticket-create-upload-dropzone" role="button" tabindex="0" aria-label="Selecionar arquivo CSV" data-csv-dropzone>
+                        <div class="ticket-create-upload-main"><span class="ticket-create-upload-icon"><i class="fas fa-file-csv"></i></span><div><div class="ticket-create-upload-title">Adicione o arquivo CSV</div><div class="ticket-create-upload-copy">Arraste aqui ou clique para selecionar o CSV exportado do GLPI.</div></div></div>
+                        <button class="page-action-btn" type="button" data-csv-pick><i class="fas fa-paperclip"></i><span>Selecionar arquivo</span></button>
+                    </div>
+                    <div class="ticket-create-attachments-list" data-csv-file-label><div class="ticket-create-attachments-empty">Nenhum arquivo selecionado.</div></div>
+                </div>
+                <button class="admin-submit" type="submit"><i class="fas fa-eye"></i><span>Gerar Prévia</span></button>
+                <div class="admin-status" id="ticketImportStatus"></div>
+            </form>
+            <div class="glass-card table-card admin-import-preview" id="ticketImportPreview" hidden>
+                <div class="category-preview-header">
+                    <div><h3 class="admin-card-title">Prévia da importação</h3><p id="ticketImportPreviewFile">Nenhum arquivo selecionado.</p></div>
+                    <button class="page-action-btn primary" type="button" id="ticketImportConfirm" hidden><i class="fas fa-check"></i><span>Confirmar importação</span></button>
+                </div>
+                <div class="import-summary-grid" id="ticketImportSummary"></div>
+                <div class="table-responsive"><table class="custom-table admin-table categories-import-table"><thead><tr><th>Linha</th><th>Status</th><th>Ticket</th><th>Destino</th><th>Observação</th></tr></thead><tbody id="ticketImportPreviewBody"><tr><td colspan="5" class="table-empty">Gere uma prévia para continuar.</td></tr></tbody></table></div>
             </div>
         </div>
         <?php endif; ?>
@@ -2730,6 +2860,18 @@ $glpiPublicUrl = rtrim((string) dashglpi_env('GLPI_PUBLIC_URL', ''), '/');
                         <span>Monitoramento de Hardware & Grid</span>
                     </div>
                 </div>
+                <?php if ($isAdmin): ?>
+                <div class="header-actions">
+                    <button class="page-action-btn" type="button" data-admin-new="computerImport">
+                        <i class="fas fa-file-import"></i>
+                        <span>Computadores</span>
+                    </button>
+                    <button class="page-action-btn" type="button" data-admin-new="monitorImport">
+                        <i class="fas fa-file-import"></i>
+                        <span>Monitores</span>
+                    </button>
+                </div>
+                <?php endif; ?>
             </header>
             <div id="assets-grid" class="assets-grid-container">
                 <div class="text-center p-5">

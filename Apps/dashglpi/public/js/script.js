@@ -2,7 +2,7 @@
 const PLUGIN_ROOT = (typeof DASHGLPI_ROOT !== 'undefined') ? DASHGLPI_ROOT : '';
 const HOURLY_RANGE_OPTIONS = [1, 3, 6, 12, 24, 48];
 const FUNCTIONAL_PAGE_KEYS = ['dashboard', 'tickets', 'sla', 'ranking', 'assets'];
-const AUXILIARY_HASH_PAGE_KEYS = ['ticketNew'];
+const AUXILIARY_HASH_PAGE_KEYS = ['ticketNew', 'computerImport', 'monitorImport', 'ticketImport'];
 const TV_ROTATION_PAGE_KEYS = ['dashboard', 'sla', 'ranking', 'assets'];
 const ALLOWED_FUNCTIONAL_PAGES = Array.isArray(typeof DASHGLPI_ALLOWED_PAGES !== 'undefined' ? DASHGLPI_ALLOWED_PAGES : null)
     ? DASHGLPI_ALLOWED_PAGES.filter((pageId) => FUNCTIONAL_PAGE_KEYS.includes(pageId))

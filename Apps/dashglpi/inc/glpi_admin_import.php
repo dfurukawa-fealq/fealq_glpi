@@ -720,3 +720,217 @@ function dashglpi_admin_user_import_preview(array $file, int $defaultProfileId =
 
     return dashglpi_admin_import_finish($summary, $items, $rows, $csv['filename']);
 }
+
+// ==================== Computadores ====================
+
+function dashglpi_admin_computer_import_preview(array $file): array
+{
+    $csv = dashglpi_admin_import_open($file);
+    $nameIndex = dashglpi_admin_import_require_column($csv['columns'], ['computador', 'nome', 'name'], 'CSV deve conter a coluna "Computador".');
+    $sourceIdIndex = dashglpi_admin_import_column($csv['columns'], ['id', 'codigo', 'código']);
+    $statusIndex = dashglpi_admin_import_column($csv['columns'], ['status']);
+    $manufacturerIndex = dashglpi_admin_import_column($csv['columns'], ['fabricante', 'manufacturer']);
+    $serialIndex = dashglpi_admin_import_column($csv['columns'], ['numero de serie', 'número de série', 'serial']);
+    $typeIndex = dashglpi_admin_import_column($csv['columns'], ['tipo', 'type']);
+    $modelIndex = dashglpi_admin_import_column($csv['columns'], ['modelo', 'model']);
+    $osIndex = dashglpi_admin_import_column($csv['columns'], ['sistema operacional', 'os', 'operating system']);
+    $locationIndex = dashglpi_admin_import_column($csv['columns'], ['localizacao', 'localização', 'location']);
+    $updateIndex = dashglpi_admin_import_column($csv['columns'], ['ult. atualizacao', 'últ. atualização', 'ultima atualizacao', 'última atualização', 'last update', 'last inventory update']);
+    $processorIndex = dashglpi_admin_import_column($csv['columns'], ['processador', 'processor']);
+    $userIndex = dashglpi_admin_import_column($csv['columns'], ['usuario', 'usuário', 'user']);
+    $inventoryIndex = dashglpi_admin_import_column($csv['columns'], ['inventario', 'inventário', 'numero de inventario', 'número de inventário', 'inventory']);
+    $warrantyIndex = dashglpi_admin_import_column($csv['columns'], ['data garantia', 'garantia', 'warranty date']);
+
+    $summary = dashglpi_admin_import_summary_init();
+    $seenRows = [];
+    $items = [];
+    $rows = [];
+    $line = 1;
+
+    try {
+        while (($csvRow = fgetcsv($csv['handle'], 0, ';')) !== false) {
+            $line++;
+            dashglpi_admin_import_guard_rows($line);
+            if (dashglpi_admin_category_csv_blank_row($csvRow)) {
+                continue;
+            }
+
+            $name = dashglpi_admin_import_cell($csvRow, $nameIndex);
+            if ($name === '') {
+                $summary['ignored']++;
+                $rows[] = dashglpi_admin_category_preview_row($line, 'ignored', '(vazio)', '', 'Computador sem nome.');
+                continue;
+            }
+
+            $rowKey = dashglpi_admin_key($name);
+            if (isset($seenRows[$rowKey])) {
+                $summary['ignored']++;
+                $rows[] = dashglpi_admin_category_preview_row($line, 'ignored', $name, '', 'Linha duplicada no CSV.');
+                continue;
+            }
+            $seenRows[$rowKey] = true;
+
+            $summary['ready']++;
+            $rows[] = dashglpi_admin_category_preview_row($line, 'ready', $name, '', 'Pronto para importar.');
+            $items[] = [
+                'name' => $name,
+                'source_id' => dashglpi_admin_import_cell($csvRow, $sourceIdIndex),
+                'status' => dashglpi_admin_import_cell($csvRow, $statusIndex),
+                'manufacturer' => dashglpi_admin_import_cell($csvRow, $manufacturerIndex),
+                'serial' => dashglpi_admin_import_cell($csvRow, $serialIndex),
+                'type' => dashglpi_admin_import_cell($csvRow, $typeIndex),
+                'model' => dashglpi_admin_import_cell($csvRow, $modelIndex),
+                'os' => dashglpi_admin_import_cell($csvRow, $osIndex),
+                'location' => dashglpi_admin_import_cell($csvRow, $locationIndex),
+                'last_update' => dashglpi_admin_import_cell($csvRow, $updateIndex),
+                'processor' => dashglpi_admin_import_cell($csvRow, $processorIndex),
+                'user' => dashglpi_admin_import_cell($csvRow, $userIndex),
+                'inventory' => dashglpi_admin_import_cell($csvRow, $inventoryIndex),
+                'warranty_date' => dashglpi_admin_import_cell($csvRow, $warrantyIndex),
+                'source_line' => $line,
+            ];
+        }
+    } finally {
+        fclose($csv['handle']);
+    }
+
+    return dashglpi_admin_import_finish($summary, $items, $rows, $csv['filename']);
+}
+
+// ==================== Monitores ====================
+
+function dashglpi_admin_monitor_import_preview(array $file): array
+{
+    $csv = dashglpi_admin_import_open($file);
+    $nameIndex = dashglpi_admin_import_require_column($csv['columns'], ['nome', 'name'], 'CSV deve conter a coluna "Nome".');
+    $sourceIdIndex = dashglpi_admin_import_column($csv['columns'], ['id', 'codigo', 'código']);
+    $statusIndex = dashglpi_admin_import_column($csv['columns'], ['status']);
+    $manufacturerIndex = dashglpi_admin_import_column($csv['columns'], ['fabricante']);
+    $locationIndex = dashglpi_admin_import_column($csv['columns'], ['localizacao', 'localização', 'location']);
+    $typeIndex = dashglpi_admin_import_column($csv['columns'], ['tipo', 'type']);
+    $modelIndex = dashglpi_admin_import_column($csv['columns'], ['modelo', 'model']);
+    $lastUpdateIndex = dashglpi_admin_import_column($csv['columns'], ['ultima atualizacao', 'última atualização', 'ult. atualizacao', 'últ. atualização', 'last update']);
+    $serialIndex = dashglpi_admin_import_column($csv['columns'], ['numero de serie', 'número de série', 'serial']);
+    $inventoryIndex = dashglpi_admin_import_column($csv['columns'], ['numero de inventario', 'número de inventário', 'inventario', 'inventário', 'inventory']);
+    $userIndex = dashglpi_admin_import_column($csv['columns'], ['usuario', 'usuário', 'user']);
+
+    $summary = dashglpi_admin_import_summary_init();
+    $seenRows = [];
+    $items = [];
+    $rows = [];
+    $line = 1;
+
+    try {
+        while (($csvRow = fgetcsv($csv['handle'], 0, ';')) !== false) {
+            $line++;
+            dashglpi_admin_import_guard_rows($line);
+            if (dashglpi_admin_category_csv_blank_row($csvRow)) {
+                continue;
+            }
+
+            $name = dashglpi_admin_import_cell($csvRow, $nameIndex);
+            if ($name === '') {
+                $summary['ignored']++;
+                $rows[] = dashglpi_admin_category_preview_row($line, 'ignored', '(vazio)', '', 'Monitor sem nome.');
+                continue;
+            }
+
+            $rowKey = dashglpi_admin_key($name);
+            if (isset($seenRows[$rowKey])) {
+                $summary['ignored']++;
+                $rows[] = dashglpi_admin_category_preview_row($line, 'ignored', $name, '', 'Linha duplicada no CSV.');
+                continue;
+            }
+            $seenRows[$rowKey] = true;
+
+            $summary['ready']++;
+            $rows[] = dashglpi_admin_category_preview_row($line, 'ready', $name, '', 'Pronto para importar.');
+            $items[] = [
+                'name' => $name,
+                'source_id' => dashglpi_admin_import_cell($csvRow, $sourceIdIndex),
+                'status' => dashglpi_admin_import_cell($csvRow, $statusIndex),
+                'manufacturer' => dashglpi_admin_import_cell($csvRow, $manufacturerIndex),
+                'location' => dashglpi_admin_import_cell($csvRow, $locationIndex),
+                'type' => dashglpi_admin_import_cell($csvRow, $typeIndex),
+                'model' => dashglpi_admin_import_cell($csvRow, $modelIndex),
+                'last_update' => dashglpi_admin_import_cell($csvRow, $lastUpdateIndex),
+                'serial' => dashglpi_admin_import_cell($csvRow, $serialIndex),
+                'inventory' => dashglpi_admin_import_cell($csvRow, $inventoryIndex),
+                'user' => dashglpi_admin_import_cell($csvRow, $userIndex),
+                'source_line' => $line,
+            ];
+        }
+    } finally {
+        fclose($csv['handle']);
+    }
+
+    return dashglpi_admin_import_finish($summary, $items, $rows, $csv['filename']);
+}
+
+// ==================== Tickets ====================
+
+function dashglpi_admin_ticket_import_preview(array $file): array
+{
+    $csv = dashglpi_admin_import_open($file);
+    $externalIdIndex = dashglpi_admin_import_column($csv['columns'], ['id', 'codigo', 'código', 'externalid', 'external id']);
+    $titleIndex = dashglpi_admin_import_require_column($csv['columns'], ['titulo', 'título', 'title'], 'CSV deve conter a coluna "Título".');
+    $statusIndex = dashglpi_admin_import_column($csv['columns'], ['status']);
+    $lastUpdateIndex = dashglpi_admin_import_column($csv['columns'], ['ultima atualizacao', 'última atualização', 'ult. atualizacao', 'últ. atualização', 'last update']);
+    $openedAtIndex = dashglpi_admin_import_column($csv['columns'], ['data de abertura', 'abertura', 'opened at', 'opening date', 'date']);
+    $priorityIndex = dashglpi_admin_import_column($csv['columns'], ['prioridade', 'priority']);
+    $urgencyIndex = dashglpi_admin_import_column($csv['columns'], ['urgencia', 'urgency']);
+    $impactIndex = dashglpi_admin_import_column($csv['columns'], ['impacto', 'impact']);
+    $typeIndex = dashglpi_admin_import_column($csv['columns'], ['tipo', 'type']);
+    $entityIndex = dashglpi_admin_import_column($csv['columns'], ['entidade', 'entity']);
+    $contentIndex = dashglpi_admin_import_column($csv['columns'], ['descricao', 'descrição', 'conteudo', 'conteúdo', 'content', 'description']);
+    $requesterIndex = dashglpi_admin_import_column($csv['columns'], ['requerente - requerente', 'requerente', 'solicitante', 'requester']);
+    $technicianIndex = dashglpi_admin_import_column($csv['columns'], ['atribuido para - tecnico', 'atribuído para - técnico', 'tecnico', 'técnico', 'technician']);
+    $categoryIndex = dashglpi_admin_import_column($csv['columns'], ['categoria', 'category']);
+
+    $summary = dashglpi_admin_import_summary_init();
+    $seenRows = [];
+    $items = [];
+    $rows = [];
+    $line = 1;
+
+    try {
+        while (($csvRow = fgetcsv($csv['handle'], 0, ';')) !== false) {
+            $line++;
+            dashglpi_admin_import_guard_rows($line);
+            if (dashglpi_admin_category_csv_blank_row($csvRow)) {
+                continue;
+            }
+
+            $title = dashglpi_admin_import_cell($csvRow, $titleIndex);
+            if ($title === '') {
+                $summary['ignored']++;
+                $rows[] = dashglpi_admin_category_preview_row($line, 'ignored', '(vazio)', '', 'Ticket sem título.');
+                continue;
+            }
+
+            $summary['ready']++;
+            $rows[] = dashglpi_admin_category_preview_row($line, 'ready', $title, '', 'Pronto para importar.');
+            $items[] = [
+                'external_id' => dashglpi_admin_import_cell($csvRow, $externalIdIndex),
+                'title' => $title,
+                'status' => dashglpi_admin_import_cell($csvRow, $statusIndex),
+                'last_update' => dashglpi_admin_import_cell($csvRow, $lastUpdateIndex),
+                'opened_at' => dashglpi_admin_import_cell($csvRow, $openedAtIndex),
+                'priority' => dashglpi_admin_import_cell($csvRow, $priorityIndex),
+                'urgency' => dashglpi_admin_import_cell($csvRow, $urgencyIndex),
+                'impact' => dashglpi_admin_import_cell($csvRow, $impactIndex),
+                'type' => dashglpi_admin_import_cell($csvRow, $typeIndex),
+                'entity' => dashglpi_admin_import_cell($csvRow, $entityIndex),
+                'content' => dashglpi_admin_import_cell($csvRow, $contentIndex),
+                'requester' => dashglpi_admin_import_cell($csvRow, $requesterIndex),
+                'technician' => dashglpi_admin_import_cell($csvRow, $technicianIndex),
+                'category' => dashglpi_admin_import_cell($csvRow, $categoryIndex),
+                'source_line' => $line,
+            ];
+        }
+    } finally {
+        fclose($csv['handle']);
+    }
+
+    return dashglpi_admin_import_finish($summary, $items, $rows, $csv['filename']);
+}
