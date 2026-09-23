@@ -1742,7 +1742,7 @@ $showGlobalSettingsSave = in_array($settingsSection, ['general', 'reports'], tru
         }
     </style>
 </head>
-<body>
+<body class="light-mode">
     <button class="floating-menu-btn" onclick="toggleMenu()">
         <i class="fas fa-bars"></i>
     </button>
@@ -4779,9 +4779,7 @@ $showGlobalSettingsSave = in_array($settingsSection, ['general', 'reports'], tru
 
         function initTheme() {
             const savedTheme = localStorage.getItem('glpi-theme');
-            if (savedTheme === 'light') {
-                document.body.classList.add('light-mode');
-            }
+            document.body.classList.toggle('light-mode', savedTheme !== 'dark');
             updateThemeIcon();
         }
 
@@ -7114,7 +7112,7 @@ table { max-width: 100%; border-collapse: collapse; }
 .x_outer { min-width: 0 !important; }
 </style>
 </head>
-<body>${body}</body>
+<body class="light-mode">${body}</body>
 </html>`;
         }
 

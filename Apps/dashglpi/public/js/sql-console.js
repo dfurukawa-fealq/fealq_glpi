@@ -13,9 +13,7 @@ function escHtml(value) {
 
 function initTheme() {
     const savedTheme = localStorage.getItem('glpi-theme');
-    if (savedTheme === 'light') {
-        document.body.classList.add('light-mode');
-    }
+    document.body.classList.toggle('light-mode', savedTheme !== 'dark');
     updateThemeIcon();
 }
 

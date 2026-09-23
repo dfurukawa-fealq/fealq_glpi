@@ -209,10 +209,8 @@ document.addEventListener('DOMContentLoaded', () => {
 // ==================== THEME ====================
 function initTheme() {
     const savedTheme = localStorage.getItem('glpi-theme');
-    if (savedTheme === 'light') {
-        document.body.classList.add('light-mode');
-        updateThemeIcon();
-    }
+    document.body.classList.toggle('light-mode', savedTheme !== 'dark');
+    updateThemeIcon();
 }
 
 function toggleTheme() {

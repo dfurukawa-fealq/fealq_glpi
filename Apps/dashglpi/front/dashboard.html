@@ -82,7 +82,7 @@ $glpiPublicUrl = rtrim((string) dashglpi_env('GLPI_PUBLIC_URL', ''), '/');
         const DASHGLPI_ITIL_TYPES = <?= json_encode($itilTypeCatalog, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) ?>;
     </script>
 </head>
-<body>
+<body class="light-mode">
     <div class="tv-indicator">
         <i class="fas fa-tv"></i> MODO TV ATIVO
     </div>

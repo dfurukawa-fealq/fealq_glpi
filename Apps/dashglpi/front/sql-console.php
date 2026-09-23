@@ -27,7 +27,7 @@ $bootstrapData = dashglpi_sql_console_dataset();
         const DASHGLPI_SQL_BOOTSTRAP = <?= json_encode($bootstrapData, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_INVALID_UTF8_SUBSTITUTE) ?>;
     </script>
 </head>
-<body>
+<body class="light-mode">
     <button class="floating-menu-btn" onclick="toggleMenu()">
         <i class="fas fa-bars"></i>
     </button>
