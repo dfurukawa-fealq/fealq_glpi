@@ -207,8 +207,13 @@ function plugin_dashglpi_admin_bridge_require_ticket(
 
 function plugin_dashglpi_admin_bridge_bootstrap_constants(): void
 {
+    $root = dirname(__DIR__, 3);
+    $autoload = $root . '/vendor/autoload.php';
+    if (!defined('GLPI_ROOT') && is_file($autoload)) {
+        require_once $autoload;
+    }
     if (!defined('GLPI_ROOT')) {
-        define('GLPI_ROOT', dirname(__DIR__, 3));
+        define('GLPI_ROOT', $root);
     }
     if (!defined('GLPI_CONFIG_DIR')) {
         define('GLPI_CONFIG_DIR', (string) (getenv('GLPI_CONFIG_DIR') ?: '/var/glpi/config'));
@@ -241,7 +246,27 @@ function plugin_dashglpi_admin_bridge_bootstrap_logger(): void
     }
 
     if (!class_exists(Monolog\Logger::class)) {
-        throw new RuntimeException('Bootstrap GLPI incompleto: logger indisponivel.');
+        if (class_exists(Psr\Log\NullLogger::class)) {
+            $PHPLOGGER = new Psr\Log\NullLogger();
+            return;
+        }
+
+        if (interface_exists(Psr\Log\LoggerInterface::class)) {
+            $PHPLOGGER = new class implements Psr\Log\LoggerInterface {
+                public function emergency(Stringable|string $message, array $context = []): void { $this->log('emergency', $message, $context); }
+                public function alert(Stringable|string $message, array $context = []): void { $this->log('alert', $message, $context); }
+                public function critical(Stringable|string $message, array $context = []): void { $this->log('critical', $message, $context); }
+                public function error(Stringable|string $message, array $context = []): void { $this->log('error', $message, $context); }
+                public function warning(Stringable|string $message, array $context = []): void { $this->log('warning', $message, $context); }
+                public function notice(Stringable|string $message, array $context = []): void { $this->log('notice', $message, $context); }
+                public function info(Stringable|string $message, array $context = []): void { $this->log('info', $message, $context); }
+                public function debug(Stringable|string $message, array $context = []): void { $this->log('debug', $message, $context); }
+                public function log($level, Stringable|string $message, array $context = []): void { error_log('[DashGLPI bridge:' . $level . '] ' . (string) $message); }
+            };
+            return;
+        }
+
+        return;
     }
 
     $PHPLOGGER = new Monolog\Logger('glpi');
@@ -261,7 +286,22 @@ function plugin_dashglpi_admin_bridge_bootstrap_cache(): void
     }
 
     if (!class_exists(Glpi\Cache\CacheManager::class)) {
-        throw new RuntimeException('Bootstrap GLPI incompleto: cache indisponivel.');
+        if (interface_exists(Psr\SimpleCache\CacheInterface::class)) {
+            $GLPI_CACHE = new class implements Psr\SimpleCache\CacheInterface {
+                private array $values = [];
+                public function get(string $key, mixed $default = null): mixed { return array_key_exists($key, $this->values) ? $this->values[$key] : $default; }
+                public function set(string $key, mixed $value, null|int|DateInterval $ttl = null): bool { $this->values[$key] = $value; return true; }
+                public function delete(string $key): bool { unset($this->values[$key]); return true; }
+                public function clear(): bool { $this->values = []; return true; }
+                public function getMultiple(iterable $keys, mixed $default = null): iterable { foreach ($keys as $key) { yield $key => $this->get((string) $key, $default); } }
+                public function setMultiple(iterable $values, null|int|DateInterval $ttl = null): bool { foreach ($values as $key => $value) { $this->set((string) $key, $value, $ttl); } return true; }
+                public function deleteMultiple(iterable $keys): bool { foreach ($keys as $key) { $this->delete((string) $key); } return true; }
+                public function has(string $key): bool { return array_key_exists($key, $this->values); }
+            };
+            return;
+        }
+
+        return;
     }
 
     $GLPI_CACHE = (new Glpi\Cache\CacheManager())->getCoreCacheInstance();
@@ -270,7 +310,7 @@ function plugin_dashglpi_admin_bridge_bootstrap_db(): void
 {
     global $DB;
 
-    if ($DB instanceof DBmysql) {
+    if (is_object($DB) && class_exists('DBmysql') && is_a($DB, 'DBmysql')) {
         return;
     }
 
@@ -301,10 +341,9 @@ function plugin_dashglpi_admin_bridge_log(Throwable $e, string $scope): void
         $e->getLine()
     );
 
+    error_log($line);
+
     if (class_exists('Toolbox')) {
         Toolbox::logInFile('php-errors', $line . "\n");
-        return;
     }
-
-    error_log($line);
 }

@@ -54,11 +54,14 @@ function dashglpi_ticket_create_uploaded_files(array $files, string $field = 'at
 try {
     if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         $action = (string) ($_GET['action'] ?? 'catalog');
-        if ($action !== 'catalog') {
-            dashglpi_json(['ok' => false, 'error' => 'Acao invalida.'], 400);
+        if ($action === 'catalog') {
+            dashglpi_json(dashglpi_ticket_create_catalog_response($_GET));
+        }
+        if ($action === 'requester_search') {
+            dashglpi_json(dashglpi_ticket_create_requester_search_response($_GET));
         }
 
-        dashglpi_json(dashglpi_ticket_create_catalog_response($_GET));
+        dashglpi_json(['ok' => false, 'error' => 'Acao invalida.'], 400);
     }
 } catch (Throwable $e) {
     $message = trim((string) $e->getMessage());

@@ -1353,19 +1353,44 @@ $glpiPublicUrl = rtrim((string) dashglpi_env('GLPI_PUBLIC_URL', ''), '/');
                                 <span>Titulo</span>
                                 <input type="text" name="name" id="ticketCreateName" maxlength="255" required>
                             </label>
-                            <label class="admin-field">
+                            <label class="admin-field ticket-create-requester-field full" id="ticketCreateRequesterField" hidden>
+                                <span>Solicitante / Requerente</span>
+                                <input type="hidden" name="requester_id" id="ticketCreateRequesterId" value="<?= (int) ($currentUser['id'] ?? 0) ?>">
+                                <div class="ticket-create-combobox" data-ticket-combobox="requester">
+                                    <input type="search" id="ticketCreateRequesterSearch" placeholder="Digite nome, login ou e-mail" autocomplete="off" role="combobox" aria-expanded="false" aria-controls="ticketCreateRequesterOptions">
+                                    <button type="button" class="ticket-create-combobox-toggle" data-ticket-combobox-toggle="requester" aria-label="Listar solicitantes">
+                                        <i class="fas fa-chevron-down"></i>
+                                    </button>
+                                    <div class="ticket-create-combobox-options" id="ticketCreateRequesterOptions" role="listbox" hidden></div>
+                                </div>
+                            </label>
+                            <label class="admin-field ticket-create-combobox-field" data-ticket-create-entity-field>
                                 <span>Entidade</span>
-                                <select name="entities_id" id="ticketCreateEntity"></select>
+                                <input type="hidden" name="entities_id" id="ticketCreateEntity" value="0">
+                                <div class="ticket-create-combobox" data-ticket-combobox="entity">
+                                    <input type="search" id="ticketCreateEntitySearch" placeholder="Digite para filtrar entidades" autocomplete="off" role="combobox" aria-expanded="false" aria-controls="ticketCreateEntityOptions">
+                                    <button type="button" class="ticket-create-combobox-toggle" data-ticket-combobox-toggle="entity" aria-label="Listar entidades">
+                                        <i class="fas fa-chevron-down"></i>
+                                    </button>
+                                    <div class="ticket-create-combobox-options" id="ticketCreateEntityOptions" role="listbox" hidden></div>
+                                </div>
                             </label>
                             <label class="admin-field">
                                 <span>Tipo</span>
                                 <select name="type" id="ticketCreateType"></select>
                             </label>
-                            <label class="admin-field">
+                            <label class="admin-field ticket-create-combobox-field">
                                 <span>Categoria</span>
-                                <select name="itilcategories_id" id="ticketCreateCategory">
-                                    <option value="0">Carregando categorias...</option>
-                                </select>
+                                <input type="hidden" name="itilcategories_id" id="ticketCreateCategory" value="0">
+                                <div class="ticket-create-combobox" data-ticket-combobox="category">
+                                    <input type="search" id="ticketCreateCategorySearch" placeholder="Digite para filtrar categorias" autocomplete="off" role="combobox" aria-expanded="false" aria-controls="ticketCreateCategoryOptions">
+                                    <button type="button" class="ticket-create-combobox-toggle" data-ticket-combobox-toggle="category" aria-label="Listar categorias">
+                                        <i class="fas fa-chevron-down"></i>
+                                    </button>
+                                    <div class="ticket-create-combobox-options" id="ticketCreateCategoryOptions" role="listbox" hidden>
+                                        <div class="ticket-create-combobox-empty">Carregando categorias...</div>
+                                    </div>
+                                </div>
                             </label>
                             <label class="admin-field">
                                 <span>Urgencia</span>

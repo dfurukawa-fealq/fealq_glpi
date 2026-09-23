@@ -2,6 +2,12 @@
 // Extraído de script.js pelo PLAN-20260703-013 (Fase 3.3) — carregado logo
 // após script.js (e demais módulos) via <script> separado.
 
+const TicketCreateComboState = {
+    entity: { options: [] },
+    category: { options: [] },
+    requester: { options: [], loading: false, timer: null },
+};
+
 function initTicketCreateSection() {
     const form = document.getElementById('ticketCreateForm');
     if (!form) {
@@ -11,6 +17,8 @@ function initTicketCreateSection() {
     const fileInput = document.getElementById('ticketCreateAttachments');
     const uploadZone = document.getElementById('ticketCreateUploadZone');
     const attachmentsList = document.getElementById('ticketCreateAttachmentsList');
+
+    initTicketCreateComboboxes();
 
     form.addEventListener('submit', handleTicketCreateSubmit);
     form.addEventListener('paste', handleTicketCreatePaste);
@@ -311,8 +319,8 @@ async function loadTicketCreateCatalog(options = {}) {
     setTicketCreateStatus('Carregando opcoes do chamado...', '');
 
     try {
-        const response = await fetch(ticketCreateCatalogUrl(options));
-        const data = await response.json();
+        const response = await fetch(ticketCreateCatalogUrl(options), { headers: { 'Accept': 'application/json' } });
+        const data = await ticketCreateReadJson(response, 'Erro ao carregar opcoes do chamado.');
         if (!response.ok || !data.ok) {
             throw new Error(data.error || 'Erro ao carregar opcoes do chamado.');
         }
@@ -337,21 +345,22 @@ function renderTicketCreateCatalog(catalog) {
         return;
     }
 
-    fillSelectOptions(entitySelect, catalog.entities || [], catalog.selected_entity_id);
+    const entityOptions = Array.isArray(catalog.entities) ? catalog.entities : [];
+    TicketCreateComboState.entity.options = entityOptions;
+    const selectedEntity = ticketCreateFindOption(entityOptions, Number(catalog.selected_entity_id ?? catalog.default_entity_id ?? 0))
+        || entityOptions[0]
+        || null;
+    ticketCreateSelectComboboxOption('entity', selectedEntity, { dispatch: false });
+
     fillSelectOptions(typeSelect, catalog.types || [], catalog.selected_type);
     fillSelectOptions(urgencySelect, catalog.urgencies || [], catalog.default_urgency || 3);
 
     const previousCategoryId = Number(categorySelect.value || 0);
     const availableCategories = Array.isArray(catalog.categories) ? catalog.categories : [];
-    const selectedCategoryId = availableCategories.some((item) => Number(item.id) === previousCategoryId)
-        ? previousCategoryId
-        : 0;
-    fillSelectOptions(
-        categorySelect,
-        availableCategories,
-        selectedCategoryId,
-        { id: 0, label: availableCategories.length ? 'Sem categoria' : 'Nenhuma categoria disponivel' }
-    );
+    const categoryOptions = [{ id: 0, label: availableCategories.length ? 'Sem categoria' : 'Nenhuma categoria disponivel' }].concat(availableCategories);
+    const selectedCategory = ticketCreateFindOption(categoryOptions, previousCategoryId) || categoryOptions[0] || null;
+    TicketCreateComboState.category.options = categoryOptions;
+    ticketCreateSelectComboboxOption('category', selectedCategory, { dispatch: false });
 
     const entityField = entitySelect.closest('.admin-field');
     if (entityField) {
@@ -359,11 +368,7 @@ function renderTicketCreateCatalog(catalog) {
     }
 
     updateTicketCreateUploadHelp();
-
-    const requester = document.getElementById('ticketCreateRequester');
-    if (requester) {
-        requester.textContent = catalog.requester?.display || catalog.requester?.name || 'Usuario logado';
-    }
+    renderTicketCreateRequester(catalog);
 
     const profile = document.getElementById('ticketCreateProfile');
     if (profile) {
@@ -373,8 +378,272 @@ function renderTicketCreateCatalog(catalog) {
     const entityScope = document.getElementById('ticketCreateEntityScope');
     if (entityScope) {
         entityScope.textContent = catalog.show_entity_selector
-            ? `${(catalog.entities || []).length} entidades disponiveis`
-            : ((catalog.entities || [])[0]?.label || 'Entidade efetiva');
+            ? `${entityOptions.length} entidades disponiveis`
+            : (ticketCreateOptionLabel(entityOptions[0]) || 'Entidade efetiva');
+    }
+}
+
+async function ticketCreateReadJson(response, fallbackMessage) {
+    const raw = await response.text();
+    try {
+        return raw ? JSON.parse(raw) : {};
+    } catch {
+        const detail = raw.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
+        throw new Error(detail ? `${fallbackMessage} ${detail.slice(0, 180)}` : fallbackMessage);
+    }
+}
+
+function initTicketCreateComboboxes() {
+    ['entity', 'category', 'requester'].forEach((kind) => {
+        const input = ticketCreateComboboxInput(kind);
+        const options = ticketCreateComboboxOptions(kind);
+        const toggle = document.querySelector(`[data-ticket-combobox-toggle="${kind}"]`);
+        if (!input || !options) {
+            return;
+        }
+
+        input.addEventListener('focus', () => {
+            if (kind === 'requester') {
+                ticketCreateLoadRequesterOptions(input.value || '', true);
+                return;
+            }
+            ticketCreateRenderComboboxOptions(kind, input.value || '', true);
+        });
+        input.addEventListener('input', () => {
+            if (kind === 'requester') {
+                ticketCreateScheduleRequesterSearch(input.value || '');
+                return;
+            }
+            ticketCreateRenderComboboxOptions(kind, input.value || '', true);
+        });
+        input.addEventListener('keydown', (event) => {
+            if (event.key === 'Escape') {
+                ticketCreateCloseCombobox(kind);
+                return;
+            }
+            if (event.key === 'Enter') {
+                const firstOption = options.querySelector('[data-ticket-combobox-value]');
+                if (firstOption) {
+                    event.preventDefault();
+                    ticketCreateSelectComboboxValue(kind, firstOption.getAttribute('data-ticket-combobox-value'));
+                }
+            }
+        });
+        options.addEventListener('mousedown', (event) => {
+            const item = event.target.closest('[data-ticket-combobox-value]');
+            if (!item) {
+                return;
+            }
+            event.preventDefault();
+            ticketCreateSelectComboboxValue(kind, item.getAttribute('data-ticket-combobox-value'));
+        });
+        toggle?.addEventListener('click', () => {
+            if (kind === 'requester') {
+                ticketCreateLoadRequesterOptions(input.value || '', true);
+                return;
+            }
+            ticketCreateRenderComboboxOptions(kind, '', true);
+        });
+    });
+
+    document.addEventListener('click', (event) => {
+        if (event.target.closest('.ticket-create-combobox')) {
+            return;
+        }
+        ['entity', 'category', 'requester'].forEach(ticketCreateCloseCombobox);
+    });
+}
+
+function ticketCreateComboboxInput(kind) {
+    return document.getElementById(`ticketCreate${ticketCreateKindSuffix(kind)}Search`);
+}
+
+function ticketCreateComboboxOptions(kind) {
+    return document.getElementById(`ticketCreate${ticketCreateKindSuffix(kind)}Options`);
+}
+
+function ticketCreateComboboxHidden(kind) {
+    if (kind === 'entity') return document.getElementById('ticketCreateEntity');
+    if (kind === 'category') return document.getElementById('ticketCreateCategory');
+    return document.getElementById('ticketCreateRequesterId');
+}
+
+function ticketCreateKindSuffix(kind) {
+    return kind === 'entity' ? 'Entity' : (kind === 'category' ? 'Category' : 'Requester');
+}
+
+function ticketCreateOptionLabel(option) {
+    return String(option?.label || option?.display || option?.name || option?.completename || '-');
+}
+
+function ticketCreateNormalizeSearch(value) {
+    return String(value || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().trim();
+}
+
+function ticketCreateFindOption(options, id) {
+    return (options || []).find((item) => Number(item?.id ?? -1) === Number(id));
+}
+
+function ticketCreateFilteredOptions(kind, query) {
+    const options = TicketCreateComboState[kind]?.options || [];
+    const terms = ticketCreateNormalizeSearch(query).split(/\s+/).filter(Boolean);
+    if (!terms.length) {
+        return options.slice(0, 60);
+    }
+    return options.filter((option) => {
+        const haystack = ticketCreateNormalizeSearch([
+            option?.label,
+            option?.display,
+            option?.name,
+            option?.completename,
+            option?.email,
+        ].join(' '));
+        return terms.every((term) => haystack.includes(term));
+    }).slice(0, 60);
+}
+
+function ticketCreateRenderComboboxOptions(kind, query = '', open = false) {
+    const optionsBox = ticketCreateComboboxOptions(kind);
+    const input = ticketCreateComboboxInput(kind);
+    if (!optionsBox || !input) {
+        return;
+    }
+
+    const options = ticketCreateFilteredOptions(kind, query);
+    if (!options.length) {
+        optionsBox.innerHTML = '<div class="ticket-create-combobox-empty">Nenhum resultado encontrado.</div>';
+    } else {
+        const selectedValue = String(ticketCreateComboboxHidden(kind)?.value || '');
+        optionsBox.innerHTML = options.map((option) => {
+            const value = String(option.id ?? 0);
+            const active = value === selectedValue ? ' is-selected' : '';
+            return `<button type="button" class="ticket-create-combobox-option${active}" role="option" data-ticket-combobox-value="${escHtml(value)}">${escHtml(ticketCreateOptionLabel(option))}</button>`;
+        }).join('');
+    }
+
+    optionsBox.hidden = !open;
+    input.setAttribute('aria-expanded', open ? 'true' : 'false');
+}
+
+function ticketCreateCloseCombobox(kind) {
+    const optionsBox = ticketCreateComboboxOptions(kind);
+    const input = ticketCreateComboboxInput(kind);
+    if (optionsBox) optionsBox.hidden = true;
+    if (input) input.setAttribute('aria-expanded', 'false');
+}
+
+function ticketCreateSelectComboboxValue(kind, rawValue) {
+    const option = ticketCreateFindOption(TicketCreateComboState[kind]?.options || [], Number(rawValue));
+    ticketCreateSelectComboboxOption(kind, option, { dispatch: true });
+}
+
+function ticketCreateSelectComboboxOption(kind, option, config = {}) {
+    const hidden = ticketCreateComboboxHidden(kind);
+    const input = ticketCreateComboboxInput(kind);
+    if (!hidden || !input || !option) {
+        return;
+    }
+
+    hidden.value = String(option.id ?? 0);
+    input.value = ticketCreateOptionLabel(option);
+    ticketCreateCloseCombobox(kind);
+
+    if (kind === 'requester') {
+        ticketCreateUpdateRequesterMeta(option);
+    }
+
+    if (config.dispatch) {
+        hidden.dispatchEvent(new Event('change', { bubbles: true }));
+    }
+}
+
+function ticketCreateCommitComboboxText(kind) {
+    const input = ticketCreateComboboxInput(kind);
+    if (!input) {
+        return;
+    }
+    const typed = ticketCreateNormalizeSearch(input.value || '');
+    const exact = (TicketCreateComboState[kind]?.options || []).find((option) => ticketCreateNormalizeSearch(ticketCreateOptionLabel(option)) === typed);
+    if (exact) {
+        ticketCreateSelectComboboxOption(kind, exact, { dispatch: false });
+    }
+}
+
+function renderTicketCreateRequester(catalog) {
+    const requester = catalog.requester || {};
+    const canChangeRequester = Boolean(catalog.can_change_requester);
+    const requesterField = document.getElementById('ticketCreateRequesterField');
+    const requesterHidden = document.getElementById('ticketCreateRequesterId');
+    const requesterInput = document.getElementById('ticketCreateRequesterSearch');
+    const previousRequesterId = Number(requesterHidden?.value || 0);
+    const currentRequesterId = Number(requester?.id || 0);
+    const shouldPreserveRequester = canChangeRequester
+        && previousRequesterId > 0
+        && previousRequesterId !== currentRequesterId
+        && String(requesterInput?.value || '').trim() !== '';
+    const selectedRequester = shouldPreserveRequester
+        ? { id: previousRequesterId, label: requesterInput.value, display: requesterInput.value }
+        : requester;
+    const requesterOptions = [];
+    if (requester?.id) {
+        requesterOptions.push(requester);
+    }
+    if (shouldPreserveRequester) {
+        requesterOptions.push(selectedRequester);
+    }
+
+    TicketCreateComboState.requester.options = requesterOptions;
+    if (requesterHidden && selectedRequester?.id) {
+        requesterHidden.value = String(selectedRequester.id);
+    }
+    ticketCreateUpdateRequesterMeta(selectedRequester);
+    ticketCreateSelectComboboxOption('requester', selectedRequester, { dispatch: false });
+
+    if (requesterField) {
+        requesterField.hidden = !canChangeRequester;
+    }
+}
+
+function ticketCreateUpdateRequesterMeta(requester) {
+    const requesterMeta = document.getElementById('ticketCreateRequester');
+    if (requesterMeta) {
+        requesterMeta.textContent = ticketCreateOptionLabel(requester) || 'Usuario logado';
+    }
+}
+
+function ticketCreateScheduleRequesterSearch(query) {
+    if (TicketCreateComboState.requester.timer) {
+        clearTimeout(TicketCreateComboState.requester.timer);
+    }
+    TicketCreateComboState.requester.timer = setTimeout(() => {
+        ticketCreateLoadRequesterOptions(query, true);
+    }, 260);
+}
+
+async function ticketCreateLoadRequesterOptions(query = '', open = false) {
+    const input = ticketCreateComboboxInput('requester');
+    if (!input || document.getElementById('ticketCreateRequesterField')?.hidden) {
+        return;
+    }
+
+    const params = new URLSearchParams({ action: 'requester_search', q: String(query || '') });
+    TicketCreateComboState.requester.loading = true;
+    try {
+        const response = await fetch(`${PLUGIN_ROOT}/ajax/ticket_create.php?${params.toString()}`, { headers: { 'Accept': 'application/json' } });
+        const data = await ticketCreateReadJson(response, 'Erro ao buscar solicitantes.');
+        if (!response.ok || !data.ok) {
+            throw new Error(data.error || 'Erro ao buscar solicitantes.');
+        }
+        TicketCreateComboState.requester.options = Array.isArray(data.users) ? data.users : [];
+        ticketCreateRenderComboboxOptions('requester', query, open);
+    } catch (error) {
+        const optionsBox = ticketCreateComboboxOptions('requester');
+        if (optionsBox) {
+            optionsBox.innerHTML = `<div class="ticket-create-combobox-empty">${escHtml(error.message || 'Erro ao buscar solicitantes.')}</div>`;
+            optionsBox.hidden = false;
+        }
+    } finally {
+        TicketCreateComboState.requester.loading = false;
     }
 }
 
@@ -454,6 +723,7 @@ async function handleTicketCreateSubmit(event) {
     setTicketCreateStatus('Registrando chamado...', '');
 
     try {
+        ['entity', 'category', 'requester'].forEach(ticketCreateCommitComboboxText);
         const formData = new FormData(form);
         formData.set('action', 'create');
         formData.set('csrf_token', DASHGLPI_CSRF_TOKEN);
