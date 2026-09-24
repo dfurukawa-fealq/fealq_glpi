@@ -1873,7 +1873,8 @@ function syncTicketsView() {
     const table = document.querySelector('#ticketsSection .table-responsive');
     const kanban = document.getElementById('ticketsKanban');
     const cards = document.getElementById('ticketsCards');
-    const view = mobile ? 'list' : DashState.ticketsView;
+    const helpdesk = typeof DASHGLPI_IS_HELPDESK_VIEW !== 'undefined' && DASHGLPI_IS_HELPDESK_VIEW;
+    const view = (mobile || helpdesk) ? 'list' : DashState.ticketsView;
 
     if (table) table.hidden = !mobile && view === 'kanban';
     if (kanban) kanban.hidden = mobile || view !== 'kanban';
@@ -1888,6 +1889,7 @@ function syncTicketsView() {
 
 function setTicketsView(view) {
     if (!['list', 'kanban'].includes(view)) return;
+    if (DASHGLPI_IS_HELPDESK_VIEW && view === 'kanban') return;
     DashState.ticketsView = view;
     syncTicketsView();
     renderTicketsTable();
@@ -1952,37 +1954,94 @@ function renderTicketsTable() {
         }
     });
 
-    fullBody.innerHTML = pageItems.map(ticket => `
+    fullBody.innerHTML = DASHGLPI_IS_HELPDESK_VIEW
+        ? renderHelpdeskTicketsRows(pageItems)
+        : renderDefaultTicketsRows(pageItems);
+    if (DASHGLPI_IS_HELPDESK_VIEW) initHelpdeskTicketRowToggles();
+}
+
+function renderDefaultTicketsRows(tickets) {
+    return tickets.map(ticket => `
         <tr data-ticket-detail="${ticket.id}" data-itemtype="${escHtml(ticket.itemtype || 'ticket')}" class="is-clickable">
             <td><strong>#${ticket.id}</strong></td>
             <td>
                 <div class="table-ticket-info">
                     <div class="table-ticket-title">
                         ${escHtml(ticket.name)}
-                        ${Number(ticket.notification_failed) === 1 ? '<i class="fas fa-triangle-exclamation notification-failure-icon" title="Falha no envio da notificação"></i>' : ''}
+                        ${Number(ticket.notification_failed) === 1 ? '<i class="fas fa-triangle-exclamation notification-failure-icon" title="Falha no envio da notificacao"></i>' : ''}
                     </div>
                     <div class="table-ticket-id">${escHtml(ticket.category || 'Sem categoria')}</div>
                 </div>
             </td>
             <td data-label="Status" class="ticket-stage-cell">${renderTicketStage(ticket)}</td>
-            <td data-label="Técnico">${escHtml(ticket.technician_name || '-')}</td>
+            <td data-label="Tecnico">${escHtml(ticket.technician_name || '-')}</td>
             <td data-label="Requerente">${escHtml(ticket.requester_name || '-')}</td>
             <td data-label="Criado em"><span class="table-date">${escHtml(formatDateTime(ticket.date))}</span></td>
-            ${DASHGLPI_IS_HELPDESK_VIEW ? `
+            ${ticketReportsEnabled() ? `
+            <td>
+                ${renderTicketReportAction(ticket.id, ticket.itemtype || 'ticket')}
+            </td>
+            ` : ''}
+        </tr>
+    `).join('');
+}
+
+function renderHelpdeskTicketsRows(tickets) {
+    return tickets.map(ticket => {
+        const ticketId = Number(ticket.id);
+        return `
+        <tr data-ticket-detail="${ticketId}" data-itemtype="${escHtml(ticket.itemtype || 'ticket')}" class="is-clickable ticket-helpdesk-main-row" aria-controls="ticket-helpdesk-extra-${ticketId}">
+            <td>
+                <div class="ticket-helpdesk-id">
+                    <button type="button" class="ticket-helpdesk-expand" data-ticket-extra-toggle="${ticketId}" aria-expanded="false" aria-controls="ticket-helpdesk-extra-${ticketId}" title="Mostrar detalhes">
+                        <i class="fas fa-chevron-right" aria-hidden="true"></i>
+                    </button>
+                    <strong>#${ticketId}</strong>
+                </div>
+            </td>
+            <td>
+                <div class="table-ticket-info">
+                    <div class="table-ticket-title">
+                        ${escHtml(ticket.name)}
+                        ${Number(ticket.notification_failed) === 1 ? '<i class="fas fa-triangle-exclamation notification-failure-icon" title="Falha no envio da notificacao"></i>' : ''}
+                    </div>
+                    <div class="table-ticket-id">${escHtml(ticket.category || 'Sem categoria')}</div>
+                </div>
+            </td>
+            <td data-label="Status" class="ticket-stage-cell">${renderTicketStage(ticket)}</td>
             <td>
                 <div class="table-action-group">
                     ${Number(ticket.readonly) === 1 ? '' : renderSelfServiceActions(ticket)}
                 </div>
             </td>
-            ` : (ticketReportsEnabled() ? `
-            <td>
-                ${renderTicketReportAction(ticket.id, ticket.itemtype || 'ticket')}
-            </td>
-            ` : '')}
         </tr>
-    `).join('');
+        <tr class="ticket-helpdesk-extra-row" id="ticket-helpdesk-extra-${ticketId}" hidden>
+            <td colspan="4">
+                <div class="ticket-helpdesk-extra-grid">
+                    <div><span>Tecnico</span><strong>${escHtml(ticket.technician_name || '-')}</strong></div>
+                    <div><span>Requerente</span><strong>${escHtml(ticket.requester_name || '-')}</strong></div>
+                    <div><span>Criado em</span><strong>${escHtml(formatDateTime(ticket.date) || '-')}</strong></div>
+                </div>
+            </td>
+        </tr>`;
+    }).join('');
 }
 
+function initHelpdeskTicketRowToggles() {
+    document.querySelectorAll('[data-ticket-extra-toggle]').forEach(button => {
+        button.addEventListener('click', event => {
+            event.preventDefault();
+            event.stopPropagation();
+            const ticketId = button.getAttribute('data-ticket-extra-toggle');
+            const detailRow = document.getElementById(`ticket-helpdesk-extra-${ticketId}`);
+            if (!detailRow) return;
+            const expanded = detailRow.hidden;
+            detailRow.hidden = !expanded;
+            button.setAttribute('aria-expanded', expanded ? 'true' : 'false');
+            button.classList.toggle('is-expanded', expanded);
+        });
+    });
+}
 function renderTicketsCards(tickets) {
     // Lista de cards acionável para mobile (PLAN-20260831-001).
     const cards = document.getElementById('ticketsCards');

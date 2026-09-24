@@ -7945,3 +7945,86 @@ body.menu-closed .header-actions {
     #attendanceExpand { display: none; }
     #ticketDetailModal .ticket-detail-footer .page-action-btn { min-height: 42px; }
 }
+
+#ticketsSection .tickets-helpdesk-table {
+    min-width: 760px;
+}
+
+.ticket-helpdesk-main-row td {
+    vertical-align: middle;
+}
+
+.ticket-helpdesk-id {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    white-space: nowrap;
+}
+
+.ticket-helpdesk-expand {
+    width: 30px;
+    height: 30px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--glass-border);
+    border-radius: 7px;
+    background: var(--glass-bg);
+    color: var(--text-sec);
+    transition: background 0.2s, color 0.2s, transform 0.2s;
+}
+
+.ticket-helpdesk-expand:hover,
+.ticket-helpdesk-expand.is-expanded {
+    background: var(--primary);
+    color: #fff;
+}
+
+.ticket-helpdesk-expand i {
+    transition: transform 0.2s;
+}
+
+.ticket-helpdesk-expand.is-expanded i {
+    transform: rotate(90deg);
+}
+
+.ticket-helpdesk-extra-row td {
+    padding-top: 0;
+    background: rgba(148, 163, 184, 0.08);
+}
+
+.ticket-helpdesk-extra-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.4fr) minmax(0, 1.4fr) minmax(150px, 0.8fr);
+    gap: 18px;
+    padding: 14px 0 4px 40px;
+}
+
+.ticket-helpdesk-extra-grid div {
+    min-width: 0;
+}
+
+.ticket-helpdesk-extra-grid span {
+    display: block;
+    margin-bottom: 4px;
+    color: var(--text-muted);
+    font-size: 0.7rem;
+    font-weight: 800;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+}
+
+.ticket-helpdesk-extra-grid strong {
+    display: block;
+    color: var(--text-sec);
+    font-size: 0.9rem;
+    font-weight: 600;
+    overflow-wrap: anywhere;
+}
+
+@media (max-width: 768px) {
+    .ticket-helpdesk-extra-grid {
+        grid-template-columns: 1fr;
+        padding-left: 0;
+    }
+}

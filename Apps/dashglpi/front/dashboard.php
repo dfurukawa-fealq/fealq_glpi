@@ -1155,36 +1155,43 @@ $glpiPublicUrl = rtrim((string) dashglpi_env('GLPI_PUBLIC_URL', ''), '/');
                     <?php endif; ?>
                     <div style="display:flex;align-items:center;gap:12px;">
                         <div class="tickets-count" id="ticketsCount">0 chamados</div>
-                        <div class="view-toggle" id="ticketsViewToggle" role="group" aria-label="Visualização dos chamados">
-                            <button type="button" class="view-toggle-btn is-active" data-view="list" aria-pressed="true" title="Visualização em lista">
+                        <?php if (!$isHelpdeskView): ?>
+                        <div class="view-toggle" id="ticketsViewToggle" role="group" aria-label="Visualizacao dos chamados">
+                            <button type="button" class="view-toggle-btn is-active" data-view="list" aria-pressed="true" title="Visualizacao em lista">
                                 <i class="fas fa-list" aria-hidden="true"></i><span>Lista</span>
                             </button>
-                            <button type="button" class="view-toggle-btn" data-view="kanban" aria-pressed="false" title="Visualização Kanban">
+                            <button type="button" class="view-toggle-btn" data-view="kanban" aria-pressed="false" title="Visualizacao Kanban">
                                 <i class="fas fa-columns" aria-hidden="true"></i><span>Kanban</span>
                             </button>
                         </div>
+                        <?php endif; ?>
                     </div>
                 </div>
                 <div class="table-responsive">
-                    <table class="custom-table responsive-table">
+                    <table class="custom-table responsive-table<?= $isHelpdeskView ? " tickets-helpdesk-table" : "" ?>">
                         <thead>
                             <tr>
+                                <?php if ($isHelpdeskView): ?>
                                 <th class="sortable-th" data-sort="id">ID <i class="fas fa-sort"></i></th>
-                                <th class="sortable-th" data-sort="name">Título <i class="fas fa-sort"></i></th>
+                                <th class="sortable-th" data-sort="name">Titulo <i class="fas fa-sort"></i></th>
                                 <th class="sortable-th" data-sort="stage">Stage <i class="fas fa-sort"></i></th>
-                                <th class="sortable-th" data-sort="technician_name">Técnico <i class="fas fa-sort"></i></th>
+                                <th>Acoes</th>
+                                <?php else: ?>
+                                <th class="sortable-th" data-sort="id">ID <i class="fas fa-sort"></i></th>
+                                <th class="sortable-th" data-sort="name">Titulo <i class="fas fa-sort"></i></th>
+                                <th class="sortable-th" data-sort="stage">Stage <i class="fas fa-sort"></i></th>
+                                <th class="sortable-th" data-sort="technician_name">Tecnico <i class="fas fa-sort"></i></th>
                                 <th class="sortable-th" data-sort="requester_name">Requerente <i class="fas fa-sort"></i></th>
                                 <th class="sortable-th" data-sort="date">Criado em <i class="fas fa-sort"></i></th>
-                                <?php if ($isHelpdeskView): ?>
-                                <th>Ações</th>
-                                <?php elseif ($canTicketReports): ?>
-                                <th>Ação</th>
+                                <?php if ($canTicketReports): ?>
+                                <th>Acao</th>
+                                <?php endif; ?>
                                 <?php endif; ?>
                             </tr>
                         </thead>
                         <tbody id="tickets-full-body">
                             <tr>
-                                <td colspan="<?= ($isHelpdeskView || $canTicketReports) ? 8 : 7 ?>" style="text-align: center; padding: 40px;">
+                                <td colspan="<?= $isHelpdeskView ? 4 : ($canTicketReports ? 7 : 6) ?>" style="text-align: center; padding: 40px;">
                                     <i class="fas fa-spinner fa-spin" style="font-size: 2rem; color: var(--text-muted);"></i>
                                 </td>
                             </tr>
