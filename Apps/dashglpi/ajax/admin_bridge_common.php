@@ -100,6 +100,57 @@ function plugin_dashglpi_admin_bridge_uploaded_files(string $field): array
     return $files;
 }
 
+function plugin_dashglpi_admin_bridge_ticket_document_category_id(): int
+{
+    global $CFG_GLPI, $DB;
+
+    $configuredId = max(0, (int) ($CFG_GLPI['documentcategories_id_forticket'] ?? 0));
+    if ($configuredId > 0) {
+        $category = new DocumentCategory();
+        if ($category->getFromDB($configuredId)) {
+            return $configuredId;
+        }
+    }
+
+    $fallbackName = 'Anexos de Chamado';
+    foreach ($DB->request([
+        'SELECT' => ['id'],
+        'FROM' => 'glpi_documentcategories',
+        'WHERE' => ['name' => $fallbackName],
+        'LIMIT' => 1,
+    ]) as $row) {
+        $categoryId = max(0, (int) ($row['id'] ?? 0));
+        if ($categoryId > 0) {
+            $CFG_GLPI['documentcategories_id_forticket'] = $categoryId;
+            return $categoryId;
+        }
+    }
+
+    foreach ($DB->request([
+        'SELECT' => ['id'],
+        'FROM' => 'glpi_documentcategories',
+        'ORDER' => 'id ASC',
+        'LIMIT' => 1,
+    ]) as $row) {
+        $categoryId = max(0, (int) ($row['id'] ?? 0));
+        if ($categoryId > 0) {
+            $CFG_GLPI['documentcategories_id_forticket'] = $categoryId;
+            return $categoryId;
+        }
+    }
+
+    $category = new DocumentCategory();
+    $categoryId = (int) $category->add([
+        'name' => $fallbackName,
+        'comment' => 'Categoria padrao usada pelo DashGLPI para anexos de chamados.',
+    ]);
+    if ($categoryId <= 0) {
+        throw new RuntimeException('Nao foi possivel criar categoria padrao para anexos de chamados.');
+    }
+
+    $CFG_GLPI['documentcategories_id_forticket'] = $categoryId;
+    return $categoryId;
+}
 function plugin_dashglpi_admin_bridge_find_one(string $class, array $criteria): ?array
 {
     $item = new $class();
@@ -221,20 +272,49 @@ function plugin_dashglpi_admin_bridge_bootstrap_constants(): void
     if (!defined('GLPI_VAR_DIR')) {
         define('GLPI_VAR_DIR', (string) (getenv('GLPI_VAR_DIR') ?: '/var/glpi/files'));
     }
-    if (!defined('GLPI_LOG_DIR')) {
-        define('GLPI_LOG_DIR', (string) (getenv('GLPI_LOG_DIR') ?: '/var/glpi/logs'));
+
+    $varDir = rtrim((string) GLPI_VAR_DIR, '/');
+    $directoryConstants = [
+        'GLPI_DOC_DIR' => $varDir,
+        'GLPI_CACHE_DIR' => $varDir . '/_cache',
+        'GLPI_CRON_DIR' => $varDir . '/_cron',
+        'GLPI_GRAPH_DIR' => $varDir . '/_graphs',
+        'GLPI_LOCAL_I18N_DIR' => $varDir . '/_locales',
+        'GLPI_LOCK_DIR' => $varDir . '/_lock',
+        'GLPI_LOG_DIR' => $varDir . '/_log',
+        'GLPI_PICTURE_DIR' => $varDir . '/_pictures',
+        'GLPI_PLUGIN_DOC_DIR' => $varDir . '/_plugins',
+        'GLPI_RSS_DIR' => $varDir . '/_rss',
+        'GLPI_SESSION_DIR' => $varDir . '/_sessions',
+        'GLPI_TMP_DIR' => $varDir . '/_tmp',
+        'GLPI_UPLOAD_DIR' => $varDir . '/_uploads',
+        'GLPI_INVENTORY_DIR' => $varDir . '/_inventories',
+        'GLPI_THEMES_DIR' => $varDir . '/_themes',
+    ];
+
+    foreach ($directoryConstants as $constant => $directory) {
+        if (!defined($constant)) {
+            define($constant, $directory);
+        }
     }
+
     if (!defined('GLPI_LOG_LVL')) {
         define('GLPI_LOG_LVL', 'warning');
     }
-    if (!defined('GLPI_CACHE_DIR')) {
-        define('GLPI_CACHE_DIR', rtrim((string) (getenv('GLPI_VAR_DIR') ?: '/var/glpi'), '/') . '/_cache');
+    if (!defined('GLPI_DISALLOWED_UPLOADS_PATTERN')) {
+        define('GLPI_DISALLOWED_UPLOADS_PATTERN', '/\.(php\d*|phar)$/i');
     }
     if (!defined('GLPI_MARKETPLACE_DIR')) {
-        define('GLPI_MARKETPLACE_DIR', (string) (getenv('GLPI_MARKETPLACE_DIR') ?: '/var/glpi/marketplace'));
+        define('GLPI_MARKETPLACE_DIR', (string) (getenv('GLPI_MARKETPLACE_DIR') ?: GLPI_ROOT . '/marketplace'));
     }
     if (!defined('GLPI_PLUGINS_DIRECTORIES')) {
-        define('GLPI_PLUGINS_DIRECTORIES', [GLPI_ROOT . '/plugins', GLPI_MARKETPLACE_DIR]);
+        define('GLPI_PLUGINS_DIRECTORIES', [GLPI_MARKETPLACE_DIR, GLPI_ROOT . '/plugins']);
+    }
+
+    foreach ($directoryConstants as $directory) {
+        if (!is_dir($directory)) {
+            @mkdir($directory, 0775, true);
+        }
     }
 }
 function plugin_dashglpi_admin_bridge_bootstrap_logger(): void

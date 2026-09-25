@@ -79,6 +79,8 @@ function dashglpi_attendance_upload_native(array &$input): void
     if (!$files) {
         return;
     }
+    plugin_dashglpi_admin_bridge_ticket_document_category_id();
+
     foreach ($files as $index => $file) {
         $name = substr(bin2hex(random_bytes(12)), 0, 23) . basename($file['name']);
         if (is_array($_FILES['attachments']['name'])) {

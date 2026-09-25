@@ -331,6 +331,8 @@ function plugin_dashglpi_ticket_create_attach_uploaded_files(array &$ticketInput
         return;
     }
 
+    plugin_dashglpi_admin_bridge_ticket_document_category_id();
+
     foreach ($uploadedFiles as $index => $file) {
         $originalName = basename((string) ($file['name'] ?? 'arquivo'));
         $prefix = substr(sha1((string) microtime(true) . $index . $originalName), 0, 23);

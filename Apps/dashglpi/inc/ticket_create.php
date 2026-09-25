@@ -24,6 +24,8 @@ function dashglpi_ticket_create_scope(): array
 
     if (!empty($context['is_admin_bypass'])) {
         $entityIds = dashglpi_ticket_create_all_entity_ids();
+    } elseif (!empty($context['has_profile_rule']) || !empty($context['is_helpdesk_profile']) || (string) ($profileRows[0]['profile_interface'] ?? '') === 'helpdesk') {
+        $entityIds = dashglpi_ticket_create_direct_profile_entity_ids($profileRows);
     } else {
         $entityIds = $profileRows ? dashglpi_expand_profile_entities($profileRows) : [];
         if (!$entityIds) {
@@ -49,6 +51,18 @@ function dashglpi_ticket_create_scope(): array
     ];
 }
 
+function dashglpi_ticket_create_direct_profile_entity_ids(array $profileRows): array
+{
+    $entityIds = [];
+    foreach ($profileRows as $row) {
+        $entityIds[] = max(0, (int) ($row['entities_id'] ?? 0));
+    }
+
+    $entityIds = array_values(array_unique($entityIds));
+    sort($entityIds);
+
+    return $entityIds ?: [0];
+}
 function dashglpi_ticket_create_all_entity_ids(): array
 {
     $entityIds = [0];
@@ -145,6 +159,15 @@ function dashglpi_ticket_create_normalize_entity_id(array $scope, int $requested
     return (int) ($scope['default_entity_id'] ?? 0);
 }
 
+function dashglpi_ticket_create_assert_entity_id(array $scope, int $requestedEntityId): int
+{
+    $allowedIds = array_map(static fn(array $entity): int => (int) ($entity['id'] ?? 0), $scope['entities'] ?? []);
+    if (in_array($requestedEntityId, $allowedIds, true)) {
+        return $requestedEntityId;
+    }
+
+    throw new RuntimeException('Entidade selecionada fora do seu escopo de acesso.');
+}
 function dashglpi_ticket_create_normalize_type($value): int
 {
     $type = (int) $value;
@@ -415,7 +438,7 @@ function dashglpi_ticket_create_payload_from_request(array $post): array
     return [
         'action' => 'create',
         'requester_id' => $requesterId,
-        'entities_id' => dashglpi_ticket_create_normalize_entity_id($scope, (int) ($post['entities_id'] ?? 0)),
+        'entities_id' => dashglpi_ticket_create_assert_entity_id($scope, (int) ($post['entities_id'] ?? 0)),
         'type' => dashglpi_ticket_create_normalize_type($post['type'] ?? 1),
         'urgency' => dashglpi_ticket_create_normalize_urgency($post['urgency'] ?? 3),
         'itilcategories_id' => max(0, (int) ($post['itilcategories_id'] ?? 0)),
