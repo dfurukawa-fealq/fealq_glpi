@@ -10,7 +10,7 @@ class PluginDashglpiDashboard
     {
         $period = self::dashboardPeriod($filters);
         $start = $period['start'];
-        $scope = self::dashboardTicketScope($start);
+        $scope = self::dashboardTicketScope($start, self::filterMyTasks($filters));
         $createdTicketsChart = self::createdTicketsChart($filters, $scope);
         $notificationQueue = self::notificationQueueData($filters);
 
@@ -237,7 +237,7 @@ class PluginDashglpiDashboard
         }
 
         $period = self::dashboardPeriod($filters);
-        $scope = self::ticketsListScope($period['start']);
+        $scope = self::ticketsListScope($period['start'], self::filterMyTasks($filters));
         $rows = self::ticketRows($period['start'], 100, $scope);
 
         $rows = self::intRows($rows, [
@@ -291,7 +291,9 @@ class PluginDashglpiDashboard
         }
 
         $period = self::dashboardPeriod($filters);
-        $scope = self::entityScope('t.entities_id');
+        $scope = self::filterMyTasks($filters)
+            ? self::currentUserItilScope($type, 't')
+            : self::entityScope('t.entities_id');
         $fk = $type['fk'];
 
         $rows = dashglpi_fetch_all(
@@ -2447,20 +2449,22 @@ class PluginDashglpiDashboard
         return dashglpi_scoped_entity_sql($column, $prependAnd);
     }
 
-    private static function dashboardTicketScope(string $start): array
+    private static function dashboardTicketScope(string $start, bool $myTasks): array
     {
-        return self::requesterThenEntityScope(
-            't.is_deleted = 0 AND t.date >= ?',
-            [$start]
-        );
+        if ($myTasks) {
+            return self::currentUserTicketScope('t');
+        }
+
+        return self::entityScope('t.entities_id');
     }
 
-    private static function ticketsListScope(string $start): array
+    private static function ticketsListScope(string $start, bool $myTasks): array
     {
-        return self::requesterThenEntityScope(
-            't.status IN (1, 2, 3, 4, 5, 6) AND t.is_deleted = 0 AND t.date >= ?',
-            [$start]
-        );
+        if ($myTasks) {
+            return self::currentUserTicketScope('t');
+        }
+
+        return self::entityScope('t.entities_id');
     }
 
     private static function slaListScope(array $where, array $params): array
@@ -2518,6 +2522,62 @@ class PluginDashglpiDashboard
         ];
     }
 
+
+    private static function filterMyTasks(array $filters): bool
+    {
+        $value = $filters['my_tasks'] ?? '1';
+        return !in_array((string) $value, ['0', 'false', 'off', 'no'], true);
+    }
+
+    private static function currentUserTicketScope(string $ticketAlias = 't'): array
+    {
+        $context = dashglpi_current_user_context();
+        $userId = (int) ($context['user_id'] ?? 0);
+        if ($userId <= 0) {
+            return ['mode' => 'my_tasks', 'sql' => ' AND 1 = 0', 'where' => '1 = 0', 'params' => []];
+        }
+
+        $where = "($ticketAlias.users_id_recipient = ? OR EXISTS (
+            SELECT 1
+            FROM glpi_tickets_users tu_scope
+            WHERE tu_scope.tickets_id = $ticketAlias.id
+              AND tu_scope.users_id = ?
+              AND tu_scope.type IN (1, 2)
+        ))";
+
+        return [
+            'mode' => 'my_tasks',
+            'sql' => ' AND ' . $where,
+            'where' => $where,
+            'params' => [$userId, $userId],
+        ];
+    }
+
+    private static function currentUserItilScope(array $type, string $objectAlias = 't'): array
+    {
+        $context = dashglpi_current_user_context();
+        $userId = (int) ($context['user_id'] ?? 0);
+        $fk = (string) ($type['fk'] ?? '');
+        $userLinkTable = (string) ($type['user_link_table'] ?? '');
+        if ($userId <= 0 || $fk === '' || $userLinkTable === '') {
+            return ['mode' => 'my_tasks', 'sql' => ' AND 1 = 0', 'where' => '1 = 0', 'params' => []];
+        }
+
+        $where = "($objectAlias.users_id_recipient = ? OR EXISTS (
+            SELECT 1
+            FROM $userLinkTable tu_scope
+            WHERE tu_scope.$fk = $objectAlias.id
+              AND tu_scope.users_id = ?
+              AND tu_scope.type IN (1, 2)
+        ))";
+
+        return [
+            'mode' => 'my_tasks',
+            'sql' => ' AND ' . $where,
+            'where' => $where,
+            'params' => [$userId, $userId],
+        ];
+    }
     private static function requesterScope(string $ticketAlias = 't', bool $prependAnd = true): array
     {
         $context = dashglpi_current_user_context();

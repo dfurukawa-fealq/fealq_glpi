@@ -116,6 +116,7 @@ const DashState = {
     dashboardPeriodDays: 30,
     createdTicketsRangeHours: 1,
     notificationRangeHours: 1,
+    myTasksOnly: true,
     dashboardNotificationsGlobal: [],
     dismissedNotificationIds: new Set(),
     glpiHealthDataGlobal: null,
@@ -190,11 +191,13 @@ document.addEventListener('DOMContentLoaded', () => {
     initDashboardPeriodFilters();
     initCreatedTicketsRangeFilters();
     initNotificationRangeFilters();
+    initMyTasksFilters();
     initSLAMonitor();
     initTicketSearchAndSort();
     initSLASearchAndSort();
     initTicketAssignmentModal();
     initSelfServiceActions();
+    initChangePasswordForm();
     initAdminRegisters();
     initTicketCreateSection();
     initHashNavigation();
@@ -580,8 +583,16 @@ function updateClock() {
 
 // ==================== TV MODE ====================
 function toggleTVMode() {
-    DashState.tvMode = !DashState.tvMode;
-    document.body.classList.toggle('tv-mode');
+    setTVMode(!DashState.tvMode);
+}
+
+function exitTVMode() {
+    setTVMode(false);
+}
+
+function setTVMode(enabled) {
+    DashState.tvMode = Boolean(enabled);
+    document.body.classList.toggle('tv-mode', DashState.tvMode);
 
     if (DashState.tvMode) {
         if (document.documentElement.requestFullscreen) {
@@ -589,7 +600,7 @@ function toggleTVMode() {
         }
         startTVRotation();
     } else {
-        if (document.exitFullscreen) {
+        if (document.fullscreenElement && document.exitFullscreen) {
             document.exitFullscreen();
         }
         stopTVRotation();
@@ -648,6 +659,7 @@ function dashboardDataUrl(action) {
         period_days: String(dashboardPeriodParam()),
         created_tickets_range_hours: String(createdTicketsRangeParam()),
         notification_range_hours: String(notificationRangeParam()),
+        my_tasks: DashState.myTasksOnly ? '1' : '0',
         // Cache-buster defensivo: garante unicidade da URL mesmo que uma camada de borda
         // ignore os cabeçalhos no-store do origin (ver dashglpi_json).
         _ts: String(Date.now())
@@ -714,6 +726,29 @@ function updateCreatedTicketsRangeButtons() {
 function updateNotificationRangeButtons() {
     document.querySelectorAll('[data-notification-range]').forEach(item => {
         item.classList.toggle('active', Number(item.getAttribute('data-notification-range')) === DashState.notificationRangeHours);
+    });
+}
+
+function initMyTasksFilters() {
+    const savedValue = localStorage.getItem('dashglpi-my-tasks-only');
+    DashState.myTasksOnly = savedValue === null ? true : savedValue === '1';
+    syncMyTasksFilters();
+
+    document.querySelectorAll('[data-my-tasks-filter]').forEach(input => {
+        input.addEventListener('change', () => {
+            DashState.myTasksOnly = input.checked;
+            localStorage.setItem('dashglpi-my-tasks-only', DashState.myTasksOnly ? '1' : '0');
+            syncMyTasksFilters();
+            DashState.ticketsPaginationState.page = 1;
+            updateData({ force: true });
+            loadTicketLists();
+        });
+    });
+}
+
+function syncMyTasksFilters() {
+    document.querySelectorAll('[data-my-tasks-filter]').forEach(input => {
+        input.checked = DashState.myTasksOnly;
     });
 }
 
@@ -2409,6 +2444,62 @@ document.addEventListener('click', (e) => {
 // ==================== ADMIN REGISTERS ====================
 // Movido para public/js/script.admin.js (PLAN-20260703-013, Fase 3.2).
 
+function openChangePasswordModal() {
+    const modal = document.getElementById('changePasswordModal');
+    const form = document.getElementById('changePasswordForm');
+    const status = document.getElementById('changePasswordStatus');
+    if (!modal) return;
+    if (form) form.reset();
+    if (status) {
+        status.textContent = '';
+        status.className = 'admin-status';
+    }
+    modal.hidden = false;
+    setTimeout(() => form?.querySelector('input[name="current_password"]')?.focus(), 50);
+}
+
+function closeChangePasswordModal() {
+    const modal = document.getElementById('changePasswordModal');
+    if (modal) modal.hidden = true;
+}
+
+function initChangePasswordForm() {
+    const form = document.getElementById('changePasswordForm');
+    if (!form) return;
+
+    form.addEventListener('submit', async event => {
+        event.preventDefault();
+        const status = document.getElementById('changePasswordStatus');
+        const submit = form.querySelector('button[type="submit"]');
+        if (status) {
+            status.textContent = 'Salvando...';
+            status.className = 'admin-status';
+        }
+        if (submit) submit.disabled = true;
+
+        try {
+            const data = await dashglpiPostForm(`${PLUGIN_ROOT}/ajax/change_password.php`, {
+                current_password: form.current_password.value,
+                new_password: form.new_password.value,
+                confirm_password: form.confirm_password.value,
+            }, 'Nao foi possivel alterar a senha.');
+            if (!data.ok) throw new Error(data.error || 'Nao foi possivel alterar a senha.');
+            if (status) {
+                status.textContent = data.message || 'Senha alterada com sucesso.';
+                status.className = 'admin-status success';
+            }
+            form.reset();
+            setTimeout(closeChangePasswordModal, 900);
+        } catch (error) {
+            if (status) {
+                status.textContent = error.message || 'Nao foi possivel alterar a senha.';
+                status.className = 'admin-status error';
+            }
+        } finally {
+            if (submit) submit.disabled = false;
+        }
+    });
+}
 // ==================== NOTIFICATIONS ====================
 function initNotifications() {
     renderDashboardNotifications([]);

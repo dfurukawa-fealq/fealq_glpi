@@ -208,6 +208,10 @@ function dashglpi_render_sidebar(string $active, string $context = 'dashboard', 
                     </div>
                 </details>
             <?php endif; ?>
+            <a href="#changePassword" class="menu-link" onclick="openChangePasswordModal(); return false;">
+                <i class="fas fa-key"></i>
+                <span>Alterar Senha</span>
+            </a>
             <div style="flex: 1;"></div>
             <?php if ($showGlpiBackLink): ?>
             <a href="<?= htmlspecialchars($glpiCentralUrl ?: '#', ENT_QUOTES, 'UTF-8') ?>" class="menu-link" title="Voltar ao GLPI">
@@ -246,8 +250,8 @@ function dashglpi_render_sidebar(string $active, string $context = 'dashboard', 
         <div class="mobile-footer-bar">
             <?php if ($context === 'dashboard' && dashglpi_current_user_can_access_page('tickets')): ?>
             <button class="mobile-footer-action mobile-footer-push" id="mobilePushNotifications" type="button" onclick="togglePushNotifications()" title="Ativar notificações Push" aria-label="Ativar notificações Push">
-                <i class="fas fa-bell"></i>
-                <span>Alertas</span>
+                <i class="fas fa-broadcast-tower"></i>
+                <span>Push</span>
             </button>
             <?php endif; ?>
             <?php if ($context === 'dashboard'): ?>
@@ -273,6 +277,39 @@ function dashglpi_render_sidebar(string $active, string $context = 'dashboard', 
                 <span>Sair</span>
             </a>
         </div>
+    </div>
+
+    <div class="dash-modal" id="changePasswordModal" hidden>
+        <div class="dash-modal-backdrop" onclick="closeChangePasswordModal()" aria-hidden="true"></div>
+        <form class="dash-modal-dialog admin-form" id="changePasswordForm" autocomplete="off">
+            <div class="dash-modal-header">
+                <div>
+                    <h3 class="admin-card-title">Alterar Senha</h3>
+                    <p class="admin-help-text">Atualize a senha usada para acessar o DashGLPI.</p>
+                </div>
+                <button class="icon-btn" type="button" onclick="closeChangePasswordModal()" title="Fechar">
+                    <i class="fas fa-xmark"></i>
+                </button>
+            </div>
+            <label class="admin-field">
+                <span>Senha atual</span>
+                <input type="password" name="current_password" autocomplete="current-password" required>
+            </label>
+            <label class="admin-field">
+                <span>Nova senha</span>
+                <input type="password" name="new_password" autocomplete="new-password" minlength="8" required>
+                <small>Use pelo menos 8 caracteres.</small>
+            </label>
+            <label class="admin-field">
+                <span>Confirmar nova senha</span>
+                <input type="password" name="confirm_password" autocomplete="new-password" minlength="8" required>
+            </label>
+            <button class="admin-submit" type="submit">
+                <i class="fas fa-save"></i>
+                <span>Salvar senha</span>
+            </button>
+            <div class="admin-status" id="changePasswordStatus"></div>
+        </form>
     </div>
     <?php
 }

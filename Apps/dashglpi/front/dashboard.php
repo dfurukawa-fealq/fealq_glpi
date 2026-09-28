@@ -84,7 +84,8 @@ $glpiPublicUrl = rtrim((string) dashglpi_env('GLPI_PUBLIC_URL', ''), '/');
 </head>
 <body class="light-mode">
     <div class="tv-indicator">
-        <i class="fas fa-tv"></i> MODO TV ATIVO
+        <span><i class="fas fa-tv"></i> MODO TV ATIVO</span>
+        <button type="button" onclick="exitTVMode()">Sair</button>
     </div>
 
     <button class="floating-menu-btn" onclick="toggleMenu()">
@@ -131,6 +132,10 @@ $glpiPublicUrl = rtrim((string) dashglpi_env('GLPI_PUBLIC_URL', ''), '/');
                         <button class="dashboard-period-btn" type="button" data-dashboard-period="90">90 dias</button>
                         <button class="dashboard-period-btn" type="button" data-dashboard-period="180">6 meses</button>
                     </div>
+                    <label class="dash-filter-check" title="Mostrar apenas chamados vinculados ao usuário atual">
+                        <input type="checkbox" id="dashboardMyTasksFilter" data-my-tasks-filter checked>
+                        <span>Minhas Tarefas</span>
+                    </label>
                     <button class="icon-btn dashboard-action-btn dashboard-action-tv" onclick="toggleTVMode()" title="Modo TV">
                         <i class="fas fa-tv"></i>
                     </button>
@@ -140,7 +145,7 @@ $glpiPublicUrl = rtrim((string) dashglpi_env('GLPI_PUBLIC_URL', ''), '/');
                     </button>
                     <?php if ($canTickets): ?>
                     <button class="icon-btn dashboard-action-btn dashboard-action-push" id="pushNotificationsBtn" onclick="togglePushNotifications()" title="Ativar notificações Push" aria-label="Ativar notificações Push">
-                        <i class="fas fa-bell"></i>
+                        <i class="fas fa-broadcast-tower"></i>
                     </button>
                     <?php endif; ?>
                 </div>
@@ -1154,6 +1159,10 @@ $glpiPublicUrl = rtrim((string) dashglpi_env('GLPI_PUBLIC_URL', ''), '/');
                     </div>
                     <?php endif; ?>
                     <div style="display:flex;align-items:center;gap:12px;">
+                        <label class="dash-filter-check" title="Mostrar apenas chamados vinculados ao usuário atual">
+                            <input type="checkbox" id="ticketsMyTasksFilter" data-my-tasks-filter checked>
+                            <span>Minhas Tarefas</span>
+                        </label>
                         <div class="tickets-count" id="ticketsCount">0 chamados</div>
                         <?php if (!$isHelpdeskView): ?>
                         <div class="view-toggle" id="ticketsViewToggle" role="group" aria-label="Visualizacao dos chamados">
