@@ -293,16 +293,31 @@ function dashglpi_render_sidebar(string $active, string $context = 'dashboard', 
             </div>
             <label class="admin-field">
                 <span>Senha atual</span>
-                <input type="password" name="current_password" autocomplete="current-password" required>
+                <div class="admin-password-control">
+                    <input type="password" name="current_password" autocomplete="current-password" required>
+                    <button type="button" class="admin-password-btn" data-change-password-toggle title="Mostrar senha" aria-label="Mostrar senha atual" aria-pressed="false">
+                        <i class="fas fa-eye"></i>
+                    </button>
+                </div>
             </label>
             <label class="admin-field">
                 <span>Nova senha</span>
-                <input type="password" name="new_password" autocomplete="new-password" minlength="8" required>
+                <div class="admin-password-control">
+                    <input type="password" name="new_password" autocomplete="new-password" minlength="8" required>
+                    <button type="button" class="admin-password-btn" data-change-password-toggle title="Mostrar senha" aria-label="Mostrar nova senha" aria-pressed="false">
+                        <i class="fas fa-eye"></i>
+                    </button>
+                </div>
                 <small>Use pelo menos 8 caracteres.</small>
             </label>
             <label class="admin-field">
                 <span>Confirmar nova senha</span>
-                <input type="password" name="confirm_password" autocomplete="new-password" minlength="8" required>
+                <div class="admin-password-control">
+                    <input type="password" name="confirm_password" autocomplete="new-password" minlength="8" required>
+                    <button type="button" class="admin-password-btn" data-change-password-toggle title="Mostrar senha" aria-label="Mostrar confirmação da nova senha" aria-pressed="false">
+                        <i class="fas fa-eye"></i>
+                    </button>
+                </div>
             </label>
             <button class="admin-submit" type="submit">
                 <i class="fas fa-save"></i>

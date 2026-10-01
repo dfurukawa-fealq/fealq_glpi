@@ -2465,7 +2465,10 @@ function openChangePasswordModal() {
     const form = document.getElementById('changePasswordForm');
     const status = document.getElementById('changePasswordStatus');
     if (!modal) return;
-    if (form) form.reset();
+    if (form) {
+        form.reset();
+        resetChangePasswordVisibility(form);
+    }
     if (status) {
         status.textContent = '';
         status.className = 'admin-status';
@@ -2482,6 +2485,10 @@ function closeChangePasswordModal() {
 function initChangePasswordForm() {
     const form = document.getElementById('changePasswordForm');
     if (!form) return;
+
+    form.querySelectorAll('[data-change-password-toggle]').forEach(button => {
+        button.addEventListener('click', () => toggleChangePasswordVisibility(button));
+    });
 
     form.addEventListener('submit', async event => {
         event.preventDefault();
@@ -2514,6 +2521,33 @@ function initChangePasswordForm() {
         } finally {
             if (submit) submit.disabled = false;
         }
+    });
+}
+
+function toggleChangePasswordVisibility(button) {
+    const control = button.closest('.admin-password-control');
+    const input = control?.querySelector('input');
+    const icon = button.querySelector('i');
+    if (!input) return;
+
+    const willShow = input.type === 'password';
+    input.type = willShow ? 'text' : 'password';
+    button.title = willShow ? 'Ocultar senha' : 'Mostrar senha';
+    button.setAttribute('aria-pressed', willShow ? 'true' : 'false');
+    if (icon) icon.className = willShow ? 'fas fa-eye-slash' : 'fas fa-eye';
+}
+
+function resetChangePasswordVisibility(form) {
+    form.querySelectorAll('.admin-password-control').forEach(control => {
+        const input = control.querySelector('input');
+        const button = control.querySelector('[data-change-password-toggle]');
+        const icon = button?.querySelector('i');
+        if (input) input.type = 'password';
+        if (button) {
+            button.title = 'Mostrar senha';
+            button.setAttribute('aria-pressed', 'false');
+        }
+        if (icon) icon.className = 'fas fa-eye';
     });
 }
 // ==================== NOTIFICATIONS ====================
