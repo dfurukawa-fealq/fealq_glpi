@@ -13,6 +13,9 @@ const DEFAULT_FUNCTIONAL_PAGE = typeof DASHGLPI_DEFAULT_PAGE === 'string' && DAS
 const TICKET_REPORTS_ENABLED = typeof DASHGLPI_TICKET_REPORTS_ENABLED === 'undefined'
     ? true
     : Boolean(DASHGLPI_TICKET_REPORTS_ENABLED);
+const MY_TASKS_FILTER_LOCKED = typeof DASHGLPI_LOCK_MY_TASKS_FILTER === 'undefined'
+    ? false
+    : Boolean(DASHGLPI_LOCK_MY_TASKS_FILTER);
 
 /**
  * Helper de fetch AJAX para o bridge cliente (Padrão duplicado C do PLAN-20260703-013).
@@ -659,7 +662,7 @@ function dashboardDataUrl(action) {
         period_days: String(dashboardPeriodParam()),
         created_tickets_range_hours: String(createdTicketsRangeParam()),
         notification_range_hours: String(notificationRangeParam()),
-        my_tasks: DashState.myTasksOnly ? '1' : '0',
+        my_tasks: (MY_TASKS_FILTER_LOCKED || DashState.myTasksOnly) ? '1' : '0',
         // Cache-buster defensivo: garante unicidade da URL mesmo que uma camada de borda
         // ignore os cabeçalhos no-store do origin (ver dashglpi_json).
         _ts: String(Date.now())
@@ -731,11 +734,20 @@ function updateNotificationRangeButtons() {
 
 function initMyTasksFilters() {
     const savedValue = localStorage.getItem('dashglpi-my-tasks-only');
-    DashState.myTasksOnly = savedValue === null ? true : savedValue === '1';
+    DashState.myTasksOnly = MY_TASKS_FILTER_LOCKED ? true : (savedValue === null ? true : savedValue === '1');
+    if (MY_TASKS_FILTER_LOCKED) {
+        localStorage.setItem('dashglpi-my-tasks-only', '1');
+    }
     syncMyTasksFilters();
 
     document.querySelectorAll('[data-my-tasks-filter]').forEach(input => {
         input.addEventListener('change', () => {
+            if (MY_TASKS_FILTER_LOCKED) {
+                DashState.myTasksOnly = true;
+                localStorage.setItem('dashglpi-my-tasks-only', '1');
+                syncMyTasksFilters();
+                return;
+            }
             DashState.myTasksOnly = input.checked;
             localStorage.setItem('dashglpi-my-tasks-only', DashState.myTasksOnly ? '1' : '0');
             syncMyTasksFilters();
@@ -747,8 +759,12 @@ function initMyTasksFilters() {
 }
 
 function syncMyTasksFilters() {
+    if (MY_TASKS_FILTER_LOCKED) {
+        DashState.myTasksOnly = true;
+    }
     document.querySelectorAll('[data-my-tasks-filter]').forEach(input => {
         input.checked = DashState.myTasksOnly;
+        input.disabled = MY_TASKS_FILTER_LOCKED;
     });
 }
 

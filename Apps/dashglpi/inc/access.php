@@ -32,6 +32,8 @@ function dashglpi_current_user_context(bool $refresh = false): array
             'scoped_entity_ids' => [],
             'has_entity_scope' => false,
             'default_page' => dashglpi_first_allowed_page([]),
+            'lock_my_tasks' => false,
+            'show_ticket_urgency' => true,
             'profiles' => [],
         ];
         return $cache;
@@ -49,6 +51,8 @@ function dashglpi_current_user_context(bool $refresh = false): array
             'scoped_entity_ids' => [],
             'has_entity_scope' => false,
             'default_page' => dashglpi_first_allowed_page($defaultPages),
+            'lock_my_tasks' => false,
+            'show_ticket_urgency' => true,
             'profiles' => dashglpi_current_user_profiles((int) $user['id']),
         ];
         return $cache;
@@ -93,6 +97,8 @@ function dashglpi_current_user_context(bool $refresh = false): array
             'scoped_entity_ids' => [],
             'has_entity_scope' => false,
             'default_page' => dashglpi_first_allowed_page($defaultPages),
+            'lock_my_tasks' => false,
+            'show_ticket_urgency' => true,
             'profiles' => $profiles,
         ];
         return $cache;
@@ -125,6 +131,8 @@ function dashglpi_current_user_context(bool $refresh = false): array
         'scoped_entity_ids' => $scopedEntityIds,
         'has_entity_scope' => true,
         'default_page' => dashglpi_first_allowed_page($allowedPages),
+        'lock_my_tasks' => !empty($winner['lock_my_tasks']),
+        'show_ticket_urgency' => array_key_exists('show_ticket_urgency', $winner) ? !empty($winner['show_ticket_urgency']) : true,
         'profiles' => $profiles,
     ];
 
@@ -174,6 +182,8 @@ function dashglpi_profile_access_rules_by_profile(array $rules): array
                 array_map('strval', is_array($rule['allowed_pages'] ?? null) ? $rule['allowed_pages'] : []),
                 static fn(string $page): bool => in_array($page, dashglpi_functional_page_keys(), true)
             )),
+            'lock_my_tasks' => array_key_exists('lock_my_tasks', $rule) ? (!empty($rule['lock_my_tasks']) ? 1 : 0) : 1,
+            'show_ticket_urgency' => array_key_exists('show_ticket_urgency', $rule) ? (!empty($rule['show_ticket_urgency']) ? 1 : 0) : 1,
             'profile_name' => (string) ($rule['profile_name'] ?? ''),
         ];
     }

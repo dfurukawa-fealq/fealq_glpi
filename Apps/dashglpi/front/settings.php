@@ -2512,12 +2512,13 @@ $showGlobalSettingsSave = in_array($settingsSection, ['general', 'reports'], tru
                                     <th>Regra ativa</th>
                                     <th>Prioridade</th>
                                     <th>Páginas liberadas</th>
+                                    <th>Campos / filtros</th>
                                     <th>Ação</th>
                                 </tr>
                             </thead>
                             <tbody id="profileAccessTableBody">
                                 <tr>
-                                    <td colspan="4" class="profile-access-empty">Carregando perfil selecionado...</td>
+                                    <td colspan="5" class="profile-access-empty">Carregando perfil selecionado...</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -4828,7 +4829,9 @@ $showGlobalSettingsSave = in_array($settingsSection, ['general', 'reports'], tru
                 profile_id: Number(rule?.profile_id) || 0,
                 enabled: Number(rule?.enabled || 0) === 1 ? 1 : 0,
                 priority: rule?.priority !== null && rule?.priority !== undefined && rule?.priority !== '' ? Number(rule.priority) : null,
-                allowed_pages: Array.isArray(rule?.allowed_pages) ? rule.allowed_pages.filter(Boolean) : []
+                allowed_pages: Array.isArray(rule?.allowed_pages) ? rule.allowed_pages.filter(Boolean) : [],
+                lock_my_tasks: Object.prototype.hasOwnProperty.call(rule || {}, 'lock_my_tasks') ? (Number(rule.lock_my_tasks || 0) === 1 ? 1 : 0) : 1,
+                show_ticket_urgency: Object.prototype.hasOwnProperty.call(rule || {}, 'show_ticket_urgency') ? (Number(rule.show_ticket_urgency || 0) === 1 ? 1 : 0) : 1
             };
         }
 
@@ -4924,8 +4927,10 @@ $showGlobalSettingsSave = in_array($settingsSection, ['general', 'reports'], tru
             const allowedPages = Array.from(row.querySelectorAll('[data-profile-access-page]:checked'))
                 .map((checkbox) => checkbox.value)
                 .filter(Boolean);
+            const lockMyTasks = row.querySelector('[data-profile-access-lock-my-tasks]')?.checked ? 1 : 0;
+            const showTicketUrgency = row.querySelector('[data-profile-access-show-ticket-urgency]')?.checked ? 1 : 0;
 
-            if (enabled === 0 && priorityValue === '' && allowedPages.length === 0) {
+            if (enabled === 0 && priorityValue === '' && allowedPages.length === 0 && lockMyTasks === 1 && showTicketUrgency === 1) {
                 return null;
             }
 
@@ -4933,7 +4938,9 @@ $showGlobalSettingsSave = in_array($settingsSection, ['general', 'reports'], tru
                 profile_id: profileId,
                 enabled,
                 priority: priorityValue === '' ? null : Number(priorityValue),
-                allowed_pages: allowedPages
+                allowed_pages: allowedPages,
+                lock_my_tasks: lockMyTasks,
+                show_ticket_urgency: showTicketUrgency
             };
         }
 
@@ -5011,7 +5018,7 @@ $showGlobalSettingsSave = in_array($settingsSection, ['general', 'reports'], tru
         function attachProfileAccessRowListeners(row) {
             if (!row) return;
 
-            row.querySelectorAll('[data-profile-access-enabled], [data-profile-access-priority], [data-profile-access-page]').forEach((field) => {
+            row.querySelectorAll('[data-profile-access-enabled], [data-profile-access-priority], [data-profile-access-page], [data-profile-access-lock-my-tasks], [data-profile-access-show-ticket-urgency]').forEach((field) => {
                 const eventName = field.matches('[data-profile-access-priority]') ? 'input' : 'change';
                 field.addEventListener(eventName, () => {
                     syncCurrentProfileAccessRowToState();
@@ -5035,13 +5042,13 @@ $showGlobalSettingsSave = in_array($settingsSection, ['general', 'reports'], tru
             const rulesByProfile = profileAccessRulesByProfileId();
 
             if (profiles.length === 0 || selectedId <= 0) {
-                body.innerHTML = '<tr><td colspan="4" class="profile-access-empty">Nenhum perfil GLPI disponível.</td></tr>';
+                body.innerHTML = '<tr><td colspan="5" class="profile-access-empty">Nenhum perfil GLPI disponível.</td></tr>';
                 return;
             }
 
             const profile = profiles.find((item) => Number(item.id) === selectedId);
             if (!profile) {
-                body.innerHTML = '<tr><td colspan="4" class="profile-access-empty">Selecione um perfil GLPI válido.</td></tr>';
+                body.innerHTML = '<tr><td colspan="5" class="profile-access-empty">Selecione um perfil GLPI válido.</td></tr>';
                 return;
             }
 
@@ -5049,6 +5056,8 @@ $showGlobalSettingsSave = in_array($settingsSection, ['general', 'reports'], tru
             const allowedPages = Array.isArray(rule.allowed_pages) ? rule.allowed_pages : [];
             const enabled = Number(rule.enabled || 0) === 1;
             const priority = rule.priority !== null && rule.priority !== undefined ? String(rule.priority) : '';
+            const lockMyTasks = Number(rule.lock_my_tasks ?? 1) === 1;
+            const showTicketUrgency = Number(rule.show_ticket_urgency ?? 1) === 1;
             const isHelpdesk = String(profile.interface || '') === 'helpdesk';
             const lockedPages = isHelpdesk ? ['dashboard', 'tickets'] : [];
             const ruleNote = isHelpdesk
@@ -5091,6 +5100,20 @@ $showGlobalSettingsSave = in_array($settingsSection, ['general', 'reports'], tru
                                     </label>
                                 `;
                             }).join('')}
+                        </div>
+                    </td>
+                    <td>
+                        <div class="profile-access-pages">
+                            <label class="profile-access-page" title="Quando ligado, o usuário sempre consulta apenas os chamados vinculados a ele.">
+                                <input type="checkbox" data-profile-access-lock-my-tasks ${lockMyTasks || isHelpdesk ? 'checked' : ''} ${isHelpdesk ? 'disabled' : ''}>
+                                <i class="fas fa-user-lock" aria-hidden="true"></i>
+                                <span>Bloquear Minhas Tarefas</span>
+                            </label>
+                            <label class="profile-access-page" title="Controla a exibicao do campo Urgencia na abertura do chamado.">
+                                <input type="checkbox" data-profile-access-show-ticket-urgency ${showTicketUrgency ? 'checked' : ''}>
+                                <i class="fas fa-exclamation-circle" aria-hidden="true"></i>
+                                <span>Mostrar Urgencia</span>
+                            </label>
                         </div>
                     </td>
                     <td>

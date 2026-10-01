@@ -8,6 +8,9 @@ require_once __DIR__ . '/../inc/dashboard.class.php';
 dashglpi_require_auth();
 
 $action = $_GET['action'] ?? '';
+if (in_array($action, ['dashboard_data', 'tickets_list'], true) && !empty(dashglpi_current_user_context()['lock_my_tasks'])) {
+    $_GET['my_tasks'] = '1';
+}
 
 try {
     switch ($action) {

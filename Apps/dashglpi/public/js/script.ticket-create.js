@@ -341,7 +341,7 @@ function renderTicketCreateCatalog(catalog) {
     const typeSelect = document.getElementById('ticketCreateType');
     const urgencySelect = document.getElementById('ticketCreateUrgency');
     const categorySelect = document.getElementById('ticketCreateCategory');
-    if (!entitySelect || !typeSelect || !urgencySelect || !categorySelect) {
+    if (!entitySelect || !typeSelect || !categorySelect) {
         return;
     }
 
@@ -353,7 +353,9 @@ function renderTicketCreateCatalog(catalog) {
     ticketCreateSelectComboboxOption('entity', selectedEntity, { dispatch: false });
 
     fillSelectOptions(typeSelect, catalog.types || [], catalog.selected_type);
-    fillSelectOptions(urgencySelect, catalog.urgencies || [], catalog.default_urgency || 3);
+    if (urgencySelect) {
+        fillSelectOptions(urgencySelect, catalog.urgencies || [], catalog.default_urgency || 3);
+    }
 
     const previousCategoryId = Number(categorySelect.value || 0);
     const availableCategories = Array.isArray(catalog.categories) ? catalog.categories : [];

@@ -76,6 +76,8 @@ $glpiPublicUrl = rtrim((string) dashglpi_env('GLPI_PUBLIC_URL', ''), '/');
         const DASHGLPI_TICKET_REPORTS_ENABLED = <?= $canTicketReports ? 'true' : 'false' ?>;
         const DASHGLPI_IS_RESTRICTED_VIEW = <?= !empty($userContext['has_profile_rule']) ? 'true' : 'false' ?>;
         const DASHGLPI_IS_HELPDESK_VIEW = <?= !empty($userContext['is_helpdesk_profile']) ? 'true' : 'false' ?>;
+        const DASHGLPI_LOCK_MY_TASKS_FILTER = <?= !empty($userContext['lock_my_tasks']) ? 'true' : 'false' ?>;
+        const DASHGLPI_SHOW_TICKET_URGENCY = <?= !array_key_exists('show_ticket_urgency', $userContext) || !empty($userContext['show_ticket_urgency']) ? 'true' : 'false' ?>;
         const DASHGLPI_CURRENT_USER_ID = <?= (int) ($userContext['user_id'] ?? 0) ?>;
         const DASHGLPI_CURRENT_USER_DISPLAY = <?= json_encode((string) ($currentUser['display'] ?? 'usuário atual'), JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) ?>;
         const DASHGLPI_SLA_DISPLAY_LABELS = <?= json_encode($slaDisplayLabels, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) ?>;
@@ -132,8 +134,8 @@ $glpiPublicUrl = rtrim((string) dashglpi_env('GLPI_PUBLIC_URL', ''), '/');
                         <button class="dashboard-period-btn" type="button" data-dashboard-period="90">90 dias</button>
                         <button class="dashboard-period-btn" type="button" data-dashboard-period="180">6 meses</button>
                     </div>
-                    <label class="dash-filter-check" title="Mostrar apenas chamados vinculados ao usuário atual">
-                        <input type="checkbox" id="dashboardMyTasksFilter" data-my-tasks-filter checked>
+                    <label class="dash-filter-check" title="<?= !empty($userContext['lock_my_tasks']) ? 'Filtro bloqueado pela regra do perfil efetivo' : 'Mostrar apenas chamados vinculados ao usuário atual' ?>">
+                        <input type="checkbox" id="dashboardMyTasksFilter" data-my-tasks-filter checked<?= !empty($userContext['lock_my_tasks']) ? ' disabled' : '' ?>>
                         <span>Minhas Tarefas</span>
                     </label>
                     <button class="icon-btn dashboard-action-btn dashboard-action-tv" onclick="toggleTVMode()" title="Modo TV">
@@ -1159,8 +1161,8 @@ $glpiPublicUrl = rtrim((string) dashglpi_env('GLPI_PUBLIC_URL', ''), '/');
                     </div>
                     <?php endif; ?>
                     <div style="display:flex;align-items:center;gap:12px;">
-                        <label class="dash-filter-check" title="Mostrar apenas chamados vinculados ao usuário atual">
-                            <input type="checkbox" id="ticketsMyTasksFilter" data-my-tasks-filter checked>
+                        <label class="dash-filter-check" title="<?= !empty($userContext['lock_my_tasks']) ? 'Filtro bloqueado pela regra do perfil efetivo' : 'Mostrar apenas chamados vinculados ao usuário atual' ?>">
+                            <input type="checkbox" id="ticketsMyTasksFilter" data-my-tasks-filter checked<?= !empty($userContext['lock_my_tasks']) ? ' disabled' : '' ?>>
                             <span>Minhas Tarefas</span>
                         </label>
                         <div class="tickets-count" id="ticketsCount">0 chamados</div>
@@ -1408,10 +1410,12 @@ $glpiPublicUrl = rtrim((string) dashglpi_env('GLPI_PUBLIC_URL', ''), '/');
                                     </div>
                                 </div>
                             </label>
+                            <?php if (!array_key_exists('show_ticket_urgency', $userContext) || !empty($userContext['show_ticket_urgency'])): ?>
                             <label class="admin-field">
                                 <span>Urgencia</span>
                                 <select name="urgency" id="ticketCreateUrgency"></select>
                             </label>
+                            <?php endif; ?>
                             <label class="admin-field full">
                                 <span>Descricao</span>
                                 <textarea name="content" id="ticketCreateContent" rows="7" required></textarea>

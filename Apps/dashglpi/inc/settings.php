@@ -466,7 +466,10 @@ function dashglpi_validate_profile_access_settings(array $data): array
             $enabledPriorities[$priority] = true;
         }
 
-        $shouldPersist = $enabled || $priority > 0 || $allowedPages;
+        $lockMyTasks = array_key_exists('lock_my_tasks', $rawRule) ? (!empty($rawRule['lock_my_tasks']) ? 1 : 0) : 1;
+        $showTicketUrgency = array_key_exists('show_ticket_urgency', $rawRule) ? (!empty($rawRule['show_ticket_urgency']) ? 1 : 0) : 1;
+
+        $shouldPersist = $enabled || $priority > 0 || $allowedPages || $lockMyTasks !== 1 || $showTicketUrgency !== 1;
         if (!$shouldPersist) {
             continue;
         }
@@ -477,6 +480,8 @@ function dashglpi_validate_profile_access_settings(array $data): array
             'enabled' => $enabled,
             'priority' => $priority,
             'allowed_pages' => array_values($allowedPages),
+            'lock_my_tasks' => $lockMyTasks,
+            'show_ticket_urgency' => $showTicketUrgency,
         ];
     }
 
@@ -496,6 +501,10 @@ function dashglpi_validate_profile_access_settings(array $data): array
                 $rules[$index]['allowed_pages'],
                 ['dashboard', 'tickets']
             )));
+            $rules[$index]['lock_my_tasks'] = 1;
+            $rules[$index]['show_ticket_urgency'] = array_key_exists('show_ticket_urgency', $rules[$index])
+                ? (!empty($rules[$index]['show_ticket_urgency']) ? 1 : 0)
+                : 1;
 
             if ((int) $rules[$index]['enabled'] !== 1) {
                 $rules[$index]['enabled'] = 1;
@@ -525,6 +534,8 @@ function dashglpi_validate_profile_access_settings(array $data): array
             'enabled' => 1,
             'priority' => $priority,
             'allowed_pages' => ['dashboard', 'tickets'],
+            'lock_my_tasks' => 1,
+            'show_ticket_urgency' => 1,
         ];
     }
 

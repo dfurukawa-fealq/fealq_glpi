@@ -4,3 +4,6 @@ docs/glpi-categoria-ITL.csv
 .Agent/.prompts
 .playwright-mcp
 docs/
+!.Agents/docs/
+!.Agents/docs/*.md
+data/*.csv

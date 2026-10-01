@@ -386,6 +386,7 @@ function dashglpi_ticket_create_catalog_response(array $input = []): array
         'types' => dashglpi_ticket_create_type_catalog(),
         'urgencies' => dashglpi_ticket_create_urgency_catalog(),
         'default_urgency' => 3,
+        'show_ticket_urgency' => !array_key_exists('show_ticket_urgency', dashglpi_current_user_context()) || !empty(dashglpi_current_user_context()['show_ticket_urgency']),
         'categories' => dashglpi_ticket_create_categories_catalog($selectedEntityId, $type),
         'upload_max_label' => dashglpi_ticket_create_upload_max_label(),
     ];
@@ -435,12 +436,15 @@ function dashglpi_ticket_create_payload_from_request(array $post): array
         $requesterId = $postedRequesterId;
     }
 
+    $context = dashglpi_current_user_context();
+    $showTicketUrgency = !array_key_exists('show_ticket_urgency', $context) || !empty($context['show_ticket_urgency']);
+
     return [
         'action' => 'create',
         'requester_id' => $requesterId,
         'entities_id' => dashglpi_ticket_create_assert_entity_id($scope, (int) ($post['entities_id'] ?? 0)),
         'type' => dashglpi_ticket_create_normalize_type($post['type'] ?? 1),
-        'urgency' => dashglpi_ticket_create_normalize_urgency($post['urgency'] ?? 3),
+        'urgency' => $showTicketUrgency ? dashglpi_ticket_create_normalize_urgency($post['urgency'] ?? 3) : 3,
         'itilcategories_id' => max(0, (int) ($post['itilcategories_id'] ?? 0)),
         'name' => $name,
         'content' => $content,
