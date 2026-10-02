@@ -6014,6 +6014,15 @@ body.menu-closed .header-actions {
     opacity: 0;
     pointer-events: none;
     transition: opacity 0.2s;
+    overscroll-behavior: contain;
+}
+
+body.ticket-detail-scroll-locked {
+    position: fixed;
+    left: 0;
+    right: 0;
+    width: 100%;
+    overflow: hidden;
 }
 
 .assignment-overlay.active {
@@ -7995,8 +8004,9 @@ body.menu-closed .header-actions {
 }
 #ticketDetailModal .assignment-header > div:first-child { flex: 1; min-width: 0; }
 #ticketDetailTitle { overflow-wrap: anywhere; }
-#ticketDetailModal.is-operator .ticket-detail-columns { grid-template-columns: minmax(0, 1fr) minmax(270px, 330px); }
-#ticketDetailModal.is-operator .ticket-detail-col-main { gap: 24px; padding: 24px; }
+#ticketDetailModal.is-operator .ticket-detail-columns { grid-template-columns: minmax(0, 1fr) minmax(270px, 330px); min-height: 0; overflow: hidden; }
+#ticketDetailModal.is-operator .ticket-detail-col { overscroll-behavior: contain; }
+#ticketDetailModal.is-operator .ticket-detail-col-main { gap: 24px; padding: 24px; overflow-y: auto; }
 #ticketDetailModal.is-operator .ticket-detail-col-followup { padding: 18px 0 0; border-top: 1px solid #e2e8f0; overflow: visible; flex-shrink: 0; }
 #ticketDetailModal .attendance-properties { background: #f8fafc; padding: 20px; display: block; }
 .attendance-properties > summary { cursor: pointer; font-weight: 750; margin-bottom: 18px; }
@@ -8435,7 +8445,8 @@ body.menu-closed .header-actions {
 }
 
 #ticketDetailModal.is-operator .attendance-properties {
-    overflow: visible;
+    overflow-y: auto;
+    overscroll-behavior: contain;
 }
 
 #ticketDetailModal .attendance-actor-field {

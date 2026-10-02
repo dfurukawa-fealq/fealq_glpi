@@ -55,7 +55,7 @@ function initSelfServiceActions() {
     document.getElementById('ticketDetailCancelToggle')?.addEventListener('click', () => {
         const section = document.getElementById('ticketDetailCancelSection');
         section?.classList.remove('is-hidden');
-        section?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        scrollTicketDetailTarget(section, { behavior: 'smooth', block: 'center' });
     });
     document.getElementById('ticketDetailCancelForm')?.addEventListener('submit', submitCancelTicket);
 
@@ -74,8 +74,27 @@ function closeTicketDetailModal() {
     DashAttendance.generation++;
     modal.classList.remove('active');
     modal.setAttribute('aria-hidden', 'true');
+    modal.querySelectorAll('.ticket-create-combobox-options:not([hidden]), .attendance-actor-options:not([hidden])').forEach(box => { box.hidden = true; });
     document.body.classList.remove('mobile-ticket-detail-active');
+    unlockTicketDetailPageScroll();
     DashAttendance.restoreFocus();
+}
+
+function lockTicketDetailPageScroll() {
+    if (document.body.classList.contains('ticket-detail-scroll-locked')) return;
+    const scrollY = window.scrollY || document.documentElement.scrollTop || 0;
+    document.body.dataset.ticketDetailScrollY = String(scrollY);
+    document.body.style.top = `-${scrollY}px`;
+    document.body.classList.add('ticket-detail-scroll-locked');
+}
+
+function unlockTicketDetailPageScroll() {
+    const wasLocked = document.body.classList.contains('ticket-detail-scroll-locked');
+    const scrollY = Number(document.body.dataset.ticketDetailScrollY || 0);
+    document.body.classList.remove('ticket-detail-scroll-locked');
+    document.body.style.top = '';
+    delete document.body.dataset.ticketDetailScrollY;
+    if (wasLocked) window.scrollTo(0, scrollY);
 }
 
 function setSelfServiceStatus(elementId, message, type) {
@@ -313,7 +332,8 @@ async function openTicketDetailModal(ticketId, options = {}) {
     modal.classList.add('active');
     modal.setAttribute('aria-hidden', 'false');
     document.body.classList.add('mobile-ticket-detail-active');
-    modal.querySelector('[data-modal-close]')?.focus();
+    lockTicketDetailPageScroll();
+    modal.querySelector('[data-modal-close]')?.focus({ preventScroll: true });
 
     if (isReadonlyType) {
         // O payload do detalhe já traz os acompanhamentos (leitura SQL direta);
@@ -402,13 +422,33 @@ function focusTicketDetailSection(focus) {
         cancel: 'ticketDetailCancelSection',
         solution: 'solutionSection',
         satisfaction: 'satisfactionSection',
-        actors: 'attendanceActorId',
+        actors: 'attendanceActors',
     };
     if (focus === 'actors') document.getElementById('attendanceProperties').open = true;
     const el = document.getElementById(map[focus]);
     if (!el) return;
-    el.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    if (typeof el.focus === 'function') el.focus();
+    scrollTicketDetailTarget(el, { behavior: 'smooth', block: 'center' });
+    if (typeof el.focus === 'function') el.focus({ preventScroll: true });
+}
+
+function scrollTicketDetailTarget(target, options = {}) {
+    if (!target) return;
+    const modal = document.getElementById('ticketDetailModal');
+    const columns = document.getElementById('ticketDetailBody');
+    const scrollParent = target.closest('.ticket-detail-col') || columns || modal;
+    if (!scrollParent) return;
+
+    const behavior = options.behavior || 'smooth';
+    const block = options.block || 'nearest';
+    const targetRect = target.getBoundingClientRect();
+    const parentRect = scrollParent.getBoundingClientRect();
+    let top = scrollParent.scrollTop + targetRect.top - parentRect.top;
+    if (block === 'center') {
+        top -= Math.max(0, (parentRect.height - targetRect.height) / 2);
+    } else if (block === 'end') {
+        top -= Math.max(0, parentRect.height - targetRect.height);
+    }
+    scrollParent.scrollTo({ top: Math.max(0, top), behavior });
 }
 
 async function loadFollowupTimeline(ticketId) {

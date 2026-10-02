@@ -24,7 +24,7 @@ const DashAttendance = {
         this.el('attendanceEditDescription')?.addEventListener('click', () => {
             this.el('attendanceDescription').value = this.ticket.content_text || '';
             this.show('attendanceDescriptionForm', true);
-            this.el('attendanceDescription').focus();
+            this.el('attendanceDescription').focus({ preventScroll: true });
         });
         this.el('attendanceCancelDescription')?.addEventListener('click', () => this.show('attendanceDescriptionForm', false));
         this.el('attendanceDescriptionForm')?.addEventListener('submit', e => {
@@ -72,7 +72,14 @@ const DashAttendance = {
         this.el('attendanceActors')?.addEventListener('keydown', e => {
             const input = e.target.closest('[data-actor-search]');
             if (!input) return;
-            if (e.key === 'Escape') this.closeActorOptions(input);
+            if (e.key === 'Escape') {
+                const box = input.closest('.attendance-actor-field')?.querySelector('[data-actor-options]');
+                if (box && !box.hidden) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    this.closeActorOptions(input);
+                }
+            }
             if (e.key === 'Enter') {
                 const first = input.closest('.attendance-actor-field')?.querySelector('[data-actor-value]');
                 if (!first) return;
@@ -107,13 +114,18 @@ const DashAttendance = {
             timer = setTimeout(() => this.loadCatalog(this.el('attendanceCatalogSearch').value), 300);
         });
         this.el('ticketDetailModal')?.addEventListener('keydown', e => {
-            if (e.key === 'Escape') { e.preventDefault(); e.stopPropagation(); closeTicketDetailModal(); }
+            if (e.key === 'Escape') {
+                e.preventDefault();
+                e.stopPropagation();
+                this.handleEscape();
+                return;
+            }
             if (e.key !== 'Tab') return;
             const focusable = [...this.el('ticketDetailModal').querySelectorAll('button, input, select, textarea, summary, a[href], [tabindex="0"]')]
                 .filter(el => !el.disabled && el.getClientRects().length);
             if (!focusable.length) return;
-            if (e.shiftKey && document.activeElement === focusable[0]) { e.preventDefault(); focusable.at(-1).focus(); }
-            if (!e.shiftKey && document.activeElement === focusable.at(-1)) { e.preventDefault(); focusable[0].focus(); }
+            if (e.shiftKey && document.activeElement === focusable[0]) { e.preventDefault(); focusable.at(-1).focus({ preventScroll: true }); }
+            if (!e.shiftKey && document.activeElement === focusable.at(-1)) { e.preventDefault(); focusable[0].focus({ preventScroll: true }); }
         });
         window.addEventListener('beforeunload', e => {
             if (this.dirty() || this.busy) { e.preventDefault(); e.returnValue = ''; }
@@ -247,10 +259,45 @@ const DashAttendance = {
         const target = section === 'properties'
             ? this.el('attendanceProperties')
             : this.el('ticketDetailModal')?.querySelector(`[data-attendance-section="${section}"]`);
-        target?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        scrollTicketDetailTarget(target, { behavior: 'smooth', block: 'start' });
         this.el('ticketDetailBody')?.querySelectorAll('[data-attendance-jump]').forEach(button => {
             button.classList.toggle('is-active', button.dataset.attendanceJump === section);
         });
+    },
+    closeOpenPopovers() {
+        let closed = false;
+        this.el('attendanceActors')?.querySelectorAll('.attendance-actor-options:not([hidden])').forEach(box => {
+            box.hidden = true;
+            closed = true;
+        });
+        this.el('ticketDetailModal')?.querySelectorAll('.ticket-create-combobox-options:not([hidden])').forEach(box => {
+            box.hidden = true;
+            closed = true;
+        });
+        this.el('ticketDetailModal')?.querySelectorAll('[role="combobox"][aria-expanded="true"]').forEach(input => {
+            input.setAttribute('aria-expanded', 'false');
+            closed = true;
+        });
+        return closed;
+    },
+    handleEscape() {
+        const active = document.activeElement;
+        if (this.closeOpenPopovers()) {
+            if (active instanceof HTMLElement) active.blur();
+            return;
+        }
+        if (active && this.el('ticketDetailModal')?.contains(active) && ['INPUT', 'TEXTAREA', 'SELECT'].includes(active.tagName)) {
+            active.blur();
+            return;
+        }
+        if (!this.el('attendanceDescriptionForm')?.classList.contains('is-hidden')) {
+            const changed = this.el('attendanceDescription')?.value !== (this.ticket?.content_text || '');
+            if (changed && !confirm('Descartar a edição da descrição?')) return;
+            this.show('attendanceDescriptionForm', false);
+            this.el('attendanceEditDescription')?.focus({ preventScroll: true });
+            return;
+        }
+        closeTicketDetailModal();
     },
     dirty() {
         if (!this.el('ticketDetailModal')?.classList.contains('active')) return false;
@@ -269,7 +316,7 @@ const DashAttendance = {
         const target = this.previousFocus?.isConnected ? this.previousFocus : fallback;
         if (target) {
             if (!target.matches('button, input, select, textarea, a[href], [tabindex]')) target.tabIndex = -1;
-            target.focus();
+            target.focus({ preventScroll: true });
         }
     },
     reset(ticketId, trigger = null) {
@@ -424,7 +471,8 @@ const DashAttendance = {
             this.el('attendanceProperties').open = true;
             this.el('attendanceStatus').value = '4';
             this.show('attendancePendingFields', true);
-            this.el('attendancePendingReason').focus();
+            scrollTicketDetailTarget(this.el('attendancePendingFields'), { behavior: 'smooth', block: 'center' });
+            this.el('attendancePendingReason').focus({ preventScroll: true });
         } else if (status === 6 && cap.approve) {
             focusTicketDetailSection('solution');
         } else {
