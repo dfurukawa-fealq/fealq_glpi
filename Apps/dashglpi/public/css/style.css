@@ -8416,6 +8416,60 @@ body.menu-closed .header-actions {
     margin-left: auto;
 }
 
+/* Mantém listas e filtros estáveis mesmo sem resultados. */
+#ticketsSection .table-card {
+    position: relative;
+    overflow: visible;
+}
+
+#ticketsSection .table-responsive {
+    min-height: 420px;
+}
+
+#ticketsSection .tickets-status-filter {
+    z-index: 120;
+}
+
+#ticketsSection .tickets-status-menu {
+    z-index: 140;
+}
+
+#ticketDetailModal.is-operator .attendance-properties {
+    overflow: visible;
+}
+
+#ticketDetailModal .attendance-actor-field {
+    position: relative;
+}
+
+#ticketDetailModal .attendance-actor-field:focus-within {
+    z-index: 90;
+}
+
+#ticketDetailModal .attendance-actor-picker {
+    min-height: 44px;
+}
+
+#ticketDetailModal .attendance-actor-tags {
+    min-height: 42px;
+}
+
+#ticketDetailModal .attendance-actor-tags input[type="search"] {
+    min-height: 30px;
+}
+
+#ticketDetailModal .attendance-actor-options,
+#ticketDetailModal .ticket-create-combobox-options {
+    z-index: 120;
+}
+
+#ticketDetailModal .attendance-actor-empty,
+#ticketDetailModal .ticket-create-combobox-empty {
+    min-height: 42px;
+    display: flex;
+    align-items: center;
+}
+
 @media (max-width: 1024px) {
     #ticketDetailModal.is-operator .ticket-detail-columns {
         grid-template-columns: 136px minmax(0, 1fr) minmax(270px, 320px);

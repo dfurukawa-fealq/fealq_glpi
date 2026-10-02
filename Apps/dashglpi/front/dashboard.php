@@ -131,7 +131,7 @@ $glpiPublicUrl = rtrim((string) dashglpi_env('GLPI_PUBLIC_URL', ''), '/');
                         <button class="dashboard-period-btn" type="button" data-dashboard-period="180">6 meses</button>
                     </div>
                     <label class="dash-filter-check" title="<?= !empty($userContext['lock_my_tasks']) ? 'Filtro bloqueado pela regra do perfil efetivo' : 'Mostrar apenas chamados vinculados ao usuário atual' ?>">
-                        <input type="checkbox" id="dashboardMyTasksFilter" data-my-tasks-filter checked<?= !empty($userContext['lock_my_tasks']) ? ' disabled' : '' ?>>
+                        <input type="checkbox" id="dashboardMyTasksFilter" data-my-tasks-filter<?= !empty($userContext['lock_my_tasks']) ? ' checked disabled' : '' ?>>
                         <span>Minhas Tarefas</span>
                     </label>
                     <button class="icon-btn dashboard-action-btn dashboard-action-tv" onclick="toggleTVMode()" title="Modo TV">
@@ -1160,7 +1160,7 @@ $glpiPublicUrl = rtrim((string) dashglpi_env('GLPI_PUBLIC_URL', ''), '/');
                     </div>
                     <div class="tickets-toolbar-actions">
                         <label class="dash-filter-check" title="<?= !empty($userContext['lock_my_tasks']) ? 'Filtro bloqueado pela regra do perfil efetivo' : 'Mostrar apenas chamados vinculados ao usuário atual' ?>">
-                            <input type="checkbox" id="ticketsMyTasksFilter" data-my-tasks-filter checked<?= !empty($userContext['lock_my_tasks']) ? ' disabled' : '' ?>>
+                            <input type="checkbox" id="ticketsMyTasksFilter" data-my-tasks-filter<?= !empty($userContext['lock_my_tasks']) ? ' checked disabled' : '' ?>>
                             <span>Minhas Tarefas</span>
                         </label>
                         <div class="tickets-status-filter">
@@ -1173,8 +1173,8 @@ $glpiPublicUrl = rtrim((string) dashglpi_env('GLPI_PUBLIC_URL', ''), '/');
                                 <label><input type="checkbox" data-ticket-status-filter value="3" checked> <span>Planejado</span></label>
                                 <label><input type="checkbox" data-ticket-status-filter value="2" checked> <span>Em Andamento</span></label>
                                 <label><input type="checkbox" data-ticket-status-filter value="4" checked> <span>Pendente</span></label>
-                                <label><input type="checkbox" data-ticket-status-filter value="5"> <span>Solucionando</span></label>
-                                <label><input type="checkbox" data-ticket-status-filter value="6"> <span>Fechado</span></label>
+                                <label><input type="checkbox" data-ticket-status-filter value="5" checked> <span>Solucionando</span></label>
+                                <label><input type="checkbox" data-ticket-status-filter value="6" checked> <span>Fechado</span></label>
                             </div>
                         </div>
                     </div>

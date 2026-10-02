@@ -6,6 +6,8 @@
  */
 class PluginDashglpiDashboard
 {
+    private const TICKETS_LIST_MAX = 5000;
+
     public static function getDashboardData(array $filters = []): array
     {
         $period = self::dashboardPeriod($filters);
@@ -236,9 +238,8 @@ class PluginDashglpiDashboard
             return self::getItilObjectsList($typeKey, $filters);
         }
 
-        $period = self::dashboardPeriod($filters);
-        $scope = self::ticketsListScope($period['start'], self::filterMyTasks($filters));
-        $rows = self::ticketRows($period['start'], 100, $scope);
+        $scope = self::ticketsListScope('1970-01-01 00:00:00', self::filterMyTasks($filters));
+        $rows = self::ticketRows('1970-01-01 00:00:00', self::TICKETS_LIST_MAX, $scope);
 
         $rows = self::intRows($rows, [
             'id', 'status', 'priority', 'global_validation', 'notification_failed',
@@ -2357,7 +2358,7 @@ class PluginDashglpiDashboard
 
     private static function ticketRows(string $start, int $limit, array $scope): array
     {
-        $limit = min(100, max(1, $limit));
+        $limit = min(self::TICKETS_LIST_MAX, max(1, $limit));
 
         return dashglpi_fetch_all(
             "SELECT t.id, t.name, t.content, t.status, t.global_validation, t.date, t.priority, t.time_to_resolve,

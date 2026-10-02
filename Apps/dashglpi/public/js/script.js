@@ -124,7 +124,7 @@ const DashState = {
     dashboardPeriodDays: 30,
     createdTicketsRangeHours: 1,
     notificationRangeHours: 1,
-    myTasksOnly: true,
+    myTasksOnly: false,
     dashboardNotificationsGlobal: [],
     dismissedNotificationIds: new Set(),
     glpiHealthDataGlobal: null,
@@ -138,7 +138,7 @@ const DashState = {
     ticketsDataGlobal: [],
     ticketsSortState: { key: 'date', direction: 'desc' },
     ticketsPaginationState: { page: 1, pageSize: 10 },
-    ticketStatusFilter: ['1', '3', '2', '4'],
+    ticketStatusFilter: ['1', '3', '2', '4', '5', '6'],
     ticketsView: 'list',
     slaDataGlobal: [],
     slaSummaryGlobal: { critical: 0, warning: 0, unassigned: 0, ok: 0, avg_open_seconds: 0 },
@@ -172,8 +172,9 @@ const DashState = {
 
 const TICKETS_PAGE_SIZE_DEFAULT = 10;
 const TICKETS_PAGE_SIZE_OPTIONS = [10, 20, 50, 100];
-const TICKET_STATUS_FILTER_DEFAULT = ['1', '3', '2', '4'];
 const TICKET_STATUS_FILTER_ALL = ['1', '3', '2', '4', '5', '6'];
+const TICKET_STATUS_FILTER_DEFAULT = TICKET_STATUS_FILTER_ALL.slice();
+const TICKETS_FILTERS_STORAGE_VERSION = '20261002-all-tickets-default';
 const TICKET_STATUS_FILTER_LABELS = {
     1: 'Aberto',
     3: 'Planejado',
@@ -752,8 +753,17 @@ function updateNotificationRangeButtons() {
 }
 
 function initMyTasksFilters() {
+    const savedVersion = localStorage.getItem('dashglpi-tickets-filter-version');
+    if (savedVersion !== TICKETS_FILTERS_STORAGE_VERSION) {
+        if (!MY_TASKS_FILTER_LOCKED) {
+            localStorage.setItem('dashglpi-my-tasks-only', '0');
+        }
+        localStorage.setItem('dashglpi-tickets-status-filter', JSON.stringify(TICKET_STATUS_FILTER_DEFAULT));
+        localStorage.setItem('dashglpi-tickets-filter-version', TICKETS_FILTERS_STORAGE_VERSION);
+    }
+
     const savedValue = localStorage.getItem('dashglpi-my-tasks-only');
-    DashState.myTasksOnly = MY_TASKS_FILTER_LOCKED ? true : (savedValue === null ? true : savedValue === '1');
+    DashState.myTasksOnly = MY_TASKS_FILTER_LOCKED ? true : (savedValue === null ? false : savedValue === '1');
     if (MY_TASKS_FILTER_LOCKED) {
         localStorage.setItem('dashglpi-my-tasks-only', '1');
     }
