@@ -23,7 +23,7 @@ function renderKanbanBoard() {
     const board = document.getElementById('ticketsKanban');
     if (!board) return;
 
-    const search = (document.getElementById('ticketsSearchInput')?.value || '').trim().toLowerCase();
+    const search = (document.getElementById('ticketsKanbanSearch')?.value || document.getElementById('ticketsSearchInput')?.value || '').trim().toLowerCase();
     const filtered = DashState.ticketsDataGlobal.filter(ticket => {
         if (!search) return true;
         return [ticket.id, ticket.name, ticket.category, ticket.technician_name, ticket.requester_name, ticket.stage]

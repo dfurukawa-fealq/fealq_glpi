@@ -57,7 +57,8 @@ function dashglpi_attendance_detail(Ticket $ticket): array
     $fields['capabilities'] = dashglpi_attendance_capabilities($ticket);
     $fields['revision'] = dashglpi_attendance_revision($ticket);
     $fields['current_user_id'] = (int) Session::getLoginUserID();
-    $fields['category'] = Dropdown::getDropdownName('glpi_itilcategories', (int) $ticket->fields['itilcategories_id']) ?: 'Sem categoria';
+    $categoryId = (int) $ticket->fields['itilcategories_id'];
+    $fields['category'] = $categoryId > 0 ? dashglpi_attendance_category_label($categoryId) : 'Sem categoria';
     $fields['entity_name'] = Dropdown::getDropdownName('glpi_entities', (int) $ticket->fields['entities_id']);
     $fields['origin_name'] = Dropdown::getDropdownName('glpi_requesttypes', (int) $ticket->fields['requesttypes_id']);
     foreach (['requester' => CommonITILActor::REQUESTER, 'observer' => CommonITILActor::OBSERVER, 'assign' => CommonITILActor::ASSIGN] as $name => $role) {
@@ -65,11 +66,17 @@ function dashglpi_attendance_detail(Ticket $ticket): array
     }
     $fields['allowed_statuses'] = [];
     if ($fields['capabilities']['status']) {
-        foreach (Ticket::getAllowedStatusArray($ticket->fields['status']) as $id => $label) {
-            // Solução e aprovação têm ações próprias, preservando seus efeitos nativos.
-            if (in_array((int) $id, [Ticket::SOLVED, Ticket::CLOSED], true) && (int) $id !== (int) $ticket->fields['status']) {
-                continue;
-            }
+        $statuses = method_exists(Ticket::class, 'getAllStatusArray')
+            ? Ticket::getAllStatusArray()
+            : [
+                Ticket::INCOMING => Ticket::getStatus(Ticket::INCOMING),
+                Ticket::ASSIGNED => Ticket::getStatus(Ticket::ASSIGNED),
+                Ticket::PLANNED => Ticket::getStatus(Ticket::PLANNED),
+                Ticket::WAITING => Ticket::getStatus(Ticket::WAITING),
+                Ticket::SOLVED => Ticket::getStatus(Ticket::SOLVED),
+                Ticket::CLOSED => Ticket::getStatus(Ticket::CLOSED),
+            ];
+        foreach ($statuses as $id => $label) {
             $fields['allowed_statuses'][] = ['id' => (int) $id, 'name' => $label];
         }
     }
@@ -82,6 +89,67 @@ function dashglpi_attendance_detail(Ticket $ticket): array
     $fields['content_edit'] = $fields['capabilities']['edit'] && !$fields['content_truncated'] ? (string) $ticket->fields['content'] : null;
     $fields['upload_max_label'] = Document::getMaxUploadSize();
     return $fields;
+}
+
+function dashglpi_attendance_category_label(int $categoryId, ?array $row = null): string
+{
+    global $DB;
+
+    if ($categoryId <= 0) {
+        return 'Sem categoria';
+    }
+
+    if ($row === null) {
+        $iterator = $DB->request([
+            'SELECT' => ['id', 'name', 'completename', 'itilcategories_id'],
+            'FROM' => 'glpi_itilcategories',
+            'WHERE' => ['id' => $categoryId],
+            'LIMIT' => 1,
+        ]);
+        $row = $iterator->current() ?: null;
+    }
+
+    if (!$row) {
+        return Dropdown::getDropdownName('glpi_itilcategories', $categoryId) ?: 'Categoria';
+    }
+
+    $parts = [];
+    $currentName = trim((string) ($row['name'] ?? ''));
+    if ($currentName !== '') {
+        $parts[] = $currentName;
+    }
+
+    $parentId = (int) ($row['itilcategories_id'] ?? 0);
+    $visited = [$categoryId];
+    $guard = 0;
+
+    while ($parentId > 0 && $guard < 100 && !in_array($parentId, $visited, true)) {
+        $visited[] = $parentId;
+        $iterator = $DB->request([
+            'SELECT' => ['id', 'name', 'itilcategories_id'],
+            'FROM' => 'glpi_itilcategories',
+            'WHERE' => ['id' => $parentId],
+            'LIMIT' => 1,
+        ]);
+        $parent = $iterator->current() ?: null;
+        if (!$parent) {
+            break;
+        }
+
+        $parentName = trim((string) ($parent['name'] ?? ''));
+        if ($parentName !== '') {
+            array_unshift($parts, $parentName);
+        }
+        $parentId = (int) ($parent['itilcategories_id'] ?? 0);
+        $guard++;
+    }
+
+    if ($parts) {
+        return implode(' > ', $parts);
+    }
+
+    $fallback = trim((string) ($row['completename'] ?? ''));
+    return $fallback !== '' ? $fallback : 'Categoria';
 }
 
 /** Filtro equivalente à visibilidade nativa, aplicado antes da paginação. */
@@ -185,6 +253,48 @@ function dashglpi_attendance_catalog(Ticket $ticket, array $payload): array
     }
     foreach (['categories' => ITILCategory::class, 'groups' => Group::class, 'solutiontypes' => SolutionType::class,
         'taskcategories' => TaskCategory::class, 'pendingreasons' => PendingReason::class] as $key => $class) {
+        if ($key === 'categories') {
+            $entityScope = [$entityId];
+            if ($entityId > 0) {
+                foreach (getAncestorsOf('glpi_entities', $entityId) as $ancestorId) {
+                    $entityScope[] = (int) $ancestorId;
+                }
+            }
+            $entityScope[] = 0;
+            $entityScope = array_values(array_unique(array_map('intval', $entityScope)));
+            $typeField = (int) $ticket->fields['type'] === Ticket::DEMAND_TYPE ? 'is_request' : 'is_incident';
+            $where = [
+                'is_helpdeskvisible' => 1,
+                $typeField => 1,
+                'entities_id' => $entityScope,
+            ];
+            if ($query !== '') {
+                $where[] = ['OR' => [
+                    ['name' => ['LIKE', '%' . $query . '%']],
+                    ['completename' => ['LIKE', '%' . $query . '%']],
+                ]];
+            }
+            $catalog[$key] = [];
+            foreach ($DB->request(['SELECT' => ['id', 'name', 'completename', 'itilcategories_id', 'entities_id', 'is_recursive'],
+                'FROM' => 'glpi_itilcategories', 'WHERE' => $where, 'ORDERBY' => ['completename', 'name']]) as $row) {
+                $categoryEntityId = (int) ($row['entities_id'] ?? 0);
+                $appliesToEntity = $categoryEntityId === $entityId
+                    || (!empty($row['is_recursive']) && in_array($categoryEntityId, $entityScope, true));
+                if (!$appliesToEntity) {
+                    continue;
+                }
+                $catalog[$key][] = [
+                    'id' => (int) $row['id'],
+                    'name' => (string) $row['name'],
+                    'completename' => (string) ($row['completename'] ?? ''),
+                    'label' => dashglpi_attendance_category_label((int) $row['id'], $row),
+                ];
+                if (count($catalog[$key]) > DASHGLPI_ATTENDANCE_CATALOG_MAX) {
+                    break;
+                }
+            }
+            continue;
+        }
         $item = new $class();
         $where = $item->isEntityAssign() ? getEntitiesRestrictCriteria($class::getTable(), '', $entityId, $item->maybeRecursive()) : [];
         if ($key === 'groups') {

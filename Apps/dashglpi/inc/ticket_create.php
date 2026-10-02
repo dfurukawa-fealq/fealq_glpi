@@ -242,7 +242,7 @@ function dashglpi_ticket_create_categories_catalog(int $entitiesId, int $type): 
     $placeholders = implode(',', array_fill(0, count($entityScope), '?'));
     $typeField = $type === 2 ? 'is_request' : 'is_incident';
     $rows = dashglpi_fetch_all(
-        "SELECT id, name, completename, entities_id, is_recursive
+        "SELECT id, name, completename, itilcategories_id, entities_id, is_recursive
          FROM glpi_itilcategories
          WHERE is_helpdeskvisible = 1
            AND {$typeField} = 1
@@ -260,10 +260,7 @@ function dashglpi_ticket_create_categories_catalog(int $entitiesId, int $type): 
             continue;
         }
 
-        $label = trim((string) ($row['completename'] ?? ''));
-        if ($label === '') {
-            $label = trim((string) ($row['name'] ?? 'Categoria'));
-        }
+        $label = dashglpi_ticket_create_category_path_label($row);
 
         $categories[] = [
             'id' => (int) ($row['id'] ?? 0),
@@ -274,6 +271,47 @@ function dashglpi_ticket_create_categories_catalog(int $entitiesId, int $type): 
     }
 
     return $categories;
+}
+
+function dashglpi_ticket_create_category_path_label(array $row): string
+{
+    $parts = [];
+    $currentName = trim((string) ($row['name'] ?? ''));
+    if ($currentName !== '') {
+        $parts[] = $currentName;
+    }
+
+    $parentId = (int) ($row['itilcategories_id'] ?? 0);
+    $visited = [(int) ($row['id'] ?? 0)];
+    $guard = 0;
+
+    while ($parentId > 0 && $guard < 100 && !in_array($parentId, $visited, true)) {
+        $visited[] = $parentId;
+        $parent = dashglpi_fetch_one(
+            "SELECT id, name, itilcategories_id
+             FROM glpi_itilcategories
+             WHERE id = ?
+             LIMIT 1",
+            [$parentId]
+        );
+        if (!$parent) {
+            break;
+        }
+
+        $parentName = trim((string) ($parent['name'] ?? ''));
+        if ($parentName !== '') {
+            array_unshift($parts, $parentName);
+        }
+        $parentId = (int) ($parent['itilcategories_id'] ?? 0);
+        $guard++;
+    }
+
+    if ($parts) {
+        return implode(' > ', $parts);
+    }
+
+    $fallback = trim((string) ($row['completename'] ?? ''));
+    return $fallback !== '' ? $fallback : 'Categoria';
 }
 function dashglpi_ticket_create_can_change_requester(): bool
 {
@@ -441,6 +479,10 @@ function dashglpi_ticket_create_payload_from_request(array $post): array
 
     return [
         'action' => 'create',
+        'actor' => [
+            'user_id' => $currentUserId,
+            'profile_id' => max(0, (int) ($scope['profile_id'] ?? 0)),
+        ],
         'requester_id' => $requesterId,
         'entities_id' => dashglpi_ticket_create_assert_entity_id($scope, (int) ($post['entities_id'] ?? 0)),
         'type' => dashglpi_ticket_create_normalize_type($post['type'] ?? 1),

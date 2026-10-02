@@ -153,12 +153,32 @@ function dashglpi_login(string $login, string $password): bool
         return false;
     }
 
+    dashglpi_record_successful_login((int) $user['id']);
+
     session_regenerate_id(true);
     $_SESSION['dashglpi_user_id'] = (int) $user['id'];
     $_SESSION['dashglpi_user_name'] = (string) $user['name'];
     $_SESSION['dashglpi_user_display'] = dashglpi_user_display_name($user);
 
     return true;
+}
+
+function dashglpi_record_successful_login(int $usersId): void
+{
+    if ($usersId <= 0) {
+        return;
+    }
+
+    try {
+        $stmt = dashglpi_db()->prepare(
+            'UPDATE glpi_users
+             SET last_login = NOW()
+             WHERE id = ?'
+        );
+        $stmt->execute([$usersId]);
+    } catch (Throwable $e) {
+        error_log('[DashGLPI] failed to update user last_login: ' . $e->getMessage());
+    }
 }
 
 function dashglpi_logout(): void

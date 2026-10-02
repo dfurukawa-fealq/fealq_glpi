@@ -124,10 +124,6 @@ $glpiPublicUrl = rtrim((string) dashglpi_env('GLPI_PUBLIC_URL', ''), '/');
                     </div>
                 </div>
                 <div class="header-actions">
-                    <div class="search-box dashboard-search-box">
-                        <input type="text" placeholder="Busca rápida...">
-                        <i class="fas fa-search"></i>
-                    </div>
                     <div class="dashboard-period-tabs dashboard-overview-period-tabs" aria-label="Período da visão geral">
                         <button class="dashboard-period-btn" type="button" data-dashboard-period="7">7 dias</button>
                         <button class="dashboard-period-btn active" type="button" data-dashboard-period="30">30 dias</button>
@@ -903,16 +899,34 @@ $glpiPublicUrl = rtrim((string) dashglpi_env('GLPI_PUBLIC_URL', ''), '/');
                 </div>
                 <input type="hidden" id="ticketDetailTicketId" value="">
                 <div id="ticketDetailBody" class="ticket-detail-columns">
+                    <nav class="ticket-detail-rail" aria-label="Seções do chamado">
+                        <button type="button" class="ticket-detail-rail-item is-active" data-attendance-jump="description">
+                            <i class="fas fa-info-circle" aria-hidden="true"></i>
+                            <span>Chamado</span>
+                        </button>
+                        <button type="button" class="ticket-detail-rail-item" data-attendance-jump="history">
+                            <i class="fas fa-history" aria-hidden="true"></i>
+                            <span>Histórico</span>
+                        </button>
+                        <button type="button" class="ticket-detail-rail-item" data-attendance-jump="followup">
+                            <i class="fas fa-comment-dots" aria-hidden="true"></i>
+                            <span>Atender</span>
+                        </button>
+                        <button type="button" class="ticket-detail-rail-item" data-attendance-jump="properties">
+                            <i class="fas fa-sliders-h" aria-hidden="true"></i>
+                            <span>Campos</span>
+                        </button>
+                    </nav>
                     <div class="ticket-detail-col ticket-detail-col-main">
                         <div class="ticket-detail-meta" id="ticketDetailMeta"></div>
-                        <div class="ticket-detail-section">
+                        <div class="ticket-detail-section" data-attendance-section="description">
                             <div class="attendance-section-heading"><h4>Descrição do chamado</h4><button type="button" class="page-action-btn is-hidden" id="attendanceEditDescription">Editar</button></div>
                             <div class="ticket-detail-content" id="ticketDetailContent"></div>
                             <div id="attendanceDescriptionDocuments" class="attendance-documents"></div>
                             <form id="attendanceDescriptionForm" class="assignment-form is-hidden"><label>Descrição do chamado<textarea id="attendanceDescription" rows="7" required></textarea></label><div class="ticket-detail-inline-actions"><button type="button" class="page-action-btn" id="attendanceCancelDescription">Cancelar edição</button><button type="submit" class="page-action-btn primary">Salvar descrição</button></div><div id="attendanceDescriptionStatus" class="assignment-status" role="status"></div></form>
                         </div>
 
-                        <div class="ticket-detail-section">
+                        <div class="ticket-detail-section" data-attendance-section="history">
                             <h4>Histórico do chamado</h4>
                             <div class="followup-timeline" id="followupTimeline"></div>
                             <button type="button" id="attendanceMore" class="page-action-btn is-hidden">Carregar anteriores</button>
@@ -978,7 +992,7 @@ $glpiPublicUrl = rtrim((string) dashglpi_env('GLPI_PUBLIC_URL', ''), '/');
                         </div>
                     </div>
 
-                    <div class="ticket-detail-col ticket-detail-col-followup">
+                    <div class="ticket-detail-col ticket-detail-col-followup" data-attendance-section="followup">
                         <h4 id="attendanceComposerTitle">Novo acompanhamento</h4>
                         <form id="followupForm" class="assignment-form">
                             <label id="attendanceKindLabel" class="is-hidden"><span>Tipo de atendimento</span><select id="attendanceKind"></select></label>
@@ -1027,7 +1041,7 @@ $glpiPublicUrl = rtrim((string) dashglpi_env('GLPI_PUBLIC_URL', ''), '/');
                             </div>
                         </form>
                     </div>
-                    <details id="attendanceProperties" class="ticket-detail-col attendance-properties is-hidden" open>
+                    <details id="attendanceProperties" class="ticket-detail-col attendance-properties is-hidden" data-attendance-section="properties" open>
                         <summary>Propriedades do chamado</summary>
                         <details class="attendance-context"><summary>Entidade, datas e SLA</summary><div id="attendancePropertiesMeta"></div></details>
                         <label>Buscar opções e responsáveis<input type="search" id="attendanceCatalogSearch" placeholder="Digite para filtrar os catálogos"></label>
@@ -1035,31 +1049,32 @@ $glpiPublicUrl = rtrim((string) dashglpi_env('GLPI_PUBLIC_URL', ''), '/');
                         <form id="attendancePropertiesForm" class="assignment-form">
                             <label>Título<input id="attendanceName" maxlength="255" required></label>
                             <label>Tipo<select id="attendanceType"><option value="1">Incidente</option><option value="2">Requisição</option></select></label>
-                            <label>Categoria<select id="attendanceCategory" data-attendance-catalog="categories"></select></label>
-                            <label>Urgência<select id="attendanceUrgency"></select></label>
-                            <label>Impacto<select id="attendanceImpact"></select></label>
-                            <label>Prioridade<select id="attendancePriority"></select></label>
-                            <button type="submit" class="page-action-btn primary">Salvar propriedades</button>
-                            <div id="attendancePropertiesStatus" class="assignment-status" role="status"></div>
-                        </form>
-                        <div id="attendanceActors"></div>
-                        <button type="button" id="attendanceTake" class="page-action-btn is-hidden">Assumir chamado</button>
-                        <form id="attendanceActorForm" class="assignment-form is-hidden">
-                            <label>Papel<select id="attendanceActorRole"></select></label>
-                            <label>Ator<select id="attendanceActorType"><option value="User">Usuário</option><option value="Group">Grupo técnico</option></select></label>
-                            <label>Selecionar<select id="attendanceActorId" data-attendance-catalog="technicians"></select></label>
-                            <button type="submit" class="page-action-btn">Adicionar ator</button>
-                            <div id="attendanceActorStatus" class="assignment-status" role="status"></div>
-                        </form>
-                        <form id="attendanceStatusForm" class="assignment-form is-hidden">
+                            <label class="attendance-combobox-field">
+                                <span>Categoria</span>
+                                <select id="attendanceCategory" data-attendance-catalog="categories" hidden aria-hidden="true" tabindex="-1"></select>
+                                <div class="ticket-create-combobox" data-dash-field-combobox="attendanceCategory">
+                                    <input type="search" id="attendanceCategorySearch" placeholder="Digite para filtrar categorias" autocomplete="off" role="combobox" aria-expanded="false" aria-controls="attendanceCategoryOptions">
+                                    <button type="button" class="ticket-create-combobox-toggle" id="attendanceCategoryToggle" aria-label="Listar categorias">
+                                        <i class="fas fa-chevron-down"></i>
+                                    </button>
+                                    <div class="ticket-create-combobox-options" id="attendanceCategoryOptions" role="listbox" hidden></div>
+                                </div>
+                            </label>
                             <label>Status<select id="attendanceStatus"></select></label>
                             <div id="attendancePendingFields" class="is-hidden">
                                 <label>Motivo da pendência<textarea id="attendancePendingReason" rows="2"></textarea></label>
                                 <label>Tipo de pendência<select id="attendancePendingType" data-attendance-catalog="pendingreasons"></select></label>
                             </div>
-                            <button type="submit" class="page-action-btn">Atualizar status</button>
-                            <div id="attendanceStateStatus" class="assignment-status" role="status"></div>
+                            <label>Urgência<select id="attendanceUrgency"></select></label>
+                            <label>Impacto<select id="attendanceImpact"></select></label>
+                            <label>Prioridade<select id="attendancePriority"></select></label>
+                            <button type="submit" class="page-action-btn primary attendance-properties-submit">Salvar propriedades</button>
+                            <div id="attendancePropertiesStatus" class="assignment-status" role="status"></div>
                         </form>
+                        <div id="attendanceActors"></div>
+                        <button type="button" id="attendanceTake" class="page-action-btn is-hidden">Assumir chamado</button>
+                        <div id="attendanceActorStatus" class="assignment-status" role="status"></div>
+                        <div id="attendanceStateStatus" class="assignment-status" role="status"></div>
                     </details>
                 </div>
                 <div class="assignment-actions ticket-detail-footer">
@@ -1067,6 +1082,9 @@ $glpiPublicUrl = rtrim((string) dashglpi_env('GLPI_PUBLIC_URL', ''), '/');
                         <i class="fas fa-ban"></i> Cancelar este chamado
                     </button>
                     <button type="button" class="page-action-btn primary is-hidden" id="attendanceGoToComposer">Atender</button>
+                    <button type="button" class="page-action-btn primary is-hidden" id="attendanceSavePropertiesFooter">
+                        <i class="fas fa-save"></i> Salvar
+                    </button>
                     <button type="button" class="page-action-btn" id="attendanceReload">Atualizar</button>
                     <button type="button" class="page-action-btn" data-modal-close>
                         <i class="fas fa-arrow-left"></i> Fechar
@@ -1133,14 +1151,6 @@ $glpiPublicUrl = rtrim((string) dashglpi_env('GLPI_PUBLIC_URL', ''), '/');
                         <span>Pesquisa, ordenação e acompanhamento por estágio</span>
                     </div>
                 </div>
-                <?php if ($isAdmin): ?>
-                <div class="header-actions">
-                    <button class="page-action-btn" type="button" data-admin-new="ticketImport">
-                        <i class="fas fa-file-import"></i>
-                        <span>Importar CSV</span>
-                    </button>
-                </div>
-                <?php endif; ?>
             </header>
             <div class="glass-card table-card">
                 <div class="tickets-toolbar">
@@ -1148,61 +1158,40 @@ $glpiPublicUrl = rtrim((string) dashglpi_env('GLPI_PUBLIC_URL', ''), '/');
                         <i class="fas fa-search"></i>
                         <input type="text" id="ticketsSearchInput" placeholder="Buscar por ID, título, técnico, requerente, categoria ou status...">
                     </div>
-                    <?php if (count($itilTypeCatalog) > 1): ?>
-                    <!-- Filtro por objeto ITIL (PLAN-20260709-019, Fase C) — só aparece para
-                         perfis com direito GLPI em Problema/Mudança. -->
-                    <div class="tickets-type-tabs" id="ticketsTypeFilters" role="tablist" aria-label="Tipo de atendimento">
-                        <?php foreach ($itilTypeCatalog as $itilEntry): ?>
-                        <?php $itilIcon = ['ticket' => 'fa-ticket-alt', 'problem' => 'fa-triangle-exclamation', 'change' => 'fa-arrows-rotate'][$itilEntry['key']] ?? 'fa-layer-group'; ?>
-                        <button type="button" role="tab" aria-selected="<?= $itilEntry['key'] === 'ticket' ? 'true' : 'false' ?>" class="tickets-type-tab<?= $itilEntry['key'] === 'ticket' ? ' active' : '' ?>" data-tickets-itemtype="<?= htmlspecialchars($itilEntry['key'], ENT_QUOTES, 'UTF-8') ?>">
-                            <i class="fas <?= $itilIcon ?>" aria-hidden="true"></i><span><?= htmlspecialchars($itilEntry['label_plural']) ?></span>
-                        </button>
-                        <?php endforeach; ?>
-                    </div>
-                    <?php endif; ?>
-                    <div style="display:flex;align-items:center;gap:12px;">
+                    <div class="tickets-toolbar-actions">
                         <label class="dash-filter-check" title="<?= !empty($userContext['lock_my_tasks']) ? 'Filtro bloqueado pela regra do perfil efetivo' : 'Mostrar apenas chamados vinculados ao usuário atual' ?>">
                             <input type="checkbox" id="ticketsMyTasksFilter" data-my-tasks-filter checked<?= !empty($userContext['lock_my_tasks']) ? ' disabled' : '' ?>>
                             <span>Minhas Tarefas</span>
                         </label>
-                        <div class="tickets-count" id="ticketsCount">0 chamados</div>
-                        <?php if (!$isHelpdeskView): ?>
-                        <div class="view-toggle" id="ticketsViewToggle" role="group" aria-label="Visualizacao dos chamados">
-                            <button type="button" class="view-toggle-btn is-active" data-view="list" aria-pressed="true" title="Visualizacao em lista">
-                                <i class="fas fa-list" aria-hidden="true"></i><span>Lista</span>
+                        <div class="tickets-status-filter">
+                            <button class="tickets-icon-filter" type="button" id="ticketsStatusFilterToggle" title="Filtrar por status" aria-label="Filtrar por status" aria-expanded="false" aria-controls="ticketsStatusFilterMenu">
+                                <i class="fas fa-filter" aria-hidden="true"></i>
                             </button>
-                            <button type="button" class="view-toggle-btn" data-view="kanban" aria-pressed="false" title="Visualizacao Kanban">
-                                <i class="fas fa-columns" aria-hidden="true"></i><span>Kanban</span>
-                            </button>
+                            <div class="tickets-status-menu" id="ticketsStatusFilterMenu" hidden>
+                                <button class="tickets-status-all" type="button" id="ticketsStatusFilterAll">Todos</button>
+                                <label><input type="checkbox" data-ticket-status-filter value="1" checked> <span>Aberto</span></label>
+                                <label><input type="checkbox" data-ticket-status-filter value="3" checked> <span>Planejado</span></label>
+                                <label><input type="checkbox" data-ticket-status-filter value="2" checked> <span>Em Andamento</span></label>
+                                <label><input type="checkbox" data-ticket-status-filter value="4" checked> <span>Pendente</span></label>
+                                <label><input type="checkbox" data-ticket-status-filter value="5"> <span>Solucionando</span></label>
+                                <label><input type="checkbox" data-ticket-status-filter value="6"> <span>Fechado</span></label>
+                            </div>
                         </div>
-                        <?php endif; ?>
                     </div>
                 </div>
                 <div class="table-responsive">
-                    <table class="custom-table responsive-table<?= $isHelpdeskView ? " tickets-helpdesk-table" : "" ?>">
+                    <table class="custom-table responsive-table tickets-helpdesk-table">
                         <thead>
                             <tr>
-                                <?php if ($isHelpdeskView): ?>
                                 <th class="sortable-th" data-sort="id">ID <i class="fas fa-sort"></i></th>
                                 <th class="sortable-th" data-sort="name">Titulo <i class="fas fa-sort"></i></th>
                                 <th class="sortable-th" data-sort="stage">Stage <i class="fas fa-sort"></i></th>
                                 <th>Acoes</th>
-                                <?php else: ?>
-                                <th class="sortable-th" data-sort="id">ID <i class="fas fa-sort"></i></th>
-                                <th class="sortable-th" data-sort="name">Titulo <i class="fas fa-sort"></i></th>
-                                <th class="sortable-th" data-sort="stage">Stage <i class="fas fa-sort"></i></th>
-                                <th class="sortable-th" data-sort="technician_name">Tecnico <i class="fas fa-sort"></i></th>
-                                <th class="sortable-th" data-sort="requester_name">Requerente <i class="fas fa-sort"></i></th>
-                                <th class="sortable-th" data-sort="date">Criado em <i class="fas fa-sort"></i></th>
-                                <?php if ($canTicketReports): ?>
-                                <th>Acao</th>
-                                <?php endif; ?>
-                                <?php endif; ?>
                             </tr>
                         </thead>
                         <tbody id="tickets-full-body">
                             <tr>
-                                <td colspan="<?= $isHelpdeskView ? 4 : ($canTicketReports ? 7 : 6) ?>" style="text-align: center; padding: 40px;">
+                                <td colspan="4" style="text-align: center; padding: 40px;">
                                     <i class="fas fa-spinner fa-spin" style="font-size: 2rem; color: var(--text-muted);"></i>
                                 </td>
                             </tr>
@@ -1210,7 +1199,6 @@ $glpiPublicUrl = rtrim((string) dashglpi_env('GLPI_PUBLIC_URL', ''), '/');
                     </table>
                 </div>
                 <div class="tickets-pagination" id="ticketsPagination" hidden></div>
-                <div id="ticketsKanban" class="kanban-container" hidden></div>
                 <div id="ticketsCards" class="tickets-cards" hidden aria-live="polite"></div>
                 <div class="tickets-mobile-search-panel" id="ticketsMobileSearchPanel" hidden>
                     <label for="ticketsSearchInputMobile">Pesquisar chamados</label>
@@ -1219,6 +1207,27 @@ $glpiPublicUrl = rtrim((string) dashglpi_env('GLPI_PUBLIC_URL', ''), '/');
                         <input type="search" id="ticketsSearchInputMobile" placeholder="ID, título, técnico ou status..." autocomplete="off">
                     </div>
                 </div>
+            </div>
+        </div>
+
+        <div class="page-section<?= $defaultPage === 'ticketsKanban' ? ' active' : '' ?>" id="ticketsKanbanSection" data-screen-type="ticketsKanban">
+            <header class="page-header">
+                <div class="page-title-wrapper">
+                    <h1>Kanban</h1>
+                    <div class="page-subtitle">
+                        <i class="fas fa-columns"></i>
+                        <span>Quadro de chamados por estágio</span>
+                    </div>
+                </div>
+            </header>
+            <div class="glass-card table-card">
+                <div class="tickets-toolbar">
+                    <div class="tickets-search">
+                        <i class="fas fa-search"></i>
+                        <input type="text" id="ticketsKanbanSearch" placeholder="Buscar por ID, título, técnico, requerente, categoria ou status...">
+                    </div>
+                </div>
+                <div id="ticketsKanban" class="kanban-container"></div>
             </div>
         </div>
         <?php endif; ?>
@@ -1371,18 +1380,7 @@ $glpiPublicUrl = rtrim((string) dashglpi_env('GLPI_PUBLIC_URL', ''), '/');
                                 <span>Titulo</span>
                                 <input type="text" name="name" id="ticketCreateName" maxlength="255" required>
                             </label>
-                            <label class="admin-field ticket-create-requester-field full" id="ticketCreateRequesterField" hidden>
-                                <span>Solicitante / Requerente</span>
-                                <input type="hidden" name="requester_id" id="ticketCreateRequesterId" value="<?= (int) ($currentUser['id'] ?? 0) ?>">
-                                <div class="ticket-create-combobox" data-ticket-combobox="requester">
-                                    <input type="search" id="ticketCreateRequesterSearch" placeholder="Digite nome, login ou e-mail" autocomplete="off" role="combobox" aria-expanded="false" aria-controls="ticketCreateRequesterOptions">
-                                    <button type="button" class="ticket-create-combobox-toggle" data-ticket-combobox-toggle="requester" aria-label="Listar solicitantes">
-                                        <i class="fas fa-chevron-down"></i>
-                                    </button>
-                                    <div class="ticket-create-combobox-options" id="ticketCreateRequesterOptions" role="listbox" hidden></div>
-                                </div>
-                            </label>
-                            <label class="admin-field ticket-create-combobox-field" data-ticket-create-entity-field>
+                            <label class="admin-field ticket-create-combobox-field full" data-ticket-create-entity-field>
                                 <span>Entidade</span>
                                 <input type="hidden" name="entities_id" id="ticketCreateEntity" value="0">
                                 <div class="ticket-create-combobox" data-ticket-combobox="entity">
@@ -1391,6 +1389,17 @@ $glpiPublicUrl = rtrim((string) dashglpi_env('GLPI_PUBLIC_URL', ''), '/');
                                         <i class="fas fa-chevron-down"></i>
                                     </button>
                                     <div class="ticket-create-combobox-options" id="ticketCreateEntityOptions" role="listbox" hidden></div>
+                                </div>
+                            </label>
+                            <label class="admin-field ticket-create-requester-field" id="ticketCreateRequesterField" hidden>
+                                <span>Solicitante / Requerente</span>
+                                <input type="hidden" name="requester_id" id="ticketCreateRequesterId" value="<?= (int) ($currentUser['id'] ?? 0) ?>">
+                                <div class="ticket-create-combobox" data-ticket-combobox="requester">
+                                    <input type="search" id="ticketCreateRequesterSearch" placeholder="Digite nome, login ou e-mail" autocomplete="off" role="combobox" aria-expanded="false" aria-controls="ticketCreateRequesterOptions">
+                                    <button type="button" class="ticket-create-combobox-toggle" data-ticket-combobox-toggle="requester" aria-label="Listar solicitantes">
+                                        <i class="fas fa-chevron-down"></i>
+                                    </button>
+                                    <div class="ticket-create-combobox-options" id="ticketCreateRequesterOptions" role="listbox" hidden></div>
                                 </div>
                             </label>
                             <label class="admin-field">
@@ -3041,6 +3050,7 @@ $glpiPublicUrl = rtrim((string) dashglpi_env('GLPI_PUBLIC_URL', ''), '/');
 
     <script src="<?= htmlspecialchars(dashglpi_asset_url('vendor/js/chart.umd.min.js'), ENT_QUOTES, 'UTF-8') ?>"></script>
     <script src="<?= htmlspecialchars(dashglpi_asset_url('js/script.js'), ENT_QUOTES, 'UTF-8') ?>"></script>
+    <script src="<?= htmlspecialchars(dashglpi_asset_url('js/script.form-components.js'), ENT_QUOTES, 'UTF-8') ?>"></script>
     <script src="<?= htmlspecialchars(dashglpi_asset_url('js/script.ticket-create.js'), ENT_QUOTES, 'UTF-8') ?>"></script>
     <script src="<?= htmlspecialchars(dashglpi_asset_url('js/script.charts.js'), ENT_QUOTES, 'UTF-8') ?>"></script>
     <script src="<?= htmlspecialchars(dashglpi_asset_url('js/script.kanban.js'), ENT_QUOTES, 'UTF-8') ?>"></script>

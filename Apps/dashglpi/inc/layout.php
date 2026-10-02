@@ -43,12 +43,13 @@ function dashglpi_render_sidebar(string $active, string $context = 'dashboard', 
     $items = [
         ['key' => 'dashboard', 'label' => 'Visão Geral', 'icon' => 'fa-th-large', 'page' => 'dashboard'],
         ['key' => 'tickets', 'label' => 'Chamados', 'icon' => 'fa-ticket-alt', 'page' => 'tickets'],
+        ['key' => 'ticketsKanban', 'label' => 'Kanban', 'icon' => 'fa-columns', 'page' => 'ticketsKanban', 'access_page' => 'tickets'],
         ['key' => 'sla', 'label' => 'Monitor SLA', 'icon' => 'fa-clock', 'page' => 'sla'],
         ['key' => 'ranking', 'label' => 'Ranking Técnicos', 'icon' => 'fa-trophy', 'page' => 'ranking'],
     ];
     $items = array_values(array_filter(
         $items,
-        static fn(array $item): bool => dashglpi_current_user_can_access_page((string) ($item['page'] ?? ''))
+        static fn(array $item): bool => dashglpi_current_user_can_access_page((string) ($item['access_page'] ?? $item['page'] ?? ''))
     ));
 
     if ($isAdmin) {

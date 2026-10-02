@@ -4,15 +4,105 @@ require_once __DIR__ . '/../../../inc/includes.php';
 require_once __DIR__ . '/admin_bridge_common.php';
 require_once __DIR__ . '/../inc/entity_sla_policy.php';
 
-plugin_dashglpi_admin_bridge_handle('ticket_create', function (array $payload): array {
-    $action = (string) ($payload['action'] ?? 'catalog');
+plugin_dashglpi_ticket_create_bridge_handle();
 
-    return match ($action) {
-        'catalog' => plugin_dashglpi_ticket_create_catalog($payload),
-        'create' => plugin_dashglpi_ticket_create_submit($payload),
-        default => throw new RuntimeException('Acao invalida para abertura de chamado.'),
-    };
-}, 'Erro interno no bridge de abertura de chamado.');
+function plugin_dashglpi_ticket_create_bridge_handle(): void
+{
+    try {
+        $payload = plugin_dashglpi_admin_bridge_payload();
+        plugin_dashglpi_admin_bridge_bootstrap_constants();
+        plugin_dashglpi_admin_bridge_bootstrap_logger();
+        plugin_dashglpi_admin_bridge_bootstrap_cache();
+        plugin_dashglpi_admin_bridge_bootstrap_db();
+
+        $action = (string) ($payload['action'] ?? 'catalog');
+        $result = match ($action) {
+            'catalog' => Session::callAsSystem(static fn(): array => plugin_dashglpi_ticket_create_catalog($payload)),
+            'create' => plugin_dashglpi_ticket_create_as_actor($payload, 'plugin_dashglpi_ticket_create_submit'),
+            default => throw new RuntimeException('Acao invalida para abertura de chamado.'),
+        };
+
+        plugin_dashglpi_admin_bridge_json(['ok' => true] + $result);
+    } catch (Throwable $e) {
+        plugin_dashglpi_admin_bridge_log($e, 'ticket_create');
+        $code = in_array((int) $e->getCode(), [400, 403, 404, 409, 422], true) ? (int) $e->getCode() : 500;
+        $message = trim((string) $e->getMessage());
+        plugin_dashglpi_admin_bridge_json(['ok' => false, 'error' => $message !== '' ? $message : 'Erro interno no bridge de abertura de chamado.'], $code);
+    }
+}
+
+function plugin_dashglpi_ticket_create_as_actor(array $payload, callable $handler): array
+{
+    $saved = $_SESSION ?? [];
+    try {
+        $userId = (int) ($payload['actor']['user_id'] ?? 0);
+        $requestedProfileId = (int) ($payload['actor']['profile_id'] ?? 0);
+
+        $user = new User();
+        if ($userId <= 0 || !$user->getFromDB($userId) || !$user->fields['is_active'] || $user->fields['is_deleted']) {
+            throw new RuntimeException('Usuario de abertura invalido.', 403);
+        }
+
+        $now = date('Y-m-d H:i:s');
+        if ((!empty($user->fields['begin_date']) && $user->fields['begin_date'] > $now)
+            || (!empty($user->fields['end_date']) && $user->fields['end_date'] < $now)) {
+            throw new RuntimeException('Usuario fora do periodo de validade.', 403);
+        }
+
+        $_SESSION = [];
+        Session::initVars();
+        $_SESSION['glpiID'] = $userId;
+        $_SESSION['glpiname'] = $user->fields['name'];
+        $_SESSION['glpidefault_entity'] = (int) $user->fields['entities_id'];
+        $user->loadPreferencesInSession();
+        Session::initEntityProfiles($userId);
+
+        $availableProfiles = array_map('intval', array_keys($_SESSION['glpiprofiles'] ?? []));
+        if ($requestedProfileId > 0 && !in_array($requestedProfileId, $availableProfiles, true)) {
+            throw new RuntimeException('Perfil de abertura nao pertence ao usuario.', 403);
+        }
+
+        $candidateProfiles = $requestedProfileId > 0
+            ? array_values(array_unique(array_merge([$requestedProfileId], $availableProfiles)))
+            : $availableProfiles;
+
+        $probeInput = plugin_dashglpi_ticket_create_probe_input($payload);
+        foreach ($candidateProfiles as $candidateProfileId) {
+            Session::changeProfile($candidateProfileId);
+            if (!isset($_SESSION['glpiactiveprofile'])) {
+                continue;
+            }
+            Session::changeActiveEntities('all');
+            Session::loadGroups();
+            $ticket = new Ticket();
+            if ($ticket->can(-1, CREATE, $probeInput)) {
+                return $handler($payload);
+            }
+        }
+
+        throw new RuntimeException('Perfil sem permissao GLPI para abrir chamado nesta entidade.', 403);
+    } finally {
+        $_SESSION = $saved;
+    }
+}
+
+function plugin_dashglpi_ticket_create_probe_input(array $payload): array
+{
+    $urgency = plugin_dashglpi_ticket_create_urgency($payload['urgency'] ?? 3);
+    $impact = plugin_dashglpi_ticket_create_impact($payload['impact'] ?? 3);
+
+    return [
+        'name' => 'Permissao de abertura DashGLPI',
+        'content' => 'Verificacao de permissao.',
+        'entities_id' => max(0, (int) ($payload['entities_id'] ?? 0)),
+        'type' => plugin_dashglpi_ticket_create_type($payload['type'] ?? Ticket::INCIDENT_TYPE),
+        'urgency' => $urgency,
+        'impact' => $impact,
+        'priority' => Ticket::computePriority($urgency, $impact),
+        'itilcategories_id' => max(0, (int) ($payload['itilcategories_id'] ?? 0)),
+        '_users_id_requester' => max(0, (int) ($payload['requester_id'] ?? 0)),
+    ];
+}
 
 function plugin_dashglpi_ticket_create_catalog(array $payload): array
 {
@@ -89,7 +179,10 @@ function plugin_dashglpi_ticket_create_submit(array $payload): array
         'priority' => $priority,
         'itilcategories_id' => $categoryId,
         '_users_id_requester' => $requesterId,
+        '_users_id_requester_notif' => ['use_notification' => 1],
         'users_id' => $requesterId,
+        'users_id_recipient' => (int) Session::getLoginUserID(),
+        'users_id_lastupdater' => (int) Session::getLoginUserID(),
     ];
     plugin_dashglpi_ticket_create_apply_sla($ticketInput, $sla);
     plugin_dashglpi_ticket_create_attach_uploaded_files($ticketInput, 'attachments');
@@ -292,7 +385,7 @@ function plugin_dashglpi_ticket_create_categories(int $entitiesId, int $type): a
     $typeField = $type === Ticket::DEMAND_TYPE ? 'is_request' : 'is_incident';
     $categories = [];
     foreach ($DB->request([
-        'SELECT' => ['id', 'name', 'completename', 'entities_id', 'is_recursive'],
+        'SELECT' => ['id', 'name', 'completename', 'itilcategories_id', 'entities_id', 'is_recursive'],
         'FROM' => 'glpi_itilcategories',
         'WHERE' => [
             'is_helpdeskvisible' => 1,
@@ -308,10 +401,7 @@ function plugin_dashglpi_ticket_create_categories(int $entitiesId, int $type): a
             continue;
         }
 
-        $label = trim((string) ($row['completename'] ?? ''));
-        if ($label === '') {
-            $label = trim((string) ($row['name'] ?? 'Categoria'));
-        }
+        $label = plugin_dashglpi_ticket_create_category_path_label($row);
 
         $categories[] = [
             'id' => (int) ($row['id'] ?? 0),
@@ -322,6 +412,53 @@ function plugin_dashglpi_ticket_create_categories(int $entitiesId, int $type): a
     }
 
     return $categories;
+}
+
+function plugin_dashglpi_ticket_create_category_path_label(array $row): string
+{
+    global $DB;
+
+    $parts = [];
+    $currentName = trim((string) ($row['name'] ?? ''));
+    if ($currentName !== '') {
+        $parts[] = $currentName;
+    }
+
+    $parentId = (int) ($row['itilcategories_id'] ?? 0);
+    $visited = [(int) ($row['id'] ?? 0)];
+    $guard = 0;
+
+    while ($parentId > 0 && $guard < 100 && !in_array($parentId, $visited, true)) {
+        $visited[] = $parentId;
+        $iterator = $DB->request([
+            'SELECT' => ['id', 'name', 'itilcategories_id'],
+            'FROM' => 'glpi_itilcategories',
+            'WHERE' => ['id' => $parentId],
+            'LIMIT' => 1,
+        ]);
+        $parent = null;
+        foreach ($iterator as $parentRow) {
+            $parent = $parentRow;
+            break;
+        }
+        if (!$parent) {
+            break;
+        }
+
+        $parentName = trim((string) ($parent['name'] ?? ''));
+        if ($parentName !== '') {
+            array_unshift($parts, $parentName);
+        }
+        $parentId = (int) ($parent['itilcategories_id'] ?? 0);
+        $guard++;
+    }
+
+    if ($parts) {
+        return implode(' > ', $parts);
+    }
+
+    $fallback = trim((string) ($row['completename'] ?? ''));
+    return $fallback !== '' ? $fallback : 'Categoria';
 }
 
 function plugin_dashglpi_ticket_create_attach_uploaded_files(array &$ticketInput, string $field): void

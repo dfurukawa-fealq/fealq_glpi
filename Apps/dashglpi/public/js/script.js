@@ -1,11 +1,13 @@
 // ==================== GLOBAL VARIABLES ====================
 const PLUGIN_ROOT = (typeof DASHGLPI_ROOT !== 'undefined') ? DASHGLPI_ROOT : '';
 const HOURLY_RANGE_OPTIONS = [1, 3, 6, 12, 24, 48];
-const FUNCTIONAL_PAGE_KEYS = ['dashboard', 'tickets', 'sla', 'ranking', 'assets'];
+const FUNCTIONAL_PAGE_KEYS = ['dashboard', 'tickets', 'ticketsKanban', 'sla', 'ranking', 'assets'];
 const AUXILIARY_HASH_PAGE_KEYS = ['ticketNew', 'computerImport', 'monitorImport', 'ticketImport'];
 const TV_ROTATION_PAGE_KEYS = ['dashboard', 'sla', 'ranking', 'assets'];
 const ALLOWED_FUNCTIONAL_PAGES = Array.isArray(typeof DASHGLPI_ALLOWED_PAGES !== 'undefined' ? DASHGLPI_ALLOWED_PAGES : null)
-    ? DASHGLPI_ALLOWED_PAGES.filter((pageId) => FUNCTIONAL_PAGE_KEYS.includes(pageId))
+    ? DASHGLPI_ALLOWED_PAGES
+        .filter((pageId) => FUNCTIONAL_PAGE_KEYS.includes(pageId))
+        .concat(DASHGLPI_ALLOWED_PAGES.includes('tickets') ? ['ticketsKanban'] : [])
     : [...FUNCTIONAL_PAGE_KEYS];
 const DEFAULT_FUNCTIONAL_PAGE = typeof DASHGLPI_DEFAULT_PAGE === 'string' && DASHGLPI_DEFAULT_PAGE !== ''
     ? DASHGLPI_DEFAULT_PAGE
@@ -60,6 +62,9 @@ function pageSectionExists(pageId) {
 function pageAllowed(pageId) {
     if (!isFunctionalPage(pageId)) {
         return true;
+    }
+    if (String(pageId || '') === 'ticketsKanban') {
+        return ALLOWED_FUNCTIONAL_PAGES.includes('tickets') || ALLOWED_FUNCTIONAL_PAGES.includes('ticketsKanban');
     }
     return ALLOWED_FUNCTIONAL_PAGES.includes(String(pageId || ''));
 }
@@ -132,7 +137,8 @@ const DashState = {
     assetsDataGlobal: [],
     ticketsDataGlobal: [],
     ticketsSortState: { key: 'date', direction: 'desc' },
-    ticketsPaginationState: { page: 1 },
+    ticketsPaginationState: { page: 1, pageSize: 10 },
+    ticketStatusFilter: ['1', '3', '2', '4'],
     ticketsView: 'list',
     slaDataGlobal: [],
     slaSummaryGlobal: { critical: 0, warning: 0, unassigned: 0, ok: 0, avg_open_seconds: 0 },
@@ -164,8 +170,18 @@ const DashState = {
     followupCreateState: { attachments: [], uploadMaxLabel: '' },
 };
 
-const TICKETS_PAGE_SIZE_MOBILE = 10;
-const TICKETS_PAGE_SIZE_DESKTOP = 20;
+const TICKETS_PAGE_SIZE_DEFAULT = 10;
+const TICKETS_PAGE_SIZE_OPTIONS = [10, 20, 50, 100];
+const TICKET_STATUS_FILTER_DEFAULT = ['1', '3', '2', '4'];
+const TICKET_STATUS_FILTER_ALL = ['1', '3', '2', '4', '5', '6'];
+const TICKET_STATUS_FILTER_LABELS = {
+    1: 'Aberto',
+    3: 'Planejado',
+    2: 'Em Andamento',
+    4: 'Pendente',
+    5: 'Solucionando',
+    6: 'Fechado',
+};
 
 const ENTITY_SMTP_FIELD_IDS = {
     entities_id: 'entitySmtpEntityId',
@@ -507,6 +523,9 @@ function showPage(pageId, linkElement = null, options = {}) {
     }
     if (pageId === 'tickets') {
         loadTicketLists();
+    }
+    if (pageId === 'ticketsKanban') {
+        loadTicketLists().then(() => renderKanbanBoard());
     }
     if (pageId === 'assets') {
         loadFullAssets();
@@ -1824,8 +1843,14 @@ function renderPagination(containerEl, { totalItems, pageSize, currentPage, onPa
     const totalPages = Math.max(1, Math.ceil(totalItems / pageSize));
     const page = Math.min(Math.max(1, currentPage), totalPages);
 
-    containerEl.hidden = totalPages <= 1;
+    containerEl.hidden = false;
     containerEl.innerHTML = `
+        <label class="pagination-size">
+            <span>Itens por página</span>
+            <select id="ticketsPageSizeSelect" aria-label="Itens por página">
+                ${TICKETS_PAGE_SIZE_OPTIONS.map(size => `<option value="${size}"${Number(size) === Number(pageSize) ? ' selected' : ''}>${size}</option>`).join('')}
+            </select>
+        </label>
         <button type="button" class="pagination-btn" data-page-action="prev"${page <= 1 ? ' disabled' : ''} title="Página anterior">
             <i class="fas fa-chevron-left"></i>
         </button>
@@ -1841,13 +1866,116 @@ function renderPagination(containerEl, { totalItems, pageSize, currentPage, onPa
             onPageChange(nextPage);
         });
     });
+
+    containerEl.querySelector('#ticketsPageSizeSelect')?.addEventListener('change', (event) => {
+        const value = Number(event.currentTarget.value) || TICKETS_PAGE_SIZE_DEFAULT;
+        DashState.ticketsPaginationState.pageSize = TICKETS_PAGE_SIZE_OPTIONS.includes(value) ? value : TICKETS_PAGE_SIZE_DEFAULT;
+        localStorage.setItem('dashglpi-tickets-page-size', String(DashState.ticketsPaginationState.pageSize));
+        DashState.ticketsPaginationState.page = 1;
+        renderTicketsTable();
+    });
 }
 
 function ticketsPageSize() {
-    return isMobileViewport() ? TICKETS_PAGE_SIZE_MOBILE : TICKETS_PAGE_SIZE_DESKTOP;
+    const saved = Number(localStorage.getItem('dashglpi-tickets-page-size') || DashState.ticketsPaginationState.pageSize || TICKETS_PAGE_SIZE_DEFAULT);
+    return TICKETS_PAGE_SIZE_OPTIONS.includes(saved) ? saved : TICKETS_PAGE_SIZE_DEFAULT;
+}
+
+function normalizeTicketStatusFilter(values) {
+    const allowed = new Set(TICKET_STATUS_FILTER_ALL);
+    const normalized = Array.from(values || [])
+        .map(value => String(value || '').trim())
+        .filter(value => allowed.has(value));
+    return Array.from(new Set(normalized));
+}
+
+function loadTicketStatusFilter() {
+    const raw = localStorage.getItem('dashglpi-tickets-status-filter');
+    if (!raw) {
+        DashState.ticketStatusFilter = TICKET_STATUS_FILTER_DEFAULT.slice();
+        return;
+    }
+
+    try {
+        const parsed = JSON.parse(raw);
+        DashState.ticketStatusFilter = normalizeTicketStatusFilter(Array.isArray(parsed) ? parsed : TICKET_STATUS_FILTER_DEFAULT);
+    } catch {
+        DashState.ticketStatusFilter = TICKET_STATUS_FILTER_DEFAULT.slice();
+    }
+}
+
+function saveTicketStatusFilter(values) {
+    DashState.ticketStatusFilter = normalizeTicketStatusFilter(values);
+    localStorage.setItem('dashglpi-tickets-status-filter', JSON.stringify(DashState.ticketStatusFilter));
+}
+
+function syncTicketStatusFilterControls() {
+    const selected = new Set(DashState.ticketStatusFilter || []);
+    document.querySelectorAll('[data-ticket-status-filter]').forEach(input => {
+        input.checked = selected.has(String(input.value || ''));
+    });
+
+    const toggle = document.getElementById('ticketsStatusFilterToggle');
+    if (toggle) {
+        const labels = TICKET_STATUS_FILTER_ALL
+            .filter(status => selected.has(status))
+            .map(status => TICKET_STATUS_FILTER_LABELS[status])
+            .filter(Boolean);
+        toggle.classList.toggle('is-active', selected.size !== TICKET_STATUS_FILTER_DEFAULT.length || !TICKET_STATUS_FILTER_DEFAULT.every(status => selected.has(status)));
+        toggle.title = labels.length ? `Status: ${labels.join(', ')}` : 'Nenhum status selecionado';
+    }
+}
+
+function selectedTicketStatusValues() {
+    return Array.from(document.querySelectorAll('[data-ticket-status-filter]:checked'))
+        .map(input => String(input.value || ''));
+}
+
+function initTicketStatusFilter() {
+    loadTicketStatusFilter();
+    syncTicketStatusFilterControls();
+
+    const toggle = document.getElementById('ticketsStatusFilterToggle');
+    const menu = document.getElementById('ticketsStatusFilterMenu');
+    if (toggle && menu) {
+        toggle.addEventListener('click', (event) => {
+            event.preventDefault();
+            event.stopPropagation();
+            const open = menu.hidden;
+            menu.hidden = !open;
+            toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+        });
+        menu.addEventListener('click', event => event.stopPropagation());
+    }
+
+    document.querySelectorAll('[data-ticket-status-filter]').forEach(input => {
+        input.addEventListener('change', () => {
+            saveTicketStatusFilter(selectedTicketStatusValues());
+            syncTicketStatusFilterControls();
+            DashState.ticketsPaginationState.page = 1;
+            renderTicketsTable();
+        });
+    });
+
+    document.getElementById('ticketsStatusFilterAll')?.addEventListener('click', () => {
+        saveTicketStatusFilter(TICKET_STATUS_FILTER_ALL);
+        syncTicketStatusFilterControls();
+        DashState.ticketsPaginationState.page = 1;
+        renderTicketsTable();
+    });
+
+    document.addEventListener('click', () => {
+        const currentMenu = document.getElementById('ticketsStatusFilterMenu');
+        const currentToggle = document.getElementById('ticketsStatusFilterToggle');
+        if (!currentMenu || currentMenu.hidden) return;
+        currentMenu.hidden = true;
+        currentToggle?.setAttribute('aria-expanded', 'false');
+    });
 }
 
 function initTicketSearchAndSort() {
+    initTicketStatusFilter();
+
     document.querySelectorAll('[data-tickets-itemtype]').forEach(btn => {
         btn.addEventListener('click', () => {
             const key = btn.getAttribute('data-tickets-itemtype') || 'ticket';
@@ -1865,6 +1993,7 @@ function initTicketSearchAndSort() {
 
     const input = document.getElementById('ticketsSearchInput');
     const mobileInput = document.getElementById('ticketsSearchInputMobile');
+    const kanbanInput = document.getElementById('ticketsKanbanSearch');
     if (input) {
         input.addEventListener('input', () => {
             if (mobileInput) mobileInput.value = input.value;
@@ -1881,12 +2010,11 @@ function initTicketSearchAndSort() {
             if (!document.getElementById('ticketsKanban')?.hidden) renderKanbanBoard();
         });
     }
-
-    document.querySelectorAll('#ticketsViewToggle [data-view]').forEach(button => {
-        button.addEventListener('click', () => {
-            setTicketsView(button.getAttribute('data-view') || 'list');
+    if (kanbanInput) {
+        kanbanInput.addEventListener('input', () => {
+            renderKanbanBoard();
         });
-    });
+    }
 
     window.addEventListener('resize', () => {
         if (currentVisiblePageId() !== 'tickets') return;
@@ -1922,29 +2050,12 @@ function initTicketSearchAndSort() {
 function syncTicketsView() {
     const mobile = isMobileViewport();
     const table = document.querySelector('#ticketsSection .table-responsive');
-    const kanban = document.getElementById('ticketsKanban');
     const cards = document.getElementById('ticketsCards');
-    const helpdesk = typeof DASHGLPI_IS_HELPDESK_VIEW !== 'undefined' && DASHGLPI_IS_HELPDESK_VIEW;
-    const view = (mobile || helpdesk) ? 'list' : DashState.ticketsView;
+    const view = 'list';
 
     if (table) table.hidden = !mobile && view === 'kanban';
-    if (kanban) kanban.hidden = mobile || view !== 'kanban';
     if (cards) cards.hidden = !mobile;
 
-    document.querySelectorAll('#ticketsViewToggle [data-view]').forEach(button => {
-        const active = button.getAttribute('data-view') === view;
-        button.classList.toggle('is-active', active);
-        button.setAttribute('aria-pressed', active ? 'true' : 'false');
-    });
-}
-
-function setTicketsView(view) {
-    if (!['list', 'kanban'].includes(view)) return;
-    if (DASHGLPI_IS_HELPDESK_VIEW && view === 'kanban') return;
-    DashState.ticketsView = view;
-    syncTicketsView();
-    renderTicketsTable();
-    if (!isMobileViewport() && view === 'kanban') renderKanbanBoard();
 }
 
 function renderTicketsTable() {
@@ -1954,7 +2065,11 @@ function renderTicketsTable() {
     syncTicketsView();
 
     const search = (document.getElementById('ticketsSearchInputMobile')?.value || document.getElementById('ticketsSearchInput')?.value || '').trim().toLowerCase();
+    const selectedStatuses = new Set(DashState.ticketStatusFilter || TICKET_STATUS_FILTER_DEFAULT);
     const filtered = DashState.ticketsDataGlobal.filter(ticket => {
+        if (!selectedStatuses.has(String(ticket.status || ''))) {
+            return false;
+        }
         if (!search) return true;
         return [
             ticket.id,
@@ -2005,41 +2120,17 @@ function renderTicketsTable() {
         }
     });
 
-    fullBody.innerHTML = DASHGLPI_IS_HELPDESK_VIEW
-        ? renderHelpdeskTicketsRows(pageItems)
-        : renderDefaultTicketsRows(pageItems);
-    if (DASHGLPI_IS_HELPDESK_VIEW) initHelpdeskTicketRowToggles();
-}
-
-function renderDefaultTicketsRows(tickets) {
-    return tickets.map(ticket => `
-        <tr data-ticket-detail="${ticket.id}" data-itemtype="${escHtml(ticket.itemtype || 'ticket')}" class="is-clickable">
-            <td><strong>#${ticket.id}</strong></td>
-            <td>
-                <div class="table-ticket-info">
-                    <div class="table-ticket-title">
-                        ${escHtml(ticket.name)}
-                        ${Number(ticket.notification_failed) === 1 ? '<i class="fas fa-triangle-exclamation notification-failure-icon" title="Falha no envio da notificacao"></i>' : ''}
-                    </div>
-                    <div class="table-ticket-id">${escHtml(ticket.category || 'Sem categoria')}</div>
-                </div>
-            </td>
-            <td data-label="Status" class="ticket-stage-cell">${renderTicketStage(ticket)}</td>
-            <td data-label="Tecnico">${escHtml(ticket.technician_name || '-')}</td>
-            <td data-label="Requerente">${escHtml(ticket.requester_name || '-')}</td>
-            <td data-label="Criado em"><span class="table-date">${escHtml(formatDateTime(ticket.date))}</span></td>
-            ${ticketReportsEnabled() ? `
-            <td>
-                ${renderTicketReportAction(ticket.id, ticket.itemtype || 'ticket')}
-            </td>
-            ` : ''}
-        </tr>
-    `).join('');
+    fullBody.innerHTML = renderHelpdeskTicketsRows(pageItems);
+    initHelpdeskTicketRowToggles();
 }
 
 function renderHelpdeskTicketsRows(tickets) {
     return tickets.map(ticket => {
         const ticketId = Number(ticket.id);
+        const actions = [
+            Number(ticket.readonly) === 1 ? '' : renderSelfServiceActions(ticket),
+            renderTicketReportAction(ticketId, ticket.itemtype || 'ticket'),
+        ].join('');
         return `
         <tr data-ticket-detail="${ticketId}" data-itemtype="${escHtml(ticket.itemtype || 'ticket')}" class="is-clickable ticket-helpdesk-main-row" aria-controls="ticket-helpdesk-extra-${ticketId}">
             <td>
@@ -2062,7 +2153,7 @@ function renderHelpdeskTicketsRows(tickets) {
             <td data-label="Status" class="ticket-stage-cell">${renderTicketStage(ticket)}</td>
             <td>
                 <div class="table-action-group">
-                    ${Number(ticket.readonly) === 1 ? '' : renderSelfServiceActions(ticket)}
+                    ${actions || '<span class="table-date">-</span>'}
                 </div>
             </td>
         </tr>
@@ -2169,7 +2260,7 @@ function renderTicketsCards(tickets) {
 }
 
 function ticketTableColspan() {
-    return (DASHGLPI_IS_HELPDESK_VIEW || ticketReportsEnabled()) ? 7 : 6;
+    return 4;
 }
 
 function renderSelfServiceActions(ticket) {

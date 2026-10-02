@@ -200,7 +200,10 @@ function dashglpi_attendance_update(Ticket $ticket, array $payload): array
     } elseif ($action === 'update_status') {
         dashglpi_attendance_require_capability($ticket, 'status');
         $status = (int) ($payload['status'] ?? 0);
-        if (!in_array($status, [1, 2, 3, 4], true) || !Ticket::isAllowedStatus($ticket->fields['status'], $status)) {
+        $knownStatuses = method_exists(Ticket::class, 'getAllStatusArray')
+            ? array_map('intval', array_keys(Ticket::getAllStatusArray()))
+            : [Ticket::INCOMING, Ticket::ASSIGNED, Ticket::PLANNED, Ticket::WAITING, Ticket::SOLVED, Ticket::CLOSED];
+        if (!in_array($status, $knownStatuses, true) || !Ticket::isAllowedStatus($ticket->fields['status'], $status)) {
             throw new RuntimeException('Transição não permitida. Para solucionar, registre uma solução.', 422);
         }
         $input['status'] = $status;

@@ -1,0 +1,137 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="pt-BR">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Chamado Solucionado - FEALQ</title>
+</head>
+<body style="margin: 0; padding: 0; background-color: #ebeff2; font-family: Arial, Helvetica, sans-serif; -webkit-font-smoothing: antialiased;">
+
+    <!-- CONTAINER EXTERNO -->
+    <table border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color: #ebeff2; width: 100%; padding: 20px 0;">
+        <tr>
+            <td align="center" style="padding: 10px;">
+
+                <!-- CONTAINER PRINCIPAL (600px Max) -->
+                <table border="0" cellpadding="0" cellspacing="0" width="600" style="max-width: 600px; width: 100%; background-color: #ffffff; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.05); border-collapse: separate;">
+                    
+                    <!-- HEADER (Azul Escuro FEALQ) -->
+                    <tr>
+                        <td align="center" bgcolor="#004158" style="background-color: #004158; padding: 35px 25px; border-top-left-radius: 8px; border-top-right-radius: 8px;">
+                            <img src="https://drive.google.com/thumbnail?id=1lrhY07_fxQujiattGnYOJieM0ZEWSdv3&sz=w1000" alt="FEALQ" style="display: block; margin: 0 auto 15px auto; max-width: 200px; width: 100%; height: auto; border: 0;" />
+                            <div style="color: #00bd9c; font-size: 13px; font-weight: bold; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 8px;">
+                                Central de Atendimento FEALQ
+                            </div>
+                            <h1 style="margin: 0; color: #ffffff; font-size: 24px; font-weight: bold; line-height: 1.3;">
+                                Chamado Solucionado
+                            </h1>
+                            <p style="margin: 8px 0 0 0; color: #cbd5e1; font-size: 14px;">
+                                Protocolo: <strong style="color: #ffffff;">##ticket.id##</strong>
+                            </p>
+                        </td>
+                    </tr>
+
+                    <!-- CORPO / CONTEÚDO -->
+                    <tr>
+                        <td style="padding: 30px 25px; background-color: #ffffff; color: #334155; font-size: 15px; line-height: 1.6;">
+                            
+                            <p style="margin: 0 0 20px 0; font-size: 15px;">
+                                Informamos que o chamado foi solucionado em nossa Central de Serviços. Abaixo seguem os dados do atendimento registrado:
+                            </p>
+
+                            <!-- CARD DE RESUMO DO TICKET -->
+                            <table border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 6px; margin-bottom: 25px; border-collapse: separate;">
+                                <tr>
+                                    <td style="padding: 15px 20px; font-size: 14px; color: #334155;">
+                                        <p style="margin: 0 0 8px 0;">
+                                            <strong style="color: #004158;">Título:</strong> 
+                                            <a href="##ticket.url##" target="_blank" style="color: #004158; font-weight: bold; text-decoration: underline;">##ticket.title##</a>
+                                        </p>
+                                        <p style="margin: 0;">
+                                            <strong style="color: #004158;">Unidade de Negócio:</strong> ##ticket.shortentity##
+                                        </p>
+                                    </td>
+                                </tr>
+                            </table>
+
+                            <p style="margin: 0 0 12px 0; font-size: 15px; font-weight: bold; color: #004158;">
+                                Último registro disponível:
+                            </p>
+
+                            <!-- LAÇO FOREACH FOLLOWUPS -->
+                            ##FOREACH LAST 1 followups##
+                            <table border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color: #f1f5f9; border-left: 4px solid #00bd9c; border-radius: 0 6px 6px 0; margin-bottom: 20px; border-collapse: separate;">
+                                <tr>
+                                    <td style="padding: 18px 20px; font-size: 14px; color: #334155;">
+                                        <p style="margin: 0 0 10px 0; line-height: 1.4;">
+                                            <strong style="color: #004158;">Autor do acompanhamento:</strong> ##followup.author##<br />
+                                            <span style="color: #64748b; font-size: 13px;"><strong>Data/Hora:</strong> ##followup.date##</span>
+                                        </p>
+                                        <div style="margin: 12px 0 0 0; padding-top: 10px; border-top: 1px solid #cbd5e1; font-size: 14px; color: #334155; line-height: 1.6;">
+                                            <strong style="color: #004158;">Conteúdo do acompanhamento:</strong><br />
+                                            ##followup.description##
+                                        </div>
+                                    </td>
+                                </tr>
+                            </table>
+                            ##ENDFOREACHfollowups##
+
+                            <!-- DESTAQUE DA DATA DE RESOLUÇÃO -->
+                            <p style="margin: 0 0 15px 0; font-size: 14px; padding: 12px; background-color: #f0fdfa; border: 1px solid #ccfbf1; border-radius: 6px;">
+                                O chamado foi solucionado em <strong style="color: #004158;">##ticket.closedate##</strong>.
+                            </p>
+
+                            <p style="margin: 0 0 15px 0; font-size: 14px;">
+                                Este atendimento foi gerenciado sob o protocolo <a href="##ticket.url##" target="_blank" style="color: #004158; font-weight: bold; text-decoration: underline;">##ticket.id##</a>.
+                            </p>
+
+                            <p style="margin: 0 0 25px 0; font-size: 14px;">
+                                Você pode obter maiores informações acessando a plataforma de atendimento através do botão a seguir:
+                            </p>
+
+                            <!-- BOTÃO CTA (Laranja Coral) -->
+                            <table border="0" cellpadding="0" cellspacing="0" width="100%" style="margin: 25px 0 10px 0;">
+                                <tr>
+                                    <td align="center">
+                                        <table border="0" cellpadding="0" cellspacing="0" style="border-collapse: separate;">
+                                            <tr>
+                                                <td align="center" bgcolor="#f87c56" style="border-radius: 6px; background-color: #f87c56;">
+                                                    <a href="##ticket.url##" target="_blank" style="display: inline-block; padding: 12px 28px; font-family: Arial, sans-serif; font-size: 15px; color: #ffffff; font-weight: bold; text-decoration: none; border-radius: 6px;">
+                                                        Acessar Chamado ##ticket.id##
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </table>
+
+                        </td>
+                    </tr>
+
+                    <!-- RODAPÉ (Azul Escuro FEALQ) -->
+                    <tr>
+                        <td bgcolor="#004158" style="background-color: #004158; padding: 25px 20px; text-align: center; border-bottom-left-radius: 8px; border-bottom-right-radius: 8px;">
+                            <p style="margin: 0 0 8px 0; color: #ffffff; font-size: 14px; font-weight: bold;">
+                                FEALQ - Fundação de Estudos Agrários Luiz de Queiroz
+                            </p>
+                            <p style="margin: 0 0 12px 0; color: #cbd5e1; font-size: 12px; line-height: 1.5;">
+                                Av. Centenário, 1080 - São Dimas, Piracicaba - SP, CEP: 13416-000<br />
+                                Telefone: (19) 3417-6600
+                            </p>
+                            <p style="margin: 0; color: #00bd9c; font-size: 11px; font-weight: bold;">
+                                © 2026 FEALQ • Todos os direitos reservados
+                            </p>
+                        </td>
+                    </tr>
+
+                </table>
+                <!-- FIM CONTAINER PRINCIPAL -->
+
+            </td>
+        </tr>
+    </table>
+    <!-- FIM CONTAINER EXTERNO -->
+
+</body>
+</html>
