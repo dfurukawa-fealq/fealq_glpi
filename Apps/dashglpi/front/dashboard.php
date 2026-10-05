@@ -1164,11 +1164,11 @@ $glpiPublicUrl = rtrim((string) dashglpi_env('GLPI_PUBLIC_URL', ''), '/');
                             <span>Minhas Tarefas</span>
                         </label>
                         <div class="tickets-status-filter">
-                            <button class="tickets-icon-filter" type="button" id="ticketsStatusFilterToggle" title="Filtrar por status" aria-label="Filtrar por status" aria-expanded="false" aria-controls="ticketsStatusFilterMenu">
+                            <button class="tickets-icon-filter" type="button" id="ticketsStatusFilterToggle" data-ticket-status-filter-toggle title="Filtrar por status" aria-label="Filtrar por status" aria-expanded="false" aria-controls="ticketsStatusFilterMenu">
                                 <i class="fas fa-filter" aria-hidden="true"></i>
                             </button>
-                            <div class="tickets-status-menu" id="ticketsStatusFilterMenu" hidden>
-                                <button class="tickets-status-all" type="button" id="ticketsStatusFilterAll">Todos</button>
+                            <div class="tickets-status-menu" id="ticketsStatusFilterMenu" data-ticket-status-filter-menu hidden>
+                                <button class="tickets-status-all" type="button" id="ticketsStatusFilterAll" data-ticket-status-filter-all>Todos</button>
                                 <label><input type="checkbox" data-ticket-status-filter value="1" checked> <span>Aberto</span></label>
                                 <label><input type="checkbox" data-ticket-status-filter value="3" checked> <span>Planejado</span></label>
                                 <label><input type="checkbox" data-ticket-status-filter value="2" checked> <span>Em Andamento</span></label>
@@ -1211,20 +1211,31 @@ $glpiPublicUrl = rtrim((string) dashglpi_env('GLPI_PUBLIC_URL', ''), '/');
         </div>
 
         <div class="page-section<?= $defaultPage === 'ticketsKanban' ? ' active' : '' ?>" id="ticketsKanbanSection" data-screen-type="ticketsKanban">
-            <header class="page-header">
-                <div class="page-title-wrapper">
-                    <h1>Kanban</h1>
-                    <div class="page-subtitle">
-                        <i class="fas fa-columns"></i>
-                        <span>Quadro de chamados por estágio</span>
-                    </div>
-                </div>
-            </header>
             <div class="glass-card table-card">
                 <div class="tickets-toolbar">
                     <div class="tickets-search">
                         <i class="fas fa-search"></i>
                         <input type="text" id="ticketsKanbanSearch" placeholder="Buscar por ID, título, técnico, requerente, categoria ou status...">
+                    </div>
+                    <div class="tickets-toolbar-actions">
+                        <label class="dash-filter-check" title="<?= !empty($userContext['lock_my_tasks']) ? 'Filtro bloqueado pela regra do perfil efetivo' : 'Mostrar apenas chamados vinculados ao usuário atual' ?>">
+                            <input type="checkbox" id="ticketsKanbanMyTasksFilter" data-my-tasks-filter<?= !empty($userContext['lock_my_tasks']) ? ' checked disabled' : '' ?>>
+                            <span>Minhas Tarefas</span>
+                        </label>
+                        <div class="tickets-status-filter">
+                            <button class="tickets-icon-filter" type="button" id="ticketsKanbanStatusFilterToggle" data-ticket-status-filter-toggle title="Filtrar por status" aria-label="Filtrar por status" aria-expanded="false" aria-controls="ticketsKanbanStatusFilterMenu">
+                                <i class="fas fa-filter" aria-hidden="true"></i>
+                            </button>
+                            <div class="tickets-status-menu" id="ticketsKanbanStatusFilterMenu" data-ticket-status-filter-menu hidden>
+                                <button class="tickets-status-all" type="button" id="ticketsKanbanStatusFilterAll" data-ticket-status-filter-all>Todos</button>
+                                <label><input type="checkbox" data-ticket-status-filter value="1" checked> <span>Aberto</span></label>
+                                <label><input type="checkbox" data-ticket-status-filter value="3" checked> <span>Planejado</span></label>
+                                <label><input type="checkbox" data-ticket-status-filter value="2" checked> <span>Em Andamento</span></label>
+                                <label><input type="checkbox" data-ticket-status-filter value="4" checked> <span>Pendente</span></label>
+                                <label><input type="checkbox" data-ticket-status-filter value="5" checked> <span>Solucionando</span></label>
+                                <label><input type="checkbox" data-ticket-status-filter value="6" checked> <span>Fechado</span></label>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div id="ticketsKanban" class="kanban-container"></div>
@@ -2982,6 +2993,69 @@ $glpiPublicUrl = rtrim((string) dashglpi_env('GLPI_PUBLIC_URL', ''), '/');
         </div>
         <?php endif; ?>
     </main>
+
+    <?php if ($canTickets): ?>
+    <div class="modal-overlay dash-modal" id="kanbanTaskModal" hidden>
+        <div class="dash-modal-card kanban-task-modal-card" role="dialog" aria-modal="true" aria-labelledby="kanbanTaskModalTitle">
+            <div class="dash-modal-header">
+                <div>
+                    <h2 id="kanbanTaskModalTitle">Nova Tarefa</h2>
+                    <p>Coluna: <strong id="kanbanTaskStatusLabel">Aberto</strong></p>
+                </div>
+                <button type="button" class="icon-btn" data-kanban-task-close aria-label="Fechar">
+                    <i class="fas fa-times" aria-hidden="true"></i>
+                </button>
+            </div>
+            <form class="admin-form kanban-task-form" id="kanbanTaskForm">
+                <input type="hidden" name="status" id="kanbanTaskStatus" value="1">
+                <label class="admin-field">
+                    <span>Título</span>
+                    <input type="text" name="name" maxlength="255" required placeholder="Ex.: Revisar backup diário">
+                </label>
+                <label class="admin-field">
+                    <span>Descrição</span>
+                    <textarea name="content" rows="4" placeholder="Detalhes rápidos da tarefa"></textarea>
+                </label>
+                <label class="admin-field">
+                    <span>Responsável</span>
+                    <input type="hidden" name="owner_users_id" id="kanbanTaskOwnerId" value="<?= (int) ($userContext['user_id'] ?? 0) ?>">
+                    <div class="attendance-actor-field kanban-task-owner-field">
+                        <div class="attendance-actor-picker">
+                            <div class="attendance-actor-tags" id="kanbanTaskOwnerTags">
+                                <span class="attendance-actor-tag" data-kanban-owner-tag>
+                                    <i class="fas fa-user" aria-hidden="true"></i>
+                                    <span><?= htmlspecialchars((string) ($currentUser['display'] ?? 'usuário atual'), ENT_QUOTES, 'UTF-8') ?></span>
+                                </span>
+                                <input type="search" id="kanbanTaskOwnerSearch" autocomplete="off" aria-label="Pesquisar responsável">
+                            </div>
+                            <div class="attendance-actor-options" id="kanbanTaskOwnerOptions" hidden></div>
+                        </div>
+                    </div>
+                    <small>Inicialmente a tarefa fica autoassumida por quem cria.</small>
+                </label>
+                <label class="admin-field">
+                    <span>Prioridade</span>
+                    <select name="priority">
+                        <option value="1">Muito baixa</option>
+                        <option value="2">Baixa</option>
+                        <option value="3" selected>Média</option>
+                        <option value="4">Alta</option>
+                        <option value="5">Muito alta</option>
+                    </select>
+                </label>
+                <div class="kanban-task-modal-actions">
+                    <button type="button" class="page-action-btn" data-kanban-task-close>
+                        <span>Cancelar</span>
+                    </button>
+                    <button type="submit" class="admin-submit">
+                        <span>Criar Tarefa</span>
+                    </button>
+                </div>
+                <div class="admin-status" id="kanbanTaskFormStatus"></div>
+            </form>
+        </div>
+    </div>
+    <?php endif; ?>
 
     <?php if ($canAssets): ?>
     <!-- Cyberpunk Asset Modal -->

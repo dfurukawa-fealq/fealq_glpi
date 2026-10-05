@@ -136,6 +136,8 @@ const DashState = {
     dashboardDataLoadedOnce: false,
     assetsDataGlobal: [],
     ticketsDataGlobal: [],
+    kanbanTasksGlobal: [],
+    kanbanTaskCreateStatus: 1,
     ticketsSortState: { key: 'date', direction: 'desc' },
     ticketsPaginationState: { page: 1, pageSize: 10 },
     ticketStatusFilter: ['1', '3', '2', '4', '5', '6'],
@@ -1813,6 +1815,9 @@ async function loadTicketLists() {
             throw new Error('Resposta inválida ao carregar chamados.');
         }
         DashState.ticketsDataGlobal = Array.isArray(tickets) ? tickets : [];
+        if (pageSectionExists('ticketsKanban')) {
+            await loadKanbanTasks();
+        }
         renderTicketsTable();
         if (!document.getElementById('ticketsKanban')?.hidden) renderKanbanBoard();
         sessionStorage.removeItem('dashglpi_tickets_reload_attempted');
@@ -1914,6 +1919,22 @@ function loadTicketStatusFilter() {
     }
 }
 
+async function loadKanbanTasks() {
+    try {
+        const response = await fetch(`${PLUGIN_ROOT}/ajax/kanban_tasks.php?my_tasks=${(MY_TASKS_FILTER_LOCKED || DashState.myTasksOnly) ? '1' : '0'}&_ts=${Date.now()}`, {
+            headers: { 'Accept': 'application/json' },
+        });
+        const tasks = await response.json();
+        if (!response.ok) {
+            throw new Error(tasks?.error || 'Erro ao carregar tarefas do Kanban.');
+        }
+        DashState.kanbanTasksGlobal = Array.isArray(tasks) ? tasks : [];
+    } catch (error) {
+        console.error('Error loading kanban tasks:', error);
+        DashState.kanbanTasksGlobal = [];
+    }
+}
+
 function saveTicketStatusFilter(values) {
     DashState.ticketStatusFilter = normalizeTicketStatusFilter(values);
     localStorage.setItem('dashglpi-tickets-status-filter', JSON.stringify(DashState.ticketStatusFilter));
@@ -1925,15 +1946,14 @@ function syncTicketStatusFilterControls() {
         input.checked = selected.has(String(input.value || ''));
     });
 
-    const toggle = document.getElementById('ticketsStatusFilterToggle');
-    if (toggle) {
+    document.querySelectorAll('[data-ticket-status-filter-toggle]').forEach(toggle => {
         const labels = TICKET_STATUS_FILTER_ALL
             .filter(status => selected.has(status))
             .map(status => TICKET_STATUS_FILTER_LABELS[status])
             .filter(Boolean);
         toggle.classList.toggle('is-active', selected.size !== TICKET_STATUS_FILTER_DEFAULT.length || !TICKET_STATUS_FILTER_DEFAULT.every(status => selected.has(status)));
         toggle.title = labels.length ? `Status: ${labels.join(', ')}` : 'Nenhum status selecionado';
-    }
+    });
 }
 
 function selectedTicketStatusValues() {
@@ -1941,45 +1961,68 @@ function selectedTicketStatusValues() {
         .map(input => String(input.value || ''));
 }
 
+function nextTicketStatusValuesFromInput(input) {
+    const selected = new Set(DashState.ticketStatusFilter || TICKET_STATUS_FILTER_DEFAULT);
+    const value = String(input?.value || '');
+    if (input?.checked) {
+        selected.add(value);
+    } else {
+        selected.delete(value);
+    }
+    return TICKET_STATUS_FILTER_ALL.filter(status => selected.has(status));
+}
+
 function initTicketStatusFilter() {
     loadTicketStatusFilter();
     syncTicketStatusFilterControls();
 
-    const toggle = document.getElementById('ticketsStatusFilterToggle');
-    const menu = document.getElementById('ticketsStatusFilterMenu');
-    if (toggle && menu) {
+    document.querySelectorAll('[data-ticket-status-filter-toggle]').forEach(toggle => {
+        const menuId = toggle.getAttribute('aria-controls');
+        const menu = menuId ? document.getElementById(menuId) : toggle.closest('.tickets-status-filter')?.querySelector('[data-ticket-status-filter-menu]');
+        if (!menu) return;
         toggle.addEventListener('click', (event) => {
             event.preventDefault();
             event.stopPropagation();
             const open = menu.hidden;
+            document.querySelectorAll('[data-ticket-status-filter-menu]').forEach(otherMenu => {
+                if (otherMenu !== menu) otherMenu.hidden = true;
+            });
+            document.querySelectorAll('[data-ticket-status-filter-toggle]').forEach(otherToggle => {
+                if (otherToggle !== toggle) otherToggle.setAttribute('aria-expanded', 'false');
+            });
             menu.hidden = !open;
             toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
         });
         menu.addEventListener('click', event => event.stopPropagation());
-    }
+    });
 
     document.querySelectorAll('[data-ticket-status-filter]').forEach(input => {
         input.addEventListener('change', () => {
-            saveTicketStatusFilter(selectedTicketStatusValues());
+            saveTicketStatusFilter(nextTicketStatusValuesFromInput(input));
             syncTicketStatusFilterControls();
             DashState.ticketsPaginationState.page = 1;
             renderTicketsTable();
+            if (!document.getElementById('ticketsKanban')?.hidden) renderKanbanBoard();
         });
     });
 
-    document.getElementById('ticketsStatusFilterAll')?.addEventListener('click', () => {
-        saveTicketStatusFilter(TICKET_STATUS_FILTER_ALL);
-        syncTicketStatusFilterControls();
-        DashState.ticketsPaginationState.page = 1;
-        renderTicketsTable();
+    document.querySelectorAll('[data-ticket-status-filter-all]').forEach(button => {
+        button.addEventListener('click', () => {
+            saveTicketStatusFilter(TICKET_STATUS_FILTER_ALL);
+            syncTicketStatusFilterControls();
+            DashState.ticketsPaginationState.page = 1;
+            renderTicketsTable();
+            if (!document.getElementById('ticketsKanban')?.hidden) renderKanbanBoard();
+        });
     });
 
     document.addEventListener('click', () => {
-        const currentMenu = document.getElementById('ticketsStatusFilterMenu');
-        const currentToggle = document.getElementById('ticketsStatusFilterToggle');
-        if (!currentMenu || currentMenu.hidden) return;
-        currentMenu.hidden = true;
-        currentToggle?.setAttribute('aria-expanded', 'false');
+        document.querySelectorAll('[data-ticket-status-filter-menu]').forEach(menu => {
+            menu.hidden = true;
+        });
+        document.querySelectorAll('[data-ticket-status-filter-toggle]').forEach(toggle => {
+            toggle.setAttribute('aria-expanded', 'false');
+        });
     });
 }
 
@@ -2068,31 +2111,50 @@ function syncTicketsView() {
 
 }
 
+function ticketFilterSearchValue(inputId = null) {
+    if (inputId) {
+        return (document.getElementById(inputId)?.value || '').trim().toLowerCase();
+    }
+    return (document.getElementById('ticketsSearchInputMobile')?.value || document.getElementById('ticketsSearchInput')?.value || '').trim().toLowerCase();
+}
+
+function ticketMatchesTicketsFilters(ticket, search, selectedStatuses) {
+    if (!selectedStatuses.has(String(ticket.status || ''))) {
+        return false;
+    }
+    if (!search) return true;
+    return [
+        ticket.id,
+        ticket.name,
+        ticket.category,
+        ticket.technician_name,
+        ticket.requester_name,
+        ticket.stage,
+        getStatusLabel(ticket.status),
+        ticket.date,
+        ticket.time_to_resolve
+    ].some(value => String(value || '').toLowerCase().includes(search));
+}
+
+function filteredTicketsForCurrentFilters(searchInputId = null) {
+    const search = ticketFilterSearchValue(searchInputId);
+    const selectedStatuses = new Set(DashState.ticketStatusFilter || TICKET_STATUS_FILTER_DEFAULT);
+    return DashState.ticketsDataGlobal.filter(ticket => ticketMatchesTicketsFilters(ticket, search, selectedStatuses));
+}
+
+function filteredKanbanTasksForCurrentFilters(searchInputId = null) {
+    const search = ticketFilterSearchValue(searchInputId);
+    const selectedStatuses = new Set(DashState.ticketStatusFilter || TICKET_STATUS_FILTER_DEFAULT);
+    return (DashState.kanbanTasksGlobal || []).filter(task => ticketMatchesTicketsFilters(task, search, selectedStatuses));
+}
+
 function renderTicketsTable() {
     const fullBody = document.getElementById('tickets-full-body');
     if (!fullBody) return;
 
     syncTicketsView();
 
-    const search = (document.getElementById('ticketsSearchInputMobile')?.value || document.getElementById('ticketsSearchInput')?.value || '').trim().toLowerCase();
-    const selectedStatuses = new Set(DashState.ticketStatusFilter || TICKET_STATUS_FILTER_DEFAULT);
-    const filtered = DashState.ticketsDataGlobal.filter(ticket => {
-        if (!selectedStatuses.has(String(ticket.status || ''))) {
-            return false;
-        }
-        if (!search) return true;
-        return [
-            ticket.id,
-            ticket.name,
-            ticket.category,
-            ticket.technician_name,
-            ticket.requester_name,
-            ticket.stage,
-            getStatusLabel(ticket.status),
-            ticket.date,
-            ticket.time_to_resolve
-        ].some(value => String(value || '').toLowerCase().includes(search));
-    });
+    const filtered = filteredTicketsForCurrentFilters();
 
     filtered.sort((a, b) => compareTicketValues(a, b, DashState.ticketsSortState.key, DashState.ticketsSortState.direction));
     updateTicketSortIcons();
