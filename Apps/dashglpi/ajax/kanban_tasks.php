@@ -55,5 +55,19 @@ dashglpi_ajax_bridge_endpoint('kanban_tasks', static function (): array {
         return ['task' => dashglpi_kanban_task_update_status($taskId, (int) ($_POST['status'] ?? 0))];
     }
 
+    if ($action === 'reorder') {
+        $taskId = max(0, (int) ($_POST['task_id'] ?? 0));
+        if ($taskId <= 0) {
+            throw new RuntimeException('Tarefa inválida.');
+        }
+
+        $orderedIds = json_decode((string) ($_POST['ordered_ids'] ?? '[]'), true);
+        if (!is_array($orderedIds)) {
+            throw new RuntimeException('Ordem inválida.');
+        }
+
+        return ['task' => dashglpi_kanban_task_reorder($taskId, (int) ($_POST['status'] ?? 0), $orderedIds)];
+    }
+
     throw new RuntimeException('Ação inválida.');
 }, 'Erro ao salvar tarefa do Kanban.');

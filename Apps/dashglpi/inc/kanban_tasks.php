@@ -18,6 +18,7 @@ function dashglpi_kanban_tasks_ensure_schema(): void
             `content` TEXT NULL,
             `status` TINYINT UNSIGNED NOT NULL DEFAULT 1,
             `priority` TINYINT UNSIGNED NOT NULL DEFAULT 3,
+            `nseq` INT UNSIGNED NOT NULL DEFAULT 0,
             `entities_id` INT UNSIGNED NOT NULL DEFAULT 0,
             `owner_users_id` INT UNSIGNED NOT NULL DEFAULT 0,
             `creator_users_id` INT UNSIGNED NOT NULL DEFAULT 0,
@@ -26,12 +27,26 @@ function dashglpi_kanban_tasks_ensure_schema(): void
             `date_creation` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
             `date_mod` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
             PRIMARY KEY (`id`),
-            KEY `idx_dashglpi_kanban_tasks_entity_status` (`entities_id`, `status`, `is_deleted`),
+            KEY `idx_dashglpi_kanban_tasks_entity_status` (`entities_id`, `status`, `nseq`, `is_deleted`),
             KEY `idx_dashglpi_kanban_tasks_owner` (`owner_users_id`, `is_deleted`)
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci"
     );
 
+    dashglpi_kanban_tasks_ensure_column('nseq', 'ALTER TABLE `' . DASHGLPI_KANBAN_TASKS_TABLE . '` ADD COLUMN `nseq` INT UNSIGNED NOT NULL DEFAULT 0 AFTER `priority`');
+
     $done = true;
+}
+
+function dashglpi_kanban_tasks_ensure_column(string $columnName, string $alterSql): void
+{
+    $pdo = dashglpi_db();
+    $exists = $pdo->query(
+        'SHOW COLUMNS FROM `' . DASHGLPI_KANBAN_TASKS_TABLE . '` LIKE ' . $pdo->quote($columnName)
+    )->fetch();
+
+    if (!$exists) {
+        $pdo->exec($alterSql);
+    }
 }
 
 function dashglpi_kanban_task_valid_status(int $status): int
@@ -140,7 +155,7 @@ function dashglpi_kanban_tasks_list(array $filters = []): array
     $creatorLabel = dashglpi_kanban_task_user_label_sql('creator');
 
     $rows = dashglpi_fetch_all(
-        "SELECT kt.id, kt.name, kt.content, kt.status, kt.priority, kt.entities_id,
+        "SELECT kt.id, kt.name, kt.content, kt.status, kt.priority, kt.nseq, kt.entities_id,
                 kt.owner_users_id, kt.creator_users_id, kt.due_date,
                 kt.date_creation AS date, kt.date_mod,
                 COALESCE(e.completename, e.name, 'Entidade raiz') AS entity_name,
@@ -151,7 +166,7 @@ function dashglpi_kanban_tasks_list(array $filters = []): array
          LEFT JOIN glpi_users owner ON owner.id = kt.owner_users_id
          LEFT JOIN glpi_users creator ON creator.id = kt.creator_users_id
          WHERE kt.is_deleted = 0" . $scope['sql'] . "
-         ORDER BY kt.date_mod DESC, kt.id DESC
+         ORDER BY kt.status ASC, kt.nseq ASC, kt.date_mod DESC, kt.id DESC
          LIMIT 500",
         $scope['params']
     );
@@ -179,6 +194,7 @@ function dashglpi_kanban_task_view_model(array $row): array
         'status_label' => dashglpi_kanban_task_status_label($status),
         'priority' => max(1, min(5, (int) ($row['priority'] ?? 3))),
         'priority_label' => 'Prioridade ' . max(1, min(5, (int) ($row['priority'] ?? 3))),
+        'nseq' => (int) ($row['nseq'] ?? 0),
         'entities_id' => (int) ($row['entities_id'] ?? 0),
         'entity_name' => (string) ($row['entity_name'] ?? 'Entidade raiz'),
         'technician_name' => $ownerName,
@@ -235,13 +251,14 @@ function dashglpi_kanban_task_create(array $input): array
     $entityId = dashglpi_kanban_task_default_entity_id();
     $ownerId = dashglpi_kanban_task_owner_id($input, $userId);
     $content = trim((string) ($input['content'] ?? ''));
+    $nseq = dashglpi_kanban_task_next_nseq($status, $entityId);
 
     $stmt = dashglpi_db()->prepare(
         'INSERT INTO `' . DASHGLPI_KANBAN_TASKS_TABLE . '`
-            (name, content, status, priority, entities_id, owner_users_id, creator_users_id, date_creation, date_mod)
-         VALUES (?, ?, ?, ?, ?, ?, ?, NOW(), NOW())'
+            (name, content, status, priority, nseq, entities_id, owner_users_id, creator_users_id, date_creation, date_mod)
+         VALUES (?, ?, ?, ?, ?, ?, ?, ?, NOW(), NOW())'
     );
-    $stmt->execute([$name, $content, $status, $priority, $entityId, $ownerId, $userId]);
+    $stmt->execute([$name, $content, $status, $priority, $nseq, $entityId, $ownerId, $userId]);
 
     $taskId = (int) dashglpi_db()->lastInsertId();
     return dashglpi_kanban_task_get($taskId);
@@ -254,7 +271,7 @@ function dashglpi_kanban_task_get(int $taskId): array
     $ownerLabel = dashglpi_kanban_task_user_label_sql('owner');
     $creatorLabel = dashglpi_kanban_task_user_label_sql('creator');
     $row = dashglpi_fetch_one(
-        "SELECT kt.id, kt.name, kt.content, kt.status, kt.priority, kt.entities_id,
+        "SELECT kt.id, kt.name, kt.content, kt.status, kt.priority, kt.nseq, kt.entities_id,
                 kt.owner_users_id, kt.creator_users_id, kt.due_date,
                 kt.date_creation AS date, kt.date_mod,
                 COALESCE(e.completename, e.name, 'Entidade raiz') AS entity_name,
@@ -307,11 +324,75 @@ function dashglpi_kanban_task_update_status(int $taskId, int $status): array
     dashglpi_kanban_tasks_ensure_schema();
     dashglpi_kanban_task_assert_access($taskId);
     $status = dashglpi_kanban_task_valid_status($status);
+    $task = dashglpi_kanban_task_get($taskId);
+    $nseq = (int) ($task['status'] ?? 0) === $status
+        ? (int) ($task['nseq'] ?? 0)
+        : dashglpi_kanban_task_next_nseq($status, (int) ($task['entities_id'] ?? 0));
 
     $stmt = dashglpi_db()->prepare(
-        'UPDATE `' . DASHGLPI_KANBAN_TASKS_TABLE . '` SET status = ?, date_mod = NOW() WHERE id = ? AND is_deleted = 0'
+        'UPDATE `' . DASHGLPI_KANBAN_TASKS_TABLE . '` SET status = ?, nseq = ?, date_mod = NOW() WHERE id = ? AND is_deleted = 0'
     );
-    $stmt->execute([$status, $taskId]);
+    $stmt->execute([$status, $nseq, $taskId]);
+
+    return dashglpi_kanban_task_get($taskId);
+}
+
+function dashglpi_kanban_task_next_nseq(int $status, int $entityId): int
+{
+    dashglpi_kanban_tasks_ensure_schema();
+    $row = dashglpi_fetch_one(
+        'SELECT MAX(nseq) AS max_nseq
+         FROM `' . DASHGLPI_KANBAN_TASKS_TABLE . '`
+         WHERE status = ? AND entities_id = ? AND is_deleted = 0',
+        [dashglpi_kanban_task_valid_status($status), max(0, $entityId)]
+    );
+
+    return $row && $row['max_nseq'] !== null ? ((int) $row['max_nseq']) + 1 : 0;
+}
+
+function dashglpi_kanban_task_reorder(int $taskId, int $status, array $orderedIds): array
+{
+    dashglpi_kanban_tasks_ensure_schema();
+    dashglpi_kanban_task_assert_access($taskId);
+    $status = dashglpi_kanban_task_valid_status($status);
+
+    $ids = [];
+    foreach ($orderedIds as $rawId) {
+        $id = max(0, (int) $rawId);
+        if ($id > 0 && !in_array($id, $ids, true)) {
+            $ids[] = $id;
+        }
+    }
+    if (!in_array($taskId, $ids, true)) {
+        $ids[] = $taskId;
+    }
+
+    $pdo = dashglpi_db();
+    $pdo->beginTransaction();
+    try {
+        $move = $pdo->prepare(
+            'UPDATE `' . DASHGLPI_KANBAN_TASKS_TABLE . '`
+             SET status = ?, date_mod = NOW()
+             WHERE id = ? AND is_deleted = 0'
+        );
+        $move->execute([$status, $taskId]);
+
+        $seq = 0;
+        $update = $pdo->prepare(
+            'UPDATE `' . DASHGLPI_KANBAN_TASKS_TABLE . '`
+             SET nseq = ?, date_mod = NOW()
+             WHERE id = ? AND status = ? AND is_deleted = 0'
+        );
+        foreach ($ids as $id) {
+            dashglpi_kanban_task_assert_access($id);
+            $update->execute([$seq, $id, $status]);
+            $seq++;
+        }
+        $pdo->commit();
+    } catch (Throwable $e) {
+        $pdo->rollBack();
+        throw $e;
+    }
 
     return dashglpi_kanban_task_get($taskId);
 }
@@ -342,13 +423,17 @@ function dashglpi_kanban_task_update(int $taskId, array $input): array
     $status = dashglpi_kanban_task_valid_status((int) ($input['status'] ?? 1));
     $priority = max(1, min(5, (int) ($input['priority'] ?? 3)));
     $ownerId = dashglpi_kanban_task_owner_id($input, $userId);
+    $current = dashglpi_kanban_task_get($taskId);
+    $nseq = (int) ($current['status'] ?? 0) === $status
+        ? (int) ($current['nseq'] ?? 0)
+        : dashglpi_kanban_task_next_nseq($status, (int) ($current['entities_id'] ?? 0));
 
     $stmt = dashglpi_db()->prepare(
         'UPDATE `' . DASHGLPI_KANBAN_TASKS_TABLE . '`
-         SET name = ?, content = ?, status = ?, priority = ?, owner_users_id = ?, date_mod = NOW()
+         SET name = ?, content = ?, status = ?, priority = ?, nseq = ?, owner_users_id = ?, date_mod = NOW()
          WHERE id = ? AND is_deleted = 0'
     );
-    $stmt->execute([$name, $content, $status, $priority, $ownerId, $taskId]);
+    $stmt->execute([$name, $content, $status, $priority, $nseq, $ownerId, $taskId]);
 
     return dashglpi_kanban_task_get($taskId);
 }

@@ -5409,6 +5409,16 @@ body.light-mode .kanban-task-card {
     color: var(--primary);
 }
 
+.kanban-card-seq {
+    font-size: 0.68rem;
+    font-weight: 700;
+    color: var(--text-muted);
+    background: rgba(148, 163, 184, 0.14);
+    border: 1px solid rgba(148, 163, 184, 0.22);
+    border-radius: 999px;
+    padding: 1px 6px;
+}
+
 .priority-dot {
     width: 8px;
     height: 8px;

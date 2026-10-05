@@ -19,6 +19,22 @@ function kanbanTicketColumn(ticket) {
     return col ? col.id : null;
 }
 
+function isDashglpiKanbanTask(item) {
+    return Number(item?.is_dashglpi_task) === 1 || item?.itemtype === 'dashglpi_task';
+}
+
+function sortKanbanColumnCards(cards) {
+    return [...cards].sort((a, b) => {
+        if (isDashglpiKanbanTask(a) && isDashglpiKanbanTask(b)) {
+            const aSeq = Number(a.nseq || 0);
+            const bSeq = Number(b.nseq || 0);
+            if (aSeq !== bSeq) return aSeq - bSeq;
+            return Number(a.id || 0) - Number(b.id || 0);
+        }
+        return 0;
+    });
+}
+
 function renderKanbanBoard() {
     const board = document.getElementById('ticketsKanban');
     if (!board) return;
@@ -40,7 +56,7 @@ function renderKanbanBoard() {
     });
 
     board.innerHTML = `<div class="kanban-board">${visibleColumns.map(col => {
-        const cards = grouped[col.id] || [];
+        const cards = sortKanbanColumnCards(grouped[col.id] || []);
         const colorVar = col.color === 'muted' ? 'var(--text-muted)' : `var(--${col.color})`;
         return `
         <div class="kanban-column">
@@ -65,7 +81,7 @@ function renderKanbanBoard() {
 }
 
 function kanbanCardHtml(t, col) {
-    if (Number(t.is_dashglpi_task) === 1 || t.itemtype === 'dashglpi_task') {
+    if (isDashglpiKanbanTask(t)) {
         return kanbanTaskCardHtml(t);
     }
 
@@ -106,10 +122,12 @@ function kanbanCardHtml(t, col) {
 
 function kanbanTaskCardHtml(t) {
     const owner = t.owner_name || t.technician_name || '-';
+    const nseq = Number(t.nseq || 0);
     return `
-    <div class="kanban-card kanban-task-card" data-kanban-task-id="${Number(t.id)}" data-kanban-task-detail="${Number(t.id)}" draggable="true" tabindex="0" role="button" aria-label="Editar tarefa #${Number(t.id)}">
+    <div class="kanban-card kanban-task-card" data-kanban-task-id="${Number(t.id)}" data-kanban-task-detail="${Number(t.id)}" data-kanban-nseq="${nseq}" draggable="true" tabindex="0" role="button" aria-label="Editar tarefa #${Number(t.id)}">
         <div class="kanban-card-header">
             <span class="kanban-card-id">Tarefa #${Number(t.id)}</span>
+            <span class="kanban-card-seq" title="Sequência na lista">Seq ${nseq}</span>
             <span class="kanban-card-sla is-success" title="Tarefa interna DashGLPI">DashGLPI</span>
             <span class="priority-dot priority-${Number(t.priority) || 3}" title="Prioridade ${Number(t.priority) || 3}"></span>
         </div>
@@ -160,12 +178,34 @@ function initKanbanDragDrop() {
             const newStatus = Number(lane.dataset.status);
             if (!newStatus) return;
             if (dragging.type === 'task') {
-                updateKanbanTaskStatus(dragging.id, newStatus);
+                reorderKanbanTask(dragging.id, newStatus, kanbanTaskOrderForDrop(lane, dragging.id, e.clientY));
             } else if (!DASHGLPI_IS_RESTRICTED_VIEW) {
                 updateTicketKanbanStatus(dragging.id, newStatus);
             }
         });
     });
+}
+
+function kanbanTaskOrderForDrop(lane, movedTaskId, clientY) {
+    const taskCards = [...lane.querySelectorAll('.kanban-task-card[data-kanban-task-id]:not(.is-dragging)')];
+    const afterElement = taskCards.reduce((closest, child) => {
+        const box = child.getBoundingClientRect();
+        const offset = clientY - box.top - box.height / 2;
+        if (offset < 0 && offset > closest.offset) {
+            return { offset, element: child };
+        }
+        return closest;
+    }, { offset: Number.NEGATIVE_INFINITY, element: null }).element;
+
+    const ids = taskCards
+        .map(card => Number(card.dataset.kanbanTaskId || 0))
+        .filter(id => id > 0 && id !== Number(movedTaskId));
+    const insertAt = afterElement
+        ? ids.indexOf(Number(afterElement.dataset.kanbanTaskId || 0))
+        : ids.length;
+    ids.splice(insertAt >= 0 ? insertAt : ids.length, 0, Number(movedTaskId));
+
+    return ids;
 }
 
 function initKanbanCardActions() {
@@ -458,6 +498,24 @@ async function updateKanbanTaskStatus(taskId, newStatus) {
             status: String(newStatus),
         }, 'Erro de conexão ao mover tarefa.');
         if (!data.ok) throw new Error(data.error || 'Não foi possível mover a tarefa.');
+        await loadKanbanTasks();
+        renderKanbanBoard();
+    } catch (error) {
+        await loadKanbanTasks();
+        renderKanbanBoard();
+        alert(error.message);
+    }
+}
+
+async function reorderKanbanTask(taskId, newStatus, orderedIds) {
+    try {
+        const data = await dashglpiPostForm(`${PLUGIN_ROOT}/ajax/kanban_tasks.php`, {
+            action: 'reorder',
+            task_id: String(taskId),
+            status: String(newStatus),
+            ordered_ids: JSON.stringify(orderedIds || []),
+        }, 'Erro de conexão ao reordenar tarefa.');
+        if (!data.ok) throw new Error(data.error || 'Não foi possível reordenar a tarefa.');
         await loadKanbanTasks();
         renderKanbanBoard();
     } catch (error) {
