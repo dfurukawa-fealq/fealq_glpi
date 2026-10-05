@@ -192,6 +192,7 @@ function plugin_dashglpi_ticket_create_submit(array $payload): array
     if ($ticketId <= 0) {
         throw new RuntimeException(plugin_dashglpi_ticket_create_last_message('Falha ao registrar chamado.'));
     }
+    plugin_dashglpi_ticket_create_ensure_new_notification($ticketId);
     plugin_dashglpi_ticket_create_log_sla_warnings($ticketId, $sla);
 
     return [
@@ -209,6 +210,55 @@ function plugin_dashglpi_ticket_create_submit(array $payload): array
         'sla' => $sla,
         'message' => plugin_dashglpi_ticket_create_success_message($sla),
     ];
+}
+
+function plugin_dashglpi_ticket_create_ensure_new_notification(int $ticketId): void
+{
+    if ($ticketId <= 0 || !class_exists(NotificationEvent::class)) {
+        return;
+    }
+
+    $ticket = new Ticket();
+    if (!$ticket->getFromDB($ticketId)) {
+        return;
+    }
+
+    if (plugin_dashglpi_ticket_create_has_new_notification($ticketId)) {
+        return;
+    }
+
+    NotificationEvent::raiseEvent('new', $ticket);
+
+    Toolbox::logInFile(
+        'php-errors',
+        sprintf("[DashGLPI ticket_create] fallback NotificationEvent::raiseEvent('new') ticket=%d\n", $ticketId)
+    );
+}
+
+function plugin_dashglpi_ticket_create_has_new_notification(int $ticketId): bool
+{
+    global $DB;
+
+    if (!$DB->tableExists('glpi_queuednotifications')) {
+        return false;
+    }
+
+    $where = [
+        'itemtype' => 'Ticket',
+        'items_id' => $ticketId,
+        'is_deleted' => 0,
+    ];
+    if ($DB->fieldExists('glpi_queuednotifications', 'event', false)) {
+        $where['event'] = 'new';
+    }
+
+    $row = $DB->request([
+        'COUNT' => 'total',
+        'FROM' => 'glpi_queuednotifications',
+        'WHERE' => $where,
+    ])->current();
+
+    return (int) ($row['total'] ?? 0) > 0;
 }
 
 function plugin_dashglpi_ticket_create_entities_from_payload($rawEntities): array

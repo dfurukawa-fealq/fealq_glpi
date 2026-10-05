@@ -301,6 +301,12 @@ function plugin_dashglpi_admin_bridge_bootstrap_constants(): void
     if (!defined('GLPI_LOG_LVL')) {
         define('GLPI_LOG_LVL', 'warning');
     }
+    if (!defined('GLPI_SKIP_UPDATES')) {
+        define('GLPI_SKIP_UPDATES', false);
+    }
+    if (!defined('GLPI_ALLOW_IFRAME_IN_RICH_TEXT')) {
+        define('GLPI_ALLOW_IFRAME_IN_RICH_TEXT', false);
+    }
     if (!defined('GLPI_DISALLOWED_UPLOADS_PATTERN')) {
         define('GLPI_DISALLOWED_UPLOADS_PATTERN', '/\.(php\d*|phar)$/i');
     }
@@ -388,25 +394,40 @@ function plugin_dashglpi_admin_bridge_bootstrap_cache(): void
 }
 function plugin_dashglpi_admin_bridge_bootstrap_db(): void
 {
-    global $DB;
+    global $CFG_GLPI, $DB;
 
-    if (is_object($DB) && class_exists('DBmysql') && is_a($DB, 'DBmysql')) {
-        return;
+    if (!(is_object($DB) && class_exists('DBmysql') && is_a($DB, 'DBmysql'))) {
+        if (!class_exists('DB')) {
+            $configDir = (string) (getenv('GLPI_CONFIG_DIR') ?: '/var/glpi/config');
+            $configDb = rtrim($configDir, '/') . '/config_db.php';
+            if (is_file($configDb)) {
+                require_once $configDb;
+            }
+        }
+
+        if (!class_exists('DB')) {
+            throw new RuntimeException('Bootstrap GLPI incompleto: classe DB indisponivel.');
+        }
+
+        $DB = new DB();
     }
 
-    if (!class_exists('DB')) {
-        $configDir = (string) (getenv('GLPI_CONFIG_DIR') ?: '/var/glpi/config');
-        $configDb = rtrim($configDir, '/') . '/config_db.php';
-        if (is_file($configDb)) {
-            require_once $configDb;
+    // Legacy classes such as Ticket and NotificationEvent read their runtime
+    // settings from CFG_GLPI, which is normally populated by the GLPI kernel.
+    if (!is_array($CFG_GLPI ?? null) || !array_key_exists('use_notifications', $CFG_GLPI)) {
+        $defaultsFile = GLPI_ROOT . '/src/autoload/CFG_GLPI.php';
+        if (is_file($defaultsFile)) {
+            // CFG_GLPI.php initializes the legacy defaults and may already
+            // have been loaded by Composer with an incomplete global state.
+            require $defaultsFile;
+        } else {
+            $CFG_GLPI = [];
+        }
+
+        if (class_exists(Config::class)) {
+            Config::loadLegacyConfiguration();
         }
     }
-
-    if (!class_exists('DB')) {
-        throw new RuntimeException('Bootstrap GLPI incompleto: classe DB indisponivel.');
-    }
-
-    $DB = new DB();
 }
 function plugin_dashglpi_admin_bridge_log(Throwable $e, string $scope): void
 {
