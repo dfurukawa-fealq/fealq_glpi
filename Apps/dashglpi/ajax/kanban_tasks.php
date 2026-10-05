@@ -28,6 +28,24 @@ dashglpi_ajax_bridge_endpoint('kanban_tasks', static function (): array {
         return ['task' => dashglpi_kanban_task_create($_POST)];
     }
 
+    if ($action === 'detail') {
+        $taskId = max(0, (int) ($_POST['task_id'] ?? 0));
+        if ($taskId <= 0) {
+            throw new RuntimeException('Tarefa inválida.');
+        }
+
+        return ['task' => dashglpi_kanban_task_get($taskId)];
+    }
+
+    if ($action === 'update') {
+        $taskId = max(0, (int) ($_POST['task_id'] ?? 0));
+        if ($taskId <= 0) {
+            throw new RuntimeException('Tarefa inválida.');
+        }
+
+        return ['task' => dashglpi_kanban_task_update($taskId, $_POST)];
+    }
+
     if ($action === 'update_status') {
         $taskId = max(0, (int) ($_POST['task_id'] ?? 0));
         if ($taskId <= 0) {

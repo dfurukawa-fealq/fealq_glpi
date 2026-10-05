@@ -315,3 +315,40 @@ function dashglpi_kanban_task_update_status(int $taskId, int $status): array
 
     return dashglpi_kanban_task_get($taskId);
 }
+
+function dashglpi_kanban_task_update(int $taskId, array $input): array
+{
+    dashglpi_kanban_tasks_ensure_schema();
+    dashglpi_kanban_task_assert_access($taskId);
+
+    $context = dashglpi_current_user_context();
+    $userId = (int) ($context['user_id'] ?? 0);
+    if ($userId <= 0) {
+        throw new RuntimeException('Usuário não identificado.');
+    }
+
+    $name = trim((string) ($input['name'] ?? ''));
+    if ($name === '') {
+        throw new RuntimeException('Informe o título da tarefa.');
+    }
+
+    if (function_exists('mb_substr')) {
+        $name = mb_substr($name, 0, 255, 'UTF-8');
+    } else {
+        $name = substr($name, 0, 255);
+    }
+
+    $content = trim((string) ($input['content'] ?? ''));
+    $status = dashglpi_kanban_task_valid_status((int) ($input['status'] ?? 1));
+    $priority = max(1, min(5, (int) ($input['priority'] ?? 3)));
+    $ownerId = dashglpi_kanban_task_owner_id($input, $userId);
+
+    $stmt = dashglpi_db()->prepare(
+        'UPDATE `' . DASHGLPI_KANBAN_TASKS_TABLE . '`
+         SET name = ?, content = ?, status = ?, priority = ?, owner_users_id = ?, date_mod = NOW()
+         WHERE id = ? AND is_deleted = 0'
+    );
+    $stmt->execute([$name, $content, $status, $priority, $ownerId, $taskId]);
+
+    return dashglpi_kanban_task_get($taskId);
+}

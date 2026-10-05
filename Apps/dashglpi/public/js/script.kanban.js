@@ -108,7 +108,7 @@ function kanbanTaskCardHtml(t) {
     const owner = t.owner_name || t.technician_name || '-';
     const description = t.description_excerpt || t.content || '';
     return `
-    <div class="kanban-card kanban-task-card" data-kanban-task-id="${Number(t.id)}" draggable="true">
+    <div class="kanban-card kanban-task-card" data-kanban-task-id="${Number(t.id)}" data-kanban-task-detail="${Number(t.id)}" draggable="true" tabindex="0" role="button" aria-label="Editar tarefa #${Number(t.id)}">
         <div class="kanban-card-header">
             <span class="kanban-card-id">Tarefa #${Number(t.id)}</span>
             <span class="kanban-card-sla is-success" title="Tarefa interna DashGLPI">DashGLPI</span>
@@ -135,11 +135,15 @@ function initKanbanDragDrop() {
                 id: Number(card.dataset.kanbanTaskId || card.dataset.ticketId || 0),
                 type: card.dataset.kanbanTaskId ? 'task' : 'ticket',
             };
+            if (dragging.type === 'task') card.dataset.kanbanJustDragged = '1';
             card.classList.add('is-dragging');
             e.dataTransfer.effectAllowed = 'move';
         });
         card.addEventListener('dragend', () => {
             card.classList.remove('is-dragging');
+            if (card.dataset.kanbanJustDragged === '1') {
+                setTimeout(() => { delete card.dataset.kanbanJustDragged; }, 0);
+            }
             dragging = null;
         });
     });
@@ -167,6 +171,19 @@ function initKanbanDragDrop() {
 }
 
 function initKanbanCardActions() {
+    document.querySelectorAll('#ticketsKanban [data-kanban-task-detail]').forEach(card => {
+        card.addEventListener('click', event => {
+            if (event.target.closest('button, a')) return;
+            if (card.dataset.kanbanJustDragged === '1') return;
+            openKanbanTaskEditModal(Number(card.dataset.kanbanTaskDetail || 0));
+        });
+        card.addEventListener('keydown', event => {
+            if (event.key !== 'Enter' && event.key !== ' ') return;
+            event.preventDefault();
+            openKanbanTaskEditModal(Number(card.dataset.kanbanTaskDetail || 0));
+        });
+    });
+
     if (!DASHGLPI_IS_RESTRICTED_VIEW) {
         document.querySelectorAll('#ticketsKanban [data-take-ticket]').forEach(btn => {
             btn.addEventListener('click', () => takeKanbanTicket(Number(btn.dataset.takeTicket)));
@@ -188,19 +205,31 @@ function initKanbanCardActions() {
     });
 }
 
+function setKanbanTaskModalMode(mode, status = 1) {
+    const title = document.getElementById('kanbanTaskModalTitle');
+    const submitText = document.getElementById('kanbanTaskSubmitText');
+    const taskId = document.getElementById('kanbanTaskId');
+    const statusInput = document.getElementById('kanbanTaskStatus');
+    const statusLabel = document.getElementById('kanbanTaskStatusLabel');
+    const column = KANBAN_COLUMNS.find(col => Number(col.status) === Number(status)) || KANBAN_COLUMNS[0];
+
+    DashState.kanbanTaskModalMode = mode === 'edit' ? 'edit' : 'create';
+    DashState.kanbanTaskCreateStatus = Number(column.status) || 1;
+    if (title) title.textContent = mode === 'edit' ? 'Editar Tarefa' : 'Nova Tarefa';
+    if (submitText) submitText.textContent = mode === 'edit' ? 'Salvar Tarefa' : 'Criar Tarefa';
+    if (taskId && mode !== 'edit') taskId.value = '';
+    if (statusInput) statusInput.value = String(DashState.kanbanTaskCreateStatus);
+    if (statusLabel) statusLabel.textContent = column.label;
+}
+
 function openKanbanTaskCreateModal(status) {
     const modal = document.getElementById('kanbanTaskModal');
     const form = document.getElementById('kanbanTaskForm');
-    const statusInput = document.getElementById('kanbanTaskStatus');
-    const statusLabel = document.getElementById('kanbanTaskStatusLabel');
     const statusMessage = document.getElementById('kanbanTaskFormStatus');
-    if (!modal || !form || !statusInput) return;
+    if (!modal || !form) return;
 
-    const column = KANBAN_COLUMNS.find(col => Number(col.status) === Number(status)) || KANBAN_COLUMNS[0];
-    DashState.kanbanTaskCreateStatus = Number(column.status) || 1;
     form.reset();
-    statusInput.value = String(DashState.kanbanTaskCreateStatus);
-    if (statusLabel) statusLabel.textContent = column.label;
+    setKanbanTaskModalMode('create', status);
     if (statusMessage) {
         statusMessage.textContent = '';
         statusMessage.className = 'admin-status';
@@ -209,6 +238,57 @@ function openKanbanTaskCreateModal(status) {
     resetKanbanTaskOwner();
     loadKanbanTaskOwnerOptions();
     setTimeout(() => form.elements.name?.focus(), 50);
+}
+
+async function openKanbanTaskEditModal(taskId) {
+    const modal = document.getElementById('kanbanTaskModal');
+    const form = document.getElementById('kanbanTaskForm');
+    const statusMessage = document.getElementById('kanbanTaskFormStatus');
+    if (!modal || !form || !taskId) return;
+
+    form.reset();
+    setKanbanTaskModalMode('edit', 1);
+    document.getElementById('kanbanTaskId').value = String(taskId);
+    if (statusMessage) {
+        statusMessage.textContent = 'Carregando tarefa...';
+        statusMessage.className = 'admin-status';
+    }
+    modal.hidden = false;
+    resetKanbanTaskOwner();
+    await loadKanbanTaskOwnerOptions();
+
+    try {
+        const data = await dashglpiPostForm(`${PLUGIN_ROOT}/ajax/kanban_tasks.php`, {
+            action: 'detail',
+            task_id: String(taskId),
+        }, 'Erro de conexão ao consultar tarefa.');
+        if (!data.ok) throw new Error(data.error || 'Não foi possível consultar a tarefa.');
+        fillKanbanTaskForm(data.task || {});
+        if (statusMessage) {
+            statusMessage.textContent = '';
+            statusMessage.className = 'admin-status';
+        }
+        setTimeout(() => form.elements.name?.focus(), 50);
+    } catch (error) {
+        if (statusMessage) {
+            statusMessage.textContent = error.message || 'Erro ao consultar tarefa.';
+            statusMessage.className = 'admin-status error';
+        } else {
+            alert(error.message);
+        }
+    }
+}
+
+function fillKanbanTaskForm(task) {
+    const form = document.getElementById('kanbanTaskForm');
+    if (!form) return;
+    setKanbanTaskModalMode('edit', Number(task.status || task.kanban_status || 1));
+    document.getElementById('kanbanTaskId').value = String(Number(task.id) || '');
+    form.elements.name.value = task.name || '';
+    form.elements.content.value = task.content || '';
+    form.elements.priority.value = String(Number(task.priority) || 3);
+    form.elements.status.value = String(Number(task.status || task.kanban_status || 1));
+    selectKanbanTaskOwner(Number(task.owner_users_id || 0), task.owner_name || task.technician_name || '-', false);
 }
 
 function closeKanbanTaskCreateModal() {
@@ -225,12 +305,9 @@ function initKanbanTaskModal() {
     modal.querySelectorAll('[data-kanban-task-close]').forEach(button => {
         button.addEventListener('click', closeKanbanTaskCreateModal);
     });
-    modal.addEventListener('click', event => {
-        if (event.target === modal) closeKanbanTaskCreateModal();
-    });
     form.addEventListener('submit', async event => {
         event.preventDefault();
-        await createKanbanTask(form);
+        await saveKanbanTask(form);
     });
 
     const ownerSearch = document.getElementById('kanbanTaskOwnerSearch');
@@ -331,11 +408,13 @@ function selectKanbanTaskOwner(userId, userName, clearSearch = true) {
     if (options) options.hidden = true;
 }
 
-async function createKanbanTask(form) {
+async function saveKanbanTask(form) {
     const status = document.getElementById('kanbanTaskFormStatus');
     const submit = form.querySelector('button[type="submit"]');
+    const mode = DashState.kanbanTaskModalMode === 'edit' ? 'edit' : 'create';
+    const taskId = Number(document.getElementById('kanbanTaskId')?.value || 0);
     if (status) {
-        status.textContent = 'Criando tarefa...';
+        status.textContent = mode === 'edit' ? 'Salvando tarefa...' : 'Criando tarefa...';
         status.className = 'admin-status';
     }
     if (submit) submit.disabled = true;
@@ -343,15 +422,21 @@ async function createKanbanTask(form) {
     try {
         const formData = new FormData(form);
         const fields = {
-            action: 'create',
+            action: mode === 'edit' ? 'update' : 'create',
+            task_id: String(taskId || ''),
             name: formData.get('name') || '',
             content: formData.get('content') || '',
             priority: formData.get('priority') || '3',
             status: formData.get('status') || String(DashState.kanbanTaskCreateStatus || 1),
             owner_users_id: formData.get('owner_users_id') || String(typeof DASHGLPI_CURRENT_USER_ID !== 'undefined' ? DASHGLPI_CURRENT_USER_ID : 0),
         };
-        const data = await dashglpiPostForm(`${PLUGIN_ROOT}/ajax/kanban_tasks.php`, fields, 'Erro de conexão ao criar tarefa.');
-        if (!data.ok) throw new Error(data.error || 'Não foi possível criar a tarefa.');
+        if (mode === 'edit' && taskId <= 0) throw new Error('Tarefa inválida.');
+        const data = await dashglpiPostForm(
+            `${PLUGIN_ROOT}/ajax/kanban_tasks.php`,
+            fields,
+            mode === 'edit' ? 'Erro de conexão ao salvar tarefa.' : 'Erro de conexão ao criar tarefa.'
+        );
+        if (!data.ok) throw new Error(data.error || (mode === 'edit' ? 'Não foi possível salvar a tarefa.' : 'Não foi possível criar a tarefa.'));
         closeKanbanTaskCreateModal();
         await loadKanbanTasks();
         renderKanbanBoard();

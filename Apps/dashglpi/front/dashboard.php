@@ -3007,6 +3007,7 @@ $glpiPublicUrl = rtrim((string) dashglpi_env('GLPI_PUBLIC_URL', ''), '/');
                 </button>
             </div>
             <form class="admin-form kanban-task-form" id="kanbanTaskForm">
+                <input type="hidden" name="task_id" id="kanbanTaskId" value="">
                 <input type="hidden" name="status" id="kanbanTaskStatus" value="1">
                 <label class="admin-field">
                     <span>Título</span>
@@ -3048,7 +3049,7 @@ $glpiPublicUrl = rtrim((string) dashglpi_env('GLPI_PUBLIC_URL', ''), '/');
                         <span>Cancelar</span>
                     </button>
                     <button type="submit" class="admin-submit">
-                        <span>Criar Tarefa</span>
+                        <span id="kanbanTaskSubmitText">Criar Tarefa</span>
                     </button>
                 </div>
                 <div class="admin-status" id="kanbanTaskFormStatus"></div>
