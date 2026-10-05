@@ -106,7 +106,6 @@ function kanbanCardHtml(t, col) {
 
 function kanbanTaskCardHtml(t) {
     const owner = t.owner_name || t.technician_name || '-';
-    const description = t.description_excerpt || t.content || '';
     return `
     <div class="kanban-card kanban-task-card" data-kanban-task-id="${Number(t.id)}" data-kanban-task-detail="${Number(t.id)}" draggable="true" tabindex="0" role="button" aria-label="Editar tarefa #${Number(t.id)}">
         <div class="kanban-card-header">
@@ -115,7 +114,6 @@ function kanbanTaskCardHtml(t) {
             <span class="priority-dot priority-${Number(t.priority) || 3}" title="Prioridade ${Number(t.priority) || 3}"></span>
         </div>
         <p class="kanban-card-title">${escHtml(t.name || '')}</p>
-        ${description ? `<p class="kanban-task-description">${escHtml(description)}</p>` : ''}
         <div class="kanban-card-meta">
             <span>${escHtml(t.entity_name || 'Entidade raiz')}</span>
             <span>${escHtml(formatDateTime(t.date) || '-')}</span>
