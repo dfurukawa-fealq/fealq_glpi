@@ -121,7 +121,7 @@ function kanbanCardHtml(t, col) {
 }
 
 function kanbanTaskCardHtml(t) {
-    const owner = t.owner_name || t.technician_name || '-';
+    const owner = kanbanTaskOwnerLabel(t);
     const nseq = Number(t.nseq || 0);
     return `
     <div class="kanban-card kanban-task-card" data-kanban-task-id="${Number(t.id)}" data-kanban-task-detail="${Number(t.id)}" data-kanban-nseq="${nseq}" draggable="true" tabindex="0" role="button" aria-label="Editar tarefa #${Number(t.id)}">
@@ -140,6 +140,16 @@ function kanbanTaskCardHtml(t) {
             <span class="kanban-card-tech"><i class="fas fa-user-check" aria-hidden="true"></i> ${escHtml(owner)}</span>
         </div>
     </div>`;
+}
+
+function kanbanTaskOwnerLabel(task) {
+    const owners = Array.isArray(task?.owners) ? task.owners : [];
+    const names = owners
+        .map(owner => String(owner?.name || '').trim())
+        .filter(Boolean);
+    if (!names.length) return task.owner_name || task.technician_name || '-';
+    if (names.length <= 2) return names.join(', ');
+    return `${names.slice(0, 2).join(', ')} +${names.length - 2}`;
 }
 
 function initKanbanDragDrop() {
@@ -274,6 +284,7 @@ function openKanbanTaskCreateModal(status) {
     }
     modal.hidden = false;
     resetKanbanTaskOwner();
+    loadKanbanTaskEntityOptions();
     loadKanbanTaskOwnerOptions();
     setTimeout(() => form.elements.name?.focus(), 50);
 }
@@ -293,7 +304,10 @@ async function openKanbanTaskEditModal(taskId) {
     }
     modal.hidden = false;
     resetKanbanTaskOwner();
-    await loadKanbanTaskOwnerOptions();
+    await Promise.all([
+        loadKanbanTaskOwnerOptions(),
+        loadKanbanTaskEntityOptions(),
+    ]);
 
     try {
         const data = await dashglpiPostForm(`${PLUGIN_ROOT}/ajax/kanban_tasks.php`, {
@@ -326,7 +340,123 @@ function fillKanbanTaskForm(task) {
     form.elements.content.value = task.content || '';
     form.elements.priority.value = String(Number(task.priority) || 3);
     form.elements.status.value = String(Number(task.status || task.kanban_status || 1));
-    selectKanbanTaskOwner(Number(task.owner_users_id || 0), task.owner_name || task.technician_name || '-', false);
+    setKanbanTaskEntity(Number(task.entities_id || 0));
+    setKanbanTaskOwners(
+        Array.isArray(task.owners) && task.owners.length
+            ? task.owners
+            : [{ id: Number(task.owner_users_id || 0), name: task.owner_name || task.technician_name || '-' }],
+        false
+    );
+}
+
+async function loadKanbanTaskEntityOptions() {
+    const hidden = document.getElementById('kanbanTaskEntity');
+    if (!hidden) return;
+
+    if (Array.isArray(DashState.kanbanTaskEntities) && DashState.kanbanTaskEntities.length) {
+        selectKanbanTaskEntity(Number(hidden.value || DashState.kanbanTaskDefaultEntityId || 0), false);
+        return;
+    }
+
+    try {
+        const params = new URLSearchParams({ action: 'catalog' });
+        const response = await fetch(`${PLUGIN_ROOT}/ajax/ticket_create.php?${params.toString()}`, { headers: { 'Accept': 'application/json' } });
+        const data = await response.json();
+        if (!response.ok || !data?.ok) throw new Error(data?.error || 'Erro ao carregar entidades.');
+        const catalog = data.catalog || {};
+        DashState.kanbanTaskEntities = Array.isArray(catalog.entities) ? catalog.entities : [];
+        DashState.kanbanTaskDefaultEntityId = Number(catalog.selected_entity_id ?? catalog.default_entity_id ?? 0);
+        selectKanbanTaskEntity(Number(hidden.value || DashState.kanbanTaskDefaultEntityId || 0), false);
+    } catch (error) {
+        console.error('Error loading task entities:', error);
+        DashState.kanbanTaskEntities = [{ id: 0, label: 'Entidade raiz' }];
+        selectKanbanTaskEntity(0, false);
+    }
+}
+
+function kanbanTaskEntityLabel(entity) {
+    return String(entity?.label || entity?.completename || entity?.name || 'Entidade');
+}
+
+function normalizeKanbanEntityTerm(value) {
+    return String(value || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().trim();
+}
+
+function kanbanTaskEntityOption(entityId) {
+    const entities = Array.isArray(DashState.kanbanTaskEntities) && DashState.kanbanTaskEntities.length
+        ? DashState.kanbanTaskEntities
+        : [{ id: 0, label: 'Entidade raiz' }];
+    return entities.find(entity => Number(entity?.id || 0) === Number(entityId))
+        || entities.find(entity => Number(entity?.id || 0) === Number(DashState.kanbanTaskDefaultEntityId || 0))
+        || entities[0]
+        || { id: 0, label: 'Entidade raiz' };
+}
+
+function renderKanbanTaskEntityOptions(query = '', open = false) {
+    const box = document.getElementById('kanbanTaskEntityOptions');
+    const input = document.getElementById('kanbanTaskEntitySearch');
+    const hidden = document.getElementById('kanbanTaskEntity');
+    if (!box || !input || !hidden) return;
+
+    const terms = normalizeKanbanEntityTerm(query).split(/\s+/).filter(Boolean);
+    const entities = Array.isArray(DashState.kanbanTaskEntities) ? DashState.kanbanTaskEntities : [];
+    const filtered = entities
+        .filter(entity => {
+            if (!terms.length) return true;
+            const haystack = normalizeKanbanEntityTerm([
+                entity?.label,
+                entity?.completename,
+                entity?.name,
+            ].join(' '));
+            return terms.every(term => haystack.includes(term));
+        })
+        .slice(0, 60);
+
+    if (!filtered.length) {
+        box.innerHTML = '<div class="ticket-create-combobox-empty">Nenhum resultado encontrado.</div>';
+    } else {
+        const selectedValue = String(hidden.value || '0');
+        box.innerHTML = filtered.map(entity => {
+            const value = String(Number(entity.id || 0));
+            const active = value === selectedValue ? ' is-selected' : '';
+            return `<button type="button" class="ticket-create-combobox-option${active}" role="option" data-kanban-entity-id="${escHtml(value)}">${escHtml(kanbanTaskEntityLabel(entity))}</button>`;
+        }).join('');
+    }
+
+    box.hidden = !open;
+    input.setAttribute('aria-expanded', open ? 'true' : 'false');
+}
+
+function selectKanbanTaskEntity(entityId, close = true) {
+    const hidden = document.getElementById('kanbanTaskEntity');
+    const input = document.getElementById('kanbanTaskEntitySearch');
+    if (!hidden || !input) return;
+    const option = kanbanTaskEntityOption(entityId);
+    hidden.value = String(Number(option?.id || 0));
+    input.value = kanbanTaskEntityLabel(option);
+    renderKanbanTaskEntityOptions(input.value, false);
+    if (close) closeKanbanTaskEntityOptions();
+}
+
+function closeKanbanTaskEntityOptions() {
+    const box = document.getElementById('kanbanTaskEntityOptions');
+    const input = document.getElementById('kanbanTaskEntitySearch');
+    if (box) box.hidden = true;
+    if (input) input.setAttribute('aria-expanded', 'false');
+}
+
+function commitKanbanTaskEntityText() {
+    const input = document.getElementById('kanbanTaskEntitySearch');
+    if (!input) return;
+    const typed = normalizeKanbanEntityTerm(input.value || '');
+    const exact = (DashState.kanbanTaskEntities || []).find(entity => normalizeKanbanEntityTerm(kanbanTaskEntityLabel(entity)) === typed);
+    if (exact) {
+        selectKanbanTaskEntity(Number(exact.id || 0), false);
+    }
+}
+
+function setKanbanTaskEntity(entityId) {
+    selectKanbanTaskEntity(Number(entityId) || 0, false);
 }
 
 function closeKanbanTaskCreateModal() {
@@ -358,15 +488,49 @@ function initKanbanTaskModal() {
         event.preventDefault();
         selectKanbanTaskOwner(Number(first.dataset.kanbanOwnerId), first.dataset.kanbanOwnerName || '');
     });
+    document.getElementById('kanbanTaskOwnerTags')?.addEventListener('click', event => {
+        const button = event.target.closest('[data-kanban-owner-remove]');
+        if (!button) return;
+        event.preventDefault();
+        removeKanbanTaskOwner(Number(button.dataset.kanbanOwnerRemove || 0));
+    });
     document.getElementById('kanbanTaskOwnerOptions')?.addEventListener('click', event => {
         const option = event.target.closest('[data-kanban-owner-id]');
         if (!option) return;
         selectKanbanTaskOwner(Number(option.dataset.kanbanOwnerId), option.dataset.kanbanOwnerName || '');
     });
+
+    const entityInput = document.getElementById('kanbanTaskEntitySearch');
+    const entityOptions = document.getElementById('kanbanTaskEntityOptions');
+    entityInput?.addEventListener('focus', () => renderKanbanTaskEntityOptions(entityInput.value || '', true));
+    entityInput?.addEventListener('input', () => renderKanbanTaskEntityOptions(entityInput.value || '', true));
+    entityInput?.addEventListener('keydown', event => {
+        if (event.key === 'Escape') {
+            closeKanbanTaskEntityOptions();
+            return;
+        }
+        if (event.key !== 'Enter') return;
+        const first = entityOptions?.querySelector('[data-kanban-entity-id]');
+        if (!first) return;
+        event.preventDefault();
+        selectKanbanTaskEntity(Number(first.dataset.kanbanEntityId || 0), true);
+    });
+    entityOptions?.addEventListener('mousedown', event => {
+        const option = event.target.closest('[data-kanban-entity-id]');
+        if (!option) return;
+        event.preventDefault();
+        selectKanbanTaskEntity(Number(option.dataset.kanbanEntityId || 0), true);
+    });
+    document.getElementById('kanbanTaskEntityToggle')?.addEventListener('click', () => renderKanbanTaskEntityOptions('', true));
+
     document.addEventListener('click', event => {
         if (event.target.closest('.kanban-task-owner-field')) return;
         const options = document.getElementById('kanbanTaskOwnerOptions');
         if (options) options.hidden = true;
+    });
+    document.addEventListener('click', event => {
+        if (event.target.closest('[data-kanban-task-entity-combobox]')) return;
+        closeKanbanTaskEntityOptions();
     });
 }
 
@@ -383,7 +547,7 @@ function kanbanCurrentUserOwner() {
 
 function resetKanbanTaskOwner() {
     const current = kanbanCurrentUserOwner();
-    selectKanbanTaskOwner(current.id, current.name, false);
+    setKanbanTaskOwners([current], false);
 }
 
 async function loadKanbanTaskOwnerOptions() {
@@ -409,7 +573,7 @@ function renderKanbanTaskOwnerOptions(open = true) {
     const box = document.getElementById('kanbanTaskOwnerOptions');
     if (!input || !box) return;
 
-    const selectedId = Number(document.getElementById('kanbanTaskOwnerId')?.value || 0);
+    const selectedIds = new Set(kanbanSelectedTaskOwners().map(owner => Number(owner.id || 0)));
     const current = kanbanCurrentUserOwner();
     const optionsById = new Map();
     if (current.id > 0) optionsById.set(current.id, current);
@@ -420,7 +584,7 @@ function renderKanbanTaskOwnerOptions(open = true) {
 
     const terms = normalizeKanbanOwnerTerm(input.value).split(/\s+/).filter(Boolean);
     const filtered = Array.from(optionsById.values())
-        .filter(user => user.id !== selectedId)
+        .filter(user => !selectedIds.has(user.id))
         .filter(user => {
             if (!terms.length) return true;
             const haystack = normalizeKanbanOwnerTerm(user.name);
@@ -435,15 +599,66 @@ function renderKanbanTaskOwnerOptions(open = true) {
 }
 
 function selectKanbanTaskOwner(userId, userName, clearSearch = true) {
+    const selected = kanbanSelectedTaskOwners();
+    const id = Number(userId) || 0;
+    if (id > 0 && !selected.some(owner => Number(owner.id) === id)) {
+        selected.push({ id, name: userName || `Usuário #${id}` });
+    }
+    setKanbanTaskOwners(selected, clearSearch);
+}
+
+function removeKanbanTaskOwner(userId) {
+    const selected = kanbanSelectedTaskOwners().filter(owner => Number(owner.id) !== Number(userId));
+    setKanbanTaskOwners(selected.length ? selected : [kanbanCurrentUserOwner()]);
+}
+
+function kanbanSelectedTaskOwners() {
+    if (!Array.isArray(DashState.kanbanTaskSelectedOwners)) {
+        DashState.kanbanTaskSelectedOwners = [];
+    }
+    return DashState.kanbanTaskSelectedOwners;
+}
+
+function setKanbanTaskOwners(owners, clearSearch = true) {
+    const current = kanbanCurrentUserOwner();
+    const normalized = [];
+    (Array.isArray(owners) ? owners : []).forEach(owner => {
+        const id = Number(owner?.id || owner?.users_id || 0);
+        if (id <= 0 || normalized.some(item => item.id === id)) return;
+        normalized.push({ id, name: String(owner?.name || owner?.label || owner?.display || `Usuário #${id}`) });
+    });
+    if (!normalized.length && current.id > 0) {
+        normalized.push(current);
+    }
+
+    DashState.kanbanTaskSelectedOwners = normalized;
+    const primary = normalized[0] || { id: 0, name: '' };
     const hidden = document.getElementById('kanbanTaskOwnerId');
-    const tag = document.querySelector('[data-kanban-owner-tag]');
-    const tagText = tag?.querySelector('span');
+    const hiddenList = document.getElementById('kanbanTaskOwnerIds');
+    const tags = document.getElementById('kanbanTaskOwnerTags');
     const input = document.getElementById('kanbanTaskOwnerSearch');
     const options = document.getElementById('kanbanTaskOwnerOptions');
-    if (hidden) hidden.value = String(Number(userId) || 0);
-    if (tagText) tagText.textContent = userName || `Usuário #${Number(userId) || 0}`;
+    if (hidden) hidden.value = String(Number(primary.id) || 0);
+    if (hiddenList) hiddenList.value = normalized.map(owner => Number(owner.id)).join(',');
+    if (tags) {
+        tags.querySelectorAll('[data-kanban-owner-tag]').forEach(tag => tag.remove());
+        normalized.forEach(owner => {
+            const tag = document.createElement('span');
+            tag.className = 'attendance-actor-tag';
+            tag.dataset.kanbanOwnerTag = '1';
+            tag.innerHTML = `<i class="fas fa-user" aria-hidden="true"></i><span></span>${
+                normalized.length > 1
+                    ? `<button type="button" data-kanban-owner-remove="${Number(owner.id)}" aria-label="Remover responsável">&times;</button>`
+                    : ''
+            }`;
+            const label = tag.querySelector('span');
+            if (label) label.textContent = owner.name || `Usuário #${Number(owner.id) || 0}`;
+            tags.insertBefore(tag, input || null);
+        });
+    }
     if (clearSearch && input) input.value = '';
     if (options) options.hidden = true;
+    renderKanbanTaskOwnerOptions(false);
 }
 
 async function saveKanbanTask(form) {
@@ -458,15 +673,18 @@ async function saveKanbanTask(form) {
     if (submit) submit.disabled = true;
 
     try {
+        commitKanbanTaskEntityText();
         const formData = new FormData(form);
         const fields = {
             action: mode === 'edit' ? 'update' : 'create',
             task_id: String(taskId || ''),
             name: formData.get('name') || '',
             content: formData.get('content') || '',
+            entities_id: formData.get('entities_id') || '0',
             priority: formData.get('priority') || '3',
             status: formData.get('status') || String(DashState.kanbanTaskCreateStatus || 1),
             owner_users_id: formData.get('owner_users_id') || String(typeof DASHGLPI_CURRENT_USER_ID !== 'undefined' ? DASHGLPI_CURRENT_USER_ID : 0),
+            owner_user_ids: JSON.stringify(kanbanSelectedTaskOwners().map(owner => Number(owner.id)).filter(id => id > 0)),
         };
         if (mode === 'edit' && taskId <= 0) throw new Error('Tarefa inválida.');
         const data = await dashglpiPostForm(

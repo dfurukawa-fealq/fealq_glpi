@@ -8879,10 +8879,44 @@ body.light-mode .dash-modal-card {
     margin-top: 18px;
 }
 
+.kanban-task-modal-card {
+    width: min(900px, 100%);
+    max-height: calc(100vh - 40px);
+    overflow-y: auto;
+}
+
+.kanban-task-form-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.35fr) minmax(300px, 0.85fr);
+    gap: 18px;
+    align-items: stretch;
+    margin-top: 14px;
+}
+
+.kanban-task-form-main,
+.kanban-task-form-side {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    min-width: 0;
+}
+
+.kanban-task-form-side {
+    min-height: 382px;
+}
+
 .kanban-task-form textarea {
     width: 100%;
-    min-height: 96px;
+    min-height: 382px;
     resize: vertical;
+}
+
+.kanban-task-description-field {
+    flex: 1 1 auto;
+}
+
+.kanban-task-description-field textarea {
+    flex: 1 1 auto;
 }
 
 .kanban-task-form input[readonly] {
@@ -8903,12 +8937,17 @@ body.light-mode .dash-modal-card {
     z-index: 12010;
 }
 
+.kanban-task-entity-combobox .ticket-create-combobox-options {
+    z-index: 12010;
+}
+
 .kanban-task-modal-actions {
     display: flex;
     justify-content: flex-end;
     align-items: center;
     gap: 12px;
-    margin-top: 18px;
+    margin-top: auto;
+    padding-top: 48px;
 }
 
 .kanban-task-modal-actions .page-action-btn,
@@ -8934,6 +8973,30 @@ body.light-mode .dash-modal-card {
     .kanban-task-modal-actions .page-action-btn,
     .kanban-task-modal-actions .admin-submit {
         width: 100%;
+    }
+}
+
+@media (max-width: 760px) {
+    .kanban-task-modal-card {
+        width: min(620px, 100%);
+    }
+
+    .kanban-task-form-grid {
+        grid-template-columns: 1fr;
+        gap: 14px;
+    }
+
+    .kanban-task-form-side {
+        min-height: 0;
+    }
+
+    .kanban-task-form textarea {
+        min-height: 128px;
+    }
+
+    .kanban-task-modal-actions {
+        margin-top: 18px;
+        padding-top: 0;
     }
 }
 

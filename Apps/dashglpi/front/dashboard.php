@@ -3009,48 +3009,68 @@ $glpiPublicUrl = rtrim((string) dashglpi_env('GLPI_PUBLIC_URL', ''), '/');
             <form class="admin-form kanban-task-form" id="kanbanTaskForm">
                 <input type="hidden" name="task_id" id="kanbanTaskId" value="">
                 <input type="hidden" name="status" id="kanbanTaskStatus" value="1">
-                <label class="admin-field">
+                <label class="admin-field kanban-task-title-field">
                     <span>Título</span>
                     <input type="text" name="name" maxlength="255" required placeholder="Ex.: Revisar backup diário">
                 </label>
-                <label class="admin-field">
-                    <span>Descrição</span>
-                    <textarea name="content" rows="4" placeholder="Detalhes rápidos da tarefa"></textarea>
-                </label>
-                <label class="admin-field">
-                    <span>Responsável</span>
-                    <input type="hidden" name="owner_users_id" id="kanbanTaskOwnerId" value="<?= (int) ($userContext['user_id'] ?? 0) ?>">
-                    <div class="attendance-actor-field kanban-task-owner-field">
-                        <div class="attendance-actor-picker">
-                            <div class="attendance-actor-tags" id="kanbanTaskOwnerTags">
-                                <span class="attendance-actor-tag" data-kanban-owner-tag>
-                                    <i class="fas fa-user" aria-hidden="true"></i>
-                                    <span><?= htmlspecialchars((string) ($currentUser['display'] ?? 'usuário atual'), ENT_QUOTES, 'UTF-8') ?></span>
-                                </span>
-                                <input type="search" id="kanbanTaskOwnerSearch" autocomplete="off" aria-label="Pesquisar responsável">
+                <div class="kanban-task-form-grid">
+                    <div class="kanban-task-form-main">
+                        <label class="admin-field kanban-task-description-field">
+                            <span>Descrição</span>
+                            <textarea name="content" rows="8" placeholder="Detalhes rápidos da tarefa"></textarea>
+                        </label>
+                    </div>
+                    <div class="kanban-task-form-side">
+                        <label class="admin-field ticket-create-combobox-field">
+                            <span>Entidade</span>
+                            <input type="hidden" name="entities_id" id="kanbanTaskEntity" value="0">
+                            <div class="ticket-create-combobox kanban-task-entity-combobox" data-kanban-task-entity-combobox>
+                                <input type="search" id="kanbanTaskEntitySearch" placeholder="Digite para filtrar entidades" autocomplete="off" role="combobox" aria-expanded="false" aria-controls="kanbanTaskEntityOptions">
+                                <button type="button" class="ticket-create-combobox-toggle" id="kanbanTaskEntityToggle" aria-label="Listar entidades">
+                                    <i class="fas fa-chevron-down"></i>
+                                </button>
+                                <div class="ticket-create-combobox-options" id="kanbanTaskEntityOptions" role="listbox" hidden>
+                                    <div class="ticket-create-combobox-empty">Carregando entidades...</div>
+                                </div>
                             </div>
-                            <div class="attendance-actor-options" id="kanbanTaskOwnerOptions" hidden></div>
+                        </label>
+                        <label class="admin-field">
+                            <span>Responsáveis</span>
+                            <input type="hidden" name="owner_users_id" id="kanbanTaskOwnerId" value="<?= (int) ($userContext['user_id'] ?? 0) ?>">
+                            <input type="hidden" name="owner_user_ids" id="kanbanTaskOwnerIds" value="<?= (int) ($userContext['user_id'] ?? 0) ?>">
+                            <div class="attendance-actor-field kanban-task-owner-field">
+                                <div class="attendance-actor-picker">
+                                    <div class="attendance-actor-tags" id="kanbanTaskOwnerTags">
+                                        <span class="attendance-actor-tag" data-kanban-owner-tag>
+                                            <i class="fas fa-user" aria-hidden="true"></i>
+                                            <span><?= htmlspecialchars((string) ($currentUser['display'] ?? 'usuário atual'), ENT_QUOTES, 'UTF-8') ?></span>
+                                        </span>
+                                        <input type="search" id="kanbanTaskOwnerSearch" autocomplete="off" aria-label="Pesquisar responsável">
+                                    </div>
+                                    <div class="attendance-actor-options" id="kanbanTaskOwnerOptions" hidden></div>
+                                </div>
+                            </div>
+                            <small>Inicialmente a tarefa fica autoassumida por quem cria; adicione mais pessoas quando necessário.</small>
+                        </label>
+                        <label class="admin-field">
+                            <span>Prioridade</span>
+                            <select name="priority">
+                                <option value="1">Muito baixa</option>
+                                <option value="2">Baixa</option>
+                                <option value="3" selected>Média</option>
+                                <option value="4">Alta</option>
+                                <option value="5">Muito alta</option>
+                            </select>
+                        </label>
+                        <div class="kanban-task-modal-actions">
+                            <button type="button" class="page-action-btn" data-kanban-task-close>
+                                <span>Cancelar</span>
+                            </button>
+                            <button type="submit" class="admin-submit">
+                                <span id="kanbanTaskSubmitText">Criar Tarefa</span>
+                            </button>
                         </div>
                     </div>
-                    <small>Inicialmente a tarefa fica autoassumida por quem cria.</small>
-                </label>
-                <label class="admin-field">
-                    <span>Prioridade</span>
-                    <select name="priority">
-                        <option value="1">Muito baixa</option>
-                        <option value="2">Baixa</option>
-                        <option value="3" selected>Média</option>
-                        <option value="4">Alta</option>
-                        <option value="5">Muito alta</option>
-                    </select>
-                </label>
-                <div class="kanban-task-modal-actions">
-                    <button type="button" class="page-action-btn" data-kanban-task-close>
-                        <span>Cancelar</span>
-                    </button>
-                    <button type="submit" class="admin-submit">
-                        <span id="kanbanTaskSubmitText">Criar Tarefa</span>
-                    </button>
                 </div>
                 <div class="admin-status" id="kanbanTaskFormStatus"></div>
             </form>
