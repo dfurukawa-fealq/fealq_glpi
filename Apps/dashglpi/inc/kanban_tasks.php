@@ -24,6 +24,7 @@ function dashglpi_kanban_tasks_ensure_schema(): void
             `owner_users_id` INT UNSIGNED NOT NULL DEFAULT 0,
             `creator_users_id` INT UNSIGNED NOT NULL DEFAULT 0,
             `due_date` DATETIME NULL,
+            `is_private` TINYINT UNSIGNED NOT NULL DEFAULT 0,
             `is_deleted` TINYINT UNSIGNED NOT NULL DEFAULT 0,
             `date_creation` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
             `date_mod` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
@@ -34,6 +35,7 @@ function dashglpi_kanban_tasks_ensure_schema(): void
     );
 
     dashglpi_kanban_tasks_ensure_column('nseq', 'ALTER TABLE `' . DASHGLPI_KANBAN_TASKS_TABLE . '` ADD COLUMN `nseq` INT UNSIGNED NOT NULL DEFAULT 0 AFTER `priority`');
+    dashglpi_kanban_tasks_ensure_column('is_private', 'ALTER TABLE `' . DASHGLPI_KANBAN_TASKS_TABLE . '` ADD COLUMN `is_private` TINYINT UNSIGNED NOT NULL DEFAULT 0 AFTER `due_date`');
 
     dashglpi_db()->exec(
         'CREATE TABLE IF NOT EXISTS `' . DASHGLPI_KANBAN_TASK_OWNERS_TABLE . "` (
@@ -157,6 +159,32 @@ function dashglpi_kanban_task_sync_owners(int $taskId, array $ownerIds): void
     }
 }
 
+function dashglpi_kanban_task_private_visibility_sql(string $alias = 'kt'): array
+{
+    $context = dashglpi_current_user_context();
+    if (!empty($context['is_admin_bypass'])) {
+        return ['sql' => '', 'params' => []];
+    }
+
+    $userId = (int) ($context['user_id'] ?? 0);
+    if ($userId <= 0) {
+        return ['sql' => " AND $alias.is_private = 0", 'params' => []];
+    }
+
+    return [
+        'sql' => " AND ($alias.is_private = 0
+            OR $alias.creator_users_id = ?
+            OR $alias.owner_users_id = ?
+            OR EXISTS (
+                SELECT 1
+                FROM `" . DASHGLPI_KANBAN_TASK_OWNERS_TABLE . "` kto_private
+                WHERE kto_private.kanban_tasks_id = $alias.id
+                  AND kto_private.users_id = ?
+            ))",
+        'params' => [$userId, $userId, $userId],
+    ];
+}
+
 function dashglpi_kanban_task_owners(int $taskId, int $fallbackOwnerId, string $fallbackOwnerName): array
 {
     $label = dashglpi_kanban_task_user_label_sql('u');
@@ -187,6 +215,7 @@ function dashglpi_kanban_task_scope(bool $myTasks, string $alias = 'kt'): array
 {
     $context = dashglpi_current_user_context();
     $userId = (int) ($context['user_id'] ?? 0);
+    $visibility = dashglpi_kanban_task_private_visibility_sql($alias);
 
     if ($myTasks) {
         if ($userId <= 0) {
@@ -194,17 +223,21 @@ function dashglpi_kanban_task_scope(bool $myTasks, string $alias = 'kt'): array
         }
 
         return [
-            'sql' => " AND ($alias.owner_users_id = ? OR EXISTS (
+            'sql' => " AND ($alias.creator_users_id = ? OR $alias.owner_users_id = ? OR EXISTS (
                 SELECT 1
                 FROM `" . DASHGLPI_KANBAN_TASK_OWNERS_TABLE . "` kto_scope
                 WHERE kto_scope.kanban_tasks_id = $alias.id
                   AND kto_scope.users_id = ?
-            ))",
-            'params' => [$userId, $userId],
+            ))" . $visibility['sql'],
+            'params' => array_merge([$userId, $userId, $userId], $visibility['params']),
         ];
     }
 
-    return dashglpi_scoped_entity_sql($alias . '.entities_id');
+    $scope = dashglpi_scoped_entity_sql($alias . '.entities_id');
+    return [
+        'sql' => $scope['sql'] . $visibility['sql'],
+        'params' => array_merge($scope['params'], $visibility['params']),
+    ];
 }
 
 function dashglpi_kanban_task_filter_my_tasks(array $filters): bool
@@ -264,7 +297,7 @@ function dashglpi_kanban_tasks_list(array $filters = []): array
 
     $rows = dashglpi_fetch_all(
         "SELECT kt.id, kt.name, kt.content, kt.status, kt.priority, kt.nseq, kt.entities_id,
-                kt.owner_users_id, kt.creator_users_id, kt.due_date,
+                kt.owner_users_id, kt.creator_users_id, kt.due_date, kt.is_private,
                 kt.date_creation AS date, kt.date_mod,
                 COALESCE(e.completename, e.name, 'Entidade raiz') AS entity_name,
                 $ownerLabel AS owner_name,
@@ -321,6 +354,7 @@ function dashglpi_kanban_task_view_model(array $row): array
         'date_mod' => (string) ($row['date_mod'] ?? ''),
         'time_to_resolve' => (string) ($row['due_date'] ?? ''),
         'due_date' => (string) ($row['due_date'] ?? ''),
+        'is_private' => !empty($row['is_private']) ? 1 : 0,
         'itemtype' => 'dashglpi_task',
         'row_key' => 'dashglpi_task:' . (int) ($row['id'] ?? 0),
         'readonly' => 0,
@@ -368,6 +402,7 @@ function dashglpi_kanban_task_create(array $input): array
     $ownerIds = dashglpi_kanban_task_owner_ids($input, $userId);
     $ownerId = (int) ($ownerIds[0] ?? $userId);
     $content = trim((string) ($input['content'] ?? ''));
+    $isPrivate = !empty($input['is_private']) ? 1 : 0;
     $nseq = dashglpi_kanban_task_next_nseq($status, $entityId);
 
     $pdo = dashglpi_db();
@@ -375,10 +410,10 @@ function dashglpi_kanban_task_create(array $input): array
     try {
         $stmt = $pdo->prepare(
             'INSERT INTO `' . DASHGLPI_KANBAN_TASKS_TABLE . '`
-                (name, content, status, priority, nseq, entities_id, owner_users_id, creator_users_id, date_creation, date_mod)
-             VALUES (?, ?, ?, ?, ?, ?, ?, ?, NOW(), NOW())'
+                (name, content, status, priority, nseq, entities_id, owner_users_id, creator_users_id, is_private, date_creation, date_mod)
+             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, NOW(), NOW())'
         );
-        $stmt->execute([$name, $content, $status, $priority, $nseq, $entityId, $ownerId, $userId]);
+        $stmt->execute([$name, $content, $status, $priority, $nseq, $entityId, $ownerId, $userId, $isPrivate]);
         $taskId = (int) $pdo->lastInsertId();
         dashglpi_kanban_task_sync_owners($taskId, $ownerIds);
         $pdo->commit();
@@ -393,12 +428,12 @@ function dashglpi_kanban_task_create(array $input): array
 function dashglpi_kanban_task_get(int $taskId): array
 {
     dashglpi_kanban_tasks_ensure_schema();
-    $scope = dashglpi_scoped_entity_sql('kt.entities_id');
+    $scope = dashglpi_kanban_task_scope(false, 'kt');
     $ownerLabel = dashglpi_kanban_task_user_label_sql('owner');
     $creatorLabel = dashglpi_kanban_task_user_label_sql('creator');
     $row = dashglpi_fetch_one(
         "SELECT kt.id, kt.name, kt.content, kt.status, kt.priority, kt.nseq, kt.entities_id,
-                kt.owner_users_id, kt.creator_users_id, kt.due_date,
+                kt.owner_users_id, kt.creator_users_id, kt.due_date, kt.is_private,
                 kt.date_creation AS date, kt.date_mod,
                 COALESCE(e.completename, e.name, 'Entidade raiz') AS entity_name,
                 $ownerLabel AS owner_name,
@@ -432,7 +467,7 @@ function dashglpi_kanban_task_assert_access(int $taskId): void
             return;
         }
     } else {
-        $scope = dashglpi_scoped_entity_sql('kt.entities_id');
+        $scope = dashglpi_kanban_task_scope(false, 'kt');
         $row = dashglpi_fetch_one(
             'SELECT kt.id FROM `' . DASHGLPI_KANBAN_TASKS_TABLE . '` kt WHERE kt.id = ? AND kt.is_deleted = 0' . $scope['sql'] . ' LIMIT 1',
             array_merge([$taskId], $scope['params'])
@@ -552,6 +587,7 @@ function dashglpi_kanban_task_update(int $taskId, array $input): array
     $ownerId = (int) ($ownerIds[0] ?? $userId);
     $current = dashglpi_kanban_task_get($taskId);
     $entityId = dashglpi_kanban_task_entity_id($input, (int) ($current['entities_id'] ?? 0));
+    $isPrivate = !empty($input['is_private']) ? 1 : 0;
     $nseq = (int) ($current['status'] ?? 0) === $status
         && (int) ($current['entities_id'] ?? 0) === $entityId
         ? (int) ($current['nseq'] ?? 0)
@@ -562,10 +598,10 @@ function dashglpi_kanban_task_update(int $taskId, array $input): array
     try {
         $stmt = $pdo->prepare(
             'UPDATE `' . DASHGLPI_KANBAN_TASKS_TABLE . '`
-             SET name = ?, content = ?, status = ?, priority = ?, nseq = ?, entities_id = ?, owner_users_id = ?, date_mod = NOW()
+             SET name = ?, content = ?, status = ?, priority = ?, nseq = ?, entities_id = ?, owner_users_id = ?, is_private = ?, date_mod = NOW()
              WHERE id = ? AND is_deleted = 0'
         );
-        $stmt->execute([$name, $content, $status, $priority, $nseq, $entityId, $ownerId, $taskId]);
+        $stmt->execute([$name, $content, $status, $priority, $nseq, $entityId, $ownerId, $isPrivate, $taskId]);
         dashglpi_kanban_task_sync_owners($taskId, $ownerIds);
         $pdo->commit();
     } catch (Throwable $e) {

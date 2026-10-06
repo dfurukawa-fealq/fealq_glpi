@@ -129,6 +129,7 @@ function kanbanTaskCardHtml(t) {
             <span class="kanban-card-id">Tarefa #${Number(t.id)}</span>
             <span class="kanban-card-seq" title="Sequência na lista">Seq ${nseq}</span>
             <span class="kanban-card-sla is-success" title="Tarefa interna DashGLPI">DashGLPI</span>
+            ${Number(t.is_private || 0) === 1 ? '<span class="kanban-card-private" title="Tarefa privada"><i class="fas fa-lock" aria-hidden="true"></i></span>' : ''}
             <span class="priority-dot priority-${Number(t.priority) || 3}" title="Prioridade ${Number(t.priority) || 3}"></span>
         </div>
         <p class="kanban-card-title">${escHtml(t.name || '')}</p>
@@ -340,6 +341,7 @@ function fillKanbanTaskForm(task) {
     form.elements.content.value = task.content || '';
     form.elements.priority.value = String(Number(task.priority) || 3);
     form.elements.status.value = String(Number(task.status || task.kanban_status || 1));
+    if (form.elements.is_private) form.elements.is_private.checked = Number(task.is_private || 0) === 1;
     setKanbanTaskEntity(Number(task.entities_id || 0));
     setKanbanTaskOwners(
         Array.isArray(task.owners) && task.owners.length
@@ -681,6 +683,7 @@ async function saveKanbanTask(form) {
             name: formData.get('name') || '',
             content: formData.get('content') || '',
             entities_id: formData.get('entities_id') || '0',
+            is_private: form.elements.is_private?.checked ? '1' : '0',
             priority: formData.get('priority') || '3',
             status: formData.get('status') || String(DashState.kanbanTaskCreateStatus || 1),
             owner_users_id: formData.get('owner_users_id') || String(typeof DASHGLPI_CURRENT_USER_ID !== 'undefined' ? DASHGLPI_CURRENT_USER_ID : 0),

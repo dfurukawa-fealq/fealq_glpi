@@ -3052,6 +3052,10 @@ $glpiPublicUrl = rtrim((string) dashglpi_env('GLPI_PUBLIC_URL', ''), '/');
                             </div>
                             <small>Inicialmente a tarefa fica autoassumida por quem cria; adicione mais pessoas quando necessário.</small>
                         </label>
+                        <label class="admin-check compact kanban-task-private-field">
+                            <input type="checkbox" name="is_private" id="kanbanTaskPrivate" value="1">
+                            <span><i class="fas fa-lock" aria-hidden="true"></i> Privada</span>
+                        </label>
                         <label class="admin-field">
                             <span>Prioridade</span>
                             <select name="priority">

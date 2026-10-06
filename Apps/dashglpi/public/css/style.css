@@ -5419,6 +5419,18 @@ body.light-mode .kanban-task-card {
     padding: 1px 6px;
 }
 
+.kanban-card-private {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 18px;
+    height: 18px;
+    border-radius: 999px;
+    background: rgba(59, 130, 246, 0.12);
+    color: var(--primary);
+    font-size: 0.68rem;
+}
+
 .priority-dot {
     width: 8px;
     height: 8px;
@@ -8939,6 +8951,21 @@ body.light-mode .dash-modal-card {
 
 .kanban-task-entity-combobox .ticket-create-combobox-options {
     z-index: 12010;
+}
+
+.kanban-task-private-field {
+    min-height: 38px;
+    padding: 8px 10px;
+    border: 1px solid var(--glass-border);
+    border-radius: 12px;
+    background: var(--glass-bg);
+    color: var(--text-main);
+}
+
+.kanban-task-private-field span {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
 }
 
 .kanban-task-modal-actions {
