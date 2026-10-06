@@ -162,10 +162,6 @@ function dashglpi_kanban_task_sync_owners(int $taskId, array $ownerIds): void
 function dashglpi_kanban_task_private_visibility_sql(string $alias = 'kt'): array
 {
     $context = dashglpi_current_user_context();
-    if (!empty($context['is_admin_bypass'])) {
-        return ['sql' => '', 'params' => []];
-    }
-
     $userId = (int) ($context['user_id'] ?? 0);
     if ($userId <= 0) {
         return ['sql' => " AND $alias.is_private = 0", 'params' => []];
@@ -457,24 +453,13 @@ function dashglpi_kanban_task_get(int $taskId): array
 
 function dashglpi_kanban_task_assert_access(int $taskId): void
 {
-    $context = dashglpi_current_user_context();
-    if (!empty($context['is_admin_bypass'])) {
-        $row = dashglpi_fetch_one(
-            'SELECT id FROM `' . DASHGLPI_KANBAN_TASKS_TABLE . '` WHERE id = ? AND is_deleted = 0 LIMIT 1',
-            [$taskId]
-        );
-        if ($row) {
-            return;
-        }
-    } else {
-        $scope = dashglpi_kanban_task_scope(false, 'kt');
-        $row = dashglpi_fetch_one(
-            'SELECT kt.id FROM `' . DASHGLPI_KANBAN_TASKS_TABLE . '` kt WHERE kt.id = ? AND kt.is_deleted = 0' . $scope['sql'] . ' LIMIT 1',
-            array_merge([$taskId], $scope['params'])
-        );
-        if ($row) {
-            return;
-        }
+    $scope = dashglpi_kanban_task_scope(false, 'kt');
+    $row = dashglpi_fetch_one(
+        'SELECT kt.id FROM `' . DASHGLPI_KANBAN_TASKS_TABLE . '` kt WHERE kt.id = ? AND kt.is_deleted = 0' . $scope['sql'] . ' LIMIT 1',
+        array_merge([$taskId], $scope['params'])
+    );
+    if ($row) {
+        return;
     }
 
     throw new RuntimeException('Tarefa não encontrada ou fora do seu escopo.');
@@ -504,11 +489,11 @@ function dashglpi_kanban_task_next_nseq(int $status, int $entityId): int
     $row = dashglpi_fetch_one(
         'SELECT MAX(nseq) AS max_nseq
          FROM `' . DASHGLPI_KANBAN_TASKS_TABLE . '`
-         WHERE status = ? AND entities_id = ? AND is_deleted = 0',
-        [dashglpi_kanban_task_valid_status($status), max(0, $entityId)]
+         WHERE status = ? AND is_deleted = 0',
+        [dashglpi_kanban_task_valid_status($status)]
     );
 
-    return $row && $row['max_nseq'] !== null ? ((int) $row['max_nseq']) + 1 : 0;
+    return $row && $row['max_nseq'] !== null ? ((int) $row['max_nseq']) + 1 : 1;
 }
 
 function dashglpi_kanban_task_reorder(int $taskId, int $status, array $orderedIds): array
@@ -538,7 +523,7 @@ function dashglpi_kanban_task_reorder(int $taskId, int $status, array $orderedId
         );
         $move->execute([$status, $taskId]);
 
-        $seq = 0;
+        $seq = 1;
         $update = $pdo->prepare(
             'UPDATE `' . DASHGLPI_KANBAN_TASKS_TABLE . '`
              SET nseq = ?, date_mod = NOW()
