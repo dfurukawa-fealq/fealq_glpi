@@ -298,7 +298,7 @@ class PluginDashglpiDashboard
         $fk = $type['fk'];
 
         $rows = dashglpi_fetch_all(
-            "SELECT t.id, t.name, t.status, t.date, t.priority, t.time_to_resolve,
+            "SELECT t.id, t.name, t.status, t.date, t.date_mod, t.priority, t.time_to_resolve,
                     t.solvedate, t.closedate, t.solve_delay_stat,
                     COALESCE(c.completename, 'Sem Categoria') AS category,
                     COALESCE(NULLIF(tech.technician_name, ''), '-') AS technician_name,
@@ -2361,7 +2361,7 @@ class PluginDashglpiDashboard
         $limit = min(self::TICKETS_LIST_MAX, max(1, $limit));
 
         return dashglpi_fetch_all(
-            "SELECT t.id, t.name, t.content, t.status, t.global_validation, t.date, t.priority, t.time_to_resolve,
+            "SELECT t.id, t.name, t.content, t.status, t.global_validation, t.date, t.date_mod, t.priority, t.time_to_resolve,
                     t.time_to_own, t.takeintoaccountdate, t.solvedate, t.closedate,
                     t.takeintoaccount_delay_stat, t.solve_delay_stat,
                     COALESCE(c.completename, 'Sem Categoria') AS category,

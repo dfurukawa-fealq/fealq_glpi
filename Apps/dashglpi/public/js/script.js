@@ -2394,6 +2394,7 @@ function updateTicketSortIcons() {
 
 function renderTicketStage(ticket) {
     const step = Number(ticket.stage_step) || 0;
+    const stageUpdatedAt = formatDateTime(ticket.date_mod);
     const columns = (DASHGLPI_IS_RESTRICTED_VIEW && !DASHGLPI_IS_HELPDESK_VIEW)
         ? KANBAN_COLUMNS.filter(col => col.id !== 'fechado')
         : KANBAN_COLUMNS;
@@ -2413,6 +2414,7 @@ function renderTicketStage(ticket) {
             <div class="ticket-stage-point ${state}">
                 <span><i class="fas ${icon}"></i></span>
                 <small>${escHtml(col.label)}</small>
+                ${state === 'active' && stageUpdatedAt ? `<em class="ticket-stage-updated" title="Ultima atualizacao">${escHtml(stageUpdatedAt)}</em>` : ''}
             </div>
         `;
     }).join('');
