@@ -1,6 +1,7 @@
 <?php
 
 require_once __DIR__ . '/../inc/bootstrap.php';
+require_once __DIR__ . '/../inc/ajax_endpoint.php';
 require_once __DIR__ . '/../inc/glpi_admin.php';
 
 dashglpi_require_auth();
@@ -15,9 +16,7 @@ try {
         ]);
     }
 } catch (Throwable $e) {
-    $message = trim((string) $e->getMessage());
-    error_log('[DashGLPI] ticket assignment error: ' . ($message !== '' ? $message : get_class($e)));
-    dashglpi_json(['ok' => false, 'error' => $message !== '' ? $message : 'Erro interno na atribuicao do chamado.'], 500);
+    dashglpi_ajax_error_response('ticket_assignment_get', $e, 'Erro interno na atribuicao do chamado.');
 }
 
 dashglpi_ajax_bridge_endpoint('ticket assignment', function () {
@@ -37,10 +36,10 @@ function dashglpi_assignment_payload(array $post): array
     $groupsId = max(0, (int) ($post['groups_id'] ?? 0));
 
     if ($ticketId <= 0) {
-        throw new RuntimeException('Chamado invalido.');
+        throw new RuntimeException('Chamado invalido.', 400);
     }
     if ($usersId <= 0 && $groupsId <= 0) {
-        throw new RuntimeException('Selecione um tecnico, um grupo ou ambos.');
+        throw new RuntimeException('Selecione um tecnico, um grupo ou ambos.', 422);
     }
 
     return [

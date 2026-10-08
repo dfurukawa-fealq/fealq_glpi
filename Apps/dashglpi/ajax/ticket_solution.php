@@ -2,6 +2,7 @@
 
 // Autenticação por sessão Dash; permissões nativas no bridge (PLAN-20260905-001).
 require_once __DIR__ . '/../inc/bootstrap.php';
+require_once __DIR__ . '/../inc/ajax_endpoint.php';
 require_once __DIR__ . '/../inc/ticket_attendance.php';
 
 dashglpi_require_auth();

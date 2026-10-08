@@ -30,30 +30,77 @@ const TICKET_FILTER_DEFAULT_ENTITY_ID = Number(typeof DASHGLPI_TICKET_FILTER_DEF
     ? -1
     : DASHGLPI_TICKET_FILTER_DEFAULT_ENTITY_ID);
 
-/**
- * Helper de fetch AJAX para o bridge cliente (Padrão duplicado C do PLAN-20260703-013).
- * Injeta csrf_token, faz POST x-www-form-urlencoded e retorna o JSON já decodificado.
- * Em falha de rede, rejeita com um Error cujo `.message` é o texto de fallback pedido
- * (para o call site poder `alert(err.message)` no mesmo padrão usado hoje).
- *
- * Fase 1 do PLAN-20260703-013: helper introduzido, nenhuma chamada existente migrada ainda.
- */
+async function dashglpiFetchJson(url, options = {}, networkErrorMessage = 'Erro de conexão.') {
+    const timeoutMs = Number(options.timeoutMs || 20000);
+    const throwOnHttpError = options.throwOnHttpError !== false;
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
+    const headers = {
+        Accept: 'application/json',
+        ...(options.headers || {}),
+    };
+
+    try {
+        const response = await fetch(url, {
+            ...options,
+            headers,
+            signal: options.signal || controller.signal,
+        });
+        const contentType = String(response.headers.get('content-type') || '').toLowerCase();
+        const isJson = contentType.includes('application/json');
+        const payload = isJson ? await response.json() : null;
+
+        if (response.status === 401) {
+            const error = new Error(payload?.error || 'Sessão expirada.');
+            error.status = response.status;
+            error.payload = payload;
+            error.requiresReload = true;
+            throw error;
+        }
+
+        if (!isJson) {
+            const text = await response.text().catch(() => '');
+            const looksLikeHtml = /<html|<!doctype|<body|<form/i.test(text);
+            const error = new Error(looksLikeHtml ? 'Sessão expirada ou resposta HTML inesperada.' : 'Resposta inválida do servidor.');
+            error.status = response.status;
+            error.requiresReload = looksLikeHtml;
+            throw error;
+        }
+
+        if (throwOnHttpError && !response.ok) {
+            const error = new Error(payload?.error || 'Erro ao processar requisição.');
+            error.status = response.status;
+            error.payload = payload;
+            error.traceId = payload?.trace_id || '';
+            throw error;
+        }
+
+        return payload;
+    } catch (error) {
+        if (error?.name === 'AbortError') {
+            throw Object.assign(new Error('Tempo esgotado ao consultar o servidor.'), { status: 0 });
+        }
+        if (error?.status || error?.requiresReload) {
+            throw error;
+        }
+        throw new Error(networkErrorMessage);
+    } finally {
+        clearTimeout(timeoutId);
+    }
+}
+
 async function dashglpiPostForm(url, fields, networkErrorMessage = 'Erro de conexão.') {
     const body = new URLSearchParams({
         ...fields,
         csrf_token: typeof DASHGLPI_CSRF_TOKEN !== 'undefined' ? DASHGLPI_CSRF_TOKEN : '',
     });
 
-    try {
-        const res = await fetch(url, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/x-www-form-urlencoded', 'Accept': 'application/json' },
-            body,
-        });
-        return await res.json();
-    } catch {
-        throw new Error(networkErrorMessage);
-    }
+    return dashglpiFetchJson(url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body,
+        throwOnHttpError: false,
+    }, networkErrorMessage);
 }
 
 function escHtml(str) {
@@ -148,12 +195,17 @@ const DashState = {
     assetsDataGlobal: [],
     ticketsDataGlobal: [],
     kanbanTasksGlobal: [],
+    kanbanTasksLoadError: '',
     kanbanTaskCreateStatus: 1,
     ticketsSortState: { key: 'date', direction: 'desc' },
     ticketsPaginationState: { page: 1, pageSize: 10 },
     ticketStatusFilter: ['1', '3', '2', '4', '5', '6'],
     ticketDashEntityFilter: [],
     ticketGlpiEntityFilter: [],
+    ticketAdvancedFilter: { types: [], categories: [], urgencies: [], impacts: [], priorities: [] },
+    ticketFilterCatalog: { types: [], categories: [], urgencies: [], impacts: [], priorities: [] },
+    ticketFilterCatalogLoaded: false,
+    ticketFilterCatalogError: '',
     ticketsView: 'list',
     slaDataGlobal: [],
     slaSummaryGlobal: { critical: 0, warning: 0, unassigned: 0, ok: 0, avg_open_seconds: 0 },
@@ -192,7 +244,10 @@ const TICKET_STATUS_FILTER_DEFAULT = TICKET_STATUS_FILTER_ALL.slice();
 const TICKETS_FILTERS_STORAGE_VERSION = '20261008-split-dash-glpi-entity-filter';
 const TICKET_DASH_ENTITY_FILTER_STORAGE_KEY = 'dashglpi-tickets-dash-entity-filter';
 const TICKET_GLPI_ENTITY_FILTER_STORAGE_KEY = 'dashglpi-tickets-glpi-entity-filter';
+const TICKET_ADVANCED_FILTER_STORAGE_KEY = 'dashglpi-tickets-advanced-filter';
 const TICKET_ENTITY_NONE_VALUE = '__none';
+const TICKET_ADVANCED_NONE_VALUE = '__none';
+const TICKET_ADVANCED_FILTER_DEFAULT = { types: [], categories: [], urgencies: [], impacts: [], priorities: [] };
 const TICKET_STATUS_FILTER_LABELS = {
     1: 'Aberto',
     3: 'Planejado',
@@ -779,6 +834,7 @@ function initMyTasksFilters() {
         localStorage.setItem('dashglpi-tickets-status-filter', JSON.stringify(TICKET_STATUS_FILTER_DEFAULT));
         localStorage.setItem(TICKET_DASH_ENTITY_FILTER_STORAGE_KEY, JSON.stringify(defaultTicketEntityFilterValues()));
         localStorage.setItem(TICKET_GLPI_ENTITY_FILTER_STORAGE_KEY, JSON.stringify([]));
+        localStorage.setItem(TICKET_ADVANCED_FILTER_STORAGE_KEY, JSON.stringify(TICKET_ADVANCED_FILTER_DEFAULT));
         localStorage.setItem('dashglpi-tickets-filter-version', TICKETS_FILTERS_STORAGE_VERSION);
     }
 
@@ -1821,14 +1877,11 @@ async function loadTicketLists() {
     }
 
     try {
-        const response = await fetch(`${dashboardDataUrl('tickets_list')}&itemtype=${encodeURIComponent(ticketsItemtypeParam())}`);
-        const tickets = await response.json();
-        if (response.status === 401) {
-            throw Object.assign(new Error('Sessão expirada.'), { requiresReload: true });
-        }
-        if (!response.ok) {
-            throw new Error(tickets?.error || 'Erro ao carregar chamados.');
-        }
+        const tickets = await dashglpiFetchJson(
+            `${dashboardDataUrl('tickets_list')}&itemtype=${encodeURIComponent(ticketsItemtypeParam())}`,
+            {},
+            'Erro de conexão ao carregar chamados.'
+        );
         if (!Array.isArray(tickets)) {
             throw new Error('Resposta inválida ao carregar chamados.');
         }
@@ -1859,7 +1912,8 @@ async function loadTicketLists() {
         }
 
         if (fullBody) {
-            fullBody.innerHTML = `<tr><td colspan="${ticketTableColspan()}" class="table-empty">${escHtml(error.message || 'Erro ao carregar chamados')}</td></tr>`;
+            const suffix = error?.traceId ? ` (trace ${error.traceId})` : '';
+            fullBody.innerHTML = `<tr><td colspan="${ticketTableColspan()}" class="table-empty">${ticketLoadErrorHtml((error.message || 'Erro ao carregar chamados') + suffix)}</td></tr>`;
         }
     }
 }
@@ -1915,6 +1969,13 @@ function ticketsPageSize() {
     return TICKETS_PAGE_SIZE_OPTIONS.includes(saved) ? saved : TICKETS_PAGE_SIZE_DEFAULT;
 }
 
+function ticketLoadErrorHtml(message, retryAttr = 'data-ticket-list-retry') {
+    return `<div class="ticket-load-error">
+        <span>${escHtml(message)}</span>
+        <button type="button" class="tickets-filter-inline-btn" ${retryAttr}>Tentar novamente</button>
+    </div>`;
+}
+
 function normalizeTicketStatusFilter(values) {
     const allowed = new Set(TICKET_STATUS_FILTER_ALL);
     const normalized = Array.from(values || [])
@@ -1936,6 +1997,136 @@ function loadTicketStatusFilter() {
     } catch {
         DashState.ticketStatusFilter = TICKET_STATUS_FILTER_DEFAULT.slice();
     }
+}
+
+function normalizeTicketAdvancedFilter(filter) {
+    const source = filter && typeof filter === 'object' ? filter : {};
+    return Object.fromEntries(Object.keys(TICKET_ADVANCED_FILTER_DEFAULT).map(key => [
+        key,
+        Array.from(new Set(Array.from(source[key] || [])
+            .map(value => value === TICKET_ADVANCED_NONE_VALUE ? TICKET_ADVANCED_NONE_VALUE : String(Number(value)))
+            .filter(value => value !== 'NaN'))),
+    ]));
+}
+
+function loadTicketAdvancedFilter() {
+    const raw = localStorage.getItem(TICKET_ADVANCED_FILTER_STORAGE_KEY);
+    if (!raw) {
+        DashState.ticketAdvancedFilter = { ...TICKET_ADVANCED_FILTER_DEFAULT };
+        return;
+    }
+    try {
+        DashState.ticketAdvancedFilter = normalizeTicketAdvancedFilter(JSON.parse(raw));
+    } catch {
+        DashState.ticketAdvancedFilter = { ...TICKET_ADVANCED_FILTER_DEFAULT };
+    }
+}
+
+function saveTicketAdvancedFilter(filter) {
+    DashState.ticketAdvancedFilter = normalizeTicketAdvancedFilter(filter);
+    localStorage.setItem(TICKET_ADVANCED_FILTER_STORAGE_KEY, JSON.stringify(DashState.ticketAdvancedFilter));
+}
+
+function sanitizeTicketAdvancedFilterAgainstCatalog({ persist = false } = {}) {
+    if (!DashState.ticketFilterCatalogLoaded) {
+        return;
+    }
+
+    let changed = false;
+    const next = {};
+    Object.keys(TICKET_ADVANCED_FILTER_DEFAULT).forEach(key => {
+        const config = ticketAdvancedFilterConfig(key);
+        const items = config ? (DashState.ticketFilterCatalog?.[config.items] || []) : [];
+        const allowed = new Set(items.map(item => String(Number(item.id || 0))));
+        const current = normalizeTicketAdvancedFilter(DashState.ticketAdvancedFilter || {})[key] || [];
+        let sanitized = current;
+
+        if (current.includes(TICKET_ADVANCED_NONE_VALUE)) {
+            sanitized = items.length ? [TICKET_ADVANCED_NONE_VALUE] : [];
+        } else if (allowed.size > 0) {
+            sanitized = current.filter(value => allowed.has(value));
+        } else {
+            sanitized = [];
+        }
+
+        if (sanitized.length !== current.length || sanitized.some((value, index) => value !== current[index])) {
+            changed = true;
+        }
+        next[key] = sanitized;
+    });
+
+    if (!changed) {
+        return;
+    }
+
+    DashState.ticketAdvancedFilter = next;
+    if (persist) {
+        localStorage.setItem(TICKET_ADVANCED_FILTER_STORAGE_KEY, JSON.stringify(next));
+    }
+}
+
+function syncTicketFilterCatalogStatus() {
+    const status = document.getElementById('ticketsFilterCatalogStatus');
+    if (!status) return;
+
+    if (!DashState.ticketFilterCatalogError) {
+        status.hidden = true;
+        status.innerHTML = '';
+        return;
+    }
+
+    status.hidden = false;
+    status.innerHTML = `
+        <span>${escHtml(DashState.ticketFilterCatalogError)}</span>
+        <button type="button" class="tickets-filter-inline-btn" data-ticket-filter-catalog-retry>Tentar novamente</button>
+    `;
+}
+
+async function loadTicketFilterCatalog() {
+    DashState.ticketFilterCatalogError = '';
+    syncTicketFilterCatalogStatus();
+    try {
+        const data = await dashglpiFetchJson(
+            `${PLUGIN_ROOT}/ajax/dashboard.php?action=ticket_filter_catalog&_ts=${Date.now()}`,
+            {},
+            'Erro de conexão ao carregar filtros.'
+        );
+        if (!data?.ok) throw new Error(data?.error || 'Não foi possível carregar filtros.');
+        const catalog = data.catalog || {};
+        DashState.ticketFilterCatalog = {
+            types: Array.isArray(catalog.types) ? catalog.types : [],
+            categories: Array.isArray(catalog.categories) ? catalog.categories : [],
+            urgencies: Array.isArray(catalog.urgencies) ? catalog.urgencies : [],
+            impacts: Array.isArray(catalog.impacts) ? catalog.impacts : [],
+            priorities: Array.isArray(catalog.priorities) ? catalog.priorities : [],
+        };
+        DashState.ticketFilterCatalogLoaded = true;
+        DashState.ticketFilterCatalogError = '';
+        sanitizeTicketAdvancedFilterAgainstCatalog({ persist: true });
+        syncTicketFilterCatalogStatus();
+        syncTicketAdvancedFilterControls();
+    } catch (error) {
+        console.error('Error loading ticket filter catalog:', error);
+        DashState.ticketFilterCatalogLoaded = false;
+        DashState.ticketFilterCatalogError = `${error.message || 'Não foi possível carregar filtros do GLPI.'} Filtros avançados ficam temporariamente indisponíveis.`;
+        DashState.ticketFilterCatalog = { types: [], categories: [], urgencies: [], impacts: [], priorities: [] };
+        syncTicketFilterCatalogStatus();
+        syncTicketAdvancedFilterControls();
+    }
+}
+
+function ticketAdvancedFilterConfig(key) {
+    return {
+        types: { containerId: 'ticketsFilterTypeOptions', attr: 'data-ticket-filter-type', items: 'types' },
+        categories: { containerId: 'ticketsFilterCategoryOptions', attr: 'data-ticket-filter-category', items: 'categories', searchId: 'ticketsFilterCategorySearch' },
+        urgencies: { containerId: 'ticketsFilterUrgencyOptions', attr: 'data-ticket-filter-urgency', items: 'urgencies' },
+        impacts: { containerId: 'ticketsFilterImpactOptions', attr: 'data-ticket-filter-impact', items: 'impacts' },
+        priorities: { containerId: 'ticketsFilterPriorityOptions', attr: 'data-ticket-filter-priority', items: 'priorities' },
+    }[key];
+}
+
+function ticketCatalogItemLabel(item) {
+    return String(item?.label || item?.name || item?.completename || '').trim() || `#${Number(item?.id || 0)}`;
 }
 
 function ticketEntityId(item) {
@@ -2054,17 +2245,17 @@ function loadTicketEntityFilter(kind) {
 
 async function loadKanbanTasks() {
     try {
-        const response = await fetch(`${PLUGIN_ROOT}/ajax/kanban_tasks.php?my_tasks=${(MY_TASKS_FILTER_LOCKED || DashState.myTasksOnly) ? '1' : '0'}&_ts=${Date.now()}`, {
-            headers: { 'Accept': 'application/json' },
-        });
-        const tasks = await response.json();
-        if (!response.ok) {
-            throw new Error(tasks?.error || 'Erro ao carregar tarefas do Kanban.');
-        }
+        const tasks = await dashglpiFetchJson(
+            `${PLUGIN_ROOT}/ajax/kanban_tasks.php?my_tasks=${(MY_TASKS_FILTER_LOCKED || DashState.myTasksOnly) ? '1' : '0'}&_ts=${Date.now()}`,
+            {},
+            'Erro de conexão ao carregar tarefas do Kanban.'
+        );
         DashState.kanbanTasksGlobal = Array.isArray(tasks) ? tasks : [];
+        DashState.kanbanTasksLoadError = '';
     } catch (error) {
         console.error('Error loading kanban tasks:', error);
         DashState.kanbanTasksGlobal = [];
+        DashState.kanbanTasksLoadError = error.message || 'Erro ao carregar tarefas do Kanban.';
     }
 }
 
@@ -2091,6 +2282,96 @@ function syncTicketStatusFilterControls() {
             ? 'Todos'
             : `${selected.size}/${TICKET_STATUS_FILTER_ALL.length}`;
     }
+}
+
+function syncTicketAdvancedFilterControls() {
+    Object.keys(TICKET_ADVANCED_FILTER_DEFAULT).forEach(key => {
+        const config = ticketAdvancedFilterConfig(key);
+        if (!config) return;
+        const container = document.getElementById(config.containerId);
+        if (!container) return;
+        const selected = new Set(DashState.ticketAdvancedFilter?.[key] || []);
+        let items = DashState.ticketFilterCatalog?.[config.items] || [];
+        let visibleIds = new Set(items.map(item => String(Number(item.id || 0))));
+        if (config.searchId) {
+            const query = normalizeTicketEntityTerm(document.getElementById(config.searchId)?.value || '');
+            const terms = query.split(/\s+/).filter(Boolean);
+            if (terms.length) {
+                visibleIds = new Set(items.filter(item => {
+                    const haystack = normalizeTicketEntityTerm(ticketCatalogItemLabel(item));
+                    return terms.every(term => haystack.includes(term));
+                }).map(item => String(Number(item.id || 0))));
+            }
+        }
+        container.innerHTML = items.length
+            ? items.map(item => {
+                const id = String(Number(item.id || 0));
+                const checked = selected.size === 0 || selected.has(id) ? ' checked' : '';
+                const hidden = visibleIds.has(id) ? '' : ' hidden';
+                return `<label class="tickets-filter-entity-option" title="${escHtml(ticketCatalogItemLabel(item))}"${hidden}>
+                    <input type="checkbox" ${config.attr} value="${escHtml(id)}"${checked}>
+                    <span>${escHtml(key === 'categories' ? ticketEntityShortLabel(ticketCatalogItemLabel(item)) : ticketCatalogItemLabel(item))}</span>
+                </label>`;
+            }).join('') + (visibleIds.size ? '' : '<div class="tickets-filter-empty">Nenhuma opção encontrada</div>')
+            : '<div class="tickets-filter-empty">Nenhuma opção disponível</div>';
+        container.querySelectorAll('input[type="checkbox"]').forEach(input => {
+            input.closest('label')?.classList.toggle('is-checked', input.checked);
+        });
+        const disabled = !DashState.ticketFilterCatalogLoaded || items.length === 0;
+        document.querySelectorAll(`[data-ticket-advanced-all="${key}"], [data-ticket-advanced-none="${key}"]`).forEach(button => {
+            button.disabled = disabled;
+        });
+    });
+    syncTicketCategoryFilterDisplay();
+}
+
+function syncTicketCategoryFilterDisplay() {
+    const items = DashState.ticketFilterCatalog?.categories || [];
+    const selected = new Set(DashState.ticketAdvancedFilter?.categories || []);
+    const catalogUnavailable = !DashState.ticketFilterCatalogLoaded && Boolean(DashState.ticketFilterCatalogError);
+    const noneSelected = selected.has(TICKET_ADVANCED_NONE_VALUE);
+    const selectedItems = selected.size === 0
+        ? items
+        : (noneSelected ? [] : items.filter(item => selected.has(String(Number(item.id || 0)))));
+    const summary = document.getElementById('ticketsFilterCategorySummary');
+    if (summary) {
+        summary.textContent = catalogUnavailable
+            ? 'Indisponível'
+            : noneSelected
+            ? `0/${items.length}`
+            : selected.size === 0
+            ? (items.length ? `Todas (${items.length})` : 'Todas')
+            : `${selectedItems.length}/${items.length}`;
+    }
+    const chips = document.getElementById('ticketsFilterCategoryChips');
+    if (!chips) return;
+    if (catalogUnavailable) {
+        chips.innerHTML = '<span class="tickets-filter-chip muted">Catálogo indisponível</span>';
+        return;
+    }
+    chips.innerHTML = selectedItems.length
+        ? selectedItems.map(item => {
+            const id = String(Number(item.id || 0));
+            const label = ticketCatalogItemLabel(item);
+            return `<span class="tickets-filter-chip" title="${escHtml(label)}">
+                <span>${escHtml(ticketEntityShortLabel(label))}</span>
+                <button type="button" data-ticket-filter-category-chip-remove data-category-id="${escHtml(id)}" aria-label="Remover ${escHtml(ticketEntityShortLabel(label))}">×</button>
+            </span>`;
+        }).join('')
+        : '<span class="tickets-filter-chip muted">Nenhuma</span>';
+}
+
+function selectedTicketAdvancedFilterValues(key) {
+    const config = ticketAdvancedFilterConfig(key);
+    if (!config) return [];
+    const items = DashState.ticketFilterCatalog?.[config.items] || [];
+    const selected = Array.from(document.querySelectorAll(`[${config.attr}]:checked`))
+        .map(input => String(Number(input.value || 0)))
+        .filter(value => value !== 'NaN');
+    if (items.length > 0 && selected.length === 0) {
+        return [TICKET_ADVANCED_NONE_VALUE];
+    }
+    return selected.length === items.length ? [] : selected;
 }
 
 function syncTicketEntityFilterControls(kind) {
@@ -2167,6 +2448,10 @@ function syncTicketEntityFilterControls(kind) {
     if (entityAll) {
         entityAll.disabled = Boolean(singleEntity) || options.length === 0;
     }
+    const entityNone = document.querySelector(`[data-ticket-filter-entity-none="${kind}"]`);
+    if (entityNone) {
+        entityNone.disabled = Boolean(singleEntity) || options.length === 0;
+    }
 }
 
 function syncTicketEntityFiltersControls() {
@@ -2175,7 +2460,7 @@ function syncTicketEntityFiltersControls() {
 }
 
 function setTicketFilterMainTab(kind) {
-    const activeKind = ['dash', 'glpi', 'status'].includes(kind) ? kind : 'dash';
+    const activeKind = ['dash', 'glpi', 'category', 'status'].includes(kind) ? kind : 'dash';
     document.querySelectorAll('[data-ticket-filter-main-tab]').forEach(button => {
         const active = button.getAttribute('data-ticket-filter-main-tab') === activeKind;
         button.classList.toggle('is-active', active);
@@ -2192,6 +2477,12 @@ function setTicketFilterMainTab(kind) {
         statusPanel.classList.toggle('is-active', active);
         statusPanel.hidden = !active;
     }
+    const categoryPanel = document.querySelector('[data-ticket-filter-category-panel]');
+    if (categoryPanel) {
+        const active = activeKind === 'category';
+        categoryPanel.classList.toggle('is-active', active);
+        categoryPanel.hidden = !active;
+    }
 }
 
 function ticketFiltersAreActive() {
@@ -2203,7 +2494,8 @@ function ticketFiltersAreActive() {
         && (DashState.ticketDashEntityFilter || []).length < options.length;
     const glpiEntityChanged = (DashState.ticketGlpiEntityFilter || []).length > 0
         && (DashState.ticketGlpiEntityFilter || []).length < options.length;
-    return statusChanged || dashEntityChanged || glpiEntityChanged || options.length === 1;
+    const advancedChanged = Object.values(DashState.ticketAdvancedFilter || {}).some(values => Array.isArray(values) && values.length > 0);
+    return statusChanged || dashEntityChanged || glpiEntityChanged || advancedChanged || options.length === 1;
 }
 
 function syncTicketFilterButtons() {
@@ -2218,6 +2510,7 @@ function syncTicketFilterButtons() {
 function syncTicketFilterModalControls() {
     syncTicketStatusFilterControls();
     syncTicketEntityFiltersControls();
+    syncTicketAdvancedFilterControls();
     syncTicketFilterButtons();
 }
 
@@ -2258,6 +2551,10 @@ function applyTicketFiltersFromModal() {
     saveTicketStatusFilter(selectedTicketFilterStatusValues());
     saveTicketEntityFilter('dash', selectedTicketFilterEntityValues('dash'));
     saveTicketEntityFilter('glpi', selectedTicketFilterEntityValues('glpi'));
+    saveTicketAdvancedFilter(Object.fromEntries(Object.keys(TICKET_ADVANCED_FILTER_DEFAULT).map(key => [
+        key,
+        selectedTicketAdvancedFilterValues(key),
+    ])));
     syncTicketFilterModalControls();
     closeTicketFilterModal();
     DashState.ticketsPaginationState.page = 1;
@@ -2269,7 +2566,9 @@ function initTicketFilters() {
     loadTicketStatusFilter();
     loadTicketEntityFilter('dash');
     loadTicketEntityFilter('glpi');
+    loadTicketAdvancedFilter();
     syncTicketFilterModalControls();
+    loadTicketFilterCatalog();
 
     document.querySelectorAll('[data-ticket-filter-modal-open]').forEach(button => {
         button.addEventListener('click', openTicketFilterModal);
@@ -2288,6 +2587,12 @@ function initTicketFilters() {
     document.getElementById('ticketsFilterModal')?.addEventListener('keydown', event => {
         if (event.key === 'Escape') closeTicketFilterModal();
     });
+    document.getElementById('ticketsFilterCatalogStatus')?.addEventListener('click', event => {
+        const button = event.target.closest('[data-ticket-filter-catalog-retry]');
+        if (!button) return;
+        button.disabled = true;
+        loadTicketFilterCatalog();
+    });
     document.querySelector('[data-ticket-filter-status-all]')?.addEventListener('click', () => {
         document.querySelectorAll('[data-ticket-filter-status]').forEach(input => {
             input.checked = true;
@@ -2304,12 +2609,69 @@ function initTicketFilters() {
             if (summary) summary.textContent = count === TICKET_STATUS_FILTER_ALL.length ? 'Todos' : `${count}/${TICKET_STATUS_FILTER_ALL.length}`;
         });
     });
+    document.querySelectorAll('[data-ticket-advanced-all]').forEach(button => {
+        button.addEventListener('click', () => {
+            const key = button.getAttribute('data-ticket-advanced-all') || '';
+            const config = ticketAdvancedFilterConfig(key);
+            if (!config) return;
+            document.querySelectorAll(`[${config.attr}]`).forEach(input => {
+                input.checked = true;
+                input.closest('label')?.classList.add('is-checked');
+            });
+            DashState.ticketAdvancedFilter = {
+                ...(DashState.ticketAdvancedFilter || TICKET_ADVANCED_FILTER_DEFAULT),
+                [key]: []
+            };
+            if (key === 'categories') syncTicketCategoryFilterDisplay();
+        });
+    });
+    document.querySelectorAll('[data-ticket-advanced-none]').forEach(button => {
+        button.addEventListener('click', () => {
+            const key = button.getAttribute('data-ticket-advanced-none') || '';
+            const config = ticketAdvancedFilterConfig(key);
+            if (!config) return;
+            document.querySelectorAll(`[${config.attr}]`).forEach(input => {
+                input.checked = false;
+                input.closest('label')?.classList.remove('is-checked');
+            });
+            DashState.ticketAdvancedFilter = {
+                ...(DashState.ticketAdvancedFilter || TICKET_ADVANCED_FILTER_DEFAULT),
+                [key]: [TICKET_ADVANCED_NONE_VALUE]
+            };
+            if (key === 'categories') syncTicketCategoryFilterDisplay();
+        });
+    });
+    Object.keys(TICKET_ADVANCED_FILTER_DEFAULT).forEach(key => {
+        const config = ticketAdvancedFilterConfig(key);
+        document.getElementById(config?.containerId || '')?.addEventListener('change', event => {
+            const input = event.target.closest('input[type="checkbox"]');
+            if (!input) return;
+            input.closest('label')?.classList.toggle('is-checked', input.checked);
+            DashState.ticketAdvancedFilter = {
+                ...(DashState.ticketAdvancedFilter || TICKET_ADVANCED_FILTER_DEFAULT),
+                [key]: selectedTicketAdvancedFilterValues(key)
+            };
+            if (key === 'categories') syncTicketCategoryFilterDisplay();
+        });
+    });
+    document.getElementById('ticketsFilterCategorySearch')?.addEventListener('input', () => {
+        syncTicketAdvancedFilterControls();
+    });
     document.querySelectorAll('[data-ticket-filter-entity-all]').forEach(button => {
         button.addEventListener('click', () => {
             const kind = button.getAttribute('data-ticket-filter-entity-all') || 'dash';
             const config = ticketEntityFilterConfig(kind);
             document.querySelectorAll(`[${config.checkboxAttr}]:not(:disabled)`).forEach(input => { input.checked = true; });
             DashState[config.stateKey] = [];
+            syncTicketEntityFilterControls(kind);
+        });
+    });
+    document.querySelectorAll('[data-ticket-filter-entity-none]').forEach(button => {
+        button.addEventListener('click', () => {
+            const kind = button.getAttribute('data-ticket-filter-entity-none') || 'dash';
+            const config = ticketEntityFilterConfig(kind);
+            document.querySelectorAll(`[${config.checkboxAttr}]:not(:disabled)`).forEach(input => { input.checked = false; });
+            DashState[config.stateKey] = [TICKET_ENTITY_NONE_VALUE];
             syncTicketEntityFilterControls(kind);
         });
     });
@@ -2329,6 +2691,24 @@ function initTicketFilters() {
         const nextValues = effectiveValues.filter(value => value !== removedId);
         DashState[config.stateKey] = nextValues.length ? normalizeTicketEntityFilter(nextValues, options) : [TICKET_ENTITY_NONE_VALUE];
         syncTicketEntityFilterControls(kind);
+    });
+    document.getElementById('ticketsFilterModal')?.addEventListener('click', event => {
+        const removeButton = event.target.closest('[data-ticket-filter-category-chip-remove]');
+        if (!removeButton) return;
+        event.preventDefault();
+        event.stopPropagation();
+        const removedId = String(Number(removeButton.getAttribute('data-category-id') || 0));
+        const items = DashState.ticketFilterCatalog?.categories || [];
+        const currentValues = DashState.ticketAdvancedFilter?.categories || [];
+        const effectiveValues = currentValues.length
+            ? currentValues
+            : items.map(item => String(Number(item.id || 0)));
+        const nextValues = effectiveValues.filter(value => value !== removedId);
+        DashState.ticketAdvancedFilter = {
+            ...(DashState.ticketAdvancedFilter || TICKET_ADVANCED_FILTER_DEFAULT),
+            categories: nextValues.length ? nextValues : [TICKET_ADVANCED_NONE_VALUE]
+        };
+        syncTicketAdvancedFilterControls();
     });
     ['dash', 'glpi'].forEach(kind => {
         const config = ticketEntityFilterConfig(kind);
@@ -2359,9 +2739,13 @@ function initTicketFilters() {
         const glpiSearch = document.getElementById('ticketsFilterGlpiEntitySearch');
         if (dashSearch) dashSearch.value = '';
         if (glpiSearch) glpiSearch.value = '';
+        const categorySearch = document.getElementById('ticketsFilterCategorySearch');
+        if (categorySearch) categorySearch.value = '';
         DashState.ticketDashEntityFilter = defaultTicketEntityFilterValues();
         DashState.ticketGlpiEntityFilter = [];
+        DashState.ticketAdvancedFilter = { ...TICKET_ADVANCED_FILTER_DEFAULT };
         syncTicketEntityFiltersControls();
+        syncTicketAdvancedFilterControls();
     });
     document.getElementById('ticketsFilterForm')?.addEventListener('submit', event => {
         event.preventDefault();
@@ -2390,6 +2774,12 @@ function initTicketSearchAndSort() {
     const input = document.getElementById('ticketsSearchInput');
     const mobileInput = document.getElementById('ticketsSearchInputMobile');
     const kanbanInput = document.getElementById('ticketsKanbanSearch');
+    document.addEventListener('click', event => {
+        const retryButton = event.target.closest('[data-ticket-list-retry], [data-kanban-tasks-retry]');
+        if (!retryButton) return;
+        retryButton.disabled = true;
+        loadTicketLists();
+    });
     if (input) {
         input.addEventListener('input', () => {
             if (mobileInput) mobileInput.value = input.value;
@@ -2468,6 +2858,9 @@ function ticketMatchesTicketsFilters(ticket, search, selectedStatuses, selectedE
     if (selectedEntities.size > 0 && !selectedEntities.has(String(ticketEntityId(ticket)))) {
         return false;
     }
+    if (!ticketFilterItemIsDashTask(ticket) && !ticketMatchesAdvancedFilters(ticket)) {
+        return false;
+    }
     if (!search) return true;
     return [
         ticket.id,
@@ -2481,6 +2874,28 @@ function ticketMatchesTicketsFilters(ticket, search, selectedStatuses, selectedE
         ticket.date,
         ticket.time_to_resolve
     ].some(value => String(value || '').toLowerCase().includes(search));
+}
+
+function ticketFilterItemIsDashTask(item) {
+    return Number(item?.is_dashglpi_task) === 1 || item?.itemtype === 'dashglpi_task';
+}
+
+function ticketMatchesAdvancedFilters(ticket) {
+    const filter = DashState.ticketAdvancedFilter || TICKET_ADVANCED_FILTER_DEFAULT;
+    const checks = [
+        ['types', ticket.type],
+        ['categories', ticket.itilcategories_id],
+        ['urgencies', ticket.urgency],
+        ['impacts', ticket.impact],
+        ['priorities', ticket.priority],
+    ];
+    return checks.every(([key, rawValue]) => {
+        const selected = filter[key] || [];
+        if (selected.includes(TICKET_ADVANCED_NONE_VALUE)) return false;
+        if (!selected.length) return true;
+        const value = String(Number(rawValue || 0));
+        return value !== 'NaN' && selected.includes(value);
+    });
 }
 
 function filteredTicketsForCurrentFilters(searchInputId = null) {

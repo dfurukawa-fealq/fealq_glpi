@@ -1,6 +1,7 @@
 <?php
 
 require_once __DIR__ . '/../inc/bootstrap.php';
+require_once __DIR__ . '/../inc/ajax_endpoint.php';
 require_once __DIR__ . '/../inc/glpi_admin.php';
 require_once __DIR__ . '/../inc/ticket_create.php';
 
@@ -64,9 +65,7 @@ try {
         dashglpi_json(['ok' => false, 'error' => 'Acao invalida.'], 400);
     }
 } catch (Throwable $e) {
-    $message = trim((string) $e->getMessage());
-    error_log('[DashGLPI] ticket create error: ' . ($message !== '' ? $message : get_class($e)));
-    dashglpi_json(['ok' => false, 'error' => $message !== '' ? $message : 'Erro interno ao criar chamado.'], 500);
+    dashglpi_ajax_error_response('ticket_create_get', $e, 'Erro interno ao criar chamado.');
 }
 
 dashglpi_ajax_bridge_endpoint('ticket create', function () {

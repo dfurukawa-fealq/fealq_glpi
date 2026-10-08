@@ -1260,11 +1260,16 @@ if (!empty($currentUser['id'])) {
                             <span>Tarefas do GLPI</span>
                             <strong id="ticketsFilterGlpiEntitySummary">Todas</strong>
                         </button>
+                        <button type="button" class="tickets-filter-tab" role="tab" aria-selected="false" aria-controls="ticketsFilterCategoryPanel" data-ticket-filter-main-tab="category">
+                            <span>Categoria</span>
+                            <strong id="ticketsFilterCategorySummary">Todas</strong>
+                        </button>
                         <button type="button" class="tickets-filter-tab" role="tab" aria-selected="false" aria-controls="ticketsFilterStatusPanel" data-ticket-filter-main-tab="status">
                             <span>Status</span>
                             <strong id="ticketsFilterStatusSummary">Todos</strong>
                         </button>
                     </div>
+                    <div class="tickets-filter-catalog-status" id="ticketsFilterCatalogStatus" hidden></div>
                     <section class="tickets-filter-section tickets-filter-entity-section">
                         <div class="tickets-filter-entity-panel is-active" id="ticketsFilterDashPanel" role="tabpanel" data-ticket-filter-entity-panel="dash">
                             <div class="tickets-filter-chip-row" id="ticketsFilterDashEntityChips"></div>
@@ -1273,7 +1278,10 @@ if (!empty($currentUser['id'])) {
                                     <i class="fas fa-search" aria-hidden="true"></i>
                                     <input type="search" id="ticketsFilterDashEntitySearch" placeholder="Buscar entidade..." autocomplete="off">
                                 </div>
-                                <button type="button" class="tickets-filter-inline-btn" data-ticket-filter-entity-all="dash">Todas</button>
+                                <div class="tickets-filter-inline-actions">
+                                    <button type="button" class="tickets-filter-inline-btn" data-ticket-filter-entity-all="dash">Todas</button>
+                                    <button type="button" class="tickets-filter-inline-btn danger" data-ticket-filter-entity-none="dash">Nenhuma</button>
+                                </div>
                                 <div class="tickets-filter-entity-list" id="ticketsFilterDashEntityOptions"></div>
                             </div>
                         </div>
@@ -1284,22 +1292,71 @@ if (!empty($currentUser['id'])) {
                                     <i class="fas fa-search" aria-hidden="true"></i>
                                     <input type="search" id="ticketsFilterGlpiEntitySearch" placeholder="Buscar entidade..." autocomplete="off">
                                 </div>
-                                <button type="button" class="tickets-filter-inline-btn" data-ticket-filter-entity-all="glpi">Todas</button>
+                                <div class="tickets-filter-inline-actions">
+                                    <button type="button" class="tickets-filter-inline-btn" data-ticket-filter-entity-all="glpi">Todas</button>
+                                    <button type="button" class="tickets-filter-inline-btn danger" data-ticket-filter-entity-none="glpi">Nenhuma</button>
+                                </div>
                                 <div class="tickets-filter-entity-list" id="ticketsFilterGlpiEntityOptions"></div>
                             </div>
                         </div>
-                        <div class="tickets-filter-entity-panel tickets-filter-status-panel" id="ticketsFilterStatusPanel" role="tabpanel" data-ticket-filter-status-panel hidden>
-                            <div class="tickets-filter-section-header">
-                                <span>Status</span>
-                                <button type="button" class="tickets-filter-inline-btn" data-ticket-filter-status-all>Todos</button>
+                        <div class="tickets-filter-entity-panel" id="ticketsFilterCategoryPanel" role="tabpanel" data-ticket-filter-category-panel hidden>
+                            <div class="tickets-filter-chip-row" id="ticketsFilterCategoryChips"></div>
+                            <div class="tickets-filter-entity-picker">
+                                <div class="tickets-filter-search">
+                                    <i class="fas fa-search" aria-hidden="true"></i>
+                                    <input type="search" id="ticketsFilterCategorySearch" placeholder="Buscar categoria..." autocomplete="off">
+                                </div>
+                                <div class="tickets-filter-inline-actions">
+                                    <button type="button" class="tickets-filter-inline-btn" data-ticket-advanced-all="categories">Todas</button>
+                                    <button type="button" class="tickets-filter-inline-btn danger" data-ticket-advanced-none="categories">Nenhuma</button>
+                                </div>
+                                <div class="tickets-filter-entity-list" id="ticketsFilterCategoryOptions"></div>
                             </div>
-                            <div class="tickets-filter-options">
-                                <label><input type="checkbox" data-ticket-filter-status value="1"> <span>Aberto</span></label>
-                                <label><input type="checkbox" data-ticket-filter-status value="3"> <span>Planejado</span></label>
-                                <label><input type="checkbox" data-ticket-filter-status value="2"> <span>Em Andamento</span></label>
-                                <label><input type="checkbox" data-ticket-filter-status value="4"> <span>Pendente</span></label>
-                                <label><input type="checkbox" data-ticket-filter-status value="5"> <span>Solucionando</span></label>
-                                <label><input type="checkbox" data-ticket-filter-status value="6"> <span>Fechado</span></label>
+                        </div>
+                        <div class="tickets-filter-entity-panel tickets-filter-status-panel" id="ticketsFilterStatusPanel" role="tabpanel" data-ticket-filter-status-panel hidden>
+                            <div class="tickets-filter-status-grid">
+                                <section class="tickets-filter-status-group">
+                                    <div class="tickets-filter-section-header">
+                                        <span>Status</span>
+                                        <button type="button" class="tickets-filter-inline-btn" data-ticket-filter-status-all>Todos</button>
+                                    </div>
+                                    <div class="tickets-filter-options">
+                                        <label><input type="checkbox" data-ticket-filter-status value="1"> <span>Aberto</span></label>
+                                        <label><input type="checkbox" data-ticket-filter-status value="3"> <span>Planejado</span></label>
+                                        <label><input type="checkbox" data-ticket-filter-status value="2"> <span>Em Andamento</span></label>
+                                        <label><input type="checkbox" data-ticket-filter-status value="4"> <span>Pendente</span></label>
+                                        <label><input type="checkbox" data-ticket-filter-status value="5"> <span>Solucionando</span></label>
+                                        <label><input type="checkbox" data-ticket-filter-status value="6"> <span>Fechado</span></label>
+                                    </div>
+                                </section>
+                                <section class="tickets-filter-status-group">
+                                    <div class="tickets-filter-section-header">
+                                        <span>Tipo</span>
+                                        <button type="button" class="tickets-filter-inline-btn" data-ticket-advanced-all="types">Todos</button>
+                                    </div>
+                                    <div class="tickets-filter-options compact" id="ticketsFilterTypeOptions"></div>
+                                </section>
+                                <section class="tickets-filter-status-group">
+                                    <div class="tickets-filter-section-header">
+                                        <span>Urgência</span>
+                                        <button type="button" class="tickets-filter-inline-btn" data-ticket-advanced-all="urgencies">Todas</button>
+                                    </div>
+                                    <div class="tickets-filter-options compact" id="ticketsFilterUrgencyOptions"></div>
+                                </section>
+                                <section class="tickets-filter-status-group">
+                                    <div class="tickets-filter-section-header">
+                                        <span>Impacto</span>
+                                        <button type="button" class="tickets-filter-inline-btn" data-ticket-advanced-all="impacts">Todos</button>
+                                    </div>
+                                    <div class="tickets-filter-options compact" id="ticketsFilterImpactOptions"></div>
+                                </section>
+                                <section class="tickets-filter-status-group full">
+                                    <div class="tickets-filter-section-header">
+                                        <span>Prioridade</span>
+                                        <button type="button" class="tickets-filter-inline-btn" data-ticket-advanced-all="priorities">Todas</button>
+                                    </div>
+                                    <div class="tickets-filter-options compact" id="ticketsFilterPriorityOptions"></div>
+                                </section>
                             </div>
                         </div>
                     </section>

@@ -2,23 +2,21 @@
 
 // Autenticação por sessão Dash; permissões nativas no bridge (PLAN-20260905-001).
 require_once __DIR__ . '/../inc/bootstrap.php';
+require_once __DIR__ . '/../inc/ajax_endpoint.php';
 require_once __DIR__ . '/../inc/ticket_attendance.php';
 
 dashglpi_require_auth();
 dashglpi_assert_page_access('tickets');
 
-try {
-    if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+    dashglpi_ajax_get_endpoint('attendance_timeline', static function (): array {
         $ticketId = dashglpi_ajax_require_ticket_id($_GET);
-        $result = dashglpi_attendance_request('ticket_followup_config.php', $ticketId, [
-            'action' => 'list', 'cursor' => (string) ($_GET['cursor'] ?? ''),
+        return dashglpi_attendance_request('ticket_followup_config.php', $ticketId, [
+            'action' => 'list',
+            'cursor' => (string) ($_GET['cursor'] ?? ''),
             'limit' => (int) ($_GET['limit'] ?? 30),
         ]);
-        dashglpi_json($result);
-    }
-} catch (Throwable $e) {
-    error_log('[DashGLPI] attendance timeline: ' . $e->getMessage());
-    dashglpi_json(['ok' => false, 'error' => $e->getMessage()], 403);
+    }, 'Erro ao carregar historico do atendimento.');
 }
 
 dashglpi_ajax_bridge_endpoint('ticket attendance', function (): array {

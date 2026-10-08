@@ -13,12 +13,11 @@ if (!empty(dashglpi_current_user_context()['lock_my_tasks'])) {
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-    try {
-        dashglpi_json(dashglpi_kanban_tasks_list($_GET));
-    } catch (Throwable $e) {
-        error_log('[DashGLPI] kanban tasks list error: ' . $e->getMessage());
-        dashglpi_json(['error' => 'Erro ao carregar tarefas do Kanban.'], 500);
-    }
+    dashglpi_ajax_get_endpoint(
+        'kanban_tasks_list',
+        static fn(): array => dashglpi_kanban_tasks_list($_GET),
+        'Erro ao carregar tarefas do Kanban.'
+    );
 }
 
 dashglpi_ajax_bridge_endpoint('kanban_tasks', static function (): array {

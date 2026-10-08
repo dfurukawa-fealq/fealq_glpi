@@ -242,7 +242,7 @@ class PluginDashglpiDashboard
         $rows = self::ticketRows('1970-01-01 00:00:00', self::TICKETS_LIST_MAX, $scope);
 
         $rows = self::intRows($rows, [
-            'id', 'status', 'priority', 'entities_id', 'global_validation', 'notification_failed',
+            'id', 'status', 'type', 'urgency', 'impact', 'priority', 'itilcategories_id', 'entities_id', 'global_validation', 'notification_failed',
             'technician_count', 'group_count', 'takeintoaccount_delay_stat', 'solve_delay_stat',
             'satisfaction_pending', 'attachments_count', 'followups_count',
         ]);
@@ -264,6 +264,58 @@ class PluginDashglpiDashboard
         unset($row);
 
         return $rows;
+    }
+
+    public static function getTicketFilterCatalog(): array
+    {
+        $scope = function_exists('dashglpi_ticket_create_scope') ? dashglpi_ticket_create_scope() : ['entities' => []];
+        $entities = array_values(array_filter($scope['entities'] ?? [], static fn($entity): bool => isset($entity['id'])));
+        $categoryMap = [];
+        foreach ($entities as $entity) {
+            $entityId = (int) ($entity['id'] ?? 0);
+            foreach ([1, 2] as $type) {
+                foreach (dashglpi_ticket_create_categories_catalog($entityId, $type) as $category) {
+                    $categoryId = (int) ($category['id'] ?? 0);
+                    if ($categoryId <= 0) {
+                        continue;
+                    }
+                    $categoryMap[$categoryId] = [
+                        'id' => $categoryId,
+                        'label' => (string) ($category['label'] ?? $category['completename'] ?? $category['name'] ?? ('Categoria #' . $categoryId)),
+                    ];
+                }
+            }
+        }
+        uasort($categoryMap, static fn($a, $b): int => strcasecmp((string) $a['label'], (string) $b['label']));
+
+        $levels = [
+            ['id' => 1, 'label' => 'Muito baixa'],
+            ['id' => 2, 'label' => 'Baixa'],
+            ['id' => 3, 'label' => 'Media'],
+            ['id' => 4, 'label' => 'Alta'],
+            ['id' => 5, 'label' => 'Muito alta'],
+        ];
+
+        return [
+            'ok' => true,
+            'catalog' => [
+                'types' => function_exists('dashglpi_ticket_create_type_catalog') ? dashglpi_ticket_create_type_catalog() : [
+                    ['id' => 1, 'label' => 'Incidente'],
+                    ['id' => 2, 'label' => 'Requisicao'],
+                ],
+                'categories' => array_values($categoryMap),
+                'urgencies' => $levels,
+                'impacts' => $levels,
+                'priorities' => [
+                    ['id' => 1, 'label' => self::priorityLabel(1)],
+                    ['id' => 2, 'label' => self::priorityLabel(2)],
+                    ['id' => 3, 'label' => self::priorityLabel(3)],
+                    ['id' => 4, 'label' => self::priorityLabel(4)],
+                    ['id' => 5, 'label' => self::priorityLabel(5)],
+                    ['id' => 6, 'label' => self::priorityLabel(6)],
+                ],
+            ],
+        ];
     }
 
     private static function ticketDescriptionExcerpt(string $content): string
@@ -2363,7 +2415,8 @@ class PluginDashglpiDashboard
         $limit = min(self::TICKETS_LIST_MAX, max(1, $limit));
 
         return dashglpi_fetch_all(
-            "SELECT t.id, t.name, t.content, t.status, t.global_validation, t.date, t.date_mod, t.priority, t.time_to_resolve,
+            "SELECT t.id, t.name, t.content, t.status, t.type, t.urgency, t.impact, t.priority, t.itilcategories_id,
+                    t.global_validation, t.date, t.date_mod, t.time_to_resolve,
                     t.time_to_own, t.takeintoaccountdate, t.solvedate, t.closedate, t.entities_id,
                     t.takeintoaccount_delay_stat, t.solve_delay_stat,
                     COALESCE(c.completename, 'Sem Categoria') AS category,

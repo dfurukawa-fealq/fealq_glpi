@@ -1,8 +1,10 @@
 <?php
 
 require_once __DIR__ . '/../inc/bootstrap.php';
+require_once __DIR__ . '/../inc/ajax_endpoint.php';
 require_once __DIR__ . '/../inc/glpi_admin.php';
 require_once __DIR__ . '/../inc/notification_admin.php';
+require_once __DIR__ . '/../inc/ticket_create.php';
 require_once __DIR__ . '/../inc/dashboard.class.php';
 
 dashglpi_require_auth();
@@ -27,6 +29,11 @@ try {
         case 'tickets_list':
             dashglpi_assert_page_access('tickets');
             dashglpi_json(PluginDashglpiDashboard::getTicketsList($_GET));
+            break;
+
+        case 'ticket_filter_catalog':
+            dashglpi_assert_page_access('tickets');
+            dashglpi_json(PluginDashglpiDashboard::getTicketFilterCatalog());
             break;
 
         case 'sla_list':
@@ -54,6 +61,5 @@ try {
             break;
     }
 } catch (Throwable $e) {
-    error_log('[DashGLPI] AJAX error: ' . $e->getMessage());
-    dashglpi_json(['error' => 'Erro interno do servidor.'], 500);
+    dashglpi_ajax_error_response('dashboard', $e, 'Erro interno do servidor.');
 }

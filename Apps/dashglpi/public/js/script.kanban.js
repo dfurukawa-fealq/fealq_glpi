@@ -73,7 +73,11 @@ function renderKanbanBoard() {
         if (colId && grouped[colId]) grouped[colId].push(ticket);
     });
 
-    board.innerHTML = `<div class="kanban-board">${visibleColumns.map(col => {
+    const taskLoadWarning = DashState.kanbanTasksLoadError
+        ? `<div class="kanban-load-warning">${ticketLoadErrorHtml(DashState.kanbanTasksLoadError, 'data-kanban-tasks-retry')}</div>`
+        : '';
+
+    board.innerHTML = `${taskLoadWarning}<div class="kanban-board">${visibleColumns.map(col => {
         const cards = sortKanbanColumnCards(grouped[col.id] || []);
         return `
         <div class="kanban-column">
@@ -389,9 +393,10 @@ async function loadKanbanTaskEntityOptions() {
 
     try {
         const params = new URLSearchParams({ action: 'catalog' });
-        const response = await fetch(`${PLUGIN_ROOT}/ajax/ticket_create.php?${params.toString()}`, { headers: { 'Accept': 'application/json' } });
-        const data = await response.json();
-        if (!response.ok || !data?.ok) throw new Error(data?.error || 'Erro ao carregar entidades.');
+        const data = typeof dashglpiFetchJson === 'function'
+            ? await dashglpiFetchJson(`${PLUGIN_ROOT}/ajax/ticket_create.php?${params.toString()}`, {}, 'Erro de conexão ao carregar entidades.')
+            : await fetch(`${PLUGIN_ROOT}/ajax/ticket_create.php?${params.toString()}`, { headers: { 'Accept': 'application/json' } }).then(response => response.json());
+        if (!data?.ok) throw new Error(data?.error || 'Erro ao carregar entidades.');
         const catalog = data.catalog || {};
         DashState.kanbanTaskEntities = Array.isArray(catalog.entities) ? catalog.entities : [];
         DashState.kanbanTaskDefaultEntityId = Number(catalog.selected_entity_id ?? catalog.default_entity_id ?? 0);

@@ -1,6 +1,7 @@
 <?php
 
 require_once __DIR__ . '/../inc/bootstrap.php';
+require_once __DIR__ . '/../inc/ajax_endpoint.php';
 require_once __DIR__ . '/../inc/ticket_attendance.php'; // PLAN-20260905-001
 
 dashglpi_require_auth();
