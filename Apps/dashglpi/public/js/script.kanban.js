@@ -5,7 +5,7 @@
 const KANBAN_COLUMNS = [
     { id: 'novo',        label: 'Aberto',                 status: 1, color: 'warning'  },
     { id: 'planejado',   label: 'Planejado',              status: 3, color: 'primary'  },
-    { id: 'atendimento', label: 'Em Atendimento',         status: 2, color: 'info'     },
+    { id: 'atendimento', label: 'Em Andamento',           status: 2, color: 'info'     },
     { id: 'pendente',    label: 'Pendente',               status: 4, color: 'danger'   },
     { id: 'solucionado', label: 'Solucionado',            status: 5, color: 'success'  },
     { id: 'fechado',     label: 'Fechado',                status: 6, color: 'muted'    },
@@ -21,6 +21,24 @@ function kanbanTicketColumn(ticket) {
 
 function isDashglpiKanbanTask(item) {
     return Number(item?.is_dashglpi_task) === 1 || item?.itemtype === 'dashglpi_task';
+}
+
+function kanbanPathParts(value) {
+    return String(value || '')
+        .split('>')
+        .map(part => part.trim())
+        .filter(Boolean);
+}
+
+function kanbanLastPathPart(value, fallback = '-') {
+    const parts = kanbanPathParts(value);
+    return parts.length ? parts[parts.length - 1] : fallback;
+}
+
+function kanbanCategoryChipsHtml(value) {
+    const parts = kanbanPathParts(value);
+    const chips = parts.length ? parts : ['Sem Categoria'];
+    return `<div class="kanban-card-category-chips">${chips.map(part => `<span title="${escHtml(part)}">${escHtml(part)}</span>`).join('')}</div>`;
 }
 
 function sortKanbanColumnCards(cards) {
@@ -57,11 +75,10 @@ function renderKanbanBoard() {
 
     board.innerHTML = `<div class="kanban-board">${visibleColumns.map(col => {
         const cards = sortKanbanColumnCards(grouped[col.id] || []);
-        const colorVar = col.color === 'muted' ? 'var(--text-muted)' : `var(--${col.color})`;
         return `
         <div class="kanban-column">
             <div class="kanban-column-header">
-                <span class="kanban-col-title" style="color:${colorVar}">${escHtml(col.label)}</span>
+                <span class="kanban-col-title kanban-col-title-${Number(col.status)}">${escHtml(col.label)}</span>
                 <div class="kanban-col-actions">
                     <span class="kanban-col-count">${cards.length}</span>
                     <button type="button" class="kanban-add-task-btn" data-kanban-add-status="${col.status}" title="Nova tarefa em ${escHtml(col.label)}" aria-label="Nova tarefa em ${escHtml(col.label)}">
@@ -85,13 +102,17 @@ function kanbanCardHtml(t, col) {
         return kanbanTaskCardHtml(t);
     }
 
+    const statusClass = `kanban-status-${Number(col?.status || t.kanban_status || t.status || 0)}`;
     const tech = t.technician_name && t.technician_name !== '-'
         ? escHtml(t.technician_name)
         : '<em style="opacity:.6">Sem técnico</em>';
+    const entityFullLabel = t.entity_name || 'Entidade raiz';
+    const entityDisplayLabel = kanbanLastPathPart(entityFullLabel, 'Entidade raiz');
+    const categoryChips = kanbanCategoryChipsHtml(t.category || '');
     // Problema/Manutenção são somente leitura (Decisão 3): sem drag e sem ações.
     const isReadonlyRow = Number(t.readonly) === 1;
     return `
-    <div class="kanban-card kanban-glpi-card" data-ticket-id="${t.id}" draggable="${(DASHGLPI_IS_RESTRICTED_VIEW || isReadonlyRow) ? 'false' : 'true'}" data-ticket-detail="${t.id}" data-itemtype="${escHtml(t.itemtype || 'ticket')}">
+    <div class="kanban-card kanban-glpi-card ${statusClass}" data-ticket-id="${t.id}" draggable="${(DASHGLPI_IS_RESTRICTED_VIEW || isReadonlyRow) ? 'false' : 'true'}" data-ticket-detail="${t.id}" data-itemtype="${escHtml(t.itemtype || 'ticket')}">
         <div class="kanban-card-header">
             <span class="kanban-card-id">#${t.id}</span>
             ${isReadonlyRow && t.status_label ? `<span class="kanban-card-sla" title="Status">${escHtml(t.status_label)}</span>` : ''}
@@ -102,8 +123,9 @@ function kanbanCardHtml(t, col) {
             <span class="priority-dot priority-${t.priority}" title="Prioridade ${t.priority}"></span>
         </div>
         <p class="kanban-card-title">${escHtml(t.name || '')}</p>
+        ${categoryChips}
         <div class="kanban-card-meta">
-            <span>${escHtml(t.category || 'Sem categoria')}</span>
+            <span title="${escHtml(entityFullLabel)}">${escHtml(entityDisplayLabel)}</span>
             <span>${escHtml(formatDateTime(t.date) || '-')}</span>
         </div>
         <div class="kanban-card-footer">
@@ -123,8 +145,12 @@ function kanbanCardHtml(t, col) {
 function kanbanTaskCardHtml(t) {
     const owner = kanbanTaskOwnerLabel(t);
     const nseq = Number(t.nseq || 0);
+    const statusClass = `kanban-status-${Number(t.kanban_status || t.status || 1)}`;
+    const entityFullLabel = t.entity_name || 'Entidade raiz';
+    const entityDisplayLabel = kanbanLastPathPart(entityFullLabel, 'Entidade raiz');
+    const categoryChips = kanbanCategoryChipsHtml(t.category || t.category_name || '');
     return `
-    <div class="kanban-card kanban-task-card" data-kanban-task-id="${Number(t.id)}" data-kanban-task-detail="${Number(t.id)}" data-kanban-nseq="${nseq}" draggable="true" tabindex="0" role="button" aria-label="Editar tarefa #${Number(t.id)}">
+    <div class="kanban-card kanban-task-card ${statusClass}" data-kanban-task-id="${Number(t.id)}" data-kanban-task-detail="${Number(t.id)}" data-kanban-nseq="${nseq}" draggable="true" tabindex="0" role="button" aria-label="Editar tarefa #${Number(t.id)}">
         <div class="kanban-card-header">
             <span class="kanban-card-id">Tarefa #${Number(t.id)}</span>
             <span class="kanban-card-seq" title="Sequência na lista">Seq ${nseq}</span>
@@ -133,8 +159,9 @@ function kanbanTaskCardHtml(t) {
             <span class="priority-dot priority-${Number(t.priority) || 3}" title="Prioridade ${Number(t.priority) || 3}"></span>
         </div>
         <p class="kanban-card-title">${escHtml(t.name || '')}</p>
+        ${categoryChips}
         <div class="kanban-card-meta">
-            <span>${escHtml(t.entity_name || 'Entidade raiz')}</span>
+            <span title="${escHtml(entityFullLabel)}">${escHtml(entityDisplayLabel)}</span>
             <span>${escHtml(formatDateTime(t.date) || '-')}</span>
         </div>
         <div class="kanban-card-footer">

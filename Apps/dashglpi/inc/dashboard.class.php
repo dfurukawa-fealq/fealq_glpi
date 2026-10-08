@@ -242,7 +242,7 @@ class PluginDashglpiDashboard
         $rows = self::ticketRows('1970-01-01 00:00:00', self::TICKETS_LIST_MAX, $scope);
 
         $rows = self::intRows($rows, [
-            'id', 'status', 'priority', 'global_validation', 'notification_failed',
+            'id', 'status', 'priority', 'entities_id', 'global_validation', 'notification_failed',
             'technician_count', 'group_count', 'takeintoaccount_delay_stat', 'solve_delay_stat',
             'satisfaction_pending', 'attachments_count', 'followups_count',
         ]);
@@ -299,14 +299,16 @@ class PluginDashglpiDashboard
 
         $rows = dashglpi_fetch_all(
             "SELECT t.id, t.name, t.status, t.date, t.date_mod, t.priority, t.time_to_resolve,
-                    t.solvedate, t.closedate, t.solve_delay_stat,
+                    t.solvedate, t.closedate, t.solve_delay_stat, t.entities_id,
                     COALESCE(c.completename, 'Sem Categoria') AS category,
+                    COALESCE(e.completename, e.name, 'Entidade raiz') AS entity_name,
                     COALESCE(NULLIF(tech.technician_name, ''), '-') AS technician_name,
                     COALESCE(tech.technician_count, 0) AS technician_count,
                     COALESCE(grp.group_count, 0) AS group_count,
                     COALESCE(NULLIF(req.requester_name, ''), NULLIF(TRIM(CONCAT(COALESCE(NULLIF(ur.firstname, ''), ur.name, ''), ' ', COALESCE(ur.realname, ''))), ''), '-') AS requester_name
              FROM {$type['table']} t
              LEFT JOIN glpi_itilcategories c ON c.id = t.itilcategories_id
+             LEFT JOIN glpi_entities e ON e.id = t.entities_id
              LEFT JOIN glpi_users ur ON ur.id = t.users_id_recipient
              LEFT JOIN (
                 SELECT tu.$fk AS object_id,
@@ -340,7 +342,7 @@ class PluginDashglpiDashboard
         );
 
         $rows = self::intRows($rows, [
-            'id', 'status', 'priority', 'technician_count', 'group_count', 'solve_delay_stat',
+            'id', 'status', 'priority', 'entities_id', 'technician_count', 'group_count', 'solve_delay_stat',
         ]);
         $now = time();
         foreach ($rows as &$row) {
@@ -2362,9 +2364,10 @@ class PluginDashglpiDashboard
 
         return dashglpi_fetch_all(
             "SELECT t.id, t.name, t.content, t.status, t.global_validation, t.date, t.date_mod, t.priority, t.time_to_resolve,
-                    t.time_to_own, t.takeintoaccountdate, t.solvedate, t.closedate,
+                    t.time_to_own, t.takeintoaccountdate, t.solvedate, t.closedate, t.entities_id,
                     t.takeintoaccount_delay_stat, t.solve_delay_stat,
                     COALESCE(c.completename, 'Sem Categoria') AS category,
+                    COALESCE(e.completename, e.name, 'Entidade raiz') AS entity_name,
                     COALESCE(NULLIF(tech.technician_name, ''), '-') AS technician_name,
                     COALESCE(tech.technician_count, 0) AS technician_count,
                     COALESCE(grp.group_count, 0) AS group_count,
@@ -2376,6 +2379,7 @@ class PluginDashglpiDashboard
                     CASE WHEN ts.id IS NOT NULL AND ts.date_answered IS NULL THEN 1 ELSE 0 END AS satisfaction_pending
              FROM glpi_tickets t
              LEFT JOIN glpi_itilcategories c ON c.id = t.itilcategories_id
+             LEFT JOIN glpi_entities e ON e.id = t.entities_id
              LEFT JOIN glpi_users ur ON ur.id = t.users_id_recipient
              LEFT JOIN (
                 SELECT tu.tickets_id,

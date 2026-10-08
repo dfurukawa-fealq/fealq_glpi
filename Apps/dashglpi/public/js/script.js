@@ -18,6 +18,17 @@ const TICKET_REPORTS_ENABLED = typeof DASHGLPI_TICKET_REPORTS_ENABLED === 'undef
 const MY_TASKS_FILTER_LOCKED = typeof DASHGLPI_LOCK_MY_TASKS_FILTER === 'undefined'
     ? false
     : Boolean(DASHGLPI_LOCK_MY_TASKS_FILTER);
+const TICKET_FILTER_STATIC_ENTITIES = Array.isArray(typeof DASHGLPI_TICKET_FILTER_ENTITIES !== 'undefined' ? DASHGLPI_TICKET_FILTER_ENTITIES : null)
+    ? DASHGLPI_TICKET_FILTER_ENTITIES
+        .map(entity => ({
+            id: Number(entity?.id ?? 0),
+            label: String(entity?.label || '').trim() || (Number(entity?.id ?? 0) === 0 ? 'Entidade raiz' : `Entidade #${Number(entity?.id ?? 0)}`),
+        }))
+        .filter(entity => entity.id >= 0)
+    : [];
+const TICKET_FILTER_DEFAULT_ENTITY_ID = Number(typeof DASHGLPI_TICKET_FILTER_DEFAULT_ENTITY_ID === 'undefined'
+    ? -1
+    : DASHGLPI_TICKET_FILTER_DEFAULT_ENTITY_ID);
 
 /**
  * Helper de fetch AJAX para o bridge cliente (Padrão duplicado C do PLAN-20260703-013).
@@ -141,6 +152,8 @@ const DashState = {
     ticketsSortState: { key: 'date', direction: 'desc' },
     ticketsPaginationState: { page: 1, pageSize: 10 },
     ticketStatusFilter: ['1', '3', '2', '4', '5', '6'],
+    ticketDashEntityFilter: [],
+    ticketGlpiEntityFilter: [],
     ticketsView: 'list',
     slaDataGlobal: [],
     slaSummaryGlobal: { critical: 0, warning: 0, unassigned: 0, ok: 0, avg_open_seconds: 0 },
@@ -176,7 +189,10 @@ const TICKETS_PAGE_SIZE_DEFAULT = 10;
 const TICKETS_PAGE_SIZE_OPTIONS = [10, 20, 50, 100];
 const TICKET_STATUS_FILTER_ALL = ['1', '3', '2', '4', '5', '6'];
 const TICKET_STATUS_FILTER_DEFAULT = TICKET_STATUS_FILTER_ALL.slice();
-const TICKETS_FILTERS_STORAGE_VERSION = '20261002-all-tickets-default';
+const TICKETS_FILTERS_STORAGE_VERSION = '20261008-split-dash-glpi-entity-filter';
+const TICKET_DASH_ENTITY_FILTER_STORAGE_KEY = 'dashglpi-tickets-dash-entity-filter';
+const TICKET_GLPI_ENTITY_FILTER_STORAGE_KEY = 'dashglpi-tickets-glpi-entity-filter';
+const TICKET_ENTITY_NONE_VALUE = '__none';
 const TICKET_STATUS_FILTER_LABELS = {
     1: 'Aberto',
     3: 'Planejado',
@@ -761,6 +777,8 @@ function initMyTasksFilters() {
             localStorage.setItem('dashglpi-my-tasks-only', '0');
         }
         localStorage.setItem('dashglpi-tickets-status-filter', JSON.stringify(TICKET_STATUS_FILTER_DEFAULT));
+        localStorage.setItem(TICKET_DASH_ENTITY_FILTER_STORAGE_KEY, JSON.stringify(defaultTicketEntityFilterValues()));
+        localStorage.setItem(TICKET_GLPI_ENTITY_FILTER_STORAGE_KEY, JSON.stringify([]));
         localStorage.setItem('dashglpi-tickets-filter-version', TICKETS_FILTERS_STORAGE_VERSION);
     }
 
@@ -1818,6 +1836,7 @@ async function loadTicketLists() {
         if (pageSectionExists('ticketsKanban')) {
             await loadKanbanTasks();
         }
+        syncTicketFilterModalControls();
         renderTicketsTable();
         if (!document.getElementById('ticketsKanban')?.hidden) renderKanbanBoard();
         sessionStorage.removeItem('dashglpi_tickets_reload_attempted');
@@ -1919,6 +1938,120 @@ function loadTicketStatusFilter() {
     }
 }
 
+function ticketEntityId(item) {
+    return Number(item?.entities_id ?? item?.entity_id ?? 0);
+}
+
+function ticketEntityLabel(item) {
+    const label = String(item?.entity_name || '').trim();
+    if (label !== '') return label;
+    return ticketEntityId(item) === 0 ? 'Entidade raiz' : `Entidade #${ticketEntityId(item)}`;
+}
+
+function ticketEntityShortLabel(label) {
+    const parts = String(label || '')
+        .split('>')
+        .map(part => part.trim())
+        .filter(Boolean);
+    return parts.length ? parts[parts.length - 1] : String(label || '');
+}
+
+function normalizeTicketEntityTerm(value) {
+    return String(value || '')
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .toLowerCase()
+        .trim();
+}
+
+function ticketEntityFilterOptions() {
+    const map = new Map();
+    TICKET_FILTER_STATIC_ENTITIES.forEach(entity => {
+        map.set(Number(entity.id), {
+            id: Number(entity.id),
+            label: entity.label,
+        });
+    });
+    if (map.size > 0) {
+        return Array.from(map.values()).sort((a, b) => a.label.localeCompare(b.label, 'pt-BR', { sensitivity: 'base' }));
+    }
+    [...(DashState.ticketsDataGlobal || []), ...(DashState.kanbanTasksGlobal || [])].forEach(item => {
+        const id = ticketEntityId(item);
+        if (id < 0 || map.has(id)) return;
+        map.set(id, {
+            id,
+            label: ticketEntityLabel(item),
+        });
+    });
+    return Array.from(map.values()).sort((a, b) => a.label.localeCompare(b.label, 'pt-BR', { sensitivity: 'base' }));
+}
+
+function defaultTicketEntityFilterValues(options = null) {
+    const available = options || ticketEntityFilterOptions();
+    if (TICKET_FILTER_DEFAULT_ENTITY_ID < 0) {
+        return [];
+    }
+    return available.some(option => Number(option.id) === TICKET_FILTER_DEFAULT_ENTITY_ID)
+        ? [String(TICKET_FILTER_DEFAULT_ENTITY_ID)]
+        : [];
+}
+
+function normalizeTicketEntityFilter(values, options = null) {
+    const allowed = new Set((options || ticketEntityFilterOptions()).map(option => String(option.id)));
+    const normalized = Array.from(values || [])
+        .map(value => value === TICKET_ENTITY_NONE_VALUE ? TICKET_ENTITY_NONE_VALUE : String(Number(value)))
+        .filter(value => value === TICKET_ENTITY_NONE_VALUE || allowed.has(value));
+    if (normalized.includes(TICKET_ENTITY_NONE_VALUE)) {
+        return [TICKET_ENTITY_NONE_VALUE];
+    }
+    return Array.from(new Set(normalized));
+}
+
+function ticketEntityFilterConfig(kind) {
+    if (kind === 'glpi') {
+        return {
+            stateKey: 'ticketGlpiEntityFilter',
+            storageKey: TICKET_GLPI_ENTITY_FILTER_STORAGE_KEY,
+            searchId: 'ticketsFilterGlpiEntitySearch',
+            summaryId: 'ticketsFilterGlpiEntitySummary',
+            chipsId: 'ticketsFilterGlpiEntityChips',
+            optionsId: 'ticketsFilterGlpiEntityOptions',
+            checkboxAttr: 'data-ticket-filter-glpi-entity',
+        };
+    }
+    return {
+        stateKey: 'ticketDashEntityFilter',
+        storageKey: TICKET_DASH_ENTITY_FILTER_STORAGE_KEY,
+        searchId: 'ticketsFilterDashEntitySearch',
+        summaryId: 'ticketsFilterDashEntitySummary',
+        chipsId: 'ticketsFilterDashEntityChips',
+        optionsId: 'ticketsFilterDashEntityOptions',
+        checkboxAttr: 'data-ticket-filter-dash-entity',
+    };
+}
+
+function defaultTicketEntityFilterValuesForKind(kind, options = null) {
+    return kind === 'dash' ? defaultTicketEntityFilterValues(options) : [];
+}
+
+function loadTicketEntityFilter(kind) {
+    const config = ticketEntityFilterConfig(kind);
+    const raw = localStorage.getItem(config.storageKey);
+    if (!raw) {
+        DashState[config.stateKey] = defaultTicketEntityFilterValuesForKind(kind);
+        return;
+    }
+
+    try {
+        const parsed = JSON.parse(raw);
+        DashState[config.stateKey] = Array.isArray(parsed)
+            ? normalizeTicketEntityFilter(parsed)
+            : [];
+    } catch {
+        DashState[config.stateKey] = defaultTicketEntityFilterValuesForKind(kind);
+    }
+}
+
 async function loadKanbanTasks() {
     try {
         const response = await fetch(`${PLUGIN_ROOT}/ajax/kanban_tasks.php?my_tasks=${(MY_TASKS_FILTER_LOCKED || DashState.myTasksOnly) ? '1' : '0'}&_ts=${Date.now()}`, {
@@ -1940,94 +2073,304 @@ function saveTicketStatusFilter(values) {
     localStorage.setItem('dashglpi-tickets-status-filter', JSON.stringify(DashState.ticketStatusFilter));
 }
 
+function saveTicketEntityFilter(kind, values) {
+    const config = ticketEntityFilterConfig(kind);
+    DashState[config.stateKey] = normalizeTicketEntityFilter(values);
+    localStorage.setItem(config.storageKey, JSON.stringify(DashState[config.stateKey]));
+}
+
 function syncTicketStatusFilterControls() {
     const selected = new Set(DashState.ticketStatusFilter || []);
-    document.querySelectorAll('[data-ticket-status-filter]').forEach(input => {
+    document.querySelectorAll('[data-ticket-filter-status]').forEach(input => {
         input.checked = selected.has(String(input.value || ''));
+        input.closest('label')?.classList.toggle('is-checked', input.checked);
     });
+    const summary = document.getElementById('ticketsFilterStatusSummary');
+    if (summary) {
+        summary.textContent = selected.size === TICKET_STATUS_FILTER_ALL.length
+            ? 'Todos'
+            : `${selected.size}/${TICKET_STATUS_FILTER_ALL.length}`;
+    }
+}
 
-    document.querySelectorAll('[data-ticket-status-filter-toggle]').forEach(toggle => {
-        const labels = TICKET_STATUS_FILTER_ALL
-            .filter(status => selected.has(status))
-            .map(status => TICKET_STATUS_FILTER_LABELS[status])
-            .filter(Boolean);
-        toggle.classList.toggle('is-active', selected.size !== TICKET_STATUS_FILTER_DEFAULT.length || !TICKET_STATUS_FILTER_DEFAULT.every(status => selected.has(status)));
-        toggle.title = labels.length ? `Status: ${labels.join(', ')}` : 'Nenhum status selecionado';
+function syncTicketEntityFilterControls(kind) {
+    const config = ticketEntityFilterConfig(kind);
+    const options = ticketEntityFilterOptions();
+    const singleEntity = options.length === 1 ? options[0] : null;
+    const selectedValues = singleEntity
+        ? [String(singleEntity.id)]
+        : normalizeTicketEntityFilter(DashState[config.stateKey] || [], options);
+    const noEntitySelected = selectedValues.includes(TICKET_ENTITY_NONE_VALUE);
+    const effectiveSelectedValues = selectedValues.length === 0
+        ? options.map(option => String(option.id))
+        : (noEntitySelected ? [] : selectedValues);
+    const selectedEntities = options.filter(option => effectiveSelectedValues.includes(String(option.id)));
+    const searchInput = document.getElementById(config.searchId);
+    const query = normalizeTicketEntityTerm(searchInput?.value || '');
+    const terms = query.split(/\s+/).filter(Boolean);
+    const visibleOptions = terms.length
+        ? options.filter(option => {
+            const haystack = normalizeTicketEntityTerm(option.label);
+            return terms.every(term => haystack.includes(term));
+        })
+        : options;
+    const visibleIds = new Set(visibleOptions.map(option => String(option.id)));
+    DashState[config.stateKey] = selectedValues;
+    localStorage.setItem(config.storageKey, JSON.stringify(selectedValues));
+
+    const chips = document.getElementById(config.chipsId);
+    if (chips) {
+        chips.innerHTML = options.length
+            ? (selectedEntities.length
+                ? selectedEntities.map(option => `<span class="tickets-filter-chip" title="${escHtml(option.label)}">
+                    <span>${escHtml(ticketEntityShortLabel(option.label))}</span>
+                    <button type="button" data-ticket-filter-entity-chip-remove="${kind}" data-entity-id="${escHtml(String(option.id))}" aria-label="Remover ${escHtml(ticketEntityShortLabel(option.label))}">×</button>
+                </span>`).join('')
+                : '<span class="tickets-filter-chip muted">Nenhuma</span>')
+            : '<span class="tickets-filter-chip muted">Nenhuma</span>';
+    }
+
+    const container = document.getElementById(config.optionsId);
+    if (container) {
+        container.innerHTML = options.length
+            ? `${options.map(option => {
+                const id = String(option.id);
+                const checked = !noEntitySelected && (selectedValues.length === 0 || selectedValues.includes(id)) ? ' checked' : '';
+                const disabled = singleEntity ? ' disabled' : '';
+                const hidden = visibleIds.has(id) ? '' : ' hidden';
+                return `<label class="tickets-filter-entity-option" title="${escHtml(option.label)}"${hidden}>
+                    <input type="checkbox" ${config.checkboxAttr} value="${escHtml(id)}"${checked}${disabled}>
+                    <span>${escHtml(ticketEntityShortLabel(option.label))}</span>
+                </label>`;
+            }).join('')}${visibleOptions.length ? '' : '<div class="tickets-filter-empty">Nenhuma entidade encontrada</div>'}`
+            : '<div class="tickets-filter-empty">Nenhuma entidade</div>';
+    }
+
+    const summary = document.getElementById(config.summaryId);
+    if (summary) {
+        if (singleEntity) {
+            summary.textContent = ticketEntityShortLabel(singleEntity.label);
+        } else if (noEntitySelected) {
+            summary.textContent = `0/${options.length}`;
+        } else if (selectedValues.length === 0 || selectedValues.length === options.length) {
+            summary.textContent = options.length ? `Todas (${options.length})` : 'Nenhuma';
+        } else {
+            summary.textContent = `${selectedValues.length}/${options.length}`;
+        }
+    }
+
+    if (searchInput) {
+        searchInput.disabled = Boolean(singleEntity) || options.length === 0;
+    }
+
+    const entityAll = document.querySelector(`[data-ticket-filter-entity-all="${kind}"]`);
+    if (entityAll) {
+        entityAll.disabled = Boolean(singleEntity) || options.length === 0;
+    }
+}
+
+function syncTicketEntityFiltersControls() {
+    syncTicketEntityFilterControls('dash');
+    syncTicketEntityFilterControls('glpi');
+}
+
+function setTicketFilterMainTab(kind) {
+    const activeKind = ['dash', 'glpi', 'status'].includes(kind) ? kind : 'dash';
+    document.querySelectorAll('[data-ticket-filter-main-tab]').forEach(button => {
+        const active = button.getAttribute('data-ticket-filter-main-tab') === activeKind;
+        button.classList.toggle('is-active', active);
+        button.setAttribute('aria-selected', active ? 'true' : 'false');
+    });
+    document.querySelectorAll('[data-ticket-filter-entity-panel]').forEach(panel => {
+        const active = panel.getAttribute('data-ticket-filter-entity-panel') === activeKind;
+        panel.classList.toggle('is-active', active);
+        panel.hidden = !active;
+    });
+    const statusPanel = document.querySelector('[data-ticket-filter-status-panel]');
+    if (statusPanel) {
+        const active = activeKind === 'status';
+        statusPanel.classList.toggle('is-active', active);
+        statusPanel.hidden = !active;
+    }
+}
+
+function ticketFiltersAreActive() {
+    const selectedStatuses = new Set(DashState.ticketStatusFilter || []);
+    const statusChanged = selectedStatuses.size !== TICKET_STATUS_FILTER_DEFAULT.length
+        || !TICKET_STATUS_FILTER_DEFAULT.every(status => selectedStatuses.has(status));
+    const options = ticketEntityFilterOptions();
+    const dashEntityChanged = (DashState.ticketDashEntityFilter || []).length > 0
+        && (DashState.ticketDashEntityFilter || []).length < options.length;
+    const glpiEntityChanged = (DashState.ticketGlpiEntityFilter || []).length > 0
+        && (DashState.ticketGlpiEntityFilter || []).length < options.length;
+    return statusChanged || dashEntityChanged || glpiEntityChanged || options.length === 1;
+}
+
+function syncTicketFilterButtons() {
+    const active = ticketFiltersAreActive();
+    document.querySelectorAll('[data-ticket-filter-modal-open]').forEach(button => {
+        button.classList.toggle('is-active', active);
+        button.title = active ? 'Filtros ativos' : 'Filtros';
+        button.setAttribute('aria-label', button.title);
     });
 }
 
-function selectedTicketStatusValues() {
-    return Array.from(document.querySelectorAll('[data-ticket-status-filter]:checked'))
+function syncTicketFilterModalControls() {
+    syncTicketStatusFilterControls();
+    syncTicketEntityFiltersControls();
+    syncTicketFilterButtons();
+}
+
+function selectedTicketFilterStatusValues() {
+    return Array.from(document.querySelectorAll('[data-ticket-filter-status]:checked'))
         .map(input => String(input.value || ''));
 }
 
-function nextTicketStatusValuesFromInput(input) {
-    const selected = new Set(DashState.ticketStatusFilter || TICKET_STATUS_FILTER_DEFAULT);
-    const value = String(input?.value || '');
-    if (input?.checked) {
-        selected.add(value);
-    } else {
-        selected.delete(value);
+function selectedTicketFilterEntityValues(kind) {
+    const config = ticketEntityFilterConfig(kind);
+    const options = ticketEntityFilterOptions();
+    if (options.length === 1) {
+        return [String(options[0].id)];
     }
-    return TICKET_STATUS_FILTER_ALL.filter(status => selected.has(status));
+    const selected = Array.from(document.querySelectorAll(`[${config.checkboxAttr}]:checked`))
+        .map(input => String(Number(input.value || 0)));
+    if (selected.length === 0) {
+        return [TICKET_ENTITY_NONE_VALUE];
+    }
+    return selected.length === options.length ? [] : selected;
 }
 
-function initTicketStatusFilter() {
+function openTicketFilterModal() {
+    const modal = document.getElementById('ticketsFilterModal');
+    if (!modal) return;
+    syncTicketFilterModalControls();
+    modal.hidden = false;
+    modal.querySelector('[data-ticket-filter-close]')?.focus({ preventScroll: true });
+}
+
+function closeTicketFilterModal() {
+    const modal = document.getElementById('ticketsFilterModal');
+    if (!modal) return;
+    modal.hidden = true;
+}
+
+function applyTicketFiltersFromModal() {
+    saveTicketStatusFilter(selectedTicketFilterStatusValues());
+    saveTicketEntityFilter('dash', selectedTicketFilterEntityValues('dash'));
+    saveTicketEntityFilter('glpi', selectedTicketFilterEntityValues('glpi'));
+    syncTicketFilterModalControls();
+    closeTicketFilterModal();
+    DashState.ticketsPaginationState.page = 1;
+    renderTicketsTable();
+    if (!document.getElementById('ticketsKanban')?.hidden) renderKanbanBoard();
+}
+
+function initTicketFilters() {
     loadTicketStatusFilter();
-    syncTicketStatusFilterControls();
+    loadTicketEntityFilter('dash');
+    loadTicketEntityFilter('glpi');
+    syncTicketFilterModalControls();
 
-    document.querySelectorAll('[data-ticket-status-filter-toggle]').forEach(toggle => {
-        const menuId = toggle.getAttribute('aria-controls');
-        const menu = menuId ? document.getElementById(menuId) : toggle.closest('.tickets-status-filter')?.querySelector('[data-ticket-status-filter-menu]');
-        if (!menu) return;
-        toggle.addEventListener('click', (event) => {
-            event.preventDefault();
-            event.stopPropagation();
-            const open = menu.hidden;
-            document.querySelectorAll('[data-ticket-status-filter-menu]').forEach(otherMenu => {
-                if (otherMenu !== menu) otherMenu.hidden = true;
-            });
-            document.querySelectorAll('[data-ticket-status-filter-toggle]').forEach(otherToggle => {
-                if (otherToggle !== toggle) otherToggle.setAttribute('aria-expanded', 'false');
-            });
-            menu.hidden = !open;
-            toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
-        });
-        menu.addEventListener('click', event => event.stopPropagation());
+    document.querySelectorAll('[data-ticket-filter-modal-open]').forEach(button => {
+        button.addEventListener('click', openTicketFilterModal);
     });
-
-    document.querySelectorAll('[data-ticket-status-filter]').forEach(input => {
-        input.addEventListener('change', () => {
-            saveTicketStatusFilter(nextTicketStatusValuesFromInput(input));
-            syncTicketStatusFilterControls();
-            DashState.ticketsPaginationState.page = 1;
-            renderTicketsTable();
-            if (!document.getElementById('ticketsKanban')?.hidden) renderKanbanBoard();
-        });
+    document.querySelectorAll('[data-ticket-filter-close]').forEach(button => {
+        button.addEventListener('click', closeTicketFilterModal);
     });
-
-    document.querySelectorAll('[data-ticket-status-filter-all]').forEach(button => {
+    document.querySelectorAll('[data-ticket-filter-main-tab]').forEach(button => {
         button.addEventListener('click', () => {
-            saveTicketStatusFilter(TICKET_STATUS_FILTER_ALL);
-            syncTicketStatusFilterControls();
-            DashState.ticketsPaginationState.page = 1;
-            renderTicketsTable();
-            if (!document.getElementById('ticketsKanban')?.hidden) renderKanbanBoard();
+            setTicketFilterMainTab(button.getAttribute('data-ticket-filter-main-tab') || 'dash');
         });
     });
-
-    document.addEventListener('click', () => {
-        document.querySelectorAll('[data-ticket-status-filter-menu]').forEach(menu => {
-            menu.hidden = true;
+    document.getElementById('ticketsFilterModal')?.addEventListener('click', event => {
+        if (event.target.id === 'ticketsFilterModal') closeTicketFilterModal();
+    });
+    document.getElementById('ticketsFilterModal')?.addEventListener('keydown', event => {
+        if (event.key === 'Escape') closeTicketFilterModal();
+    });
+    document.querySelector('[data-ticket-filter-status-all]')?.addEventListener('click', () => {
+        document.querySelectorAll('[data-ticket-filter-status]').forEach(input => {
+            input.checked = true;
+            input.closest('label')?.classList.add('is-checked');
         });
-        document.querySelectorAll('[data-ticket-status-filter-toggle]').forEach(toggle => {
-            toggle.setAttribute('aria-expanded', 'false');
+        const summary = document.getElementById('ticketsFilterStatusSummary');
+        if (summary) summary.textContent = 'Todos';
+    });
+    document.querySelectorAll('[data-ticket-filter-status]').forEach(input => {
+        input.addEventListener('change', () => {
+            input.closest('label')?.classList.toggle('is-checked', input.checked);
+            const count = selectedTicketFilterStatusValues().length;
+            const summary = document.getElementById('ticketsFilterStatusSummary');
+            if (summary) summary.textContent = count === TICKET_STATUS_FILTER_ALL.length ? 'Todos' : `${count}/${TICKET_STATUS_FILTER_ALL.length}`;
         });
+    });
+    document.querySelectorAll('[data-ticket-filter-entity-all]').forEach(button => {
+        button.addEventListener('click', () => {
+            const kind = button.getAttribute('data-ticket-filter-entity-all') || 'dash';
+            const config = ticketEntityFilterConfig(kind);
+            document.querySelectorAll(`[${config.checkboxAttr}]:not(:disabled)`).forEach(input => { input.checked = true; });
+            DashState[config.stateKey] = [];
+            syncTicketEntityFilterControls(kind);
+        });
+    });
+    document.getElementById('ticketsFilterModal')?.addEventListener('click', event => {
+        const removeButton = event.target.closest('[data-ticket-filter-entity-chip-remove]');
+        if (!removeButton) return;
+        event.preventDefault();
+        event.stopPropagation();
+        const kind = removeButton.getAttribute('data-ticket-filter-entity-chip-remove') || 'dash';
+        const config = ticketEntityFilterConfig(kind);
+        const removedId = String(Number(removeButton.getAttribute('data-entity-id') || 0));
+        const options = ticketEntityFilterOptions();
+        const currentValues = normalizeTicketEntityFilter(DashState[config.stateKey] || [], options);
+        const effectiveValues = currentValues.length === 0
+            ? options.map(option => String(option.id))
+            : currentValues;
+        const nextValues = effectiveValues.filter(value => value !== removedId);
+        DashState[config.stateKey] = nextValues.length ? normalizeTicketEntityFilter(nextValues, options) : [TICKET_ENTITY_NONE_VALUE];
+        syncTicketEntityFilterControls(kind);
+    });
+    ['dash', 'glpi'].forEach(kind => {
+        const config = ticketEntityFilterConfig(kind);
+        document.getElementById(config.searchId)?.addEventListener('input', () => {
+            syncTicketEntityFilterControls(kind);
+        });
+        document.getElementById(config.optionsId)?.addEventListener('change', event => {
+            if (!event.target.matches(`[${config.checkboxAttr}]`)) return;
+            const selected = selectedTicketFilterEntityValues(kind);
+            DashState[config.stateKey] = selected;
+            syncTicketEntityFilterControls(kind);
+        });
+    });
+    document.getElementById('ticketsFilterEntityOptions')?.addEventListener('change', event => {
+        if (!event.target.matches('[data-ticket-filter-entity]')) return;
+        const options = ticketEntityFilterOptions();
+        const selected = selectedTicketFilterEntityValues('dash');
+        const summary = document.getElementById('ticketsFilterEntitySummary');
+        if (summary) {
+            summary.textContent = selected.length === 0 || selected.length === options.length
+                ? `Todas as entidades (${options.length})`
+                : `${selected.length} de ${options.length} entidades selecionadas`;
+        }
+    });
+    document.querySelector('[data-ticket-filter-clear]')?.addEventListener('click', () => {
+        document.querySelectorAll('[data-ticket-filter-status]').forEach(input => { input.checked = true; });
+        const dashSearch = document.getElementById('ticketsFilterDashEntitySearch');
+        const glpiSearch = document.getElementById('ticketsFilterGlpiEntitySearch');
+        if (dashSearch) dashSearch.value = '';
+        if (glpiSearch) glpiSearch.value = '';
+        DashState.ticketDashEntityFilter = defaultTicketEntityFilterValues();
+        DashState.ticketGlpiEntityFilter = [];
+        syncTicketEntityFiltersControls();
+    });
+    document.getElementById('ticketsFilterForm')?.addEventListener('submit', event => {
+        event.preventDefault();
+        applyTicketFiltersFromModal();
     });
 }
 
 function initTicketSearchAndSort() {
-    initTicketStatusFilter();
+    initTicketFilters();
 
     document.querySelectorAll('[data-tickets-itemtype]').forEach(btn => {
         btn.addEventListener('click', () => {
@@ -2118,8 +2461,11 @@ function ticketFilterSearchValue(inputId = null) {
     return (document.getElementById('ticketsSearchInputMobile')?.value || document.getElementById('ticketsSearchInput')?.value || '').trim().toLowerCase();
 }
 
-function ticketMatchesTicketsFilters(ticket, search, selectedStatuses) {
+function ticketMatchesTicketsFilters(ticket, search, selectedStatuses, selectedEntities) {
     if (!selectedStatuses.has(String(ticket.status || ''))) {
+        return false;
+    }
+    if (selectedEntities.size > 0 && !selectedEntities.has(String(ticketEntityId(ticket)))) {
         return false;
     }
     if (!search) return true;
@@ -2127,6 +2473,7 @@ function ticketMatchesTicketsFilters(ticket, search, selectedStatuses) {
         ticket.id,
         ticket.name,
         ticket.category,
+        ticket.entity_name,
         ticket.technician_name,
         ticket.requester_name,
         ticket.stage,
@@ -2139,13 +2486,15 @@ function ticketMatchesTicketsFilters(ticket, search, selectedStatuses) {
 function filteredTicketsForCurrentFilters(searchInputId = null) {
     const search = ticketFilterSearchValue(searchInputId);
     const selectedStatuses = new Set(DashState.ticketStatusFilter || TICKET_STATUS_FILTER_DEFAULT);
-    return DashState.ticketsDataGlobal.filter(ticket => ticketMatchesTicketsFilters(ticket, search, selectedStatuses));
+    const selectedEntities = new Set(DashState.ticketGlpiEntityFilter || []);
+    return DashState.ticketsDataGlobal.filter(ticket => ticketMatchesTicketsFilters(ticket, search, selectedStatuses, selectedEntities));
 }
 
 function filteredKanbanTasksForCurrentFilters(searchInputId = null) {
     const search = ticketFilterSearchValue(searchInputId);
     const selectedStatuses = new Set(DashState.ticketStatusFilter || TICKET_STATUS_FILTER_DEFAULT);
-    return (DashState.kanbanTasksGlobal || []).filter(task => ticketMatchesTicketsFilters(task, search, selectedStatuses));
+    const selectedEntities = new Set(DashState.ticketDashEntityFilter || []);
+    return (DashState.kanbanTasksGlobal || []).filter(task => ticketMatchesTicketsFilters(task, search, selectedStatuses, selectedEntities));
 }
 
 function renderTicketsTable() {

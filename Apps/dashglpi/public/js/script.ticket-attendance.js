@@ -2,6 +2,7 @@
 const DashAttendance = {
     ticket: null, generation: 0, cursor: null, events: [], catalog: null, busy: false,
     previousFocus: null, initialProperties: '', initialStatus: '', catalogRequest: 0, restoredDraftForTicket: 0,
+    userTouchedFields: new Set(),
     fieldComboboxes: {},
     el(id) { return document.getElementById(id); },
     show(id, visible) { this.el(id)?.classList.toggle('is-hidden', !visible); },
@@ -215,10 +216,17 @@ const DashAttendance = {
             'attendanceKind', 'followupContent', 'attendancePendingReason', 'attendancePendingType', 'attendanceStatus',
             'attendanceSolutionType', 'attendanceDuration', 'attendanceTaskState', 'attendanceTaskUser',
             'attendanceTaskGroup', 'attendanceTaskCategory', 'attendanceTaskBegin', 'attendanceTaskEnd',
+            'attendanceDescription',
             ...Object.values(this.propertyFields),
         ];
-        ids.forEach(id => this.el(id)?.addEventListener('input', () => this.saveDraft()));
-        ids.forEach(id => this.el(id)?.addEventListener('change', () => this.saveDraft()));
+        ids.forEach(id => this.el(id)?.addEventListener('input', () => {
+            this.userTouchedFields.add(id);
+            this.saveDraft();
+        }));
+        ids.forEach(id => this.el(id)?.addEventListener('change', () => {
+            this.userTouchedFields.add(id);
+            this.saveDraft();
+        }));
     },
     restoreDraft() {
         if (!this.ticket?.id || this.restoredDraftForTicket === Number(this.ticket.id)) return;
@@ -301,11 +309,18 @@ const DashAttendance = {
     },
     dirty() {
         if (!this.el('ticketDetailModal')?.classList.contains('active')) return false;
-        return Boolean(this.el('followupContent')?.value.trim() || DashState.followupCreateState.attachments.length
-            || (!this.el('attendanceDescriptionForm')?.classList.contains('is-hidden') && this.el('attendanceDescription')?.value !== (this.ticket?.content_text || ''))
-            || (this.ticket && this.initialProperties && this.propertiesSnapshot() !== this.initialProperties)
-            || (this.ticket && this.initialStatus && String(this.el('attendanceStatus')?.value || '') !== String(this.initialStatus))
-            || this.el('attendancePendingReason')?.value.trim());
+        const propertyTouched = Object.values(this.propertyFields).some(id => this.userTouchedFields.has(id));
+        const composerTouched = ['attendanceKind', 'followupContent', 'attendancePendingReason', 'attendancePendingType',
+            'attendanceSolutionType', 'attendanceDuration', 'attendanceTaskState', 'attendanceTaskUser',
+            'attendanceTaskGroup', 'attendanceTaskCategory', 'attendanceTaskBegin', 'attendanceTaskEnd']
+            .some(id => this.userTouchedFields.has(id));
+        const statusTouched = this.userTouchedFields.has('attendanceStatus');
+        const descriptionTouched = this.userTouchedFields.has('attendanceDescription');
+        return Boolean((composerTouched && (this.el('followupContent')?.value.trim() || this.el('attendancePendingReason')?.value.trim()))
+            || DashState.followupCreateState.attachments.length
+            || (descriptionTouched && !this.el('attendanceDescriptionForm')?.classList.contains('is-hidden') && this.el('attendanceDescription')?.value !== (this.ticket?.content_text || ''))
+            || (propertyTouched && this.ticket && this.initialProperties && this.propertiesSnapshot() !== this.initialProperties)
+            || (statusTouched && this.ticket && this.initialStatus && String(this.el('attendanceStatus')?.value || '') !== String(this.initialStatus)));
     },
     canClose() {
         if (this.busy) { this.status('followupStatus', 'Aguarde a confirmação da operação antes de fechar.'); return false; }
@@ -322,6 +337,7 @@ const DashAttendance = {
     reset(ticketId, trigger = null) {
         this.generation++; this.ticket = null; this.cursor = null; this.events = []; this.catalog = null;
         this.catalogRequest++; this.initialProperties = ''; this.initialStatus = '';
+        this.userTouchedFields.clear();
         const source = trigger || document.activeElement;
         if (!this.el('ticketDetailModal').contains(source)) this.previousFocus = source;
         this.el('ticketDetailModal').classList.remove('is-operator', 'is-expanded');
@@ -470,6 +486,7 @@ const DashAttendance = {
         } else if (status === 4 && cap.status && (this.ticket.allowed_statuses || []).some(value => Number(value.id) === 4)) {
             this.el('attendanceProperties').open = true;
             this.el('attendanceStatus').value = '4';
+            this.userTouchedFields.add('attendanceStatus');
             this.show('attendancePendingFields', true);
             scrollTicketDetailTarget(this.el('attendancePendingFields'), { behavior: 'smooth', block: 'center' });
             this.el('attendancePendingReason').focus({ preventScroll: true });
@@ -645,6 +662,7 @@ const DashAttendance = {
             onSuccess?.();
             if (statusId === 'attendanceStateStatus') this.el('attendancePendingReason').value = '';
             this.clearDraft(id);
+            this.userTouchedFields.clear();
             await this.refresh(statusId !== 'attendancePropertiesStatus');
             await loadTicketLists();
             this.status(statusId, 'Alteração registrada no GLPI.', 'success');

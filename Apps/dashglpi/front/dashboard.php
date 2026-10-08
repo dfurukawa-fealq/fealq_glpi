@@ -3,6 +3,7 @@ require_once __DIR__ . '/../inc/bootstrap.php';
 require_once __DIR__ . '/../inc/settings.php';
 require_once __DIR__ . '/../inc/sla_simple.php';
 require_once __DIR__ . '/../inc/push.php';
+require_once __DIR__ . '/../inc/ticket_create.php';
 require_once __DIR__ . '/../inc/layout.php';
 dashglpi_require_auth();
 
@@ -43,6 +44,23 @@ $slaSettings = dashglpi_get_settings('sla_simple');
 $slaDisplayLabels = dashglpi_sla_display_labels($slaSettings);
 $appName = (string) $settings['app_name'];
 $glpiPublicUrl = rtrim((string) dashglpi_env('GLPI_PUBLIC_URL', ''), '/');
+$ticketFilterEntities = array_map(
+    static fn(array $entity): array => [
+        'id' => (int) ($entity['id'] ?? 0),
+        'label' => (string) (($entity['label'] ?? '') ?: ($entity['completename'] ?? '') ?: ($entity['name'] ?? '') ?: 'Entidade raiz'),
+    ],
+    dashglpi_ticket_create_scope()['entities'] ?? []
+);
+$ticketFilterDefaultEntityId = -1;
+if (!empty($currentUser['id'])) {
+    $defaultEntityRows = dashglpi_fetch_all(
+        'SELECT entities_id FROM glpi_users WHERE id = ? LIMIT 1',
+        [(int) $currentUser['id']]
+    );
+    if ($defaultEntityRows) {
+        $ticketFilterDefaultEntityId = max(0, (int) ($defaultEntityRows[0]['entities_id'] ?? 0));
+    }
+}
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
@@ -77,6 +95,8 @@ $glpiPublicUrl = rtrim((string) dashglpi_env('GLPI_PUBLIC_URL', ''), '/');
         const DASHGLPI_IS_RESTRICTED_VIEW = <?= !empty($userContext['has_profile_rule']) ? 'true' : 'false' ?>;
         const DASHGLPI_IS_HELPDESK_VIEW = <?= !empty($userContext['is_helpdesk_profile']) ? 'true' : 'false' ?>;
         const DASHGLPI_LOCK_MY_TASKS_FILTER = <?= !empty($userContext['lock_my_tasks']) ? 'true' : 'false' ?>;
+        const DASHGLPI_TICKET_FILTER_ENTITIES = <?= json_encode($ticketFilterEntities, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) ?>;
+        const DASHGLPI_TICKET_FILTER_DEFAULT_ENTITY_ID = <?= (int) $ticketFilterDefaultEntityId ?>;
         const DASHGLPI_SHOW_TICKET_URGENCY = <?= !array_key_exists('show_ticket_urgency', $userContext) || !empty($userContext['show_ticket_urgency']) ? 'true' : 'false' ?>;
         const DASHGLPI_CURRENT_USER_ID = <?= (int) ($userContext['user_id'] ?? 0) ?>;
         const DASHGLPI_CURRENT_USER_DISPLAY = <?= json_encode((string) ($currentUser['display'] ?? 'usuário atual'), JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) ?>;
@@ -1163,20 +1183,9 @@ $glpiPublicUrl = rtrim((string) dashglpi_env('GLPI_PUBLIC_URL', ''), '/');
                             <input type="checkbox" id="ticketsMyTasksFilter" data-my-tasks-filter<?= !empty($userContext['lock_my_tasks']) ? ' checked disabled' : '' ?>>
                             <span>Minhas Tarefas</span>
                         </label>
-                        <div class="tickets-status-filter">
-                            <button class="tickets-icon-filter" type="button" id="ticketsStatusFilterToggle" data-ticket-status-filter-toggle title="Filtrar por status" aria-label="Filtrar por status" aria-expanded="false" aria-controls="ticketsStatusFilterMenu">
-                                <i class="fas fa-filter" aria-hidden="true"></i>
-                            </button>
-                            <div class="tickets-status-menu" id="ticketsStatusFilterMenu" data-ticket-status-filter-menu hidden>
-                                <button class="tickets-status-all" type="button" id="ticketsStatusFilterAll" data-ticket-status-filter-all>Todos</button>
-                                <label><input type="checkbox" data-ticket-status-filter value="1" checked> <span>Aberto</span></label>
-                                <label><input type="checkbox" data-ticket-status-filter value="3" checked> <span>Planejado</span></label>
-                                <label><input type="checkbox" data-ticket-status-filter value="2" checked> <span>Em Andamento</span></label>
-                                <label><input type="checkbox" data-ticket-status-filter value="4" checked> <span>Pendente</span></label>
-                                <label><input type="checkbox" data-ticket-status-filter value="5" checked> <span>Solucionando</span></label>
-                                <label><input type="checkbox" data-ticket-status-filter value="6" checked> <span>Fechado</span></label>
-                            </div>
-                        </div>
+                        <button class="tickets-icon-filter" type="button" data-ticket-filter-modal-open title="Filtros" aria-label="Filtros">
+                            <i class="fas fa-filter" aria-hidden="true"></i>
+                        </button>
                     </div>
                 </div>
                 <div class="table-responsive">
@@ -1222,23 +1231,84 @@ $glpiPublicUrl = rtrim((string) dashglpi_env('GLPI_PUBLIC_URL', ''), '/');
                             <input type="checkbox" id="ticketsKanbanMyTasksFilter" data-my-tasks-filter<?= !empty($userContext['lock_my_tasks']) ? ' checked disabled' : '' ?>>
                             <span>Minhas Tarefas</span>
                         </label>
-                        <div class="tickets-status-filter">
-                            <button class="tickets-icon-filter" type="button" id="ticketsKanbanStatusFilterToggle" data-ticket-status-filter-toggle title="Filtrar por status" aria-label="Filtrar por status" aria-expanded="false" aria-controls="ticketsKanbanStatusFilterMenu">
-                                <i class="fas fa-filter" aria-hidden="true"></i>
-                            </button>
-                            <div class="tickets-status-menu" id="ticketsKanbanStatusFilterMenu" data-ticket-status-filter-menu hidden>
-                                <button class="tickets-status-all" type="button" id="ticketsKanbanStatusFilterAll" data-ticket-status-filter-all>Todos</button>
-                                <label><input type="checkbox" data-ticket-status-filter value="1" checked> <span>Aberto</span></label>
-                                <label><input type="checkbox" data-ticket-status-filter value="3" checked> <span>Planejado</span></label>
-                                <label><input type="checkbox" data-ticket-status-filter value="2" checked> <span>Em Andamento</span></label>
-                                <label><input type="checkbox" data-ticket-status-filter value="4" checked> <span>Pendente</span></label>
-                                <label><input type="checkbox" data-ticket-status-filter value="5" checked> <span>Solucionando</span></label>
-                                <label><input type="checkbox" data-ticket-status-filter value="6" checked> <span>Fechado</span></label>
-                            </div>
-                        </div>
+                        <button class="tickets-icon-filter" type="button" data-ticket-filter-modal-open title="Filtros" aria-label="Filtros">
+                            <i class="fas fa-filter" aria-hidden="true"></i>
+                        </button>
                     </div>
                 </div>
                 <div id="ticketsKanban" class="kanban-container"></div>
+            </div>
+        </div>
+        <div class="modal-overlay dash-modal" id="ticketsFilterModal" hidden>
+            <div class="dash-modal-card tickets-filter-modal-card" role="dialog" aria-modal="true" aria-labelledby="ticketsFilterModalTitle">
+                <div class="dash-modal-header">
+                    <div>
+                        <h2 id="ticketsFilterModalTitle">Filtros</h2>
+                        <p>Status e entidades dos chamados</p>
+                    </div>
+                    <button type="button" class="icon-btn" data-ticket-filter-close aria-label="Fechar">
+                        <i class="fas fa-times" aria-hidden="true"></i>
+                    </button>
+                </div>
+                <form class="tickets-filter-form" id="ticketsFilterForm">
+                    <div class="tickets-filter-tabs tickets-filter-main-tabs" role="tablist" aria-label="Filtros">
+                        <button type="button" class="tickets-filter-tab is-active" role="tab" aria-selected="true" aria-controls="ticketsFilterDashPanel" data-ticket-filter-main-tab="dash">
+                            <span>Tarefas do Dash</span>
+                            <strong id="ticketsFilterDashEntitySummary">Todas</strong>
+                        </button>
+                        <button type="button" class="tickets-filter-tab" role="tab" aria-selected="false" aria-controls="ticketsFilterGlpiPanel" data-ticket-filter-main-tab="glpi">
+                            <span>Tarefas do GLPI</span>
+                            <strong id="ticketsFilterGlpiEntitySummary">Todas</strong>
+                        </button>
+                        <button type="button" class="tickets-filter-tab" role="tab" aria-selected="false" aria-controls="ticketsFilterStatusPanel" data-ticket-filter-main-tab="status">
+                            <span>Status</span>
+                            <strong id="ticketsFilterStatusSummary">Todos</strong>
+                        </button>
+                    </div>
+                    <section class="tickets-filter-section tickets-filter-entity-section">
+                        <div class="tickets-filter-entity-panel is-active" id="ticketsFilterDashPanel" role="tabpanel" data-ticket-filter-entity-panel="dash">
+                            <div class="tickets-filter-chip-row" id="ticketsFilterDashEntityChips"></div>
+                            <div class="tickets-filter-entity-picker">
+                                <div class="tickets-filter-search">
+                                    <i class="fas fa-search" aria-hidden="true"></i>
+                                    <input type="search" id="ticketsFilterDashEntitySearch" placeholder="Buscar entidade..." autocomplete="off">
+                                </div>
+                                <button type="button" class="tickets-filter-inline-btn" data-ticket-filter-entity-all="dash">Todas</button>
+                                <div class="tickets-filter-entity-list" id="ticketsFilterDashEntityOptions"></div>
+                            </div>
+                        </div>
+                        <div class="tickets-filter-entity-panel" id="ticketsFilterGlpiPanel" role="tabpanel" data-ticket-filter-entity-panel="glpi" hidden>
+                            <div class="tickets-filter-chip-row" id="ticketsFilterGlpiEntityChips"></div>
+                            <div class="tickets-filter-entity-picker">
+                                <div class="tickets-filter-search">
+                                    <i class="fas fa-search" aria-hidden="true"></i>
+                                    <input type="search" id="ticketsFilterGlpiEntitySearch" placeholder="Buscar entidade..." autocomplete="off">
+                                </div>
+                                <button type="button" class="tickets-filter-inline-btn" data-ticket-filter-entity-all="glpi">Todas</button>
+                                <div class="tickets-filter-entity-list" id="ticketsFilterGlpiEntityOptions"></div>
+                            </div>
+                        </div>
+                        <div class="tickets-filter-entity-panel tickets-filter-status-panel" id="ticketsFilterStatusPanel" role="tabpanel" data-ticket-filter-status-panel hidden>
+                            <div class="tickets-filter-section-header">
+                                <span>Status</span>
+                                <button type="button" class="tickets-filter-inline-btn" data-ticket-filter-status-all>Todos</button>
+                            </div>
+                            <div class="tickets-filter-options">
+                                <label><input type="checkbox" data-ticket-filter-status value="1"> <span>Aberto</span></label>
+                                <label><input type="checkbox" data-ticket-filter-status value="3"> <span>Planejado</span></label>
+                                <label><input type="checkbox" data-ticket-filter-status value="2"> <span>Em Andamento</span></label>
+                                <label><input type="checkbox" data-ticket-filter-status value="4"> <span>Pendente</span></label>
+                                <label><input type="checkbox" data-ticket-filter-status value="5"> <span>Solucionando</span></label>
+                                <label><input type="checkbox" data-ticket-filter-status value="6"> <span>Fechado</span></label>
+                            </div>
+                        </div>
+                    </section>
+                    <div class="tickets-filter-actions">
+                        <button type="button" class="page-action-btn" data-ticket-filter-clear>Limpar</button>
+                        <button type="button" class="page-action-btn" data-ticket-filter-close>Cancelar</button>
+                        <button type="submit" class="admin-submit">Aplicar</button>
+                    </div>
+                </form>
             </div>
         </div>
         <?php endif; ?>
