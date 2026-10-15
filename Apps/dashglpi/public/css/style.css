@@ -8644,7 +8644,22 @@ body.ticket-detail-scroll-locked {
 #ticketDetailModal .followup-item-header time { margin-left: auto; color: #64748b; font-size: .75rem; }
 .attendance-documents { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 10px; }
 .attendance-document { display: flex; flex-direction: column; gap: 6px; max-width: 160px; padding: 8px; border: 1px solid #e2e8f0; border-radius: 8px; font-size: .75rem; overflow-wrap: anywhere; }
-.attendance-document img { width: 140px; height: 90px; object-fit: contain; }
+.attendance-document-preview { display: block; padding: 0; border: 0; background: #f8fafc; cursor: zoom-in; }
+.attendance-document-preview img { display: block; width: 140px; height: 90px; object-fit: contain; }
+.attendance-document-icon { display: grid; place-items: center; width: 140px; height: 90px; color: #64748b; font-size: 1.6rem; background: #f8fafc; }
+.attendance-document-name { overflow-wrap: anywhere; }
+.attendance-image-preview { display: none; position: fixed; inset: 0; z-index: 10050; align-items: center; justify-content: center; padding: 24px; }
+.attendance-image-preview.is-active { display: flex; }
+.attendance-image-preview-backdrop { position: absolute; inset: 0; background: rgba(15, 23, 42, .82); }
+.attendance-image-preview-panel { position: relative; z-index: 1; display: flex; align-items: center; justify-content: center; width: min(94vw, 1100px); height: min(90vh, 820px); }
+.attendance-image-preview-image { max-width: calc(100% - 110px); max-height: calc(100% - 54px); object-fit: contain; border-radius: 8px; box-shadow: 0 12px 40px rgba(0,0,0,.35); }
+.attendance-image-preview-close, .attendance-image-preview-nav { position: absolute; z-index: 2; border: 0; border-radius: 999px; color: #fff; background: rgba(15,23,42,.7); cursor: pointer; }
+.attendance-image-preview-close { top: 0; right: 0; width: 38px; height: 38px; font-size: 1.7rem; line-height: 1; }
+.attendance-image-preview-nav { top: 50%; width: 42px; height: 42px; transform: translateY(-50%); font-size: 1.2rem; }
+.attendance-image-preview-nav:disabled { opacity: .35; cursor: default; }
+.attendance-image-preview-prev { left: 8px; }
+.attendance-image-preview-next { right: 8px; }
+.attendance-image-preview-caption { position: absolute; bottom: 0; max-width: 80%; color: #fff; text-align: center; overflow-wrap: anywhere; }
 .attendance-actors-header {
     display: flex;
     align-items: center;

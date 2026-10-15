@@ -21,6 +21,26 @@ const DashAttendance = {
             if (!button) return;
             this.jumpTo(button.dataset.attendanceJump || '');
         });
+        this.el('ticketDetailModal')?.addEventListener('click', e => {
+            const imageButton = e.target.closest('[data-attendance-image-id]');
+            if (imageButton) this.openImagePreview(imageButton.dataset.attendanceImageId);
+        });
+        document.addEventListener('click', e => {
+            const modal = document.getElementById('attendanceImagePreview');
+            if (!modal?.classList.contains('is-active')) return;
+            if (e.target.closest('[data-attendance-image-close]')) return this.closeImagePreview();
+            if (e.target.closest('[data-attendance-image-prev]')) modal._index = (modal._index - 1 + modal._documents.length) % modal._documents.length;
+            else if (e.target.closest('[data-attendance-image-next]')) modal._index = (modal._index + 1) % modal._documents.length;
+            else return;
+            this.updateImagePreview();
+        });
+        document.addEventListener('keydown', e => {
+            const modal = document.getElementById('attendanceImagePreview');
+            if (!modal?.classList.contains('is-active')) return;
+            if (e.key === 'Escape') this.closeImagePreview();
+            if (e.key === 'ArrowLeft') { modal._index = (modal._index - 1 + modal._documents.length) % modal._documents.length; this.updateImagePreview(); }
+            if (e.key === 'ArrowRight') { modal._index = (modal._index + 1) % modal._documents.length; this.updateImagePreview(); }
+        });
         this.el('attendanceKind')?.addEventListener('change', () => this.kindChanged());
         this.el('attendanceEditDescription')?.addEventListener('click', () => {
             this.el('attendanceDescription').value = this.ticket.content_text || '';
@@ -379,8 +399,41 @@ const DashAttendance = {
     documentHTML(doc) {
         const id = Number(doc.id), ticketId = Number(this.ticket?.id || this.el('ticketDetailTicketId').value);
         const base = `${PLUGIN_ROOT}/front/document-preview.php?ticket_id=${ticketId}&document_id=${id}`;
-        return `<a class="attendance-document" href="${base}&download=1" target="_blank" rel="noopener noreferrer">${doc.is_image ? `<img src="${base}" loading="lazy" alt="${escHtml(doc.name || 'Imagem')}">` : '<i class="fas fa-paperclip" aria-hidden="true"></i>'}<span>${escHtml(doc.name || 'Documento')}</span></a>`;
+        const preview = doc.is_image
+            ? `<button class="attendance-document-preview" type="button" data-attendance-image-id="${id}" aria-label="Visualizar ${escHtml(doc.name || 'imagem')}"><img src="${base}" loading="lazy" alt="${escHtml(doc.name || 'Imagem')}"></button>`
+            : '<span class="attendance-document-icon"><i class="fas fa-paperclip" aria-hidden="true"></i></span>';
+        return `<article class="attendance-document">${preview}<a class="attendance-document-name" href="${base}&download=1" target="_blank" rel="noopener noreferrer">${escHtml(doc.name || 'Documento')}</a></article>`;
     },
+    openImagePreview(documentId) {
+        const docs = (this.ticket?.documents || []).filter(doc => doc.is_image);
+        const index = docs.findIndex(doc => Number(doc.id) === Number(documentId));
+        if (index < 0) return;
+        let modal = document.getElementById('attendanceImagePreview');
+        if (!modal) {
+            modal = document.createElement('div');
+            modal.id = 'attendanceImagePreview';
+            modal.className = 'attendance-image-preview';
+            modal.setAttribute('role', 'dialog');
+            modal.setAttribute('aria-modal', 'true');
+            modal.innerHTML = '<div class="attendance-image-preview-backdrop" data-attendance-image-close></div><div class="attendance-image-preview-panel"><button class="attendance-image-preview-close" type="button" data-attendance-image-close aria-label="Fechar">&times;</button><button class="attendance-image-preview-nav attendance-image-preview-prev" type="button" data-attendance-image-prev aria-label="Imagem anterior">&#10094;</button><img class="attendance-image-preview-image" alt=""><button class="attendance-image-preview-nav attendance-image-preview-next" type="button" data-attendance-image-next aria-label="Próxima imagem">&#10095;</button><div class="attendance-image-preview-caption"></div></div>';
+            document.body.append(modal);
+        }
+        modal._documents = docs; modal._index = index; modal.classList.add('is-active');
+        this.updateImagePreview();
+    },
+    updateImagePreview() {
+        const modal = document.getElementById('attendanceImagePreview');
+        const doc = modal?._documents?.[modal?._index];
+        if (!modal || !doc) return;
+        const ticketId = Number(this.ticket?.id || this.el('ticketDetailTicketId').value);
+        const src = `${PLUGIN_ROOT}/front/document-preview.php?ticket_id=${ticketId}&document_id=${Number(doc.id)}`;
+        modal.querySelector('.attendance-image-preview-image').src = src;
+        modal.querySelector('.attendance-image-preview-image').alt = doc.name || 'Imagem';
+        modal.querySelector('.attendance-image-preview-caption').textContent = `${doc.name || 'Imagem'} (${modal._index + 1}/${modal._documents.length})`;
+        modal.querySelector('[data-attendance-image-prev]').disabled = modal._documents.length < 2;
+        modal.querySelector('[data-attendance-image-next]').disabled = modal._documents.length < 2;
+    },
+    closeImagePreview() { document.getElementById('attendanceImagePreview')?.classList.remove('is-active'); },
     optionLabel(item) {
         return String(item?.label || item?.completename || item?.display || item?.text || item?.name || '').trim() || '-';
     },
