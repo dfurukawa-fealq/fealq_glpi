@@ -44,7 +44,7 @@ if (!defined('GLPI_ROOT')) {
  */
 class Profile extends \Profile
 {
-    public static string $rightname = "profile";
+    public static $rightname = "profile";
 
     public static function getAllRights()
     {
