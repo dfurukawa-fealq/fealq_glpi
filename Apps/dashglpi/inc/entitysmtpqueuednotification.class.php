@@ -9,7 +9,7 @@ if (!defined('GLPI_ROOT')) {
 
 class PluginDashglpiEntitysmtpQueuednotification extends CommonDBTM
 {
-    public static $rightname = 'config';
+    public static string $rightname = 'config';
 
     private const CONFIG_TABLE = 'glpi_plugin_dashglpi_entitysmtp_configs';
     private const LOG_TABLE = 'glpi_plugin_dashglpi_entitysmtp_logs';
