@@ -823,7 +823,7 @@ if (!function_exists('brandkit_get_wallpaper_preset_assets')) {
             }
         }
 
-        $pluginWebBase = rtrim(Plugin::getWebDir('brandkit', true), '/');
+        $pluginWebBase = rtrim(brandkit_get_plugin_web_dir(true), '/');
         return [
             'url' => $pluginWebBase . '/pics/wallpapers/' . rawurlencode($presetFile) . '?v=' . $presetMtime,
             'webp_url' => '',

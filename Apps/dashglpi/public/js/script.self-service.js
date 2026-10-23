@@ -71,6 +71,10 @@ function initSelfServiceActions() {
 function closeTicketDetailModal() {
     const modal = document.getElementById('ticketDetailModal');
     if (!modal || !DashAttendance.canClose()) return;
+    if (document.body.classList.contains('ticket-page')) {
+        window.location.href = './dashboard.php#tickets';
+        return;
+    }
     DashAttendance.generation++;
     modal.classList.remove('active');
     modal.setAttribute('aria-hidden', 'true');
@@ -285,6 +289,12 @@ function clearFollowupAttachments() {
 }
 
 async function openTicketDetailModal(ticketId, options = {}) {
+    if (!document.body.classList.contains('ticket-page') && !options.inline) {
+        const params = new URLSearchParams({ ticket_id: String(ticketId) });
+        if (options.itemtype) params.set('itemtype', String(options.itemtype));
+        window.location.href = `ticket.php?${params.toString()}`;
+        return;
+    }
     const modal = document.getElementById('ticketDetailModal');
     const hidden = document.getElementById('ticketDetailTicketId');
     if (!modal || !hidden || !ticketId || !DashAttendance.canClose()) return;

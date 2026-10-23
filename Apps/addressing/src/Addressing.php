@@ -53,7 +53,7 @@ if (!defined('GLPI_ROOT')) {
  */
 class Addressing extends CommonDBTM
 {
-    public static $rightname = "plugin_addressing";
+    public static string $rightname = "plugin_addressing";
 
     public static $types = [
         'Computer', 'NetworkEquipment', 'Peripheral', 'Phone', 'Printer', 'Enclosure', 'PDU', 'Cluster'];

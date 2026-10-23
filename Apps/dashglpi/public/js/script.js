@@ -657,8 +657,11 @@ function openTicketDeepLinkFromQuery() {
         return;
     }
 
-    showPage('tickets', pageMenuLink('tickets'));
+    const ticketPage = document.body.classList.contains('ticket-page');
+    if (!ticketPage) showPage('tickets', pageMenuLink('tickets'));
     openTicketDetailModal(ticketId);
+
+    if (ticketPage) return;
 
     params.delete('ticket_id');
     const nextSearch = params.toString();

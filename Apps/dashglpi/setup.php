@@ -9,7 +9,7 @@
 
 define('PLUGIN_DASHGLPI_VERSION', '1.0.1');
 define('PLUGIN_DASHGLPI_MIN_GLPI_VERSION', '11.0.0');
-define('PLUGIN_DASHGLPI_MAX_GLPI_VERSION', '11.0.99');
+define('PLUGIN_DASHGLPI_MAX_GLPI_VERSION', '12.0.99');
 
 require_once __DIR__ . '/inc/entitysmtpqueuednotification.class.php';
 

@@ -347,8 +347,8 @@ if ($currentStep < 0 || $currentStep > 3) {
     $currentStep = 0;
 }
 
-$baseUrl = Plugin::getWebDir('brandkit') . '/front/index.php';
-$pluginWebBase = Plugin::getWebDir('brandkit', false);
+$baseUrl = brandkit_get_plugin_web_dir() . '/front/index.php';
+$pluginWebBase = brandkit_get_plugin_web_dir(false);
 if (is_string($pluginWebBase) && $pluginWebBase !== '' && $pluginWebBase[0] !== '/') {
     $pluginWebBase = '/' . $pluginWebBase;
 }

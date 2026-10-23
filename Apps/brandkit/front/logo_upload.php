@@ -92,8 +92,8 @@ function brandkit_delete_uploaded_wallpaper_variants(string $baseName = 'wallpap
 
 $action = $_POST['brandkit_action'] ?? 'upload_logo';
 $refreshToken = (string) round(microtime(true) * 1000);
-$logoRedirectUrl = Plugin::getWebDir('brandkit') . '/front/index.php?step=1&refresh=' . rawurlencode($refreshToken);
-$wallpaperRedirectUrl = Plugin::getWebDir('brandkit') . '/front/index.php?step=3&refresh=' . rawurlencode($refreshToken);
+$logoRedirectUrl = brandkit_get_plugin_web_dir() . '/front/index.php?step=1&refresh=' . rawurlencode($refreshToken);
+$wallpaperRedirectUrl = brandkit_get_plugin_web_dir() . '/front/index.php?step=3&refresh=' . rawurlencode($refreshToken);
 $redirectUrl = in_array($action, ['upload_logo', 'clear_logo'], true) ? $logoRedirectUrl : $wallpaperRedirectUrl;
 
 if (empty($_POST) && empty($_FILES)) {

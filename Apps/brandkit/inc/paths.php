@@ -66,18 +66,19 @@ if (!function_exists('brandkit_get_glpi_root_doc')) {
                 $root = rtrim($cfg['root_doc'], '/');
             }
         }
-        if ($root === '' && class_exists('Plugin')) {
-            $pluginWeb = Plugin::getWebDir('brandkit', false);
-            if (is_string($pluginWeb) && $pluginWeb !== '') {
-                $normalized = rtrim($pluginWeb, '/');
-                $root = preg_replace('~/?plugins/brandkit$~', '', $normalized) ?? '';
-            }
-        }
         if ($root !== '' && $root[0] !== '/') {
             $root = '/' . $root;
         }
 
         return $root;
+    }
+}
+
+if (!function_exists('brandkit_get_plugin_web_dir')) {
+    function brandkit_get_plugin_web_dir(bool $full = false): string
+    {
+        $root = rtrim(brandkit_get_glpi_root_doc(), '/');
+        return $root . '/plugins/brandkit';
     }
 }
 

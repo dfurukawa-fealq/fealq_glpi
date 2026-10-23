@@ -6780,6 +6780,58 @@ body.ticket-detail-scroll-locked {
     display: none !important;
 }
 
+/* Página dedicada do chamado: reutiliza o componente do dashboard sem overlay. */
+body.ticket-page {
+    overflow: auto;
+}
+
+body.ticket-page .sidebar,
+body.ticket-page .floating-menu-btn,
+body.ticket-page .notification-panel,
+body.ticket-page .edit-mode-indicator,
+body.ticket-page .tv-indicator {
+    display: none !important;
+}
+
+body.ticket-page .main-content {
+    margin-left: 0;
+    min-height: 100vh;
+    padding: 0;
+}
+
+body.ticket-page #mainContent > *:not(#ticketDetailModal) {
+    display: none !important;
+}
+
+body.ticket-page #ticketDetailModal {
+    position: static;
+    inset: auto;
+    display: block;
+    min-height: 100vh;
+    padding: 0;
+    background: #f8fafc;
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+}
+
+body.ticket-page #ticketDetailModal .ticket-detail-dialog {
+    width: 100%;
+    max-width: none;
+    min-height: 100vh;
+    max-height: none;
+    border-radius: 0;
+    box-shadow: none;
+}
+
+body.ticket-page #ticketDetailModal .ticket-detail-columns {
+    min-height: calc(100vh - 150px);
+}
+
+body.ticket-page #attendanceExpand {
+    display: none;
+}
+
 /* ---- Modal de detalhe do chamado (descricao + timeline + acoes) ---- */
 .ticket-detail-dialog {
     width: min(960px, 100%);

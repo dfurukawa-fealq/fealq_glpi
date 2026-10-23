@@ -8,6 +8,7 @@ require_once __DIR__ . '/../inc/layout.php';
 dashglpi_require_auth();
 
 $pluginRoot = '';
+$isTicketPage = isset($_GET['ticket_page']) && (string) $_GET['ticket_page'] === '1';
 $currentUser = dashglpi_current_user();
 $userContext = dashglpi_current_user_context();
 $isAdmin = dashglpi_current_user_is_admin();
@@ -104,7 +105,7 @@ if (!empty($currentUser['id'])) {
         const DASHGLPI_ITIL_TYPES = <?= json_encode($itilTypeCatalog, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) ?>;
     </script>
 </head>
-<body class="light-mode">
+<body class="light-mode<?= $isTicketPage ? ' ticket-page' : '' ?>">
     <div class="tv-indicator">
         <span><i class="fas fa-tv"></i> MODO TV ATIVO</span>
         <button type="button" onclick="exitTVMode()">Sair</button>

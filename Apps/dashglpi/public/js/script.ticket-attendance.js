@@ -9,6 +9,11 @@ const DashAttendance = {
     status(id, message, type = '') { setSelfServiceStatus(id, message, type); },
     init() {
         this.el('attendanceExpand')?.addEventListener('click', () => {
+            const ticketId = Number(this.el('ticketDetailTicketId')?.value || 0);
+            if (ticketId && !document.body.classList.contains('ticket-page')) {
+                window.location.href = `ticket.php?ticket_id=${encodeURIComponent(ticketId)}`;
+                return;
+            }
             const expanded = this.el('ticketDetailModal').classList.toggle('is-expanded');
             this.el('attendanceExpand').setAttribute('aria-pressed', String(expanded));
         });

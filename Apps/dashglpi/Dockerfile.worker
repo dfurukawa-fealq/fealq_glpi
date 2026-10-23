@@ -5,7 +5,7 @@
 # nativo do GLPI. O loop de execução fica no CMD; cada passada é idempotente.
 FROM composer:2 AS composer
 
-FROM php:8.3-cli
+FROM php:8.5.12-cli
 
 COPY --from=composer /usr/bin/composer /usr/bin/composer
 

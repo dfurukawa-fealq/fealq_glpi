@@ -41,7 +41,7 @@ if (!defined('GLPI_ROOT')) {
 
 class PluginBrandkitConfig extends CommonGLPI
 {
-    public static $rightname = 'config';
+    public static string $rightname = 'config';
 
     public static function getTypeName($nb = 0)
     {
@@ -65,7 +65,7 @@ class PluginBrandkitConfig extends CommonGLPI
 
     public static function getSearchURL($full = true)
     {
-        return Plugin::getWebDir('brandkit', $full) . '/front/index.php';
+        return brandkit_get_plugin_web_dir($full) . '/front/index.php';
     }
 
     public static function getMenuContent()
@@ -76,7 +76,7 @@ class PluginBrandkitConfig extends CommonGLPI
 
         $menu = [
             'title' => self::getTypeName(1),
-            'page' => Plugin::getWebDir('brandkit', false) . '/front/index.php',
+            'page' => brandkit_get_plugin_web_dir(false) . '/front/index.php',
             'icon' => 'ti ti-paint',
         ];
 

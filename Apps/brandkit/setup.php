@@ -39,7 +39,7 @@ if (!defined('GLPI_ROOT')) {
 
 define('PLUGIN_BRANDKIT_VERSION', '0.1.9');
 define('PLUGIN_BRANDKIT_MIN_GLPI', '10.0.0');
-define('PLUGIN_BRANDKIT_MAX_GLPI', '11.0.99');
+define('PLUGIN_BRANDKIT_MAX_GLPI', '12.0.99');
 
 include_once __DIR__ . '/hook.php';
 include_once __DIR__ . '/inc/config.class.php';
