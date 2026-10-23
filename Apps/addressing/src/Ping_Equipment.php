@@ -43,7 +43,7 @@ if (!defined('GLPI_ROOT')) {
  */
 class Ping_Equipment extends CommonDBTM
 {
-    public static string $rightname = "plugin_addressing";
+    public static $rightname = "plugin_addressing";
 
     public function showPingForm($itemtype, $items_id)
     {

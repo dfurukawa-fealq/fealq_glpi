@@ -45,7 +45,7 @@ if (!defined('GLPI_ROOT')) {
  */
 class ReserveIp extends CommonDBTM
 {
-    public static string $rightname = 'plugin_addressing';
+    public static $rightname = 'plugin_addressing';
 
     public static function getTypeName($nb = 0)
     {
