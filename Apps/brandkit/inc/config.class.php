@@ -41,7 +41,7 @@ if (!defined('GLPI_ROOT')) {
 
 class PluginBrandkitConfig extends CommonGLPI
 {
-    public static string $rightname = 'config';
+    public static $rightname = 'config';
 
     public static function getTypeName($nb = 0)
     {
