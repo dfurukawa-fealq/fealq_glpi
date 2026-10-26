@@ -214,25 +214,35 @@ function plugin_dashglpi_ticket_create_submit(array $payload): array
 
 function plugin_dashglpi_ticket_create_ensure_new_notification(int $ticketId): void
 {
+    // Ticket::add() already queues the native notification. This fallback is
+    // best-effort only: GLPI 12 changed parts of the notification API and a
+    // failure here must never turn a successfully created ticket into HTTP 500.
     if ($ticketId <= 0 || !class_exists(NotificationEvent::class)) {
         return;
     }
 
-    $ticket = new Ticket();
-    if (!$ticket->getFromDB($ticketId)) {
-        return;
+    try {
+        $ticket = new Ticket();
+        if (!$ticket->getFromDB($ticketId) || plugin_dashglpi_ticket_create_has_new_notification($ticketId)) {
+            return;
+        }
+
+        NotificationEvent::raiseEvent('new', $ticket);
+        Toolbox::logInFile(
+            'php-errors',
+            sprintf("[DashGLPI ticket_create] fallback NotificationEvent::raiseEvent('new') ticket=%d\n", $ticketId)
+        );
+    } catch (Throwable $e) {
+        Toolbox::logInFile(
+            'php-errors',
+            sprintf(
+                "[DashGLPI ticket_create] notification fallback ignored ticket=%d class=%s message=%s\n",
+                $ticketId,
+                get_class($e),
+                trim((string) $e->getMessage())
+            )
+        );
     }
-
-    if (plugin_dashglpi_ticket_create_has_new_notification($ticketId)) {
-        return;
-    }
-
-    NotificationEvent::raiseEvent('new', $ticket);
-
-    Toolbox::logInFile(
-        'php-errors',
-        sprintf("[DashGLPI ticket_create] fallback NotificationEvent::raiseEvent('new') ticket=%d\n", $ticketId)
-    );
 }
 
 function plugin_dashglpi_ticket_create_has_new_notification(int $ticketId): bool
