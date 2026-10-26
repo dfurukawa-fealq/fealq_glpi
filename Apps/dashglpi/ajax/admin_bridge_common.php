@@ -424,9 +424,11 @@ function plugin_dashglpi_admin_bridge_bootstrap_db(): void
             $CFG_GLPI = [];
         }
 
-        if (class_exists(Config::class)) {
-            Config::loadLegacyConfiguration();
-        }
+        // Do not call Config::loadLegacyConfiguration() here. In current
+        // GLPI versions it expects the Symfony RequestStack to contain a main
+        // request, which is not available in this isolated bridge request.
+        // inc/includes.php has already bootstrapped the active GLPI config;
+        // reloading it here causes: getMainRequest() on null.
     }
 }
 function plugin_dashglpi_admin_bridge_log(Throwable $e, string $scope): void
