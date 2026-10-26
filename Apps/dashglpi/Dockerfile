@@ -16,6 +16,9 @@ RUN apt-get update \
 # The application sets the cookie name at runtime; this provides a stable,
 # writable server-side store for that cookie across Apache workers.
 RUN printf '%s\n' \
+    'display_errors=Off' \
+    'log_errors=On' \
+    'error_log=/proc/self/fd/2' \
     'session.save_path=/var/lib/php/sessions' \
     'session.use_strict_mode=1' \
     'session.cookie_httponly=1' \

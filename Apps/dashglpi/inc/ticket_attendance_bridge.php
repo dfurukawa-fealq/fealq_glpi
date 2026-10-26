@@ -36,19 +36,7 @@ function dashglpi_attendance_as_actor(array $payload, callable $handler): array
             || (!empty($user->fields['end_date']) && $user->fields['end_date'] < $now)) {
             throw new RuntimeException('Usuário fora do período de validade.', 403);
         }
-        $_SESSION = [];
-        Session::initVars();
-        $_SESSION['glpiID'] = $userId;
-        $_SESSION['glpiname'] = $user->fields['name'];
-        $_SESSION['glpidefault_entity'] = (int) $user->fields['entities_id'];
-        $actorLanguage = trim((string) ($user->fields['language'] ?? ''));
-        if ($actorLanguage === '') {
-            $actorLanguage = 'pt_BR';
-            $user->fields['language'] = $actorLanguage;
-        }
-        $_SESSION['glpilanguage'] = $actorLanguage;
-        $user->loadPreferencesInSession();
-        Session::initEntityProfiles($userId);
+        plugin_dashglpi_admin_bridge_prepare_actor_session($user);
         $availableProfiles = array_map('intval', array_keys($_SESSION['glpiprofiles'] ?? []));
         if ($requestedProfileId > 0 && !in_array($requestedProfileId, $availableProfiles, true)) {
             throw new RuntimeException('Perfil não pertence ao usuário.', 403);

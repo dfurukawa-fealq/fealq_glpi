@@ -15,10 +15,30 @@ function plugin_dashglpi_admin_bridge_require_token(): void
 
 function plugin_dashglpi_admin_bridge_json(array $data, int $status = 200): void
 {
+    $requestId = plugin_dashglpi_admin_bridge_request_id();
+    $data['request_id'] ??= $requestId;
     http_response_code($status);
     header('Content-Type: application/json; charset=utf-8');
+    header('X-Request-ID: ' . $requestId);
     echo json_encode($data, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
     exit;
+}
+
+function plugin_dashglpi_admin_bridge_request_id(): string
+{
+    $requestId = strtolower(trim((string) ($_SERVER['HTTP_X_REQUEST_ID'] ?? '')));
+    if (!preg_match('/^[a-f0-9-]{16,64}$/', $requestId)) {
+        try {
+            $requestId = bin2hex(random_bytes(16));
+        } catch (Throwable) {
+            $requestId = substr(sha1(uniqid('', true)), 0, 32);
+        }
+    }
+    $GLOBALS['DASHGLPI_BRIDGE_REQUEST_ID'] = $requestId;
+    if (!headers_sent()) {
+        header('X-Request-ID: ' . $requestId);
+    }
+    return $requestId;
 }
 
 function plugin_dashglpi_admin_bridge_payload(): array
@@ -41,7 +61,7 @@ function plugin_dashglpi_admin_bridge_payload(): array
             $_SESSION['glpi_currenttime'] = date('Y-m-d H:i:s');
         }
 
-        return $decoded;
+        return plugin_dashglpi_admin_bridge_payload_with_request_id($decoded);
     }
 
     $input = json_decode((string) file_get_contents('php://input'), true);
@@ -53,7 +73,22 @@ function plugin_dashglpi_admin_bridge_payload(): array
         $_SESSION['glpi_currenttime'] = date('Y-m-d H:i:s');
     }
 
-    return $input['payload'];
+    return plugin_dashglpi_admin_bridge_payload_with_request_id($input['payload']);
+}
+
+function plugin_dashglpi_admin_bridge_payload_with_request_id(array $payload): array
+{
+    $headerId = plugin_dashglpi_admin_bridge_request_id();
+    $payloadId = strtolower(trim((string) ($payload['request_id'] ?? '')));
+    if (preg_match('/^[a-f0-9-]{16,64}$/', $payloadId) && hash_equals($headerId, $payloadId)) {
+        $GLOBALS['DASHGLPI_BRIDGE_REQUEST_ID'] = $payloadId;
+        return $payload;
+    }
+    if ($payloadId !== '' && preg_match('/^[a-f0-9-]{16,64}$/', $payloadId)) {
+        throw new RuntimeException('Identificador de correlacao inconsistente.', 400);
+    }
+    $payload['request_id'] = $headerId;
+    return $payload;
 }
 
 function plugin_dashglpi_admin_bridge_uploaded_files(string $field): array
@@ -67,37 +102,93 @@ function plugin_dashglpi_admin_bridge_uploaded_files(string $field): array
     $tmpNames = $entry['tmp_name'] ?? [];
     $errors = $entry['error'] ?? [];
     $types = $entry['type'] ?? [];
+    $sizes = $entry['size'] ?? [];
 
     if (!is_array($names)) {
         $names = [$names];
         $tmpNames = [$tmpNames];
         $errors = [$errors];
         $types = [$types];
+        $sizes = [$sizes];
+    }
+
+    if (count($names) > 10) {
+        throw new RuntimeException('O chamado aceita no maximo 10 anexos.', 422);
     }
 
     $files = [];
+    $totalBytes = 0;
+    $maxFileBytes = plugin_dashglpi_admin_bridge_ini_bytes((string) ini_get('upload_max_filesize'));
+    $maxPostBytes = plugin_dashglpi_admin_bridge_ini_bytes((string) ini_get('post_max_size'));
     foreach ($names as $index => $name) {
         $error = (int) ($errors[$index] ?? UPLOAD_ERR_NO_FILE);
         if ($error === UPLOAD_ERR_NO_FILE) {
             continue;
         }
         if ($error !== UPLOAD_ERR_OK) {
-            throw new RuntimeException('Falha ao receber um dos anexos enviados ao GLPI.');
+            $status = in_array($error, [UPLOAD_ERR_INI_SIZE, UPLOAD_ERR_FORM_SIZE], true) ? 413 : 400;
+            throw new RuntimeException('Falha ao receber um dos anexos enviados ao GLPI.', $status);
         }
 
         $tmpName = (string) ($tmpNames[$index] ?? '');
         if ($tmpName === '' || !is_uploaded_file($tmpName)) {
-            throw new RuntimeException('Arquivo temporario do anexo nao encontrado no GLPI.');
+            throw new RuntimeException('Arquivo temporario do anexo nao encontrado no GLPI.', 400);
+        }
+
+        $size = (int) ($sizes[$index] ?? 0);
+        if ($size <= 0 || ($maxFileBytes > 0 && $size > $maxFileBytes)) {
+            throw new RuntimeException('Anexo vazio ou acima do limite por arquivo do GLPI.', 422);
+        }
+        $totalBytes += $size;
+        if ($maxPostBytes > 0 && $totalBytes > $maxPostBytes) {
+            throw new RuntimeException('O tamanho total dos anexos excede o limite de envio do GLPI.', 422);
+        }
+
+        $clientName = basename(str_replace('\\', '/', (string) $name));
+        if ($clientName === '' || strlen($clientName) > 240 || preg_match('/[\x00-\x1F\x7F]/', $clientName)) {
+            throw new RuntimeException('Nome de anexo invalido ou muito longo.', 422);
+        }
+        if (preg_match('/\.(php\d*|phtml|phar|cgi|pl|py|sh|shtml)$/i', $clientName)) {
+            throw new RuntimeException('Este tipo de arquivo nao pode ser anexado.', 422);
+        }
+
+        $mimeType = (string) ($types[$index] ?? 'application/octet-stream');
+        if (function_exists('finfo_open')) {
+            $finfo = finfo_open(FILEINFO_MIME_TYPE);
+            if ($finfo) {
+                $detected = finfo_file($finfo, $tmpName);
+                finfo_close($finfo);
+                if (is_string($detected) && $detected !== '') {
+                    $mimeType = $detected;
+                }
+            }
         }
 
         $files[] = [
-            'name' => (string) $name,
+            'name' => $clientName,
             'tmp_name' => $tmpName,
-            'type' => (string) ($types[$index] ?? 'application/octet-stream'),
+            'type' => $mimeType,
+            'size' => $size,
         ];
     }
 
     return $files;
+}
+
+function plugin_dashglpi_admin_bridge_ini_bytes(string $value): int
+{
+    $value = trim($value);
+    if ($value === '') {
+        return 0;
+    }
+    $number = (float) $value;
+    $unit = strtolower(substr($value, -1));
+    return (int) ($number * match ($unit) {
+        'g' => 1024 * 1024 * 1024,
+        'm' => 1024 * 1024,
+        'k' => 1024,
+        default => 1,
+    });
 }
 
 function plugin_dashglpi_admin_bridge_ticket_document_category_id(): int
@@ -412,31 +503,287 @@ function plugin_dashglpi_admin_bridge_bootstrap_db(): void
         $DB = new DB();
     }
 
-    // Legacy classes such as Ticket and NotificationEvent read their runtime
-    // settings from CFG_GLPI, which is normally populated by the GLPI kernel.
-    if (!is_array($CFG_GLPI ?? null) || !array_key_exists('use_notifications', $CFG_GLPI)) {
-        $defaultsFile = GLPI_ROOT . '/src/autoload/CFG_GLPI.php';
-        if (is_file($defaultsFile)) {
-            // CFG_GLPI.php initializes the legacy defaults and may already
-            // have been loaded by Composer with an incomplete global state.
-            require $defaultsFile;
-        } else {
-            $CFG_GLPI = [];
+    // The isolated plugin bridge loads GLPI classes without booting its web
+    // kernel. CFG_GLPI therefore contains defaults, not the persisted values
+    // from glpi_configs. Load the native legacy configuration while hiding
+    // REQUEST_URI temporarily: GLPI otherwise asks the absent Symfony
+    // RequestStack for a main request. Restore the request immediately after.
+    if (!class_exists(Config::class) || !DBConnection::isDbAvailable()) {
+        throw new RuntimeException('Bootstrap GLPI incompleto: configuracao persistida indisponivel.');
+    }
+
+    $hadRequestUri = array_key_exists('REQUEST_URI', $_SERVER);
+    $requestUri = $_SERVER['REQUEST_URI'] ?? null;
+    $rootDoc = $CFG_GLPI['root_doc'] ?? '';
+    unset($_SERVER['REQUEST_URI']);
+    try {
+        $loaded = Config::loadLegacyConfiguration();
+    } finally {
+        if ($hadRequestUri) {
+            $_SERVER['REQUEST_URI'] = $requestUri;
+        }
+    }
+    if ($loaded !== true) {
+        throw new RuntimeException('GLPI nao carregou as configuracoes persistidas do banco.');
+    }
+    // This request only returns JSON and has no GLPI page base path.
+    $CFG_GLPI['root_doc'] = $rootDoc;
+}
+
+/**
+ * Prepare the native GLPI session for an actor used by an isolated bridge
+ * request. Keep this in one place because GLPI 11 and 12 differ in how they
+ * validate user preferences during loadPreferencesInSession().
+ */
+function plugin_dashglpi_admin_bridge_prepare_actor_session(User $user): void
+{
+    $userId = max(0, (int) ($user->fields['id'] ?? 0));
+    if ($userId <= 0) {
+        throw new RuntimeException('Usuario do bridge nao informado.', 403);
+    }
+
+    $_SESSION = [];
+    Session::initVars();
+    $_SESSION['glpiID'] = $userId;
+    $_SESSION['glpiname'] = (string) ($user->fields['name'] ?? '');
+    $_SESSION['glpidefault_entity'] = (int) ($user->fields['entities_id'] ?? 0);
+
+    // GLPI 12 requires a string language code. Older records may contain NULL;
+    // use the installation language only for this request, without persisting
+    // anything back to glpi_users.
+    $language = trim((string) ($user->fields['language'] ?? ''));
+    if ($language === '') {
+        $language = 'pt_BR';
+        $user->fields['language'] = $language;
+    }
+    $_SESSION['glpilanguage'] = $language;
+
+    $user->loadPreferencesInSession();
+    Session::initEntityProfiles($userId);
+}
+
+/** Run a bridge operation with the validated user's native GLPI profile/session. */
+function plugin_dashglpi_admin_bridge_as_actor(array $payload, callable $handler): array
+{
+    $hadSession = array_key_exists('_SESSION', $GLOBALS);
+    $saved = $hadSession ? $_SESSION : null;
+    try {
+        $userId = (int) ($payload['actor']['user_id'] ?? 0);
+        $requestedProfileId = (int) ($payload['actor']['profile_id'] ?? 0);
+        $user = new User();
+        if ($userId <= 0 || !$user->getFromDB($userId) || !$user->fields['is_active'] || $user->fields['is_deleted']) {
+            throw new RuntimeException('Usuario de abertura invalido.', 403);
         }
 
-        // Do not call Config::loadLegacyConfiguration() here. In current
-        // GLPI versions it expects the Symfony RequestStack to contain a main
-        // request, which is not available in this isolated bridge request.
-        // inc/includes.php has already bootstrapped the active GLPI config;
-        // reloading it here causes: getMainRequest() on null.
+        $now = date('Y-m-d H:i:s');
+        if ((!empty($user->fields['begin_date']) && $user->fields['begin_date'] > $now)
+            || (!empty($user->fields['end_date']) && $user->fields['end_date'] < $now)) {
+            throw new RuntimeException('Usuario fora do periodo de validade.', 403);
+        }
+
+        plugin_dashglpi_admin_bridge_prepare_actor_session($user);
+        $availableProfiles = array_map('intval', array_keys($_SESSION['glpiprofiles'] ?? []));
+        if ($requestedProfileId > 0 && !in_array($requestedProfileId, $availableProfiles, true)) {
+            throw new RuntimeException('Perfil de abertura nao pertence ao usuario.', 403);
+        }
+
+        $candidateProfiles = $requestedProfileId > 0
+            ? array_values(array_unique(array_merge([$requestedProfileId], $availableProfiles)))
+            : $availableProfiles;
+        $probeInput = function_exists('plugin_dashglpi_ticket_create_probe_input')
+            ? plugin_dashglpi_ticket_create_probe_input($payload)
+            : [];
+        foreach ($candidateProfiles as $candidateProfileId) {
+            Session::changeProfile($candidateProfileId);
+            if (!isset($_SESSION['glpiactiveprofile'])) {
+                continue;
+            }
+            Session::changeActiveEntities('all');
+            Session::loadGroups();
+            $ticket = new Ticket();
+            if ($ticket->can(-1, CREATE, $probeInput)) {
+                return $handler($payload);
+            }
+        }
+        throw new RuntimeException('Perfil sem permissao GLPI para abrir chamado nesta entidade.', 403);
+    } finally {
+        if ($hadSession) {
+            $_SESSION = $saved;
+        } else {
+            unset($_SESSION);
+        }
     }
 }
+
+/** Add uploaded documents to a native GLPI item input before add(). */
+function plugin_dashglpi_admin_bridge_attach_uploaded_files(array &$itemInput, string $field = 'attachments'): void
+{
+    $uploadedFiles = plugin_dashglpi_admin_bridge_uploaded_files($field);
+    if (!$uploadedFiles) {
+        return;
+    }
+
+    plugin_dashglpi_admin_bridge_ticket_document_category_id();
+    foreach ($uploadedFiles as $index => $file) {
+        $originalName = basename((string) ($file['name'] ?? 'arquivo'));
+        $prefix = substr(sha1((string) microtime(true) . $index . $originalName), 0, 23);
+        if (is_array($_FILES[$field]['name'] ?? null)) {
+            $_FILES[$field]['name'][$index] = $prefix . $originalName;
+        } else {
+            $_FILES[$field]['name'] = $prefix . $originalName;
+        }
+    }
+
+    $uploadResult = GLPIUploadHandler::uploadFiles([
+        'name' => $field,
+        'print_response' => false,
+    ]);
+    foreach ($uploadResult as $group) {
+        foreach ((array) $group as $fileResult) {
+            if (!empty($fileResult->error)) {
+                throw new RuntimeException((string) $fileResult->error);
+            }
+            if (!isset($fileResult->name)) {
+                continue;
+            }
+            $itemInput['_filename'][] = (string) $fileResult->name;
+            $itemInput['_prefix_filename'][] = (string) ($fileResult->prefix ?? '');
+        }
+    }
+}
+
+/** Ensure the native GLPI notification queue contains the ticket event. */
+function plugin_dashglpi_admin_bridge_ensure_ticket_notification(int $ticketId): bool
+{
+    if ($ticketId <= 0 || !class_exists(NotificationEvent::class)) {
+        plugin_dashglpi_admin_bridge_notification_log($ticketId, false, 'notification_event_unavailable');
+        return false;
+    }
+
+    try {
+        $ticket = new Ticket();
+        if (!$ticket->getFromDB($ticketId)) {
+            plugin_dashglpi_admin_bridge_notification_log($ticketId, false, 'ticket_not_found');
+            return false;
+        }
+        if (plugin_dashglpi_admin_bridge_has_ticket_notification($ticketId)) {
+            return true;
+        }
+
+        global $CFG_GLPI;
+        $mailModeActive = class_exists(Notification_NotificationTemplate::class)
+            ? Notification_NotificationTemplate::hasActiveMode()
+            : false;
+        $raiseResult = NotificationEvent::raiseEvent('new', $ticket);
+        $queued = plugin_dashglpi_admin_bridge_has_ticket_notification($ticketId);
+        $profileId = (int) ($_SESSION['glpiactiveprofile']['id'] ?? 0);
+        $sessionUserId = (int) ($_SESSION['glpiID'] ?? 0);
+        $reason = sprintf(
+            'raise_return=%s use_notifications=%d notifications_mailing=%d active_mail_mode=%d session_user=%d profile=%d entity=%d %s',
+            var_export($raiseResult, true),
+            (int) ($CFG_GLPI['use_notifications'] ?? 0),
+            (int) ($CFG_GLPI['notifications_mailing'] ?? 0),
+            (int) $mailModeActive,
+            $sessionUserId,
+            $profileId,
+            (int) ($ticket->fields['entities_id'] ?? 0),
+            $queued ? 'queued_after_raise' : 'queue_empty_after_raise'
+        );
+        plugin_dashglpi_admin_bridge_notification_log($ticketId, $queued, $reason);
+        return $queued;
+    } catch (Throwable $e) {
+        // The ticket is already created. Notification failure must remain
+        // observable without converting a successful add() into HTTP 500.
+        plugin_dashglpi_admin_bridge_notification_log($ticketId, false, get_class($e) . ': ' . trim((string) $e->getMessage()));
+        return false;
+    }
+}
+
+function plugin_dashglpi_admin_bridge_notification_log(int $ticketId, bool $queued, string $reason): void
+{
+    $line = sprintf(
+        '[DashGLPI bridge:ticket_notification request_id=%s] ticket=%d queued=%s reason=%s',
+        (string) ($GLOBALS['DASHGLPI_BRIDGE_REQUEST_ID'] ?? plugin_dashglpi_admin_bridge_request_id()),
+        $ticketId,
+        $queued ? 'yes' : 'no',
+        str_replace(["\r", "\n"], ' ', $reason)
+    );
+    error_log($line);
+    if (class_exists('Toolbox')) {
+        Toolbox::logInFile('php-errors', $line . "\n");
+    }
+}
+
+function plugin_dashglpi_admin_bridge_has_ticket_notification(int $ticketId): bool
+{
+    global $DB;
+    if (!$DB->tableExists('glpi_queuednotifications')) {
+        return false;
+    }
+
+    $where = ['itemtype' => 'Ticket', 'items_id' => $ticketId, 'is_deleted' => 0];
+    if ($DB->fieldExists('glpi_queuednotifications', 'event', false)) {
+        $where['event'] = 'new';
+    }
+    $row = $DB->request([
+        'COUNT' => 'total',
+        'FROM' => 'glpi_queuednotifications',
+        'WHERE' => $where,
+    ])->current();
+
+    return (int) ($row['total'] ?? 0) > 0;
+}
+
+/** Serialize retries for one actor/request and reuse the original native ticket. */
+function plugin_dashglpi_admin_bridge_with_ticket_idempotency(string $externalId, callable $create): array
+{
+    global $DB;
+    $lockName = 'dashglpi_ticket_' . substr(hash('sha256', $externalId), 0, 40);
+    $result = $DB->doQuery("SELECT GET_LOCK('" . $lockName . "', 15) AS lock_status");
+    if ($result === false) {
+        throw new RuntimeException('Nao foi possivel reservar a chave de abertura no banco.', 503);
+    }
+    $row = $DB->fetchArray($result);
+    if ((int) ($row['lock_status'] ?? 0) !== 1) {
+        throw new RuntimeException('Esta abertura ainda esta sendo processada. Tente novamente em instantes.', 409);
+    }
+
+    try {
+        $existing = plugin_dashglpi_admin_bridge_find_one(Ticket::class, [
+            'externalid' => $externalId,
+            'is_deleted' => 0,
+        ]);
+        if ($existing) {
+            $existingTicketId = (int) ($existing['id'] ?? 0);
+            $notificationQueued = plugin_dashglpi_admin_bridge_ensure_ticket_notification($existingTicketId);
+            return [
+                'ticket' => [
+                    'id' => $existingTicketId,
+                    'name' => (string) ($existing['name'] ?? ''),
+                    'entities_id' => (int) ($existing['entities_id'] ?? 0),
+                    'type' => (int) ($existing['type'] ?? Ticket::INCIDENT_TYPE),
+                    'priority' => (int) ($existing['priority'] ?? 0),
+                ],
+                'sla' => null,
+                'message' => 'Chamado ja havia sido registrado; retorno recuperado com seguranca.',
+                'idempotent_replay' => true,
+                'notification_queued' => $notificationQueued,
+            ];
+        }
+
+        return $create();
+    } finally {
+        $DB->doQuery("SELECT RELEASE_LOCK('" . $lockName . "')");
+    }
+}
+
 function plugin_dashglpi_admin_bridge_log(Throwable $e, string $scope): void
 {
     $message = trim((string) $e->getMessage());
     $line = sprintf(
-        "[DashGLPI admin bridge:%s] class=%s code=%s message=%s file=%s line=%d",
+        "[DashGLPI admin bridge:%s request_id=%s] class=%s code=%s message=%s file=%s line=%d",
         $scope,
+        (string) ($GLOBALS['DASHGLPI_BRIDGE_REQUEST_ID'] ?? plugin_dashglpi_admin_bridge_request_id()),
         get_class($e),
         (string) $e->getCode(),
         $message !== '' ? $message : '(empty)',

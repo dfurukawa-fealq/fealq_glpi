@@ -6,10 +6,15 @@ function dashglpi_ajax_request_id(): string
 {
     static $requestId = null;
     if ($requestId === null) {
-        try {
-            $requestId = bin2hex(random_bytes(8));
-        } catch (Throwable) {
-            $requestId = substr(str_replace('.', '', uniqid('', true)), 0, 16);
+        $provided = strtolower(trim((string) ($_SERVER['HTTP_X_REQUEST_ID'] ?? '')));
+        if (preg_match('/^[a-f0-9-]{16,64}$/', $provided)) {
+            $requestId = $provided;
+        } else {
+            try {
+                $requestId = bin2hex(random_bytes(16));
+            } catch (Throwable) {
+                $requestId = substr(str_replace('.', '', uniqid('', true)), 0, 16);
+            }
         }
     }
 
@@ -35,6 +40,7 @@ function dashglpi_ajax_error_response(
     $status = dashglpi_ajax_http_status_from_exception($e, $fallbackStatus);
     $message = trim((string) $e->getMessage());
     $traceId = dashglpi_ajax_request_id();
+    header('X-Request-ID: ' . $traceId);
 
     error_log(sprintf(
         '[DashGLPI][%s] %s error: %s in %s:%d',

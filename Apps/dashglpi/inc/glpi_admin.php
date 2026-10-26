@@ -847,7 +847,7 @@ function dashglpi_admin_entitysmtp_encryption(string $value): string
     return in_array($value, ['none', 'tls', 'ssl'], true) ? $value : 'tls';
 }
 
-function dashglpi_admin_bridge_request(string $endpoint, array $payload, array $files = []): array
+function dashglpi_admin_bridge_request(string $endpoint, array $payload, array $files = [], string $requestId = ''): array
 {
     $baseUrl = dashglpi_env('DASHGLPI_BRIDGE_BASE_URL', '');
     if ($baseUrl === '') {
@@ -857,6 +857,11 @@ function dashglpi_admin_bridge_request(string $endpoint, array $payload, array $
 
     $url = rtrim((string) $baseUrl, '/') . '/ajax/' . ltrim($endpoint, '/');
     $token = dashglpi_env('DASHGLPI_BRIDGE_TOKEN', '');
+    $requestId = strtolower(trim($requestId));
+    if (!preg_match('/^[a-f0-9-]{16,64}$/', $requestId)) {
+        $requestId = function_exists('dashglpi_ajax_request_id') ? dashglpi_ajax_request_id() : bin2hex(random_bytes(16));
+    }
+    $payload['request_id'] = $requestId;
 
     if (!$url || !$token) {
         throw new RuntimeException('Bridge GLPI nao configurado. Defina DASHGLPI_BRIDGE_TOKEN.');
@@ -865,6 +870,7 @@ function dashglpi_admin_bridge_request(string $endpoint, array $payload, array $
     $headers = [
         'Accept: application/json',
         'X-DashGLPI-Bridge-Token: ' . $token,
+        'X-Request-ID: ' . $requestId,
     ];
     if ($files) {
         $boundary = '--------------------------dashglpi' . bin2hex(random_bytes(12));
@@ -878,60 +884,56 @@ function dashglpi_admin_bridge_request(string $endpoint, array $payload, array $
         $headers[] = 'Content-Type: application/json';
     }
 
-    $context = stream_context_create([
-        'http' => [
-            'method' => 'POST',
-            'header' => $headers,
-            'content' => $body,
-            'ignore_errors' => true,
-            'timeout' => 20,
-        ],
-    ]);
-
-    $transportError = null;
-    set_error_handler(static function (int $severity, string $message) use (&$transportError): bool {
-        $transportError = $message;
-        return true;
-    });
-    try {
-        $response = file_get_contents($url, false, $context);
-    } finally {
-        restore_error_handler();
+    if (!function_exists('curl_init')) {
+        throw new RuntimeException('Extensao cURL indisponivel para chamar o bridge GLPI.');
     }
-
-    $status = dashglpi_admin_http_status($http_response_header ?? []);
+    $curl = curl_init($url);
+    curl_setopt_array($curl, [
+        CURLOPT_POST => true,
+        CURLOPT_POSTFIELDS => $body,
+        CURLOPT_HTTPHEADER => $headers,
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_CONNECTTIMEOUT => 5,
+        CURLOPT_TIMEOUT => 45,
+        CURLOPT_NOSIGNAL => true,
+    ]);
+    $response = curl_exec($curl);
+    $transportError = $response === false ? curl_error($curl) : '';
+    $status = (int) curl_getinfo($curl, CURLINFO_RESPONSE_CODE);
+    $contentType = (string) curl_getinfo($curl, CURLINFO_CONTENT_TYPE);
+    // curl_close() has no effect since PHP 8.0 and emits E_DEPRECATED on 8.5.
+    // Avoid writing that warning into an AJAX JSON response when display_errors
+    // is enabled by a local PHP configuration.
     $data = is_string($response) ? json_decode($response, true) : null;
 
     if ($response === false) {
-        throw new RuntimeException('Falha ao chamar bridge GLPI' . ($transportError ? ': ' . $transportError : '.'));
+        error_log(sprintf('[DashGLPI bridge] request_id=%s endpoint=%s transport_error=%s', $requestId, $endpoint, $transportError ?: '(unknown)'));
+        throw new RuntimeException('Falha ao chamar bridge GLPI. Referencia: ' . $requestId);
     }
 
     if (!is_array($data)) {
-        $contentType = '';
-        foreach (($http_response_header ?? []) as $header) {
-            if (stripos((string) $header, 'Content-Type:') === 0) {
-                $contentType = trim(substr((string) $header, strlen('Content-Type:')));
-                break;
-            }
-        }
         error_log(sprintf(
-            '[DashGLPI bridge] endpoint=%s invalid_response http=%s content_type=%s body=%s',
+            '[DashGLPI bridge] request_id=%s endpoint=%s invalid_response http=%s content_type=%s bytes=%d body_sha256=%s preview=%s',
+            $requestId,
             $endpoint,
             (string) ($status ?: 'sem status'),
             $contentType !== '' ? $contentType : '(unknown)',
-            substr(trim((string) $response), 0, 1200)
+            strlen((string) $response),
+            hash('sha256', (string) $response),
+            dashglpi_admin_bridge_safe_response_preview((string) $response)
         ));
-        throw new RuntimeException('Resposta invalida do bridge GLPI. HTTP ' . ($status ?: 'sem status') . '.');
+        throw new RuntimeException('Resposta invalida do bridge GLPI. HTTP ' . ($status ?: 'sem status') . '. Referencia: ' . $requestId);
     }
 
     if ($status >= 400 || empty($data['ok'])) {
         $error = dashglpi_admin_bridge_error_message($data);
         $logMessage = sprintf(
-            '[DashGLPI bridge] endpoint=%s http=%s error=%s response=%s',
+            '[DashGLPI bridge] request_id=%s endpoint=%s http=%s error=%s response_preview=%s',
+            $requestId,
             $endpoint,
             (string) ($status ?: 'sem status'),
-            $error !== '' ? $error : '(vazio)',
-            substr($response, 0, 1200)
+            $error !== '' ? dashglpi_admin_bridge_safe_response_preview($error) : '(vazio)',
+            dashglpi_admin_bridge_safe_response_preview((string) $response)
         );
         error_log($logMessage);
 
@@ -942,6 +944,15 @@ function dashglpi_admin_bridge_request(string $endpoint, array $payload, array $
     }
 
     return $data;
+}
+
+function dashglpi_admin_bridge_safe_response_preview(string $response): string
+{
+    $preview = strip_tags($response);
+    $preview = preg_replace('/[\r\n\t]+/', ' ', $preview) ?? '';
+    $preview = preg_replace('/[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}/i', '[email]', $preview) ?? $preview;
+    $preview = preg_replace('/(token|authorization|password|passwd)\s*[:=]\s*[^\s,;]+/i', '$1=[redacted]', $preview) ?? $preview;
+    return substr(trim($preview), 0, 400);
 }
 
 function dashglpi_admin_bridge_error_message(array $data): string

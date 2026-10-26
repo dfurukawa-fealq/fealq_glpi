@@ -1593,6 +1593,7 @@ if (!empty($currentUser['id'])) {
                             </label>
                         </div>
                         <div class="ticket-create-status admin-status" id="ticketCreateStatus"></div>
+                        <button class="page-action-btn" type="button" id="ticketCreateCatalogRetry" hidden> <i class="fas fa-redo"></i> Tentar carregar opcoes novamente</button>
                         <div class="ticket-create-actions">
                             <button class="page-action-btn primary" type="submit" id="ticketCreateSubmit">
                                 <i class="fas fa-paper-plane"></i>

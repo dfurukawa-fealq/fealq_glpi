@@ -13,6 +13,16 @@ $CFG_GLPI['use_notifications'] = 0;
 putenv('DASHGLPI_BRIDGE_TOKEN=integration-only');
 $path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 if ($path === '/health') { echo 'ok'; return; }
+if ($path === '/validate-ticket-upload') {
+    require '/var/www/glpi/plugins/dashglpi/ajax/admin_bridge_common.php';
+    try {
+        echo json_encode(['ok' => true, 'files' => plugin_dashglpi_admin_bridge_uploaded_files('attachments')]);
+    } catch (Throwable $e) {
+        http_response_code(in_array((int) $e->getCode(), [400, 413, 422], true) ? (int) $e->getCode() : 500);
+        echo json_encode(['ok' => false, 'error' => $e->getMessage()]);
+    }
+    return;
+}
 $allowed = ['ticket_followup_config.php','ticket_task_config.php','ticket_solution_config.php','ticket_attendance_config.php','ticket_satisfaction_config.php','ticket_cancel_config.php'];
 $endpoint = basename($path);
 if (!in_array($endpoint, $allowed, true)) { http_response_code(404); exit; }

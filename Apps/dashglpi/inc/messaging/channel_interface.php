@@ -95,7 +95,6 @@ abstract class DashglpiMessagingChannelBase implements DashglpiMessagingChannel
         $responseBody = curl_exec($ch);
         $status = (int) curl_getinfo($ch, CURLINFO_RESPONSE_CODE);
         $curlError = curl_error($ch);
-        curl_close($ch);
 
         if ($responseBody === false) {
             return ['ok' => false, 'status' => $status, 'body' => '', 'error' => $curlError ?: 'Falha na requisição HTTP.'];

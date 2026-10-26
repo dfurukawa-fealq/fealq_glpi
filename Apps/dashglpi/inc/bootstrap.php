@@ -282,6 +282,9 @@ function dashglpi_json($data, int $status = 200): void
 {
     http_response_code($status);
     header('Content-Type: application/json; charset=utf-8');
+    if (function_exists('dashglpi_ajax_request_id')) {
+        header('X-Request-ID: ' . dashglpi_ajax_request_id());
+    }
     // Dados dinâmicos nunca devem ser cacheados pela borda (ex.: Akamai EAA): sem no-store,
     // abas de vida longa recebem listas obsoletas e arrastam "chamados fantasma" no Kanban.
     header('Cache-Control: no-store, no-cache, must-revalidate, max-age=0');

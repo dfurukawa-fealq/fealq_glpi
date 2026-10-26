@@ -14,8 +14,17 @@ register_shutdown_function(static function (): void {
     }
 
     $message = trim((string) ($error['message'] ?? ''));
+    $requestId = strtolower(trim((string) ($_SERVER['HTTP_X_REQUEST_ID'] ?? '')));
+    if (!preg_match('/^[a-f0-9-]{16,64}$/', $requestId)) {
+        try {
+            $requestId = bin2hex(random_bytes(16));
+        } catch (Throwable) {
+            $requestId = substr(sha1(uniqid('', true)), 0, 32);
+        }
+    }
     error_log(sprintf(
-        '[DashGLPI bridge][ticket_create:fatal] %s in %s:%d',
+        '[DashGLPI bridge][ticket_create:fatal] request_id=%s %s in %s:%d',
+        $requestId,
         $message !== '' ? $message : 'Erro fatal no bridge.',
         (string) ($error['file'] ?? '(unknown)'),
         (int) ($error['line'] ?? 0)
@@ -24,10 +33,12 @@ register_shutdown_function(static function (): void {
     if (!headers_sent()) {
         http_response_code(500);
         header('Content-Type: application/json; charset=utf-8');
+        header('X-Request-ID: ' . $requestId);
     }
     echo json_encode([
         'ok' => false,
         'error' => 'Erro fatal ao carregar o bridge de abertura de chamado.',
+        'request_id' => $requestId,
     ], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
 });
 
@@ -49,6 +60,11 @@ plugin_dashglpi_ticket_create_bridge_handle();
 function plugin_dashglpi_ticket_create_bridge_handle(): void
 {
     try {
+        $contentLength = (int) ($_SERVER['CONTENT_LENGTH'] ?? 0);
+        $postLimit = plugin_dashglpi_admin_bridge_ini_bytes((string) ini_get('post_max_size'));
+        if ($contentLength > 0 && $postLimit > 0 && $contentLength > $postLimit) {
+            throw new RuntimeException('O envio excede post_max_size configurado no GLPI.', 413);
+        }
         $payload = plugin_dashglpi_admin_bridge_payload();
         plugin_dashglpi_admin_bridge_bootstrap_constants();
         plugin_dashglpi_admin_bridge_bootstrap_logger();
@@ -58,7 +74,7 @@ function plugin_dashglpi_ticket_create_bridge_handle(): void
         $action = (string) ($payload['action'] ?? 'catalog');
         $result = match ($action) {
             'catalog' => Session::callAsSystem(static fn(): array => plugin_dashglpi_ticket_create_catalog($payload)),
-            'create' => plugin_dashglpi_ticket_create_as_actor($payload, 'plugin_dashglpi_ticket_create_submit'),
+            'create' => plugin_dashglpi_admin_bridge_as_actor($payload, 'plugin_dashglpi_ticket_create_submit'),
             default => throw new RuntimeException('Acao invalida para abertura de chamado.'),
         };
 
@@ -68,70 +84,6 @@ function plugin_dashglpi_ticket_create_bridge_handle(): void
         $code = in_array((int) $e->getCode(), [400, 403, 404, 409, 422], true) ? (int) $e->getCode() : 500;
         $message = trim((string) $e->getMessage());
         plugin_dashglpi_admin_bridge_json(['ok' => false, 'error' => $message !== '' ? $message : 'Erro interno no bridge de abertura de chamado.'], $code);
-    }
-}
-
-function plugin_dashglpi_ticket_create_as_actor(array $payload, callable $handler): array
-{
-    $saved = $_SESSION ?? [];
-    try {
-        $userId = (int) ($payload['actor']['user_id'] ?? 0);
-        $requestedProfileId = (int) ($payload['actor']['profile_id'] ?? 0);
-
-        $user = new User();
-        if ($userId <= 0 || !$user->getFromDB($userId) || !$user->fields['is_active'] || $user->fields['is_deleted']) {
-            throw new RuntimeException('Usuario de abertura invalido.', 403);
-        }
-
-        $now = date('Y-m-d H:i:s');
-        if ((!empty($user->fields['begin_date']) && $user->fields['begin_date'] > $now)
-            || (!empty($user->fields['end_date']) && $user->fields['end_date'] < $now)) {
-            throw new RuntimeException('Usuario fora do periodo de validade.', 403);
-        }
-
-        $_SESSION = [];
-        Session::initVars();
-        $_SESSION['glpiID'] = $userId;
-        $_SESSION['glpiname'] = $user->fields['name'];
-        $_SESSION['glpidefault_entity'] = (int) $user->fields['entities_id'];
-        // GLPI 12 no longer accepts a null language in LanguageRegistry::has().
-        // Older users may have an empty language preference, so provide the
-        // runtime fallback without changing the value stored in glpi_users.
-        $actorLanguage = trim((string) ($user->fields['language'] ?? ''));
-        if ($actorLanguage === '') {
-            $actorLanguage = 'pt_BR';
-            $user->fields['language'] = $actorLanguage;
-        }
-        $_SESSION['glpilanguage'] = $actorLanguage;
-        $user->loadPreferencesInSession();
-        Session::initEntityProfiles($userId);
-
-        $availableProfiles = array_map('intval', array_keys($_SESSION['glpiprofiles'] ?? []));
-        if ($requestedProfileId > 0 && !in_array($requestedProfileId, $availableProfiles, true)) {
-            throw new RuntimeException('Perfil de abertura nao pertence ao usuario.', 403);
-        }
-
-        $candidateProfiles = $requestedProfileId > 0
-            ? array_values(array_unique(array_merge([$requestedProfileId], $availableProfiles)))
-            : $availableProfiles;
-
-        $probeInput = plugin_dashglpi_ticket_create_probe_input($payload);
-        foreach ($candidateProfiles as $candidateProfileId) {
-            Session::changeProfile($candidateProfileId);
-            if (!isset($_SESSION['glpiactiveprofile'])) {
-                continue;
-            }
-            Session::changeActiveEntities('all');
-            Session::loadGroups();
-            $ticket = new Ticket();
-            if ($ticket->can(-1, CREATE, $probeInput)) {
-                return $handler($payload);
-            }
-        }
-
-        throw new RuntimeException('Perfil sem permissao GLPI para abrir chamado nesta entidade.', 403);
-    } finally {
-        $_SESSION = $saved;
     }
 }
 
@@ -186,10 +138,22 @@ function plugin_dashglpi_ticket_create_catalog(array $payload): array
 
 function plugin_dashglpi_ticket_create_submit(array $payload): array
 {
+    $requestId = strtolower(trim((string) ($payload['request_id'] ?? '')));
+    if (!preg_match('/^[a-f0-9-]{16,64}$/', $requestId)) {
+        throw new RuntimeException('Identificador da solicitacao invalido.', 400);
+    }
     $requesterId = max(0, (int) ($payload['requester_id'] ?? 0));
     if ($requesterId <= 0) {
         throw new RuntimeException('Solicitante do chamado nao informado.');
     }
+
+    $actorId = max(0, (int) ($payload['actor']['user_id'] ?? 0));
+    if ($actorId <= 0) {
+        throw new RuntimeException('Usuario de abertura nao informado.', 403);
+    }
+    $externalId = 'dashglpi:' . $actorId . ':' . $requestId;
+
+    return plugin_dashglpi_admin_bridge_with_ticket_idempotency($externalId, static function () use ($payload, $requesterId, $externalId): array {
 
     plugin_dashglpi_admin_bridge_require_item(User::class, $requesterId, 'Solicitante do chamado nao encontrado.');
 
@@ -232,16 +196,17 @@ function plugin_dashglpi_ticket_create_submit(array $payload): array
         'users_id' => $requesterId,
         'users_id_recipient' => (int) Session::getLoginUserID(),
         'users_id_lastupdater' => (int) Session::getLoginUserID(),
+        'externalid' => $externalId,
     ];
     plugin_dashglpi_ticket_create_apply_sla($ticketInput, $sla);
-    plugin_dashglpi_ticket_create_attach_uploaded_files($ticketInput, 'attachments');
+    plugin_dashglpi_admin_bridge_attach_uploaded_files($ticketInput, 'attachments');
 
     $ticket = new Ticket();
     $ticketId = (int) $ticket->add($ticketInput);
     if ($ticketId <= 0) {
         throw new RuntimeException(plugin_dashglpi_ticket_create_last_message('Falha ao registrar chamado.'));
     }
-    plugin_dashglpi_ticket_create_ensure_new_notification($ticketId);
+    $notificationQueued = plugin_dashglpi_admin_bridge_ensure_ticket_notification($ticketId);
     plugin_dashglpi_ticket_create_log_sla_warnings($ticketId, $sla);
 
     return [
@@ -258,66 +223,9 @@ function plugin_dashglpi_ticket_create_submit(array $payload): array
         ],
         'sla' => $sla,
         'message' => plugin_dashglpi_ticket_create_success_message($sla),
+        'notification_queued' => $notificationQueued,
     ];
-}
-
-function plugin_dashglpi_ticket_create_ensure_new_notification(int $ticketId): void
-{
-    // Ticket::add() already queues the native notification. This fallback is
-    // best-effort only: GLPI 12 changed parts of the notification API and a
-    // failure here must never turn a successfully created ticket into HTTP 500.
-    if ($ticketId <= 0 || !class_exists(NotificationEvent::class)) {
-        return;
-    }
-
-    try {
-        $ticket = new Ticket();
-        if (!$ticket->getFromDB($ticketId) || plugin_dashglpi_ticket_create_has_new_notification($ticketId)) {
-            return;
-        }
-
-        NotificationEvent::raiseEvent('new', $ticket);
-        Toolbox::logInFile(
-            'php-errors',
-            sprintf("[DashGLPI ticket_create] fallback NotificationEvent::raiseEvent('new') ticket=%d\n", $ticketId)
-        );
-    } catch (Throwable $e) {
-        Toolbox::logInFile(
-            'php-errors',
-            sprintf(
-                "[DashGLPI ticket_create] notification fallback ignored ticket=%d class=%s message=%s\n",
-                $ticketId,
-                get_class($e),
-                trim((string) $e->getMessage())
-            )
-        );
-    }
-}
-
-function plugin_dashglpi_ticket_create_has_new_notification(int $ticketId): bool
-{
-    global $DB;
-
-    if (!$DB->tableExists('glpi_queuednotifications')) {
-        return false;
-    }
-
-    $where = [
-        'itemtype' => 'Ticket',
-        'items_id' => $ticketId,
-        'is_deleted' => 0,
-    ];
-    if ($DB->fieldExists('glpi_queuednotifications', 'event', false)) {
-        $where['event'] = 'new';
-    }
-
-    $row = $DB->request([
-        'COUNT' => 'total',
-        'FROM' => 'glpi_queuednotifications',
-        'WHERE' => $where,
-    ])->current();
-
-    return (int) ($row['total'] ?? 0) > 0;
+    });
 }
 
 function plugin_dashglpi_ticket_create_entities_from_payload($rawEntities): array
@@ -568,46 +476,6 @@ function plugin_dashglpi_ticket_create_category_path_label(array $row): string
 
     $fallback = trim((string) ($row['completename'] ?? ''));
     return $fallback !== '' ? $fallback : 'Categoria';
-}
-
-function plugin_dashglpi_ticket_create_attach_uploaded_files(array &$ticketInput, string $field): void
-{
-    $uploadedFiles = plugin_dashglpi_admin_bridge_uploaded_files($field);
-    if (!$uploadedFiles) {
-        return;
-    }
-
-    plugin_dashglpi_admin_bridge_ticket_document_category_id();
-
-    foreach ($uploadedFiles as $index => $file) {
-        $originalName = basename((string) ($file['name'] ?? 'arquivo'));
-        $prefix = substr(sha1((string) microtime(true) . $index . $originalName), 0, 23);
-        if (is_array($_FILES[$field]['name'] ?? null)) {
-            $_FILES[$field]['name'][$index] = $prefix . $originalName;
-        } else {
-            $_FILES[$field]['name'] = $prefix . $originalName;
-        }
-    }
-
-    $uploadResult = GLPIUploadHandler::uploadFiles([
-        'name' => $field,
-        'print_response' => false,
-    ]);
-
-    foreach ($uploadResult as $group) {
-        foreach ((array) $group as $fileResult) {
-            if (!empty($fileResult->error)) {
-                throw new RuntimeException((string) $fileResult->error);
-            }
-
-            if (!isset($fileResult->name)) {
-                continue;
-            }
-
-            $ticketInput['_filename'][] = (string) $fileResult->name;
-            $ticketInput['_prefix_filename'][] = (string) ($fileResult->prefix ?? '');
-        }
-    }
 }
 
 function plugin_dashglpi_ticket_create_last_message(string $fallback): string

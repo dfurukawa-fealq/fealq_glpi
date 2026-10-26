@@ -7,6 +7,7 @@ const TicketCreateComboState = {
     category: { options: [] },
     requester: { options: [], loading: false, timer: null },
 };
+const TICKET_CREATE_PENDING_STORAGE_KEY = 'dashglpi.ticket-create.pending.v1';
 
 function initTicketCreateSection() {
     const form = document.getElementById('ticketCreateForm');
@@ -21,6 +22,9 @@ function initTicketCreateSection() {
     initTicketCreateComboboxes();
 
     form.addEventListener('submit', handleTicketCreateSubmit);
+    document.getElementById('ticketCreateCatalogRetry')?.addEventListener('click', () => {
+        loadTicketCreateCatalog({ force: true });
+    });
     form.addEventListener('paste', handleTicketCreatePaste);
     document.getElementById('ticketCreateReset')?.addEventListener('click', () => {
         resetTicketCreateForm();
@@ -209,6 +213,19 @@ function addTicketCreateFiles(files) {
     let added = 0;
 
     incomingFiles.forEach((file) => {
+        if (DashState.ticketCreateState.attachments.length >= 10) {
+            setTicketCreateStatus('O chamado aceita no maximo 10 anexos.', 'error');
+            return;
+        }
+        if (!file.name || file.name.length > 240 || /[\u0000-\u001f\u007f]/.test(file.name)
+            || /\.(php\d*|phtml|phar|cgi|pl|py|sh|shtml)$/i.test(file.name)) {
+            setTicketCreateStatus(`Arquivo com nome ou tipo nao permitido: ${file.name || 'anexo'}.`, 'error');
+            return;
+        }
+        if (!Number.isFinite(file.size) || file.size <= 0) {
+            setTicketCreateStatus(`O arquivo esta vazio: ${file.name}.`, 'error');
+            return;
+        }
         const fileKey = ticketCreateFileKey(file);
         if (existingKeys.has(fileKey)) {
             return;
@@ -317,20 +334,51 @@ async function loadTicketCreateCatalog(options = {}) {
 
     DashState.ticketCreateState.loading = true;
     setTicketCreateStatus('Carregando opcoes do chamado...', '');
+    const retryButton = document.getElementById('ticketCreateCatalogRetry');
+    if (retryButton) retryButton.hidden = true;
 
     try {
-        const response = await fetch(ticketCreateCatalogUrl(options), { headers: { 'Accept': 'application/json' } });
-        const data = await ticketCreateReadJson(response, 'Erro ao carregar opcoes do chamado.');
-        if (!response.ok || !data.ok) {
-            throw new Error(data.error || 'Erro ao carregar opcoes do chamado.');
+        let response = null;
+        let data = null;
+        let lastError = null;
+        for (let attempt = 0; attempt < 2; attempt += 1) {
+            const controller = new AbortController();
+            const timeout = setTimeout(() => controller.abort(), 10000);
+            try {
+                response = await fetch(ticketCreateCatalogUrl(options), {
+                    headers: { 'Accept': 'application/json' },
+                    signal: controller.signal,
+                });
+                data = await ticketCreateReadJson(response, 'Erro ao carregar opcoes do chamado.');
+                if (!response.ok || !data.ok) {
+                    lastError = new Error(data.error || 'Erro ao carregar opcoes do chamado.');
+                    if (response.status >= 500 && attempt === 0) {
+                        await new Promise(resolve => setTimeout(resolve, 350));
+                        continue;
+                    }
+                    break;
+                }
+                lastError = null;
+                break;
+            } catch (error) {
+                lastError = error?.name === 'AbortError'
+                    ? new Error('Tempo esgotado ao carregar as opcoes do chamado.')
+                    : error;
+                if (attempt === 0) await new Promise(resolve => setTimeout(resolve, 350));
+            } finally {
+                clearTimeout(timeout);
+            }
         }
+        if (lastError) throw lastError;
 
         DashState.ticketCreateState.loaded = true;
         DashState.ticketCreateState.catalog = data.catalog || {};
         renderTicketCreateCatalog(DashState.ticketCreateState.catalog);
         setTicketCreateStatus('', '');
     } catch (error) {
-        setTicketCreateStatus(error.message || 'Erro ao carregar opcoes do chamado.', 'error');
+        DashState.ticketCreateState.loaded = false;
+        setTicketCreateStatus(`${error.message || 'Erro ao carregar opcoes do chamado.'} Use o botao abaixo para tentar novamente.`, 'error');
+        if (retryButton) retryButton.hidden = false;
     } finally {
         DashState.ticketCreateState.loading = false;
     }
@@ -390,8 +438,8 @@ async function ticketCreateReadJson(response, fallbackMessage) {
     try {
         return raw ? JSON.parse(raw) : {};
     } catch {
-        const detail = raw.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
-        throw new Error(detail ? `${fallbackMessage} ${detail.slice(0, 180)}` : fallbackMessage);
+        const trace = response.headers.get('X-Request-ID') || '';
+        throw new Error(trace ? `${fallbackMessage} Referencia: ${trace}` : fallbackMessage);
     }
 }
 
@@ -729,16 +777,35 @@ async function handleTicketCreateSubmit(event) {
         const formData = new FormData(form);
         formData.set('action', 'create');
         formData.set('csrf_token', DASHGLPI_CSRF_TOKEN);
+        const idempotency = ticketCreatePendingRequest(formData);
+        const requestId = idempotency.requestId;
+        formData.set('request_id', requestId);
 
-        const response = await fetch(`${PLUGIN_ROOT}/ajax/ticket_create.php`, {
-            method: 'POST',
-            body: formData,
-        });
-        const data = await response.json();
+        const controller = new AbortController();
+        const timeout = setTimeout(() => controller.abort(), 55000);
+        let response;
+        try {
+            response = await fetch(`${PLUGIN_ROOT}/ajax/ticket_create.php`, {
+                method: 'POST',
+                headers: { 'X-Request-ID': requestId, 'Accept': 'application/json' },
+                body: formData,
+                signal: controller.signal,
+            });
+        } catch (error) {
+            if (error?.name === 'AbortError') {
+                throw new Error(`Tempo esgotado aguardando o GLPI. O resultado pode estar em processamento. Reenvie sem alterar o formulario para recuperar o mesmo chamado (referencia ${requestId}).`);
+            }
+            throw new Error(`Falha de comunicacao com o GLPI. Reenvie sem alterar o formulario para recuperar o mesmo chamado (referencia ${requestId}).`);
+        } finally {
+            clearTimeout(timeout);
+        }
+        const data = await ticketCreateReadJson(response, 'Resposta invalida ao criar chamado.');
         if (!response.ok || !data.ok) {
-            throw new Error(data.error || 'Erro ao criar chamado.');
+            const reference = data.request_id || requestId;
+            throw new Error(`${data.error || 'Erro ao criar chamado.'} Referencia: ${reference}`);
         }
 
+        ticketCreateClearPendingRequest();
         const createdTicket = data.ticket || null;
         DashState.ticketCreateState.lastTicket = createdTicket;
         hideTicketCreateSuccess();
@@ -757,12 +824,53 @@ async function handleTicketCreateSubmit(event) {
             successBox.hidden = false;
         }
 
-        setTicketCreateStatus(data.message || 'Chamado criado com sucesso.', 'success');
+        const statusMessage = data.notification_queued === false
+            ? `${data.message || 'Chamado criado com sucesso.'} O e-mail não entrou na fila do GLPI; chamado #${ticketId}.`
+            : (data.message || 'Chamado criado com sucesso.');
+        setTicketCreateStatus(statusMessage, 'success');
     } catch (error) {
         setTicketCreateStatus(error.message || 'Erro ao criar chamado.', 'error');
     } finally {
         submitButton.disabled = false;
         DashState.ticketCreateState.submitting = false;
+    }
+}
+
+function ticketCreatePendingRequest(formData) {
+    const fields = [];
+    for (const [key, value] of formData.entries()) {
+        if (key === 'csrf_token' || key === 'action' || key === 'request_id') continue;
+        if (value instanceof File) {
+            fields.push([key, value.name, value.size, value.lastModified, value.type]);
+        } else {
+            fields.push([key, String(value)]);
+        }
+    }
+    const fingerprint = JSON.stringify(fields);
+    try {
+        const stored = JSON.parse(sessionStorage.getItem(TICKET_CREATE_PENDING_STORAGE_KEY) || 'null');
+        if (stored?.fingerprint === fingerprint && /^[a-f0-9-]{16,64}$/i.test(stored.requestId || '')) {
+            return stored;
+        }
+        const requestId = globalThis.crypto?.randomUUID
+            ? crypto.randomUUID().toLowerCase()
+            : Array.from({ length: 4 }, () => Math.floor(Math.random() * 0x100000000).toString(16).padStart(8, '0')).join('');
+        const pending = { fingerprint, requestId };
+        sessionStorage.setItem(TICKET_CREATE_PENDING_STORAGE_KEY, JSON.stringify(pending));
+        return pending;
+    } catch {
+        const requestId = globalThis.crypto?.randomUUID
+            ? crypto.randomUUID().toLowerCase()
+            : `${Date.now().toString(16)}${Math.random().toString(16).slice(2)}`;
+        return { fingerprint, requestId };
+    }
+}
+
+function ticketCreateClearPendingRequest() {
+    try {
+        sessionStorage.removeItem(TICKET_CREATE_PENDING_STORAGE_KEY);
+    } catch {
+        // Session storage may be disabled; server-side idempotency still protects retries within this request.
     }
 }
 

@@ -13,6 +13,7 @@ if ($DB->dbdefault !== 'attendance_test' || $DB->dbhost !== 'localhost:/test/soc
     throw new RuntimeException('A base não é a base descartável de teste.');
 }
 require __DIR__ . '/../inc/ticket_attendance_bridge.php';
+require __DIR__ . '/../ajax/admin_bridge_common.php';
 $CFG_GLPI['use_notifications'] = 0;
 Session::initVars();
 $_SESSION['glpiID'] = 2;
@@ -62,6 +63,11 @@ function actor_call(int $user, int $profile, int $ticketId, callable $fn, array 
 function mutate_as(int $user, int $profile, int $ticketId, array $payload, callable $fn): array {
     return actor_call($user, $profile, $ticketId, fn(array $p, Ticket $t): array => dashglpi_attendance_mutate($t, $payload, fn(Ticket $locked): array => $fn($locked, $payload)));
 }
+$bridgeSessionBefore = $_SESSION;
+denied(fn() => plugin_dashglpi_admin_bridge_as_actor(['actor'=>['user_id'=>999999,'profile_id'=>1]], static fn(): array => []), 'Bridge ne aceita sessao de usuario inexistente', 403);
+check($_SESSION === $bridgeSessionBefore, 'Sessao GLPI e preservada quando o ator e invalido');
+denied(fn() => plugin_dashglpi_admin_bridge_as_actor(['actor'=>['user_id'=>2,'profile_id'=>999999]], static fn(): array => []), 'Bridge rejeita perfil que nao pertence ao usuario', 403);
+check($_SESSION === $bridgeSessionBefore, 'Sessao GLPI e restaurada apos rejeitar perfil forjado');
 $tid = $fixtures['ticket']; $requester = $fixtures['requester']; $tech = $fixtures['operator'];
 $detail = actor_call(2, 4, $tid, fn($p, $t) => dashglpi_attendance_detail($t));
 check($detail['capabilities']['mode'] === 'operator' && $detail['capabilities']['edit'], 'Admin recebe capacidades operacionais nativas');
@@ -130,8 +136,16 @@ try {
     curl_setopt_array($curl,[CURLOPT_RETURNTRANSFER=>true,CURLOPT_POST=>true,CURLOPT_HTTPHEADER=>['X-DashGLPI-Bridge-Token: integration-only'],
         CURLOPT_POSTFIELDS=>['payload'=>json_encode(['actor'=>['user_id'=>$tech,'profile_id'=>6],'ticket_id'=>$tid,'action'=>'add','content'=>'Imagem interna','is_private'=>1]),
             'attachments[0]'=>new CURLFile('/test/pixel.png','image/png','captura.png')]]);
-    $uploadRaw = curl_exec($curl); $upload = json_decode($uploadRaw,true); curl_close($curl);
+    $uploadRaw = curl_exec($curl); $upload = json_decode($uploadRaw,true);
     check(!empty($upload['ok']), 'Upload multipart cria acompanhamento: ' . ($upload['error'] ?? 'ok'));
+    $tooManyFiles = [];
+    for ($fileIndex = 0; $fileIndex < 11; $fileIndex++) {
+        $tooManyFiles['attachments[' . $fileIndex . ']'] = new CURLFile('/test/pixel.png', 'image/png', 'captura-' . $fileIndex . '.png');
+    }
+    $curl = curl_init('http://127.0.0.1:18769/validate-ticket-upload');
+    curl_setopt_array($curl, [CURLOPT_RETURNTRANSFER=>true, CURLOPT_POST=>true, CURLOPT_POSTFIELDS=>$tooManyFiles]);
+    $tooManyRaw = curl_exec($curl); $tooManyStatus = curl_getinfo($curl, CURLINFO_RESPONSE_CODE);
+    check($tooManyStatus === 422 && !empty(json_decode($tooManyRaw, true)['error']), 'Upload acima da quantidade permitida e rejeitado no bridge');
     $uploadId = (int)$upload['event']['id'];
     $privateDocs = actor_call($tech,6,$tid,fn($p,$t)=>dashglpi_attendance_documents($t,[['glpi_documents_items.itemtype'=>'ITILFollowup','glpi_documents_items.items_id'=>$uploadId]]));
     check(count($privateDocs)===1 && $privateDocs[0]['name']==='captura.png', 'Anexo mantém nome e vínculo com acompanhamento');
@@ -143,7 +157,7 @@ try {
     $curl = curl_init('http://127.0.0.1:18769/ticket_followup_config.php');
     curl_setopt_array($curl,[CURLOPT_RETURNTRANSFER=>true,CURLOPT_POST=>true,CURLOPT_HTTPHEADER=>['Content-Type: application/json','X-DashGLPI-Bridge-Token: invalid'],
         CURLOPT_POSTFIELDS=>json_encode(['payload'=>['actor'=>['user_id'=>2,'profile_id'=>4],'ticket_id'=>$tid,'action'=>'list']])]);
-    $invalid = json_decode(curl_exec($curl),true); $httpCode = curl_getinfo($curl,CURLINFO_RESPONSE_CODE); curl_close($curl);
+        $invalid = json_decode(curl_exec($curl),true); $httpCode = curl_getinfo($curl,CURLINFO_RESPONSE_CODE);
     check($httpCode===403 && empty($invalid['ok']), 'Bridge HTTP rejeita token inválido');
     $surveyTicket = Session::callAsSystem(fn()=>fixture_ticket($requester));
     mutate_as(2,4,$surveyTicket,['content'=>'Solução para pesquisa'],fn($t,$p)=>dashglpi_attendance_add_event($t,$p,'solution'));
@@ -155,7 +169,7 @@ try {
         $curl = curl_init('http://127.0.0.1:18769/'.$endpoint);
         curl_setopt_array($curl,[CURLOPT_RETURNTRANSFER=>true,CURLOPT_POST=>true,CURLOPT_HTTPHEADER=>['Content-Type: application/json','X-DashGLPI-Bridge-Token: integration-only'],
             CURLOPT_POSTFIELDS=>json_encode(['payload'=>['actor'=>['user_id'=>$requester,'profile_id'=>1],'ticket_id'=>$target]+$input])]);
-        $body = curl_exec($curl); $httpCode=curl_getinfo($curl,CURLINFO_RESPONSE_CODE); curl_close($curl);
+        $body = curl_exec($curl); $httpCode=curl_getinfo($curl,CURLINFO_RESPONSE_CODE);
         check($httpCode===$expected, "$endpoint retorna HTTP $expected: ".($httpCode===$expected?'ok':$body));
     }
 } finally {
@@ -202,4 +216,31 @@ check(count($seen)===65 && count(array_unique($seen))===65 && $pages===3, 'Hist�
 echo sprintf("Pagination: 65 events / 3 pages in %.3f s (isolated fixture).\n",microtime(true)-$started);
 $fixtureBytes = file_put_contents('/test/browser-fixtures.json', json_encode(['operator'=>$reloaded,'self'=>$self,'timeline'=>$timeline,'selfTimeline'=>$selfTimeline], JSON_UNESCAPED_UNICODE));
 check($fixtureBytes !== false, 'Fixtures de navegador foram gravadas');
+$idempotencyKey = 'dashglpi-test:' . bin2hex(random_bytes(12));
+$createdByIdempotency = null;
+$createOnce = static function () use (&$createdByIdempotency, $requester, $idempotencyKey): array {
+    $ticket = new Ticket();
+    $createdByIdempotency = (int) $ticket->add([
+        'name' => 'Teste idempotente DashGLPI',
+        'content' => 'Fixture de integração descartável.',
+        'entities_id' => 0,
+        'type' => Ticket::INCIDENT_TYPE,
+        'urgency' => 3,
+        'impact' => 3,
+        '_users_id_requester' => $requester,
+        'externalid' => $idempotencyKey,
+    ]);
+    if ($createdByIdempotency <= 0) {
+        throw new RuntimeException('Falha ao criar o ticket de teste idempotente.');
+    }
+    return ['ticket' => ['id' => $createdByIdempotency], 'idempotent_replay' => false];
+};
+$firstIdempotentResult = plugin_dashglpi_admin_bridge_with_ticket_idempotency($idempotencyKey, $createOnce);
+$secondIdempotentResult = plugin_dashglpi_admin_bridge_with_ticket_idempotency($idempotencyKey, static function (): array {
+    throw new RuntimeException('A repeticao nao deveria criar outro ticket.');
+});
+$idempotentRows = (new Ticket())->find(['externalid' => $idempotencyKey, 'is_deleted' => 0]);
+check((int) $firstIdempotentResult['ticket']['id'] === (int) $secondIdempotentResult['ticket']['id']
+    && !empty($secondIdempotentResult['idempotent_replay'])
+    && count($idempotentRows) === 1, 'Retry da mesma chave recupera o ticket nativo sem duplicar');
 echo "Native integration: $passed checks passed.\n";
