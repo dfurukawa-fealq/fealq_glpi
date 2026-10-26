@@ -31,6 +31,15 @@ register_shutdown_function(static function (): void {
     ], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
 });
 
+// GLPI 12 expects its legacy classes (including Toolbox) to be available
+// before inc/includes.php is loaded. The bridge is an isolated HTTP request,
+// so it cannot rely on a front controller having loaded Composer already.
+$glpiRoot = dirname(__DIR__, 3);
+$glpiAutoload = $glpiRoot . '/vendor/autoload.php';
+if (is_file($glpiAutoload)) {
+    require_once $glpiAutoload;
+}
+
 require_once __DIR__ . '/../../../inc/includes.php';
 require_once __DIR__ . '/admin_bridge_common.php';
 require_once __DIR__ . '/../inc/entity_sla_policy.php';
