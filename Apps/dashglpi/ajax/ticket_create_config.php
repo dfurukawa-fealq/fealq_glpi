@@ -1,5 +1,36 @@
 <?php
 
+// Fatal errors can occur while loading GLPI itself, before the regular
+// try/catch below is reached. Always keep the bridge contract JSON-shaped.
+ob_start();
+register_shutdown_function(static function (): void {
+    $error = error_get_last();
+    if (!$error || !in_array((int) ($error['type'] ?? 0), [E_ERROR, E_PARSE, E_CORE_ERROR, E_COMPILE_ERROR], true)) {
+        return;
+    }
+
+    while (ob_get_level() > 0) {
+        ob_end_clean();
+    }
+
+    $message = trim((string) ($error['message'] ?? ''));
+    error_log(sprintf(
+        '[DashGLPI bridge][ticket_create:fatal] %s in %s:%d',
+        $message !== '' ? $message : 'Erro fatal no bridge.',
+        (string) ($error['file'] ?? '(unknown)'),
+        (int) ($error['line'] ?? 0)
+    ));
+
+    if (!headers_sent()) {
+        http_response_code(500);
+        header('Content-Type: application/json; charset=utf-8');
+    }
+    echo json_encode([
+        'ok' => false,
+        'error' => 'Erro fatal ao carregar o bridge de abertura de chamado.',
+    ], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+});
+
 require_once __DIR__ . '/../../../inc/includes.php';
 require_once __DIR__ . '/admin_bridge_common.php';
 require_once __DIR__ . '/../inc/entity_sla_policy.php';

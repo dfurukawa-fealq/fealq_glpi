@@ -907,6 +907,20 @@ function dashglpi_admin_bridge_request(string $endpoint, array $payload, array $
     }
 
     if (!is_array($data)) {
+        $contentType = '';
+        foreach (($http_response_header ?? []) as $header) {
+            if (stripos((string) $header, 'Content-Type:') === 0) {
+                $contentType = trim(substr((string) $header, strlen('Content-Type:')));
+                break;
+            }
+        }
+        error_log(sprintf(
+            '[DashGLPI bridge] endpoint=%s invalid_response http=%s content_type=%s body=%s',
+            $endpoint,
+            (string) ($status ?: 'sem status'),
+            $contentType !== '' ? $contentType : '(unknown)',
+            substr(trim((string) $response), 0, 1200)
+        ));
         throw new RuntimeException('Resposta invalida do bridge GLPI. HTTP ' . ($status ?: 'sem status') . '.');
     }
 
