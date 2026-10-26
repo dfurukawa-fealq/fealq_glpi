@@ -94,6 +94,15 @@ function plugin_dashglpi_ticket_create_as_actor(array $payload, callable $handle
         $_SESSION['glpiID'] = $userId;
         $_SESSION['glpiname'] = $user->fields['name'];
         $_SESSION['glpidefault_entity'] = (int) $user->fields['entities_id'];
+        // GLPI 12 no longer accepts a null language in LanguageRegistry::has().
+        // Older users may have an empty language preference, so provide the
+        // runtime fallback without changing the value stored in glpi_users.
+        $actorLanguage = trim((string) ($user->fields['language'] ?? ''));
+        if ($actorLanguage === '') {
+            $actorLanguage = 'pt_BR';
+            $user->fields['language'] = $actorLanguage;
+        }
+        $_SESSION['glpilanguage'] = $actorLanguage;
         $user->loadPreferencesInSession();
         Session::initEntityProfiles($userId);
 

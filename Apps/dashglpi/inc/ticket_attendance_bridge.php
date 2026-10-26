@@ -41,6 +41,12 @@ function dashglpi_attendance_as_actor(array $payload, callable $handler): array
         $_SESSION['glpiID'] = $userId;
         $_SESSION['glpiname'] = $user->fields['name'];
         $_SESSION['glpidefault_entity'] = (int) $user->fields['entities_id'];
+        $actorLanguage = trim((string) ($user->fields['language'] ?? ''));
+        if ($actorLanguage === '') {
+            $actorLanguage = 'pt_BR';
+            $user->fields['language'] = $actorLanguage;
+        }
+        $_SESSION['glpilanguage'] = $actorLanguage;
         $user->loadPreferencesInSession();
         Session::initEntityProfiles($userId);
         $availableProfiles = array_map('intval', array_keys($_SESSION['glpiprofiles'] ?? []));
